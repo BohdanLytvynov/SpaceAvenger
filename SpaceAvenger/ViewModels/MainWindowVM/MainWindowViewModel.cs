@@ -100,7 +100,7 @@ namespace SpaceAvenger.ViewModels.MainWindowVM
 
             m_Height = new GridLength(0, GridUnitType.Star);
 
-            m_title = "Space Avenger V 1.0";
+            m_title = "Space Avenger V 1.0.0.0";
 
             m_InfoOpenClosed = false;
 

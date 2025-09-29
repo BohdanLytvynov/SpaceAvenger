@@ -7,7 +7,7 @@ using ViewModelBaseLibDotNetCore.VM;
 
 namespace SpaceAvenger.ViewModels.Base
 {
-    internal class SubscriptableViewModel : ViewModelBase
+    internal class SubscriptableViewModel : ViewModelBase, IDisposable
     {
         #region Fields
 
@@ -32,6 +32,11 @@ namespace SpaceAvenger.ViewModels.Base
         { 
             foreach (var subscription in m_subscriptions) 
                 subscription.Dispose();
+        }
+
+        public void Dispose()
+        {
+            Unsubscribe();
         }
 
         #endregion

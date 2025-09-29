@@ -1,0 +1,34 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!--#region BackGrounds-GamePage -->
+
+    <ImageSource x:Key="Back1_GamePage">pack://siteoforigin:,,,/Resources/Content/Backgrounds/GamePage/BlueNebula1.png
+    </ImageSource>
+    
+    <!--<ImageSource x:Key="Back2_GamePage">pack://siteoforigin:,,,/Images/Backgrounds/GamePage/Back2.jpg
+    </ImageSource>
+
+    <ImageSource x:Key="Back3_GamePage">pack://siteoforigin:,,,/Images/Backgrounds/GamePage/Back3.jpg
+    </ImageSource>-->
+
+    <!--#endregion-->
+
+    <!--#region ChooseProfilePage -->
+
+    <ImageSource x:Key="ChooseProfileBack">pack://siteoforigin:,,,/Resources/Content/Backgrounds/ChooseProfilePage/SAChooseProfile.jpg
+    </ImageSource>
+
+    <ImageSource x:Key="LevelsPageBack">pack://siteoforigin:,,,/Resources/Content/Backgrounds/LevelsPage/SALevels1.jpg
+    </ImageSource>
+
+    <ImageSource x:Key="MainPageBack">pack://siteoforigin:,,,/Resources/Content/Backgrounds/MainPage/SAMainBack.jpg
+    </ImageSource>
+
+    <ImageSource x:Key="HumanCF">pack://siteoforigin:,,,/Resources/Content/Chars/Commanders/CommandersF.png
+    </ImageSource>
+
+    <ImageSource x:Key="HumanCM">pack://siteoforigin:,,,/Resources/Content/Chars/Commanders/CommandersM.png
+    </ImageSource>
+
+    <!--#endregion-->
+</ResourceDictionary>

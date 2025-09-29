@@ -12,7 +12,7 @@
       >
 
     <Page.Background>
-        <ImageBrush ImageSource="pack://siteoforigin:,,,/Images/Backgrounds/ChooseProfilePage/SAChooseProfile.jpg"/>
+        <ImageBrush ImageSource="{StaticResource ChooseProfileBack}"/>
     </Page.Background>
 
     <Grid>

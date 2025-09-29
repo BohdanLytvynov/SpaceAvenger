@@ -12,13 +12,15 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using ViewModelBaseLibDotNetCore.VM;
+using WPFGameEngine.Extensions;
 
 namespace SpaceAvenger.ViewModels.PagesVM
 {
     [ViewModelType(ViewModelUsage.Page)]
-    internal class UserProfileInfo_ViewModel : SubscriptableViewModel, IDisposable
+    internal class UserProfileInfo_ViewModel : SubscriptableViewModel
     {
         #region Fields
         private string m_userName;
@@ -65,11 +67,11 @@ namespace SpaceAvenger.ViewModels.PagesVM
 
                 if (m_male_Female)// Male
                 {
-                    UserImage = LoadImageUsingUri("pack://siteoforigin:,,,/Images/Chars/Commanders/CommandersM.png", UriKind.RelativeOrAbsolute);
+                    UserImage = LoadImageUsingUri(App.Current.TryGetResource<ImageSource>("HumanCM"));
                 }
                 else
                 {
-                    UserImage = LoadImageUsingUri("pack://siteoforigin:,,,/Images/Chars/Commanders/CommandersF.png", UriKind.RelativeOrAbsolute);
+                    UserImage = LoadImageUsingUri(App.Current.TryGetResource<ImageSource>("HumanCF")); ;
                 }
             } 
         }
@@ -116,7 +118,7 @@ namespace SpaceAvenger.ViewModels.PagesVM
             Points = msg.Content.Points;
         }
 
-        private Image LoadImageUsingUri(string uri, UriKind kind)
+        private static Image LoadImageUsingUri(string uri, UriKind kind)
         {             
             BitmapImage bitmap = new BitmapImage();
             bitmap.BeginInit();
@@ -127,11 +129,13 @@ namespace SpaceAvenger.ViewModels.PagesVM
             image.Source = bitmap;
             return image;
         }
-
-        public void Dispose()
+        private static Image LoadImageUsingUri(ImageSource imageSource)
         {
-            Unsubscribe();
+            Image image = new Image();
+            image.Source = imageSource;
+            return image;
         }
+
         #endregion
     }
 }

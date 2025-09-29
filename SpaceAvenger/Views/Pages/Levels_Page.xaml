@@ -10,7 +10,7 @@
 
     <Page.Background>
         <ImageBrush 
-  ImageSource="pack://siteoforigin:,,,/Images/Backgrounds/LevelsPage/SALevels1.jpg"/>
+  ImageSource="{StaticResource LevelsPageBack}"/>
     </Page.Background>
 
     <Page.Resources>

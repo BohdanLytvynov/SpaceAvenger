@@ -13,7 +13,7 @@
 
     <Page.Background>
         <ImageBrush 
-    ImageSource="pack://siteoforigin:,,,/Images/Backgrounds/MainPage/SAMainBack.jpg"
+    ImageSource="{StaticResource MainPageBack}"
         Stretch="UniformToFill"/>
     </Page.Background>
 

@@ -40,6 +40,11 @@ namespace WPFGameEngine.Extensions
 
             return resource;
         }
+
+        public static TResource? TryGetResource<TResource>(this Application app, string key)
+        {
+            return (TResource)app.TryFindResource(key);
+        }
     }
 
 

@@ -4,29 +4,27 @@ using SpaceAvenger.Services.Interfaces.PageManager;
 using SpaceAvenger.ViewModels.Base;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
-using System.IO;
-using WPFGameEngine.Utilities.Directories;
 using System.Windows;
-using WPFGameEngine.Utilities.Images;
 using System.Windows.Controls;
 using WPFGameEngine.AnimatedControls;
 using System.Windows.Media.Animation;
-using System.Windows.Shapes;
 using System.Windows.Media.Imaging;
 using WPFGameEngine.Extensions;
 using WPFGameEngine.Realizations.Loader;
 using WPFGameEngine.Extensions.Animations;
+using SpaceAvenger.Services.Interfaces.MessageBus;
+using SpaceAvenger.Services.Realizations.Message;
+using System.Diagnostics;
+using WPFGameEngine.Timers;
+using System.Threading;
 
 namespace SpaceAvenger.ViewModels.PagesVM
 {
     [ViewModelName("Game_ViewModel")]
     [ViewModelType(ViewModelUsage.Page)]
-    internal class GamePage_ViewModel : SubscriptableViewModel, IDisposable
+    internal class GamePage_ViewModel : SubscriptableViewModel
     {
         #region event
 
@@ -36,6 +34,12 @@ namespace SpaceAvenger.ViewModels.PagesVM
 
         #region Fields
 
+        private CancellationTokenSource m_moveBackCancelToken;
+
+        private bool m_GameStarted;
+        
+        private Vector m_backOffset;
+
         private string m_pathToImages;
 
         private string m_pathToBackGrounds;
@@ -43,6 +47,8 @@ namespace SpaceAvenger.ViewModels.PagesVM
         private int m_backCount = 3;
 
         IPageManagerService<FrameType> m_PageManager;
+
+        IMessageBus m_MessageBus;
 
         List<BitmapImage>? m_GameBacks;
 
@@ -54,6 +60,12 @@ namespace SpaceAvenger.ViewModels.PagesVM
 
         #region Properties
 
+        public Vector BackOffset 
+        {
+            get=>m_backOffset;
+            set=>Set(ref m_backOffset, value);
+        }
+
         public Canvas Canvas { get=> m_Canvas; set=> Set(ref m_Canvas, value); }
 
         public ImageSource Background { get=> m_GameBack; set=> Set(ref m_GameBack, value); }
@@ -64,50 +76,56 @@ namespace SpaceAvenger.ViewModels.PagesVM
         #region Ctor
         public GamePage_ViewModel()
         {
-            m_pathToImages = Environment.CurrentDirectory + System.IO.Path.DirectorySeparatorChar + 
-                "Images";
-
-            m_pathToBackGrounds = Environment.CurrentDirectory + System.IO.Path.DirectorySeparatorChar +
-                "Images/Backgrounds/GamePage";
-            
-            m_RecursiveBitmapImageLoader = new RecursiveBitmapImageLoader(m_pathToImages);
-
             #region InitFields
-
             m_Canvas = new Canvas();
-
             #endregion
 
-            SetBackGround();
+            GameTimer.Init();
 
-            SetEnvironment();            
+            MoveBackground();
         }
         
-        public GamePage_ViewModel(IPageManagerService<FrameType> pageManager) : this() 
+        public GamePage_ViewModel(IPageManagerService<FrameType> pageManager, 
+            IMessageBus messageBus) : this() 
         {
+            m_MessageBus = messageBus ?? throw new ArgumentNullException(nameof(messageBus));
+
+            Subscriptions.Add(m_MessageBus.RegisterHandler<GameMessage, string>(OnMessageRecieved));
+
             m_PageManager = pageManager;
         }
 
-        public void Dispose()
-        {
-            throw new NotImplementedException();
-        }
         #endregion
 
         #region Methods
 
         #region Set BackGround
 
+        private void OnMessageRecieved(GameMessage gameMessage)
+        {
+            //We need to Start Game Here
+        }
+
+        private void MoveBackground()
+        {
+            m_moveBackCancelToken = new CancellationTokenSource();
+
+            Task t = Task.Run(() => 
+            {
+                for (; ;)
+                { 
+                    
+                }
+            });
+
+            t.ContinueWith(t => t.Dispose());
+        }
+
         private void SetBackGround()
-        {            
+        {
             Random r = new Random();
-
-            m_GameBacks = App.Current.TryGetResourceOrLoad("GamePage",
-                m_RecursiveBitmapImageLoader, "Back");
-
+            
             var index = r.Next(0, m_backCount);
-
-            m_GameBack = m_GameBacks[index];
         }
 
         private void SetEnvironment()

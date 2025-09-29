@@ -44,9 +44,9 @@ namespace SpaceAvenger
             services.AddPageViewModelsAsSingleton();
 
             services.AddSingleton<IPageManagerService<FrameType>, PageManagerService<FrameType>>();               
-            
+
             services.AddSingleton<IMessageBus, MessageBusService>();
-                                                    
+
             return services;
         }
 
@@ -90,7 +90,7 @@ namespace SpaceAvenger
                     : vm.GetCustomAttribute<ViewModelName>()?.Name?.Split(SEPARATOR)[0].Equals(pageName) ?? false);
 
                 if (viewModelInfo is null)
-                    throw new Exception($"Can't find corresponding ViewModel to the View {pageName}! Please check you page's and viewmodel's namings.");
+                    throw new Exception($"Can't find corresponding ViewModel to the View {pageName}! Please check your page's and viewmodel's namings.");
 
                 vm = Services.GetRequiredService(viewModelInfo.AsType()) as ViewModelBase;
                 view = Activator.CreateInstance(page.AsType()) as Page;

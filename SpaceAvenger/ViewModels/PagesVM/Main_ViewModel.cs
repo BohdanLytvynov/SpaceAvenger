@@ -9,6 +9,7 @@ using SpaceAvenger.Enums.FrameTypes;
 using SpaceAvenger.Services.Interfaces.MessageBus;
 using SpaceAvenger.Services.Interfaces.PageManager;
 using SpaceAvenger.Services.Realizations;
+using SpaceAvenger.Services.Realizations.Message;
 using SpaceAvenger.Views.Pages;
 using ViewModelBaseLibDotNetCore.Commands;
 using ViewModelBaseLibDotNetCore.VM;
@@ -78,7 +79,7 @@ namespace SpaceAvenger.ViewModels.PagesVM
 
         public void OnNewGameButtonPressedExecute(object p)
         {
-            m_PageManager.SwitchPage("levels", FrameType.MainFrame);
+            m_PageManager.SwitchPage(nameof(Levels_Page), FrameType.MainFrame);
         }
 
         #endregion
@@ -89,6 +90,7 @@ namespace SpaceAvenger.ViewModels.PagesVM
 
         private void OnSurvivalModeButtonPressedExecute(object p)
         {
+            m_messageBus.Send<GameMessage, string>(new GameMessage("start"));
             m_PageManager.SwitchPage(nameof(Game_Page), FrameType.MainFrame);
         }
 
