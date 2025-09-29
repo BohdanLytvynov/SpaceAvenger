@@ -1,0 +1,22 @@
+﻿namespace SpaceAvenger.ViewModels.GameLevel;
+public class GameLevel
+{
+    #region Fields
+
+    #endregion
+
+    #region Properties
+
+    #endregion
+
+    #region Ctor
+    public GameLevel()
+    {
+
+    }
+    #endregion
+
+    #region Methods
+
+    #endregion
+}
