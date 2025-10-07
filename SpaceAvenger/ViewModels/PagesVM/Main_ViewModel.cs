@@ -1,18 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using SpaceAvenger.Attributes.PageManager;
 using SpaceAvenger.Enums.FrameTypes;
 using SpaceAvenger.Services.Interfaces.MessageBus;
 using SpaceAvenger.Services.Interfaces.PageManager;
-using SpaceAvenger.Services.Realizations;
 using SpaceAvenger.Services.Realizations.Message;
 using SpaceAvenger.Views.Pages;
 using ViewModelBaseLibDotNetCore.Commands;
 using ViewModelBaseLibDotNetCore.VM;
+using c = SpaceAvenger.Services.Constants;
 
 namespace SpaceAvenger.ViewModels.PagesVM
 {
@@ -56,11 +52,15 @@ namespace SpaceAvenger.ViewModels.PagesVM
             #endregion
         }
 
-        public Main_ViewModel(IPageManagerService<FrameType> pageManagerService) : this()
+        public Main_ViewModel(
+            IPageManagerService<FrameType> pageManagerService,
+            IMessageBus messageBus) : this()
         {            
             #region Init Fields
             
-            m_PageManager = pageManagerService;
+            m_PageManager = pageManagerService ?? throw new ArgumentNullException(nameof(pageManagerService));
+
+            m_messageBus = messageBus ?? throw new ArgumentNullException(nameof(messageBus));
             
             #endregion
         }
@@ -90,8 +90,8 @@ namespace SpaceAvenger.ViewModels.PagesVM
 
         private void OnSurvivalModeButtonPressedExecute(object p)
         {
-            m_messageBus.Send<GameMessage, string>(new GameMessage("start"));
             m_PageManager.SwitchPage(nameof(Game_Page), FrameType.MainFrame);
+            m_messageBus.Send<GameMessage, string>(new GameMessage(c.START_GAME_COMMAND));            
         }
 
         #endregion

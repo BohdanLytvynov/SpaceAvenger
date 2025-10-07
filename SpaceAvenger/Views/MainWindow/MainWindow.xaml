@@ -36,7 +36,9 @@
         UpdateSourceTrigger=PropertyChanged,
         Mode=OneWay}" 
        NavigationUIVisibility="Hidden"
-               Panel.ZIndex="0"/>
+               Panel.ZIndex="5"/>
+        <TextBlock Text="Main Window" HorizontalAlignment="Center" 
+                   VerticalAlignment="Center"/>
     </Grid>
 
 </Window>

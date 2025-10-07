@@ -145,9 +145,8 @@ namespace SpaceAvenger.ViewModels.MainWindowVM
                     MainFrame = args.Page;
                     break;
                 case FrameType.InfoFrame:
-
                     InfoFrame = args.Page;
-                    break;                
+                    break;
             }
             
         }

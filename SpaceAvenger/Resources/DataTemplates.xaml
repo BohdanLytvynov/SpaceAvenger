@@ -96,7 +96,7 @@
             UpdateSourceTrigger=PropertyChanged}" Value="True">
                 <DataTrigger.Setters>
                     <Setter TargetName="userVm_Image" Property="Source" 
-                        Value="pack://siteoforigin:,,,/Images/Chars/Commanders/CommandersM.png"/>
+                        Value="{StaticResource HumanCM}"/>
                 </DataTrigger.Setters>
             </DataTrigger>
             <!--Show female-->
@@ -104,7 +104,7 @@
             UpdateSourceTrigger=PropertyChanged}" Value="False">
                 <DataTrigger.Setters>
                     <Setter TargetName="userVm_Image" Property="Source" 
-                        Value="pack://siteoforigin:,,,/Images/Chars/Commanders/CommandersF.png"/>
+                        Value="{StaticResource HumanCF}"/>
                 </DataTrigger.Setters>
             </DataTrigger>
         </DataTemplate.Triggers>

@@ -3,22 +3,17 @@ using SpaceAvenger.Enums.FrameTypes;
 using SpaceAvenger.Services.Interfaces.PageManager;
 using SpaceAvenger.ViewModels.Base;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Windows;
-using System.Windows.Controls;
-using WPFGameEngine.AnimatedControls;
-using System.Windows.Media.Animation;
-using System.Windows.Media.Imaging;
-using WPFGameEngine.Extensions;
 using WPFGameEngine.Realizations.Loader;
-using WPFGameEngine.Extensions.Animations;
 using SpaceAvenger.Services.Interfaces.MessageBus;
 using SpaceAvenger.Services.Realizations.Message;
-using System.Diagnostics;
 using WPFGameEngine.Timers;
 using System.Threading;
+using WPFGameEngine.GameViewControl;
+using c = SpaceAvenger.Services.Constants;
+using System.Diagnostics;
 
 namespace SpaceAvenger.ViewModels.PagesVM
 {
@@ -34,11 +29,15 @@ namespace SpaceAvenger.ViewModels.PagesVM
 
         #region Fields
 
+        private double m_ActualHeight;
+
+        private double m_ActualWidth;
+
         private CancellationTokenSource m_moveBackCancelToken;
 
         private bool m_GameStarted;
-        
-        private Vector m_backOffset;
+
+        private Rect m_backViewport;
 
         private string m_pathToImages;
 
@@ -46,27 +45,39 @@ namespace SpaceAvenger.ViewModels.PagesVM
 
         private int m_backCount = 3;
 
+        private double m_BackMoveSpeed;
+
         IPageManagerService<FrameType> m_PageManager;
 
         IMessageBus m_MessageBus;
-
-        List<BitmapImage>? m_GameBacks;
-
+        
         ImageSource m_GameBack;
 
-        private Canvas m_Canvas;
+        private GameViewHost m_GameView;
 
         #endregion
 
         #region Properties
 
-        public Vector BackOffset 
+        public double ActualHeight
         {
-            get=>m_backOffset;
-            set=>Set(ref m_backOffset, value);
+            get=> m_ActualHeight;
+            set=>Set(ref m_ActualHeight, value);
         }
 
-        public Canvas Canvas { get=> m_Canvas; set=> Set(ref m_Canvas, value); }
+        public double ActualWidth 
+        { 
+            get=>m_ActualWidth;
+            set=>Set(ref m_ActualWidth, value);
+        }
+
+        public Rect BackViewport 
+        {
+            get=> m_backViewport; 
+            set=> Set(ref m_backViewport, value);
+        }
+
+        public GameViewHost GameView { get=> m_GameView; set=> Set(ref m_GameView, value); }
 
         public ImageSource Background { get=> m_GameBack; set=> Set(ref m_GameBack, value); }
 
@@ -74,25 +85,25 @@ namespace SpaceAvenger.ViewModels.PagesVM
         #endregion
 
         #region Ctor
+
+        public GamePage_ViewModel(
+            IPageManagerService<FrameType> pageManager,
+            IMessageBus messageBus) : this()
+        {
+            m_MessageBus = messageBus ?? throw new ArgumentNullException(nameof(messageBus));
+            m_PageManager = pageManager ?? throw new ArgumentNullException(nameof(pageManager));
+            Subscriptions.Add(m_MessageBus.RegisterHandler<GameMessage, string>(OnMessageRecieved));
+        }
+
         public GamePage_ViewModel()
         {
             #region InitFields
-            m_Canvas = new Canvas();
+            m_GameView = new GameViewHost();
             #endregion
 
+            m_BackMoveSpeed = 2;
+            GameTimer.UpdateFunction += Update;
             GameTimer.Init();
-
-            MoveBackground();
-        }
-        
-        public GamePage_ViewModel(IPageManagerService<FrameType> pageManager, 
-            IMessageBus messageBus) : this() 
-        {
-            m_MessageBus = messageBus ?? throw new ArgumentNullException(nameof(messageBus));
-
-            Subscriptions.Add(m_MessageBus.RegisterHandler<GameMessage, string>(OnMessageRecieved));
-
-            m_PageManager = pageManager;
         }
 
         #endregion
@@ -103,70 +114,58 @@ namespace SpaceAvenger.ViewModels.PagesVM
 
         private void OnMessageRecieved(GameMessage gameMessage)
         {
-            //We need to Start Game Here
+            if (gameMessage.Content.Equals(c.START_GAME_COMMAND))
+            {
+                GameTimer.Started = true;
+
+                MoveBackground();
+            }
+            else if (gameMessage.Content.Equals(c.STOP_GAME_COMMAND))
+            {
+                GameTimer.Started = false;
+            }
         }
 
         private void MoveBackground()
         {
-            m_moveBackCancelToken = new CancellationTokenSource();
+            double xCurrent = BackViewport.X;
+            double yCurrent = BackViewport.Y;
 
-            Task t = Task.Run(() => 
-            {
-                for (; ;)
-                { 
-                    
-                }
-            });
+            if (yCurrent >= 1)
+                yCurrent = 0;
 
-            t.ContinueWith(t => t.Dispose());
+            if (xCurrent >= 1)
+                xCurrent = 0;
+            double newY = yCurrent + m_BackMoveSpeed * 0.01 * GameTimer.deltaTime.TotalSeconds;
+            BackViewport = new Rect(xCurrent, newY, 1, 1);
         }
 
-        private void SetBackGround()
-        {
-            Random r = new Random();
-            
-            var index = r.Next(0, m_backCount);
-        }
-
-        private void SetEnvironment()
+        private void Update()
         { 
-            AnimatedControl pulseStar = new AnimatedControl();
-            pulseStar.Width = 128;
-            pulseStar.Height = 128;                                    
+            GameView.ClearVisuals();
 
-            Canvas.Children.Add(pulseStar);
+            MoveBackground();
 
-            pulseStar.ConfigureAnimation(async sb =>
+            //Here All the main game logic will be placed and all components will be re-drawed
+
+            //Testing
+            DrawingVisual test = new DrawingVisual();
+
+            using (var context = test.RenderOpen())
             {
-                ObjectAnimationUsingKeyFrames m_anim = new();
+                Brush fill = new SolidColorBrush(Colors.Red);
+                Pen border = new Pen(Brushes.Black, 1);
+                fill.Freeze();
+                border.Freeze();
 
-                m_anim.AutoReverse = true;
+                context.DrawRectangle(fill, border, new Rect(50,50, 20, 20));
+            }
 
-                sb.RepeatBehavior = new RepeatBehavior(1.4);
-                                
-                sb.Duration = new Duration(TimeSpan.FromSeconds(0.7));
-
-                var images = App.Current.TryGetResourceOrLoad("PulsatingStar", 
-                    m_RecursiveBitmapImageLoader, "Anim");
-
-                m_anim.AddKeyFrames(images);
-                                
-                sb.Children.Add(m_anim);
-
-                Storyboard.SetTarget(m_anim, pulseStar.Image);
-                Storyboard.SetTargetProperty(m_anim, new PropertyPath(Image.SourceProperty));
-
-                sb.AccelerationRatio = 0.33;
-                sb.DecelerationRatio = 0.55;
-            });
-
-            pulseStar.Begin();
+            GameView.AddVisual(test);
         }
 
         #endregion
-
         
-
         #endregion
     }
 

@@ -32,9 +32,8 @@ namespace WPFGameEngine.Timers
             deltaTime = totalTime - m_lastRenderTime;
             m_lastRenderTime = totalTime;
 
-            if(Started)
+            if(Started && UpdateFunction is not null)
                 UpdateFunction();
-
         }
 
         public static void Stop()

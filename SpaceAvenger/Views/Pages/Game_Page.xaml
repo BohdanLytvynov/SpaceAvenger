@@ -12,27 +12,19 @@
       x:Name="Root"
       d:DataContext="{d:DesignInstance vm:GamePage_ViewModel, IsDesignTimeCreatable=True}">
     <Grid>
-        <Rectangle Width="{Binding RelativeSource={RelativeSource AncestorType=Canvas, Mode=FindAncestor}, 
-                UpdateSourceTrigger=PropertyChanged, Path=ActualWidth}"
-                Height="{Binding RelativeSource={RelativeSource AncestorType=Canvas, Mode=FindAncestor}, 
-                UpdateSourceTrigger=PropertyChanged, Path=ActualHeight}">
-            <Rectangle.Fill>
-                <ImageBrush ImageSource="{StaticResource Back1_GamePage}" Stretch="UniformToFill" ViewboxUnits="RelativeToBoundingBox" ViewportUnits="RelativeToBoundingBox" TileMode="Tile" Viewbox="0,0,1,1" Viewport="0,0,1,1">
-                    <ImageBrush.Transform>
-                        <TransformGroup>
-                            <TranslateTransform X="0" Y="450"/>
-                        </TransformGroup>
-                    </ImageBrush.Transform>
-                </ImageBrush>
-            </Rectangle.Fill>
-        </Rectangle>
+        <Grid.Background>
+            <ImageBrush ImageSource="{StaticResource Back1_GamePage}" 
+                            Stretch="UniformToFill" 
+                            TileMode="FlipX"
+                        Viewport="{Binding BackViewport, UpdateSourceTrigger=PropertyChanged}"/>
+        </Grid.Background>
         <Label Width="{Binding RelativeSource={RelativeSource 
             Mode=FindAncestor, AncestorType=Page}, Path=ActualWidth, 
             UpdateSourceTrigger=PropertyChanged}"
                Height="{Binding RelativeSource={RelativeSource 
             Mode=FindAncestor, AncestorType=Page}, Path=ActualHeight, 
             UpdateSourceTrigger=PropertyChanged}"
-               Content="{Binding Canvas, UpdateSourceTrigger=PropertyChanged}">
+               Content="{Binding GameView, UpdateSourceTrigger=PropertyChanged}">
         </Label>
     </Grid>
 </Page>
