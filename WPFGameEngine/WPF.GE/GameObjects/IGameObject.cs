@@ -23,9 +23,9 @@ namespace WPFGameEngine.WPF.GE.GameObjects
 
         public string Name { get; init; }
 
-        void Render(GameViewHost cancas, Matrix parent = default);
+        void Render(DrawingContext dc, Matrix parent);
 
-        void Update();
+        void Update(List<IGameObject> world);
 
         GameObject RegisterComponent(IComponent component);
 

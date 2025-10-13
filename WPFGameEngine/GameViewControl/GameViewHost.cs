@@ -1,53 +1,96 @@
 ﻿using System.Windows;
 using System.Windows.Media;
+using WPFGameEngine.Enums;
+using WPFGameEngine.Timers;
+using WPFGameEngine.WPF.GE.GameObjects;
 
 namespace WPFGameEngine.GameViewControl
 {
     public class GameViewHost : FrameworkElement
     {
+        #region Delegates
+        public Action OnUpdate;
+        #endregion
+
         #region Fields
-        private readonly VisualCollection m_visuals;
+        private readonly VisualCollection m_visualCollection;
+        private DrawingVisual m_drawingSurface;
+        private List<IGameObject> m_world;
+        private GameState m_gameState;
         #endregion
 
         #region Properties
-        protected override int VisualChildrenCount
-        {
-            get { return m_visuals.Count; }
-        }
+        public List<IGameObject> World { get => m_world; }
+        public GameState GameState { get; }
+        protected override int VisualChildrenCount => m_visualCollection.Count;
         #endregion
 
         #region Ctor
         public GameViewHost()
         {
-            m_visuals = new VisualCollection(this);
-            this.CacheMode = new BitmapCache();
+            m_world = new List<IGameObject>();
+            m_drawingSurface = new DrawingVisual();
+            m_visualCollection = new VisualCollection(this);
+            CompositionTarget.Rendering += CompositionTarget_Rendering;
         }
+
         #endregion
 
-        #region Methods
-        public void AddVisual(DrawingVisual visual)
-        {
-            m_visuals.Add(visual);
-        }
-
-        public void RemoveVisual(DrawingVisual visual)
-        {
-            m_visuals.Remove(visual);
-        }
-
+        #region Mehtods
         protected override Visual GetVisualChild(int index)
         {
-            if (index < 0 || index >= m_visuals.Count)
+            if (index < 0 || index >= m_visualCollection.Count)
             {
                 throw new ArgumentOutOfRangeException();
             }
 
-            return m_visuals[index];
+            return m_visualCollection[index];
         }
 
-        public void ClearVisuals()
+        private void CompositionTarget_Rendering(object? sender, EventArgs e)
         {
-            m_visuals.Clear();
+            GameTimer.UpdateTime();
+            if (m_gameState == GameState.Running)
+            {
+                m_visualCollection.Clear();
+                m_world.Sort(new GameObject.ZIndexGameObjectComparer());
+                using (DrawingContext dc = m_drawingSurface.RenderOpen())
+                {
+                    foreach (var obj in World)
+                    {
+                        if(obj != null)
+                        {
+                            obj.Update(World);
+                            obj.Render(dc, Matrix.Identity);
+                        }
+                    }
+                }
+                m_visualCollection.Add(m_drawingSurface);
+                //Call External Update
+                OnUpdate?.Invoke();
+            }
+        }
+
+        public void StartGame()
+        { 
+            GameTimer.Start();
+            m_gameState = GameState.Running;
+        }
+
+        public void Resume()
+        {
+            m_gameState = GameState.Running;
+        }
+
+        public void Pause()
+        { 
+            m_gameState = GameState.Paused;
+        }
+
+        public void Stop()
+        { 
+            m_gameState = GameState.Stopped;
+            GameTimer.Stop();
         }
         #endregion
     }

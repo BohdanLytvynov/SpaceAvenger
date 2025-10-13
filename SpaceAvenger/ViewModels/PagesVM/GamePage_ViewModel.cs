@@ -25,8 +25,6 @@ namespace SpaceAvenger.ViewModels.PagesVM
     internal class GamePage_ViewModel : SubscriptableViewModel
     {
         #region Fields
-        private CancellationTokenSource m_moveBackCancelToken;
-
         private Rect m_backViewport;
         
         private int m_backCount = 3;
@@ -40,8 +38,6 @@ namespace SpaceAvenger.ViewModels.PagesVM
         ImageSource m_GameBack;
 
         private GameViewHost m_GameView;
-
-        private List<GameObject> m_objects;
 
         #endregion
 
@@ -83,12 +79,12 @@ namespace SpaceAvenger.ViewModels.PagesVM
         {
             #region InitFields
             m_GameView = new GameViewHost();
-            m_objects = new List<GameObject>();
+            m_GameView.OnUpdate += Update;
             GESettings.DrawGizmo = true;
+            GESettings.DrawBorders = true;
             #endregion
 
             m_BackMoveSpeed = 2;
-            GameTimer.GameLoopFunction += GameLoop;
         }
 
         #endregion
@@ -101,13 +97,12 @@ namespace SpaceAvenger.ViewModels.PagesVM
         {
             if (gameMessage.Content.Equals(c.START_GAME_COMMAND))
             {
-                GameTimer.Started = true;
-
                 Initialize();
+                m_GameView.StartGame();
             }
             else if (gameMessage.Content.Equals(c.STOP_GAME_COMMAND))
             {
-                GameTimer.Started = false;
+                m_GameView.Stop();
             }
         }
 
@@ -125,19 +120,9 @@ namespace SpaceAvenger.ViewModels.PagesVM
             BackViewport = new Rect(xCurrent, newY, 1, 1);
         }
 
-        private void GameLoop()
-        { 
-            GameView.ClearVisuals();
-
+        private void Update()
+        {
             MoveBackground();
-            m_objects.Sort(new GameObject.GameObjectComparer());
-
-            //Here All the main game logic will be placed and all components will be re-drawed
-            foreach (GameObject obj in m_objects)
-            {
-                obj.Update();
-                obj.Render(GameView);
-            }
         }
 
         #endregion
@@ -152,15 +137,13 @@ namespace SpaceAvenger.ViewModels.PagesVM
             };
 
             RegisterNewObject(destroyer);
-
-            GameTimer.Init();
         }
 
         private void RegisterNewObject(GameObject gameObject)
         {
             if (gameObject == null)
                 throw new ArgumentNullException(nameof(gameObject));
-            m_objects.Add(gameObject);
+            m_GameView.World.Add(gameObject);
         }
 
         #endregion

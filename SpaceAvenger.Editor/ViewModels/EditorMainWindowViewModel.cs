@@ -136,7 +136,13 @@ namespace SpaceAvenger.Editor.ViewModels
             get => m_SelectedRoot;
             set
             {
-                if (!string.IsNullOrEmpty(value))
+                if (m_root == null && !string.IsNullOrEmpty(value))
+                {
+                    m_root = new SpaceshipMock();
+                    m_root.GetComponent<Sprite>(nameof(Sprite)).Load(m_ResourceLoader.ResourceDictionary, value);
+                    m_gameViewHost.World.Add(m_root);
+                }
+                else
                 {
                     m_root.GetComponent<Sprite>(nameof(Sprite)).Load(m_ResourceLoader.ResourceDictionary, value);
                 }
@@ -162,7 +168,7 @@ namespace SpaceAvenger.Editor.ViewModels
             m_resourceNames = new ObservableCollection<string>();
             m_SelectedRoot = string.Empty;
             m_gameViewHost = new GameViewHost();
-            m_root = new SpaceshipMock();
+            m_gameViewHost.StartGame();
             m_rootEnabled = true;
             m_ShowBorders = true;
             m_ShowGizmos = true;
@@ -174,20 +180,9 @@ namespace SpaceAvenger.Editor.ViewModels
                 OnAddModuleButtonPressedExecute,
                 CanOnAddModuleButtonPressedExecute
                 );
-
-            CompositionTarget.Rendering += CompositionTarget_Rendering;
         }
 
-        private void CompositionTarget_Rendering(object? sender, EventArgs e)
-        {
-            GameView.ClearVisuals();
-            if (m_root != null)
-            {
-                m_root.Update();
-                m_root.Render(GameView);
-            }
-        }
-        #endregion
+        #endregion 
 
         #region Methods
         #region On Add Module Button Pressed

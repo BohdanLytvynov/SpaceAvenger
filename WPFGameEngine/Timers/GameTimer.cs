@@ -5,24 +5,19 @@ namespace WPFGameEngine.Timers
 {
     public static class GameTimer
     {
-        #region Delegates
-        public static Action GameLoopFunction;
-        #endregion
-
         #region Fields
-
         private static TimeSpan m_TotalTime;
         private static TimeSpan m_deltaTime;
         private static Stopwatch m_stopwatch;
         private static TimeSpan m_lastRenderTime;
-
+        private static bool m_started;
         #endregion
 
         #region Properties
         /// <summary>
         /// Indicates if we need to perform Update Logic of the Game
         /// </summary>
-        public static bool Started { get; set; }
+        public static bool Started { get => m_started; }
         /// <summary>
         /// Time elapsed between frames
         /// </summary>
@@ -36,32 +31,42 @@ namespace WPFGameEngine.Timers
         #region Ctor
         static GameTimer()
         {
-            m_stopwatch = new Stopwatch();
+            ReInit();
         }
         #endregion
 
-        public static void Init()
+        public static void ReInit()
         {
+            m_stopwatch = new Stopwatch();
             m_lastRenderTime = TimeSpan.Zero;
-
-            CompositionTarget.Rendering += CompositionTarget_Rendering;
-            m_stopwatch.Start();
         }
 
-        private static void CompositionTarget_Rendering(object? sender, EventArgs e)
+        public static void Start()
         {
-            m_TotalTime = m_stopwatch.Elapsed;
-            m_deltaTime = m_TotalTime - m_lastRenderTime;
-            m_lastRenderTime = m_TotalTime;
+            if (!m_started)
+            {
+                m_stopwatch.Start();
+                m_started = true;
+            }
+        }
 
-            if(Started && GameLoopFunction is not null)
-                GameLoopFunction();
+        public static void UpdateTime()
+        {
+            if (m_started)
+            {
+                m_TotalTime = m_stopwatch.Elapsed;
+                m_deltaTime = m_TotalTime - m_lastRenderTime;
+                m_lastRenderTime = m_TotalTime;
+            }
         }
 
         public static void Stop()
-        { 
-            CompositionTarget.Rendering -= CompositionTarget_Rendering;
-            m_stopwatch.Stop();
+        {
+            if (m_started)
+            {
+                m_stopwatch.Stop();
+                m_started = false;
+            }
         }
     }
 }

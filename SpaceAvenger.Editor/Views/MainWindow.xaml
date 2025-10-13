@@ -62,7 +62,7 @@
                                     <ComboBox MinWidth="200" IsEditable="True"
                                               ItemsSource="{Binding ResourceNames, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                               SelectedItem="{Binding SelectedRoot, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                                    
+                                    <ToggleButton/>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal">
                                     <Button Content="Add Module" Height="20" Width="100" Margin="20,0,0,0"/>

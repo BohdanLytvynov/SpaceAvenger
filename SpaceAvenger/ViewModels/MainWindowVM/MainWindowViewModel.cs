@@ -210,12 +210,6 @@ namespace SpaceAvenger.ViewModels.MainWindowVM
                 }
             });
         }
-
-        public void Dispose()
-        {
-            Unsubscribe();
-        }
-
         #endregion
 
         #endregion

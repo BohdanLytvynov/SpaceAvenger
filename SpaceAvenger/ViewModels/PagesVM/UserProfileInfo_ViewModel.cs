@@ -118,17 +118,6 @@ namespace SpaceAvenger.ViewModels.PagesVM
             Points = msg.Content.Points;
         }
 
-        private static Image LoadImageUsingUri(string uri, UriKind kind)
-        {             
-            BitmapImage bitmap = new BitmapImage();
-            bitmap.BeginInit();
-            bitmap.UriSource = new Uri(uri, kind);
-            bitmap.CacheOption = BitmapCacheOption.OnLoad;
-            bitmap.EndInit();
-            Image image = new Image();
-            image.Source = bitmap;
-            return image;
-        }
         private static Image LoadImageUsingUri(ImageSource imageSource)
         {
             Image image = new Image();
