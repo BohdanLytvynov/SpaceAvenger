@@ -43,7 +43,7 @@ namespace SpaceAvenger
 
             services.AddPageViewModelsAsSingleton();
 
-            services.AddSingleton<IPageManagerService<FrameType>, PageManagerService<FrameType>>();               
+            services.AddSingleton<IPageManagerService<FrameType>, PageManagerService<FrameType>>();
 
             services.AddSingleton<IMessageBus, MessageBusService>();
 
@@ -97,12 +97,12 @@ namespace SpaceAvenger
 
                 view.DataContext = vm;
                 vm.Dispatcher = view.Dispatcher;
-
                 pm.AddPage(
                 page.Name, view);
             }
 
             var mainWindow = Services.GetRequiredService<MainWindow>();
+            App.Current.MainWindow = mainWindow;
 
             var mainWindowViewModel = Services.GetRequiredService<MainWindowViewModel>();
 
@@ -112,10 +112,7 @@ namespace SpaceAvenger
             mainWindow.Show();
 
             pm.SwitchPage(nameof(Main_Page), FrameType.MainFrame);
-
             pm.SwitchPage(nameof(UserProfileInfo_Page), FrameType.InfoFrame);
         }
-
-        
     }
 }

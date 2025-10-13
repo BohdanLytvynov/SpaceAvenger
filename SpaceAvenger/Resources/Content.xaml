@@ -31,4 +31,15 @@
     </ImageSource>
 
     <!--#endregion-->
+
+    <!--#region SpaceShips -->
+    <ImageSource x:Key="F10_Destr">pack://siteoforigin:,,,/Resources/Content/SpaceShips/F10/Destroyer/destroyer256.png
+    </ImageSource>
+    <!--#endregion-->
+
+    <!--#region Jets -->
+    <ImageSource x:Key="F10_Jet_Normal">pack://siteoforigin:,,,/Resources/Content/Jets/F10/F10_Jet_Normal_Atlas.png
+    </ImageSource>
+    <!--#endregion-->
+
 </ResourceDictionary>

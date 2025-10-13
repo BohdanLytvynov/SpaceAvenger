@@ -67,11 +67,11 @@ namespace SpaceAvenger.ViewModels.PagesVM
 
                 if (m_male_Female)// Male
                 {
-                    UserImage = LoadImageUsingUri(App.Current.TryGetResource<ImageSource>("HumanCM"));
+                    UserImage = LoadImageUsingUri((ImageSource)App.Current.TryFindResource("HumanCM"));
                 }
                 else
                 {
-                    UserImage = LoadImageUsingUri(App.Current.TryGetResource<ImageSource>("HumanCF")); ;
+                    UserImage = LoadImageUsingUri((ImageSource)App.Current.TryFindResource("HumanCF")); ;
                 }
             } 
         }

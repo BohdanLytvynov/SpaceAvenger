@@ -1,0 +1,81 @@
+﻿<Window x:Class="SpaceAvenger.Editor.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SpaceAvenger.Editor"
+        xmlns:gameView ="clr-namespace:WPFGameEngine.GameViewControl;assembly=WPFGameEngine"
+        xmlns:vm="clr-namespace:SpaceAvenger.Editor.ViewModels"
+        xmlns:controls="clr-namespace:WPFGameEngine.Editor.Controls;assembly=WPFGameEngine"
+        mc:Ignorable="d"
+        Height="450" Width="800" WindowState="Maximized" x:Name="Root"
+        d:DataContext="{d:DesignInstance vm:EditorMainWindowViewModel, IsDesignTimeCreatable=True}">
+    <Grid>
+        <TabControl>
+            <TabItem Header="Game Objects">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="482*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="297*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.Column="0" x:Name="GameView" 
+                           Content="{Binding GameView, UpdateSourceTrigger=PropertyChanged}"/>
+                    <GridSplitter Grid.Column="1" Width="5" VerticalAlignment="Stretch" 
+                                  HorizontalAlignment="Stretch" 
+                                  Background="Black"/>
+                    <Grid Grid.Column="2">
+                        <ScrollViewer VerticalScrollBarVisibility="Visible">
+                            <StackPanel Orientation="Vertical" Height="1200">
+                                <Rectangle Style="{StaticResource BorderRectStyle}"/>
+                                <TextBlock Text="Transforms" Style="{StaticResource DescLabel}"/>
+                                <Rectangle Style="{StaticResource BorderRectStyle}"/>
+                                <StackPanel Orientation="Vertical">
+                                    <CheckBox Content="Enabled" Margin="10" IsChecked="{Binding RootEnabled, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                                    <StackPanel Orientation="Horizontal">
+                                        <CheckBox Content="ShowGizmo" Margin="10" IsChecked="{Binding ShowGizmos, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                                        <CheckBox Content="ShowBorders" Margin="10" IsChecked="{Binding ShowBorders, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                                    </StackPanel>
+                                </StackPanel>
+                                <controls:Slider Value="{Binding PositionX, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                Margin="10" LabelText="X-Position: "
+                                Minimum="0" Maximum="{Binding ElementName=GameView, Path=ActualWidth, 
+                                UpdateSourceTrigger=PropertyChanged}"/>
+                                <controls:Slider Value="{Binding PositionY, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                Margin="10" LabelText="Y-Position: "
+                                Minimum="0" Maximum="{Binding ElementName=GameView, Path=ActualHeight, 
+                                UpdateSourceTrigger=PropertyChanged}"/>
+                                <controls:Slider Value="{Binding Rot, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                Margin="10" LabelText="Rotation: "
+                                Minimum="-360.0" Maximum="360.0"/>
+                                <controls:Slider Value="{Binding ScaleX, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                Margin="10" LabelText="X-Scale: "
+                                Minimum="0" Maximum="1.0"/>
+                                <controls:Slider Value="{Binding ScaleY, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                Margin="10" LabelText="Y-Scale: "
+                                Minimum="0" Maximum="1.0"/>
+                                <Rectangle Style="{StaticResource BorderRectStyle}"/>
+                                <TextBlock Text="Space Ship" Style="{StaticResource DescLabel}"/>
+                                <Rectangle Style="{StaticResource BorderRectStyle}"/>
+                                <StackPanel Orientation="Horizontal" Margin="0,10,0,10">
+                                    <TextBlock Text="Select Corp Image:" Style="{StaticResource DescLabel}"/>
+                                    <ComboBox MinWidth="200" IsEditable="True"
+                                              ItemsSource="{Binding ResourceNames, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                              SelectedItem="{Binding SelectedRoot, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                                    
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Content="Add Module" Height="20" Width="100" Margin="20,0,0,0"/>
+                                </StackPanel>
+                                <ListView/>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </Grid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Level">
+
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>

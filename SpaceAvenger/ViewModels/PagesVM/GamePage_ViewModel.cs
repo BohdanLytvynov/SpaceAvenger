@@ -3,17 +3,20 @@ using SpaceAvenger.Enums.FrameTypes;
 using SpaceAvenger.Services.Interfaces.PageManager;
 using SpaceAvenger.ViewModels.Base;
 using System;
-using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Windows;
-using WPFGameEngine.Realizations.Loader;
 using SpaceAvenger.Services.Interfaces.MessageBus;
 using SpaceAvenger.Services.Realizations.Message;
 using WPFGameEngine.Timers;
 using System.Threading;
 using WPFGameEngine.GameViewControl;
 using c = SpaceAvenger.Services.Constants;
-using System.Diagnostics;
+using WPFGameEngine.WPF.GE.GameObjects;
+using System.Collections.Generic;
+using System.Numerics;
+using SpaceAvenger.Game.Core.Spaceships.F10.Destroyer;
+using WPFGameEngine.WPF.GE.Settings;
+using System.Drawing;
 
 namespace SpaceAvenger.ViewModels.PagesVM
 {
@@ -21,28 +24,11 @@ namespace SpaceAvenger.ViewModels.PagesVM
     [ViewModelType(ViewModelUsage.Page)]
     internal class GamePage_ViewModel : SubscriptableViewModel
     {
-        #region event
-
-        public event Func<Task> OnPageBuild;
-
-        #endregion
-
         #region Fields
-
-        private double m_ActualHeight;
-
-        private double m_ActualWidth;
-
         private CancellationTokenSource m_moveBackCancelToken;
 
-        private bool m_GameStarted;
-
         private Rect m_backViewport;
-
-        private string m_pathToImages;
-
-        private string m_pathToBackGrounds;
-
+        
         private int m_backCount = 3;
 
         private double m_BackMoveSpeed;
@@ -55,20 +41,20 @@ namespace SpaceAvenger.ViewModels.PagesVM
 
         private GameViewHost m_GameView;
 
+        private List<GameObject> m_objects;
+
         #endregion
 
         #region Properties
 
         public double ActualHeight
         {
-            get=> m_ActualHeight;
-            set=>Set(ref m_ActualHeight, value);
+            get=>App.Current.MainWindow.Height;
         }
 
         public double ActualWidth 
-        { 
-            get=>m_ActualWidth;
-            set=>Set(ref m_ActualWidth, value);
+        {
+            get => App.Current.MainWindow.Width;
         }
 
         public Rect BackViewport 
@@ -80,8 +66,6 @@ namespace SpaceAvenger.ViewModels.PagesVM
         public GameViewHost GameView { get=> m_GameView; set=> Set(ref m_GameView, value); }
 
         public ImageSource Background { get=> m_GameBack; set=> Set(ref m_GameBack, value); }
-
-        private RecursiveBitmapImageLoader m_RecursiveBitmapImageLoader;
         #endregion
 
         #region Ctor
@@ -99,11 +83,12 @@ namespace SpaceAvenger.ViewModels.PagesVM
         {
             #region InitFields
             m_GameView = new GameViewHost();
+            m_objects = new List<GameObject>();
+            GESettings.DrawGizmo = true;
             #endregion
 
             m_BackMoveSpeed = 2;
-            GameTimer.UpdateFunction += Update;
-            GameTimer.Init();
+            GameTimer.GameLoopFunction += GameLoop;
         }
 
         #endregion
@@ -118,7 +103,7 @@ namespace SpaceAvenger.ViewModels.PagesVM
             {
                 GameTimer.Started = true;
 
-                MoveBackground();
+                Initialize();
             }
             else if (gameMessage.Content.Equals(c.STOP_GAME_COMMAND))
             {
@@ -140,32 +125,44 @@ namespace SpaceAvenger.ViewModels.PagesVM
             BackViewport = new Rect(xCurrent, newY, 1, 1);
         }
 
-        private void Update()
+        private void GameLoop()
         { 
             GameView.ClearVisuals();
 
             MoveBackground();
+            m_objects.Sort(new GameObject.GameObjectComparer());
 
             //Here All the main game logic will be placed and all components will be re-drawed
-
-            //Testing
-            DrawingVisual test = new DrawingVisual();
-
-            using (var context = test.RenderOpen())
+            foreach (GameObject obj in m_objects)
             {
-                Brush fill = new SolidColorBrush(Colors.Red);
-                Pen border = new Pen(Brushes.Black, 1);
-                fill.Freeze();
-                border.Freeze();
-
-                context.DrawRectangle(fill, border, new Rect(50,50, 20, 20));
+                obj.Update();
+                obj.Render(GameView);
             }
-
-            GameView.AddVisual(test);
         }
 
         #endregion
-        
+
+        private void Initialize()
+        {
+            F10Destroyer destroyer = new F10Destroyer("Player")
+            {
+                Position = new Vector2(200, 300),
+                Scale = new SizeF(0.7f, 0.7f),
+                Rotation = 45
+            };
+
+            RegisterNewObject(destroyer);
+
+            GameTimer.Init();
+        }
+
+        private void RegisterNewObject(GameObject gameObject)
+        {
+            if (gameObject == null)
+                throw new ArgumentNullException(nameof(gameObject));
+            m_objects.Add(gameObject);
+        }
+
         #endregion
     }
 

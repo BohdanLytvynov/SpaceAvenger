@@ -1,0 +1,77 @@
+﻿<UserControl x:Class="WPFGameEngine.Editor.Controls.Slider"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WPFGameEngine.Editor.Controls"
+             mc:Ignorable="d"
+             d:DesignHeight="70" 
+             d:DesignWidth="800"
+            d:DataContext="{d:DesignInstance local:Slider, IsDesignTimeCreatable=True}"
+            x:Name="Control">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="ControlStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid DataContext="{Binding ElementName=Control}">
+        <Border Style="{StaticResource Border}">
+            <StackPanel x:Name="StackVertical" Orientation="Vertical">
+                <StackPanel x:Name="StackHorizontal" Orientation="Horizontal">
+                    <Label x:Name="Label" Content="{Binding LabelText, UpdateSourceTrigger=PropertyChanged}"
+                       Style="{StaticResource InputTxtBoxLabel}"/>
+                    <TextBox x:Name="IntegerPart" MinWidth="10" Style="{StaticResource TxtBoxInputStyle}">
+                        <TextBox.Text>
+                            <Binding Path="IntegerPartValueString" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
+                                <Binding.ValidationRules>
+                                    <DataErrorValidationRule/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
+                    <Label x:Name="DeliminatorLabel" 
+                       Content="{Binding Deliminator, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Bottom"
+                       Style="{StaticResource InputTxtBoxLabel}"/>
+                    <TextBox x:Name="FloatPart" MinWidth="10" Style="{StaticResource TxtBoxInputStyle}">
+                        <TextBox.Text>
+                            <Binding Path="FloatPartValueString" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
+                                <Binding.ValidationRules>
+                                    <DataErrorValidationRule/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
+                    <Label Margin="30,0,0,0" Content="Minimum:" Style="{StaticResource InputTxtBoxLabel}"/>
+                    <TextBox x:Name="Min" Margin="5,0,0,0" MinWidth="40"
+                         Style="{StaticResource TxtBoxInputStyle}">
+                        <TextBox.Text>
+                            <Binding Path="MinimumString" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
+                                <Binding.ValidationRules>
+                                    <DataErrorValidationRule/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
+                    <Label Margin="10,0,0,0" Content="Maximum:" Style="{StaticResource InputTxtBoxLabel}"/>
+                    <TextBox x:Name="Max" Margin="5,0,0,0" MinWidth="40"
+                         Style="{StaticResource TxtBoxInputStyle}">
+                        <TextBox.Text>
+                            <Binding Path="MaximumString" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
+                                <Binding.ValidationRules>
+                                    <DataErrorValidationRule/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
+                </StackPanel>
+                <Slider x:Name="SliderValue" Style="{StaticResource SliderInternal}"
+    Width="{Binding ElementName=Control,
+    UpdateSourceTrigger=PropertyChanged,
+    Path=Width}" Value="{Binding Value,UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                    />
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

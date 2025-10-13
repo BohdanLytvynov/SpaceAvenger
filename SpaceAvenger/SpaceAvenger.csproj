@@ -30,6 +30,8 @@
     <None Remove="Resources\Content\Backgrounds\MainPage\SAMainBack4.jpg" />
     <None Remove="Resources\Content\Chars\Commanders\CommandersF.png" />
     <None Remove="Resources\Content\Chars\Commanders\CommandersM.png" />
+    <None Remove="Resources\Content\Jets\F10\F10_Jet_Normal_Atlas.png" />
+    <None Remove="Resources\Content\SpaceShips\F10\Destroyer\destroyer256.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -93,6 +95,12 @@
     <Content Include="Resources\Content\Chars\Commanders\CommandersM.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resources\Content\Jets\F10\F10_Jet_Normal_Atlas.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Content\SpaceShips\F10\Destroyer\destroyer256.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
@@ -104,6 +112,7 @@
 
   <ItemGroup>
     <Folder Include="DataBase\" />
+    <Folder Include="Game.Core\Spaceships\F10\Weapons\" />
   </ItemGroup>
 
   <ItemGroup>

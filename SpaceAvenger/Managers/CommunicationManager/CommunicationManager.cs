@@ -21,7 +21,7 @@ namespace SpaceAvenger.Managers.CommunicationManager
             if (!m_storage.ContainsKey(key))
                 m_storage.Add(key, entity);
             else
-                throw new Exception("Storage alredy contains key!");
+                throw new Exception("Storage already contains key!");
         }
 
         public static void Delete(string key)

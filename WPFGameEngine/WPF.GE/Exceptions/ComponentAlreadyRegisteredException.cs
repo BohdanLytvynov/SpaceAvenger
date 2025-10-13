@@ -1,0 +1,17 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace WPFGameEngine.WPF.GE.Exceptions
+{
+    public class ComponentAlreadyRegisteredException : Exception
+    {
+        public ComponentAlreadyRegisteredException(string componentname) 
+            :base("<" + componentname + "> was already registered!")
+        {
+            
+        }
+    }
+}

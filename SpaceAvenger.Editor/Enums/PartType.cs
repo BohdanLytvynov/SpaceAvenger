@@ -4,10 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WPFGameEngine.Interfaces.Loader
+namespace SpaceAvenger.Editor.Enums
 {
-    public interface IResourceLoader<TResource>
+    internal enum PartType
     {
-        TResource Load(params object[] args);
+        None = 0,
+        Corpus,
+        Engines,
+        Weapons
     }
 }

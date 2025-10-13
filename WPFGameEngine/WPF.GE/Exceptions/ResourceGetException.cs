@@ -1,0 +1,16 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace WPFGameEngine.WPF.GE.Exceptions
+{
+    public class ResourceGetException : Exception
+    {
+        public ResourceGetException(string resourceName) : base("<" + resourceName + "> was not found!")
+        {
+        
+        }
+    }
+}
