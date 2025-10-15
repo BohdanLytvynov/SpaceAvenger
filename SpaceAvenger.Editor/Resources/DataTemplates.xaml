@@ -2,7 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:base="clr-namespace:SpaceAvenger.Editor.ViewModels.SpaceshipsParts.Base"
                     >
-    <DataTemplate DataType="{x:Type base:ShipModule}">
+    <DataTemplate DataType="{x:Type base:ShipModuleViewModel}">
         <Border BorderThickness="2" BorderBrush="Black">
             
         </Border>

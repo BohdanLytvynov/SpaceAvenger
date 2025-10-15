@@ -1,24 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
+﻿using System.Drawing;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 using WPFGameEngine.WPF.GE.Component.Sprites;
 using WPFGameEngine.WPF.GE.GameObjects;
 
 namespace SpaceAvenger.Editor.Spaceships
 {
-    public class SpaceshipMock : GameObject
+    public class ModuleMock : GameObject
     {
-        public SpaceshipMock(Vector2 position, double rotation, SizeF scale) 
-            : base("Mock", position, rotation, scale)
+        public ModuleMock(string name, Vector2 position, double rotation, SizeF scale) 
+            : base(name, position, rotation, scale)
         {
             Init();
         }
 
-        public SpaceshipMock() : base("Mock")
+        public ModuleMock(string name) : base(name)
         {
             Init();
         }

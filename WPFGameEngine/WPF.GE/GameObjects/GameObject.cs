@@ -38,7 +38,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         public int Id { get; init; }
         public bool Enabled { get; set; }
         public double ZIndex { get; set; }
-        public string Name { get; init; }
+        public string Name { get; set; }
 
         #endregion
 

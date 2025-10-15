@@ -3,10 +3,12 @@ using SpaceAvenger.Editor.Spaceships;
 using SpaceAvenger.Editor.ViewModels.SpaceshipsParts.Base;
 using System.Collections.ObjectModel;
 using System.Drawing;
+using System.IO.Pipelines;
 using System.Numerics;
 using System.Windows.Input;
 using System.Windows.Media;
 using ViewModelBaseLibDotNetCore.Commands;
+using ViewModelBaseLibDotNetCore.Helpers;
 using ViewModelBaseLibDotNetCore.VM;
 using WPFGameEngine.GameViewControl;
 using WPFGameEngine.WPF.GE.Component.Sprites;
@@ -15,28 +17,45 @@ using WPFGameEngine.WPF.GE.Settings;
 
 namespace SpaceAvenger.Editor.ViewModels
 {
-    internal class EditorMainWindowViewModel : ViewModelBase
+    internal class EditorMainWindowViewModel : ValidationViewModel
     {
         #region Fields
         private GameObject m_root;
+        private Dictionary<int, IGameObject> m_childrenMap;
         private GameViewHost m_gameViewHost;
 
         private bool m_rootEnabled;
         private bool m_ShowGizmos;
         private bool m_ShowBorders;
+        private bool m_RootSelected;
+        private string m_RootName;
+        private bool m_ChooseRootImageEnabled;
 
         private double m_posX;
         private double m_posY;
         private double m_rot;
         private double m_ScaleX;
         private double m_ScaleY;
-        private ObservableCollection<ShipModule> m_ShipModules;
+        private ObservableCollection<ShipModuleViewModel> m_ShipModules;
         private ObservableCollection<string> m_resourceNames;
         private IResourceLoader m_ResourceLoader;
         private string m_SelectedRoot;
         #endregion
 
         #region Properties
+
+        public bool ChooseRootImageEnabled 
+        { 
+            get=> m_ChooseRootImageEnabled; 
+            set => Set(ref m_ChooseRootImageEnabled, value);
+        }
+
+        public string RootName 
+        {
+            get=> m_RootName; 
+            set=> Set(ref m_RootName, value);
+        }
+
         public bool RootEnabled
         {
             get => m_rootEnabled;
@@ -125,7 +144,36 @@ namespace SpaceAvenger.Editor.ViewModels
         }
         #endregion
 
-        public ObservableCollection<ShipModule> ShipModules
+        #region IDataErrorInfo
+        public override string this[string columnName]
+        {
+            get
+            { 
+                string error = string.Empty;
+
+                switch (columnName)
+                {
+                    case nameof(RootName):
+                        if (!ValidationHelper.TextIsEmpty(RootName, out error))
+                        {
+                            ChooseRootImageEnabled = true;
+
+                            if(m_root != null && !m_root.Name.Equals(RootName))
+                                m_root.Name = RootName;
+                        }
+                        else
+                        {
+                            ChooseRootImageEnabled = false;
+                        }
+                        break;
+                }
+
+                return error;
+            }
+        }
+        #endregion
+
+        public ObservableCollection<ShipModuleViewModel> ShipModules
         { get => m_ShipModules; set => m_ShipModules = value; }
 
         public ObservableCollection<string> ResourceNames
@@ -138,7 +186,7 @@ namespace SpaceAvenger.Editor.ViewModels
             {
                 if (m_root == null && !string.IsNullOrEmpty(value))
                 {
-                    m_root = new SpaceshipMock();
+                    m_root = new ModuleMock(RootName);
                     m_root.GetComponent<Sprite>(nameof(Sprite)).Load(m_ResourceLoader.ResourceDictionary, value);
                     m_gameViewHost.World.Add(m_root);
                 }
@@ -146,6 +194,23 @@ namespace SpaceAvenger.Editor.ViewModels
                 {
                     m_root.GetComponent<Sprite>(nameof(Sprite)).Load(m_ResourceLoader.ResourceDictionary, value);
                 }
+            }
+        }
+
+        public bool RootSelected 
+        {
+            get => m_RootSelected;
+            set 
+            {
+                Set(ref m_RootSelected, value);
+                if (!m_RootSelected)
+                    return;
+
+                PositionX = m_root.Position.X;
+                PositionY = m_root.Position.Y;
+                Rot = m_root.Rotation;
+                ScaleX = m_root.Scale.Width;
+                ScaleY = m_root.Scale.Height;
             }
         }
 
@@ -164,7 +229,8 @@ namespace SpaceAvenger.Editor.ViewModels
 
         public EditorMainWindowViewModel()
         {
-            m_ShipModules = new ObservableCollection<ShipModule>();
+            m_childrenMap = new Dictionary<int, IGameObject>();
+            m_ShipModules = new ObservableCollection<ShipModuleViewModel>();
             m_resourceNames = new ObservableCollection<string>();
             m_SelectedRoot = string.Empty;
             m_gameViewHost = new GameViewHost();
@@ -172,6 +238,7 @@ namespace SpaceAvenger.Editor.ViewModels
             m_rootEnabled = true;
             m_ShowBorders = true;
             m_ShowGizmos = true;
+            m_RootName = string.Empty;
 
             GESettings.DrawGizmo = true;
             GESettings.DrawBorders = true;
@@ -190,7 +257,10 @@ namespace SpaceAvenger.Editor.ViewModels
 
         private void OnAddModuleButtonPressedExecute(object p)
         {
-            var module = new ShipModule(ResourceNames);
+            var child = new ModuleMock("Module");
+            m_childrenMap.Add(child.Id, child);
+            var module = new ShipModuleViewModel(child, ResourceNames);
+            m_root.AddChild(child);
             ShipModules.Add(module);
         }
         #endregion

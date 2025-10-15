@@ -21,7 +21,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects
 
         public bool Enabled { get; set; }
 
-        public string Name { get; init; }
+        public string Name { get; set; }
 
         void Render(DrawingContext dc, Matrix parent);
 
