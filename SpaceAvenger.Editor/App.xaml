@@ -8,8 +8,8 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/SpaceAvenger;component/Resources/Content.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/SpaceAvenger.Editor;component/Resources/Styles.xaml"/>
-                <ResourceDictionary Source="pack://application:,,,/SpaceAvenger.Editor;component/Resources/DataTemplates.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/WPFGameEngine;component/Editor/Controls/ControlStyles.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/SpaceAvenger.Editor;component/Resources/DataTemplates.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

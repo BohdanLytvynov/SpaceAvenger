@@ -2,9 +2,26 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:base="clr-namespace:SpaceAvenger.Editor.ViewModels.SpaceshipsParts.Base"
                     >
-    <DataTemplate DataType="{x:Type base:ShipModuleViewModel}">
-        <Border BorderThickness="2" BorderBrush="Black">
-            
+    <DataTemplate DataType="{x:Type base:ChildObjectViewModel}">
+        <Border BorderThickness="2" BorderBrush="Black" Style="{StaticResource BorderRoundStyle}">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Style="{StaticResource DescLabel}" Text="{Binding ShowNumber, 
+                    UpdateSourceTrigger=PropertyChanged, StringFormat='№{0})'}"/>
+                <TextBox Style="{StaticResource TxtBoxInputStyle}" Margin="10">
+                    <TextBox.Text>
+                        <Binding Path="ModuleName" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
+                            <Binding.ValidationRules>
+                                <DataErrorValidationRule/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
+                <TextBlock Text="Select an Image:" Style="{StaticResource DescLabel}" Margin="10"
+                           VerticalAlignment="Center"/>
+                <ComboBox IsEditable="True" 
+                          ItemsSource="{Binding ResourceNames, UpdateSourceTrigger=PropertyChanged}"
+                          Margin="10" MinWidth="150"/>
+            </StackPanel>
         </Border>
     </DataTemplate>
 </ResourceDictionary>

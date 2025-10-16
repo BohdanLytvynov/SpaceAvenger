@@ -16,4 +16,12 @@
             <Setter Property="HorizontalAlignment" Value="Center"/>
         </Style.Setters>
     </Style>
+
+    <Style x:Key="BorderRoundStyle" TargetType="Border">
+        <Style.Setters>
+            <Setter Property="CornerRadius" Value="5"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="Black"/>
+        </Style.Setters>
+    </Style>
 </ResourceDictionary>

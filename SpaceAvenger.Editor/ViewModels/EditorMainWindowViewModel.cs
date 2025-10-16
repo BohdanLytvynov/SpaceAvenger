@@ -1,12 +1,12 @@
-﻿using SpaceAvenger.Editor.Services.Base;
+﻿using Newtonsoft.Json.Linq;
+using SpaceAvenger.Editor.Services.Base;
 using SpaceAvenger.Editor.Spaceships;
 using SpaceAvenger.Editor.ViewModels.SpaceshipsParts.Base;
 using System.Collections.ObjectModel;
 using System.Drawing;
-using System.IO.Pipelines;
 using System.Numerics;
+using System.Windows.Data;
 using System.Windows.Input;
-using System.Windows.Media;
 using ViewModelBaseLibDotNetCore.Commands;
 using ViewModelBaseLibDotNetCore.Helpers;
 using ViewModelBaseLibDotNetCore.VM;
@@ -21,7 +21,6 @@ namespace SpaceAvenger.Editor.ViewModels
     {
         #region Fields
         private GameObject m_root;
-        private Dictionary<int, IGameObject> m_childrenMap;
         private GameViewHost m_gameViewHost;
 
         private bool m_rootEnabled;
@@ -30,19 +29,41 @@ namespace SpaceAvenger.Editor.ViewModels
         private bool m_RootSelected;
         private string m_RootName;
         private bool m_ChooseRootImageEnabled;
+        private bool m_SelectRootEnabled;
+        private int m_SelectedChildIndex;
 
         private double m_posX;
         private double m_posY;
         private double m_rot;
         private double m_ScaleX;
         private double m_ScaleY;
-        private ObservableCollection<ShipModuleViewModel> m_ShipModules;
+        private ObservableCollection<ChildObjectViewModel> m_ShipModules;
         private ObservableCollection<string> m_resourceNames;
         private IResourceLoader m_ResourceLoader;
         private string m_SelectedRoot;
         #endregion
 
         #region Properties
+        
+        public int SelectedChildIndex 
+        { 
+            get=> m_SelectedChildIndex;
+            set 
+            {
+                Set(ref m_SelectedChildIndex, value);
+                if (SelectedChildIndex >= 0)
+                {                    
+                    LoadCurrentGameObjProperties(GetCurrentGameObject());
+                    RootSelected = false;
+                }
+            }
+        }
+
+        public bool SelectRootEnabled 
+        {
+            get=> m_SelectRootEnabled;
+            set=> Set(ref m_SelectRootEnabled, value); 
+        }
 
         public bool ChooseRootImageEnabled 
         { 
@@ -92,32 +113,30 @@ namespace SpaceAvenger.Editor.ViewModels
         public double PositionX
         {
             get => m_posX;
-            set
+            set 
             {
                 Set(ref m_posX, value);
-                var y = m_root.Position.Y;
-                m_root.Position = new Vector2((float)value, y);
+                UpdatePositionX(GetCurrentGameObject(), (float)PositionX);
             }
         }
 
         public double PositionY
         {
             get => m_posY;
-            set
-            {
+            set 
+            { 
                 Set(ref m_posY, value);
-                var x = m_root.Position.X;
-                m_root.Position = new Vector2(x, (float)value);
+                UpdatePositionY(GetCurrentGameObject(), (float)PositionY);
             }
         }
 
         public double Rot
         {
             get => m_rot;
-            set
-            {
+            set 
+            { 
                 Set(ref m_rot, value);
-                m_root.Rotation = value;
+                UpdateRotation(GetCurrentGameObject(), (float)Rot);
             }
         }
 
@@ -125,10 +144,9 @@ namespace SpaceAvenger.Editor.ViewModels
         {
             get => m_ScaleX;
             set 
-            {
+            { 
                 Set(ref m_ScaleX, value);
-                var h = m_root.Scale.Height;
-                m_root.Scale = new SizeF((float)value, h);
+                UpdateScaleX(GetCurrentGameObject(), (float)ScaleX);
             }
         }
 
@@ -136,10 +154,53 @@ namespace SpaceAvenger.Editor.ViewModels
         {
             get => m_ScaleY;
             set 
-            {
+            { 
                 Set(ref m_ScaleY, value);
-                var w = m_root.Scale.Width;
-                m_root.Scale = new SizeF(w, (float)value);
+                UpdateScaleY(GetCurrentGameObject(), (float)ScaleY);
+            }
+        }
+
+        public ObservableCollection<ChildObjectViewModel> Children
+        { get => m_ShipModules; set => m_ShipModules = value; }
+
+        public ObservableCollection<string> ResourceNames
+        { get => m_resourceNames; set => m_resourceNames = value; }
+
+        public string SelectedRoot
+        {
+            get => m_SelectedRoot;
+            set 
+            {
+                Set(ref m_SelectedRoot, value);
+
+                if (m_root == null && !string.IsNullOrEmpty(SelectedRoot))
+                {
+                    m_root = new ModuleMock(RootName);
+                    m_root.GetComponent<Sprite>(nameof(Sprite)).Load(m_ResourceLoader.ResourceDictionary, SelectedRoot);
+                    m_gameViewHost.World.Add(m_root);
+                    SelectRootEnabled = true;
+                    RootSelected = true;
+                }
+                else
+                {
+                    m_root.GetComponent<Sprite>(nameof(Sprite)).Load(m_ResourceLoader.ResourceDictionary, SelectedRoot);
+                    SelectRootEnabled = true;
+                    RootSelected = true;
+                }
+            }
+        }
+
+        public bool RootSelected
+        {
+            get => m_RootSelected;
+            set 
+            { 
+                Set(ref m_RootSelected, value);
+                if (m_RootSelected)
+                {
+                    LoadCurrentGameObjProperties(m_root);
+                    SelectedChildIndex = -1;
+                }
             }
         }
         #endregion
@@ -150,69 +211,26 @@ namespace SpaceAvenger.Editor.ViewModels
             get
             { 
                 string error = string.Empty;
-
                 switch (columnName)
                 {
                     case nameof(RootName):
                         if (!ValidationHelper.TextIsEmpty(RootName, out error))
                         {
                             ChooseRootImageEnabled = true;
-
-                            if(m_root != null && !m_root.Name.Equals(RootName))
-                                m_root.Name = RootName;
+                            SelectRootEnabled = true;
                         }
                         else
                         {
                             ChooseRootImageEnabled = false;
+                            SelectRootEnabled = false;
                         }
-                        break;
+                    break;
                 }
 
                 return error;
             }
         }
         #endregion
-
-        public ObservableCollection<ShipModuleViewModel> ShipModules
-        { get => m_ShipModules; set => m_ShipModules = value; }
-
-        public ObservableCollection<string> ResourceNames
-        { get => m_resourceNames; set => m_resourceNames = value; }
-
-        public string SelectedRoot
-        {
-            get => m_SelectedRoot;
-            set
-            {
-                if (m_root == null && !string.IsNullOrEmpty(value))
-                {
-                    m_root = new ModuleMock(RootName);
-                    m_root.GetComponent<Sprite>(nameof(Sprite)).Load(m_ResourceLoader.ResourceDictionary, value);
-                    m_gameViewHost.World.Add(m_root);
-                }
-                else
-                {
-                    m_root.GetComponent<Sprite>(nameof(Sprite)).Load(m_ResourceLoader.ResourceDictionary, value);
-                }
-            }
-        }
-
-        public bool RootSelected 
-        {
-            get => m_RootSelected;
-            set 
-            {
-                Set(ref m_RootSelected, value);
-                if (!m_RootSelected)
-                    return;
-
-                PositionX = m_root.Position.X;
-                PositionY = m_root.Position.Y;
-                Rot = m_root.Rotation;
-                ScaleX = m_root.Scale.Width;
-                ScaleY = m_root.Scale.Height;
-            }
-        }
 
         #region Commands
         public ICommand OnAddModuleButtonPressed { get; }
@@ -229,8 +247,7 @@ namespace SpaceAvenger.Editor.ViewModels
 
         public EditorMainWindowViewModel()
         {
-            m_childrenMap = new Dictionary<int, IGameObject>();
-            m_ShipModules = new ObservableCollection<ShipModuleViewModel>();
+            m_ShipModules = new ObservableCollection<ChildObjectViewModel>();
             m_resourceNames = new ObservableCollection<string>();
             m_SelectedRoot = string.Empty;
             m_gameViewHost = new GameViewHost();
@@ -239,6 +256,12 @@ namespace SpaceAvenger.Editor.ViewModels
             m_ShowBorders = true;
             m_ShowGizmos = true;
             m_RootName = string.Empty;
+            m_SelectRootEnabled = false;
+            m_ChooseRootImageEnabled = false;
+            m_SelectedChildIndex = -1;
+
+            m_ScaleX = 1f;
+            m_ScaleY = 1f;
 
             GESettings.DrawGizmo = true;
             GESettings.DrawBorders = true;
@@ -253,17 +276,86 @@ namespace SpaceAvenger.Editor.ViewModels
 
         #region Methods
         #region On Add Module Button Pressed
-        private bool CanOnAddModuleButtonPressedExecute(object p) => true;
+        private bool CanOnAddModuleButtonPressedExecute(object p) => m_root != null;
 
         private void OnAddModuleButtonPressedExecute(object p)
         {
-            var child = new ModuleMock("Module");
-            m_childrenMap.Add(child.Id, child);
-            var module = new ShipModuleViewModel(child, ResourceNames);
+            string name = $"Module{Children.Count + 1}";
+            var child = new ModuleMock(name);
+            var module = new ChildObjectViewModel(Children.Count + 1, name, m_ResourceLoader,
+                child, ResourceNames);
             m_root.AddChild(child);
-            ShipModules.Add(module);
+            Children.Add(module);
         }
         #endregion
+        private void LoadCurrentGameObjProperties(IGameObject obj)
+        {
+            if (obj != null)
+            { 
+                PositionX = obj.Position.X;
+                PositionY = obj.Position.Y;
+                Rot = obj.Rotation;
+                ScaleX = obj.Scale.Width;
+                ScaleY = obj.Scale.Height;
+            }
+        }
+
+        private void UpdatePositionX(IGameObject obj, float x)
+        {
+            if (obj != null)
+            { 
+                float y = obj.Position.Y;
+                obj.Position = new Vector2(x, y);
+            }
+        }
+
+        private void UpdatePositionY(IGameObject obj, float y)
+        {
+            if (obj != null)
+            {
+                float x = obj.Position.X;
+                obj.Position = new Vector2(x, y);
+            }
+        }
+
+        private void UpdateRotation(IGameObject obj, float rotation)
+        { 
+            if(obj != null)
+                obj.Rotation = rotation;
+        }
+
+        private void UpdateScaleX(IGameObject obj, float x)
+        {
+            if (obj != null)
+            {
+                float y = obj.Scale.Height;
+                obj.Scale = new SizeF(x, y);
+            }
+        }
+
+        private void UpdateScaleY(IGameObject obj, float y)
+        {
+            if (obj != null)
+            {
+                float x = obj.Scale.Width;
+                obj.Scale = new SizeF(x, y);
+            }
+        }
+
+        private IGameObject GetCurrentGameObject()
+        {
+            IGameObject obj = null;
+            if (SelectedChildIndex >= 0)
+            {
+                obj = Children[SelectedChildIndex].GameObject;
+            }
+            else if (RootSelected && m_root is not null)
+            {
+                obj = m_root;
+            }
+            return obj;
+        }
+
         #endregion
     }
 }

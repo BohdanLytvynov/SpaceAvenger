@@ -1,9 +1,7 @@
 ﻿using System.Drawing;
 using System.Numerics;
 using System.Windows.Media;
-using WPFGameEngine.GameViewControl;
 using WPFGameEngine.WPF.GE.Component.Base;
-using WPFGameEngine.WPF.GE.Component.Sprites;
 
 namespace WPFGameEngine.WPF.GE.GameObjects
 {
@@ -27,14 +25,17 @@ namespace WPFGameEngine.WPF.GE.GameObjects
 
         void Update(List<IGameObject> world);
 
-        GameObject RegisterComponent(IComponent component);
+        IGameObject RegisterComponent(IComponent component);
 
-        GameObject UnregisterComponent(IComponent component);
+        IGameObject UnregisterComponent(IComponent component);
 
         void AddChild(GameObject child);
 
         void RemoveChild(GameObject child);
 
         Matrix GetGlobalTransformMatrix(Vector2 center);
+
+        public TComponent? GetComponent<TComponent>(string componentName, bool throwException = true)
+            where TComponent : IComponent;
     }
 }

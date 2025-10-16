@@ -40,25 +40,37 @@
                                 <controls:Slider Value="{Binding PositionX, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                 Margin="10" LabelText="X-Position: "
                                 Minimum="0" Maximum="{Binding ElementName=GameView, Path=ActualWidth, 
-                                UpdateSourceTrigger=PropertyChanged}"/>
+                                UpdateSourceTrigger=PropertyChanged}"
+                                                 FloatValue="True"/>
                                 <controls:Slider Value="{Binding PositionY, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                 Margin="10" LabelText="Y-Position: "
                                 Minimum="0" Maximum="{Binding ElementName=GameView, Path=ActualHeight, 
-                                UpdateSourceTrigger=PropertyChanged}"/>
+                                UpdateSourceTrigger=PropertyChanged}"
+                                                 FloatValue="True"
+                                                 />
                                 <controls:Slider Value="{Binding Rot, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                 Margin="10" LabelText="Rotation: "
-                                Minimum="-360.0" Maximum="360.0"/>
+                                Minimum="-360.0" Maximum="360.0"
+                                                 FloatValue="True"
+                                                 />
                                 <controls:Slider Value="{Binding ScaleX, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                 Margin="10" LabelText="X-Scale: "
-                                Minimum="0" Maximum="1.0"/>
+                                Minimum="0" Maximum="1.0"
+                                                 FloatValue="True"
+                                                 />
                                 <controls:Slider Value="{Binding ScaleY, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                 Margin="10" LabelText="Y-Scale: "
-                                Minimum="0" Maximum="1.0"/>
+                                Minimum="0" Maximum="1.0"
+                                                 FloatValue="True"
+                                                 />
                                 <Rectangle Style="{StaticResource BorderRectStyle}"/>
                                 <TextBlock Text="Space Ship" Style="{StaticResource DescLabel}"/>
                                 <Rectangle Style="{StaticResource BorderRectStyle}"/>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="Enter Root Object Name:" Style="{StaticResource DescLabel}"/>
+                                <StackPanel Orientation="Horizontal" Margin="10,0,0,0">
+                                    <TextBlock Text="Enter Root Object Name:" 
+                                               Style="{StaticResource DescLabel}"
+                                               Margin="0,0,10,0"
+                                               VerticalAlignment="Center"/>
                                     <TextBox Style="{StaticResource TxtBoxInputStyle}">
                                         <TextBox.Text>
                                             <Binding Path="RootName" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
@@ -69,19 +81,31 @@
                                         </TextBox.Text>
                                     </TextBox>
                                 </StackPanel>
-                                <StackPanel Orientation="Horizontal" Margin="0,10,0,10">
-                                    <TextBlock Text="Select Root Image:" Style="{StaticResource DescLabel}"/>
-                                    <ComboBox MinWidth="200" IsEditable="True" 
+                                <StackPanel Orientation="Horizontal" Margin="10,10,0,10">
+                                    <TextBlock Text="Select Root Image:" 
+                                               VerticalAlignment="Center"
+                                               Style="{StaticResource DescLabel}"/>
+                                    <ComboBox MinWidth="200" IsEditable="True" Margin="10,0,0,0" 
                                               IsEnabled="{Binding ChooseRootImageEnabled, UpdateSourceTrigger=PropertyChanged}"
                                               ItemsSource="{Binding ResourceNames, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                               SelectedItem="{Binding SelectedRoot, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                                    <ToggleButton Content="Select Root"/>
+                                    <ToggleButton Content="Select Root" Margin="10,0,0,0"
+                                                  IsEnabled="{Binding SelectRootEnabled, 
+                                        UpdateSourceTrigger=PropertyChanged}"
+                                                  IsChecked="{Binding RootSelected, 
+                                        UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                                 </StackPanel>
+                                <Rectangle Style="{StaticResource BorderRectStyle}"/>
+                                <TextBlock Text="Children Configuration" Style="{StaticResource DescLabel}"/>
+                                <Rectangle Style="{StaticResource BorderRectStyle}"/>
                                 <StackPanel Orientation="Horizontal">
                                     <Button Content="Add Child" Height="20" Width="100" Margin="20,0,0,0"
                                             Command="{Binding OnAddModuleButtonPressed}"/>
                                 </StackPanel>
-                                <ListView ItemsSource="{Binding ShipModules, UpdateSourceTrigger=PropertyChanged}"/>
+                                <ListView ItemsSource="{Binding Children, UpdateSourceTrigger=PropertyChanged}"
+                                          SelectedIndex="{Binding SelectedChildIndex, 
+                                    UpdateSourceTrigger=PropertyChanged, 
+                                    Mode=TwoWay}"/>
                             </StackPanel>
                         </ScrollViewer>
                     </Grid>

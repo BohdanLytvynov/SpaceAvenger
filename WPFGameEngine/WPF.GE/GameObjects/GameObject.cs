@@ -201,7 +201,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects
             ZIndex = 0;
         }
 
-        public GameObject RegisterComponent(IComponent component)
+        public IGameObject RegisterComponent(IComponent component)
         {
             if (component == null)
                 throw new ArgumentNullException(nameof(component));
@@ -214,7 +214,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects
             return this;
         }
 
-        public GameObject UnregisterComponent(IComponent component)
+        public IGameObject UnregisterComponent(IComponent component)
         {
             if (component == null)
                 throw new ArgumentNullException(nameof(component));

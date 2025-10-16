@@ -496,8 +496,8 @@ namespace WPFGameEngine.Editor.Controls
                 This.Value = newValue;
 
             var currentValue = This.Value.ToString();
-            var arr = currentValue.Split(',');
-            if (currentValue.Contains(','))
+            var arr = currentValue.Split('.');
+            if (currentValue.Contains('.'))
             {
                 This.IntegerPartValueString = arr[0];
                 This.FloatPartValueString = arr[1];
