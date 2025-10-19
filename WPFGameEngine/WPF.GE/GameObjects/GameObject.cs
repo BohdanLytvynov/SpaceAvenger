@@ -6,6 +6,7 @@ using WPFGameEngine.WPF.GE.Animations;
 using WPFGameEngine.WPF.GE.Component.Animators;
 using WPFGameEngine.WPF.GE.Component.Base;
 using WPFGameEngine.WPF.GE.Component.Sprites;
+using WPFGameEngine.WPF.GE.Component.Transforms;
 using WPFGameEngine.WPF.GE.Exceptions;
 using WPFGameEngine.WPF.GE.Settings;
 
@@ -25,58 +26,48 @@ namespace WPFGameEngine.WPF.GE.GameObjects
 
         private Dictionary<string, IComponent> m_components;
         private List<IGameObject> m_children;
+
+        private int m_id;
         #endregion
 
         #region Propeties
-
-        public Vector2 Position { get; set; }
-        public Vector2 CenterPosition { get; set; }
-        public double Rotation { get; set; }//Degree
-        public SizeF Scale { get; set; }
-        public int Id { get; init; }
+                
+        public int Id { get => m_id; }
         public bool Enabled { get; set; }
         public double ZIndex { get; set; }
         public string Name { get; set; }
-
         #endregion
 
         #region Ctor
-        public GameObject(string name)
+        public GameObject() : this(null)
         {
-            Init();
-            Position = new Vector2(0, 0);
-            Rotation = 0;
-            Scale = new SizeF(1, 1);
-            CenterPosition = new Vector2(0.5f, 0.5f);
-            Id = ++m_globId;
-
-            if (string.IsNullOrEmpty(name))
-            {
-                Name = name + $"_{Id}";
-            }
-            else
-            {
-                Name = name;
-            }
         }
 
+        public GameObject(string name) : this(name, new TransformComponent())
+        {
+        }
+        /// <summary>
+        /// Main Ctor
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="position"></param>
+        /// <param name="centerPosition"></param>
+        /// <param name="rotation"></param>
+        /// <param name="scale"></param>
         public GameObject(string name, Vector2 position, Vector2 centerPosition, double rotation, SizeF scale)
         {
             Init();
-            Position = position;
-            Rotation = rotation;
-            Scale = scale;
-            Name = name;
-            Id = ++m_globId;
+            RegisterComponent(new TransformComponent(position, centerPosition, rotation, scale));
+            InitName(name);
+            SetId();
+        }
 
-            if (string.IsNullOrEmpty(name))
-            {
-                Name = name + $"_{Id}";
-            }
-            else
-            {
-                Name = name;
-            }
+        public GameObject(string name, ITransform transform)
+        {
+            Init();
+            RegisterComponent(transform);
+            InitName(name);
+            SetId();
         }
         #endregion
 
@@ -85,8 +76,8 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         public virtual void Update(List<IGameObject> world)
         {
             if (!Enabled) return;
-            Animation? animation = GetComponent<Animation>(nameof(Animation), false);
-            Animator? animator = GetComponent<Animator>(nameof(Animator), false);
+            Animation? animation = GetComponent<Animation>(false);
+            Animator? animator = GetComponent<Animator>(false);
 
             if (animator != null)
             {
@@ -108,10 +99,10 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         public virtual void Render(DrawingContext dc, Matrix parent = default)
         {
             if (!Enabled) return;
-
-            Sprite? sprite = GetComponent<Sprite>(nameof(Sprite));
-            Animation? animation = GetComponent<Animation>(nameof(Animation), false);
-            Animator? animator = GetComponent<Animator>(nameof(Animator), false);
+            TransformComponent transform = GetComponent<TransformComponent>();
+            Sprite? sprite = GetComponent<Sprite>();
+            Animation? animation = GetComponent<Animation>(false);
+            Animator? animator = GetComponent<Animator>(false);
             //Get An Image for Render
             BitmapSource bitmapSource = null;
             if (animation != null)
@@ -131,10 +122,10 @@ namespace WPFGameEngine.WPF.GE.GameObjects
                 return;
 
             //Calculate the center of the Image
-            float Xcenter = (float)(bitmapSource.Width * Scale.Width) * CenterPosition.X;
-            float Ycenter = (float)(bitmapSource.Height * Scale.Height) * CenterPosition.Y;
+            float Xcenter = (float)(bitmapSource.Width * transform.Scale.Width) * transform.CenterPosition.X;
+            float Ycenter = (float)(bitmapSource.Height * transform.Scale.Height) * transform.CenterPosition.Y;
             //Get matrix for current game object
-            var globalMatrix = GetGlobalTransformMatrix(new Vector2(Xcenter, Ycenter));
+            var globalMatrix = transform.GetLocalTransformMatrix(new Vector2(Xcenter, Ycenter));
 
             if (parent != default)
             {
@@ -143,8 +134,8 @@ namespace WPFGameEngine.WPF.GE.GameObjects
 
             dc.PushTransform(new MatrixTransform(globalMatrix));
 
-            dc.DrawImage(bitmapSource, new System.Windows.Rect(0, 0, bitmapSource.Width * Scale.Width,
-                bitmapSource.Height * Scale.Height));
+            dc.DrawImage(bitmapSource, new System.Windows.Rect(0, 0, bitmapSource.Width * transform.Scale.Width,
+                bitmapSource.Height * transform.Scale.Height));
 
             if (GESettings.DrawGizmo)
             {
@@ -152,19 +143,19 @@ namespace WPFGameEngine.WPF.GE.GameObjects
                 dc.DrawLine(
                     GESettings.XAxisColor,
                     new System.Windows.Point(Xcenter, Ycenter),
-                    new System.Windows.Point(Xcenter + (bitmapSource.Width * Scale.Width) * (1 - CenterPosition.X), Ycenter));
+                    new System.Windows.Point(Xcenter + (bitmapSource.Width * transform.Scale.Width) * (1 - transform.CenterPosition.X), Ycenter));
 
                 dc.DrawLine(
                     GESettings.YAxisColor,
                     new System.Windows.Point(Xcenter, Ycenter),
-                    new System.Windows.Point(Xcenter, Ycenter + (bitmapSource.Height * Scale.Height) * (1 - CenterPosition.Y)));
+                    new System.Windows.Point(Xcenter, Ycenter + (bitmapSource.Height * transform.Scale.Height) * (1 - transform.CenterPosition.Y)));
 
                 dc.DrawEllipse(
                     GESettings.GizmoCenterBrush,
                     GESettings.GizmoCenterPen,
                     new System.Windows.Point(Xcenter, Ycenter),
-                    GESettings.GizmoCenterXRadius * Scale.Width,
-                    GESettings.GizmoCenterYRadius * Scale.Height);
+                    GESettings.GizmoCenterXRadius * transform.Scale.Width,
+                    GESettings.GizmoCenterYRadius * transform.Scale.Height);
             }
 
             if (GESettings.DrawBorders)
@@ -174,8 +165,8 @@ namespace WPFGameEngine.WPF.GE.GameObjects
                     GESettings.BorderRectanglePen,
                     new System.Windows.Rect(
                         0, 0,
-                        bitmapSource.Width * Scale.Width,
-                        bitmapSource.Height * Scale.Height)
+                        bitmapSource.Width * transform.Scale.Width,
+                        bitmapSource.Height * transform.Scale.Height)
                     );
             }
 
@@ -198,6 +189,23 @@ namespace WPFGameEngine.WPF.GE.GameObjects
             m_children = new List<IGameObject>();
             Enabled = true;
             ZIndex = 0;
+        }
+
+        private void InitName(string name)
+        {
+            if (string.IsNullOrEmpty(name))
+            {
+                Name = this.GetType().Name + $"_{Id}";
+            }
+            else
+            {
+                Name = name;
+            }
+        }
+
+        private void SetId()
+        {
+            m_id = ++m_globId;
         }
 
         public IGameObject RegisterComponent(IComponent component)
@@ -224,9 +232,10 @@ namespace WPFGameEngine.WPF.GE.GameObjects
             return this;
         }
 
-        public TComponent? GetComponent<TComponent>(string componentName, bool throwException = true)
+        public TComponent? GetComponent<TComponent>(bool throwException = true)
             where TComponent : IComponent
         {
+            var componentName = typeof(TComponent).Name;
             if (throwException && !m_components.ContainsKey(componentName))
                 throw new ComponentNotFoundException(componentName);
 
@@ -236,24 +245,6 @@ namespace WPFGameEngine.WPF.GE.GameObjects
                 return (TComponent)component;
             }
             return default;
-        }
-
-        public Matrix GetGlobalTransformMatrix(Vector2 center)
-        {
-            //Create I matrix, diagonal is 1
-            Matrix matrix = Matrix.Identity;
-            //Move to center of the texture
-            matrix.Translate(-center.X, -center.Y);
-            //Apply scale
-            matrix.Scale(Scale.Width, Scale.Height);
-            //Apply Rotation
-            matrix.Rotate(Rotation);
-            //Move back to initial origin
-            matrix.Translate(center.X, center.Y);
-            //Apply Translate in the World
-            matrix.Translate(Position.X, Position.Y);
-
-            return matrix;
         }
 
         public void AddChild(GameObject child)

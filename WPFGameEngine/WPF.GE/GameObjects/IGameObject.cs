@@ -1,22 +1,16 @@
 ﻿using System.Drawing;
 using System.Numerics;
+using System.Reflection.Metadata.Ecma335;
 using System.Windows.Media;
 using WPFGameEngine.WPF.GE.Component.Base;
+using WPFGameEngine.WPF.GE.Component.Transforms;
 
 namespace WPFGameEngine.WPF.GE.GameObjects
 {
     public interface IGameObject 
     {
-        public int Id { get; init; }
-
-        public Vector2 Position { get; set; }
-
-        public Vector2 CenterPosition { get; set; }
-
-        public double Rotation { get; set; }
-
-        public SizeF Scale { get; set; }
-
+        public int Id { get; }
+        
         public double ZIndex { get; set; }
 
         public bool Enabled { get; set; }
@@ -35,9 +29,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects
 
         void RemoveChild(GameObject child);
 
-        Matrix GetGlobalTransformMatrix(Vector2 center);
-
-        public TComponent? GetComponent<TComponent>(string componentName, bool throwException = true)
+        public TComponent? GetComponent<TComponent>(bool throwException = true)
             where TComponent : IComponent;
     }
 }

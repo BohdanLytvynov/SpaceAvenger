@@ -15,16 +15,21 @@
             <TabItem Header="Game Objects">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="482*"/>
+                        <ColumnDefinition Width="157*"/>
                         <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="297*"/>
+                        <ColumnDefinition Width="319*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="303*"/>
                     </Grid.ColumnDefinitions>
-                    <Label Grid.Column="0" x:Name="GameView" 
-                           Content="{Binding GameView, UpdateSourceTrigger=PropertyChanged}"/>
                     <GridSplitter Grid.Column="1" Width="5" VerticalAlignment="Stretch" 
                                   HorizontalAlignment="Stretch" 
                                   Background="Black"/>
-                    <Grid Grid.Column="2">
+                    <Label Grid.Column="2" x:Name="GameView" 
+                           Content="{Binding GameView, UpdateSourceTrigger=PropertyChanged}"/>
+                    <GridSplitter Grid.Column="3" Width="5" VerticalAlignment="Stretch" 
+                                  HorizontalAlignment="Stretch" 
+                                  Background="Black"/>
+                    <!--<Grid Grid.Column="4">
                         <ScrollViewer VerticalScrollBarVisibility="Visible">
                             <StackPanel Orientation="Vertical" Height="1200">
                                 <Rectangle Style="{StaticResource BorderRectStyle}"/>
@@ -118,7 +123,7 @@
                                     Mode=TwoWay}"/>
                             </StackPanel>
                         </ScrollViewer>
-                    </Grid>
+                    </Grid>-->
                 </Grid>
             </TabItem>
             <TabItem Header="Level">

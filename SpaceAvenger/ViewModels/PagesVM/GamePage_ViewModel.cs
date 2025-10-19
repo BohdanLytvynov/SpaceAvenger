@@ -129,14 +129,14 @@ namespace SpaceAvenger.ViewModels.PagesVM
 
         private void Initialize()
         {
-            F10Destroyer destroyer = new F10Destroyer("Player")
-            {
-                Position = new Vector2(200, 300),
-                Scale = new SizeF(0.7f, 0.7f),
-                Rotation = 45
-            };
+            //F10Destroyer destroyer = new F10Destroyer("Player")
+            //{
+            //    Position = new Vector2(200, 300),
+            //    Scale = new SizeF(0.7f, 0.7f),
+            //    Rotation = 45
+            //};
 
-            RegisterNewObject(destroyer);
+            //RegisterNewObject(destroyer);
         }
 
         private void RegisterNewObject(GameObject gameObject)

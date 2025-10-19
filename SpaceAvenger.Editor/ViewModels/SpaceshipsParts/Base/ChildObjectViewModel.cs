@@ -56,11 +56,11 @@ namespace SpaceAvenger.Editor.ViewModels.SpaceshipsParts.Base
 
                 if (GameObject == null && !string.IsNullOrEmpty(value))
                 {
-                    GameObject.GetComponent<Sprite>(nameof(Sprite)).Load(m_ResourceLoader.ResourceDictionary, value);                    
+                    GameObject.GetComponent<Sprite>().Load(m_ResourceLoader.ResourceDictionary, value);                    
                 }
                 else
                 {
-                    GameObject.GetComponent<Sprite>(nameof(Sprite)).Load(m_ResourceLoader.ResourceDictionary, value);
+                    GameObject.GetComponent<Sprite>().Load(m_ResourceLoader.ResourceDictionary, value);
                 }
             }
         }

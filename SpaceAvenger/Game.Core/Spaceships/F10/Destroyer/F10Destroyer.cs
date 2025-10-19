@@ -22,7 +22,7 @@ namespace SpaceAvenger.Game.Core.Spaceships.F10.Destroyer
             sprite.Load(App.Current.Resources, "F10_Destr");
             RegisterComponent(sprite);
             mainL = new F10Jet("Main1Jet") ;
-            mainL_Animator = mainL.GetComponent<Animator>(nameof(Animator));
+            mainL_Animator = mainL.GetComponent<Animator>();
             StartMainEngines();
             AddChild(mainL);
         }

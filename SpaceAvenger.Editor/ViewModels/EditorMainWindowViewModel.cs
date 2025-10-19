@@ -12,6 +12,7 @@ using ViewModelBaseLibDotNetCore.Helpers;
 using ViewModelBaseLibDotNetCore.VM;
 using WPFGameEngine.GameViewControl;
 using WPFGameEngine.WPF.GE.Component.Sprites;
+using WPFGameEngine.WPF.GE.Component.Transforms;
 using WPFGameEngine.WPF.GE.GameObjects;
 using WPFGameEngine.WPF.GE.Settings;
 
@@ -198,14 +199,14 @@ namespace SpaceAvenger.Editor.ViewModels
                 if (m_root == null && !string.IsNullOrEmpty(SelectedRoot))
                 {
                     m_root = new ModuleMock(RootName);
-                    m_root.GetComponent<Sprite>(nameof(Sprite)).Load(m_ResourceLoader.ResourceDictionary, SelectedRoot);
+                    m_root.GetComponent<Sprite>(true).Load(m_ResourceLoader.ResourceDictionary, SelectedRoot);
                     m_gameViewHost.World.Add(m_root);
                     SelectRootEnabled = true;
                     RootSelected = true;
                 }
                 else
                 {
-                    m_root.GetComponent<Sprite>(nameof(Sprite)).Load(m_ResourceLoader.ResourceDictionary, SelectedRoot);
+                    m_root.GetComponent<Sprite>(true).Load(m_ResourceLoader.ResourceDictionary, SelectedRoot);
                     SelectRootEnabled = true;
                     RootSelected = true;
                 }
@@ -313,23 +314,26 @@ namespace SpaceAvenger.Editor.ViewModels
         private void LoadCurrentGameObjProperties(IGameObject obj)
         {
             if (obj != null)
-            { 
-                PositionX = obj.Position.X;
-                PositionY = obj.Position.Y;
-                Rot = obj.Rotation;
-                ScaleX = obj.Scale.Width;
-                ScaleY = obj.Scale.Height;
-                CenterPositionX = obj.CenterPosition.X;
-                CenterPositionY = obj.CenterPosition.Y;
+            {
+                var t = obj.GetComponent<TransformComponent>(true);
+
+                PositionX = t.Position.X;
+                PositionY = t.Position.Y;
+                Rot = t.Rotation;
+                ScaleX = t.Scale.Width;
+                ScaleY = t.Scale.Height;
+                CenterPositionX = t.CenterPosition.X;
+                CenterPositionY = t.CenterPosition.Y;
             }
         }
 
         private void UpdatePositionX(IGameObject obj, float x)
         {
             if (obj != null)
-            { 
-                float y = obj.Position.Y;
-                obj.Position = new Vector2(x, y);
+            {
+                var t = obj.GetComponent<TransformComponent>(true);
+                float y = t.Position.Y;
+                t.Position = new Vector2(x, y);
             }
         }
 
@@ -337,23 +341,29 @@ namespace SpaceAvenger.Editor.ViewModels
         {
             if (obj != null)
             {
-                float x = obj.Position.X;
-                obj.Position = new Vector2(x, y);
+                var t = obj.GetComponent<TransformComponent>(true);
+                float x = t.Position.X;
+                t.Position = new Vector2(x, y);
             }
         }
 
         private void UpdateRotation(IGameObject obj, float rotation)
-        { 
-            if(obj != null)
-                obj.Rotation = rotation;
+        {
+            if (obj != null)
+            {
+                var t = obj.GetComponent<TransformComponent>(true);
+                t.Rotation = rotation;
+            }
+            
         }
 
         private void UpdateScaleX(IGameObject obj, float x)
         {
             if (obj != null)
             {
-                float y = obj.Scale.Height;
-                obj.Scale = new SizeF(x, y);
+                var t = obj.GetComponent<TransformComponent>(true);
+                float y = t.Scale.Height;
+                t.Scale = new SizeF(x, y);
             }
         }
 
@@ -361,8 +371,9 @@ namespace SpaceAvenger.Editor.ViewModels
         {
             if (obj != null)
             {
-                float x = obj.Scale.Width;
-                obj.Scale = new SizeF(x, y);
+                var t = obj.GetComponent<TransformComponent>(true);
+                float x = t.Scale.Width;
+                t.Scale = new SizeF(x, y);
             }
         }
 
@@ -370,8 +381,9 @@ namespace SpaceAvenger.Editor.ViewModels
         {
             if (obj != null)
             {
-                float y = obj.CenterPosition.Y;
-                obj.CenterPosition = new Vector2(x, y);
+                var t = obj.GetComponent<TransformComponent>(true);
+                float y = t.CenterPosition.Y;
+                t.CenterPosition = new Vector2(x, y);
             }
         }
 
@@ -379,8 +391,9 @@ namespace SpaceAvenger.Editor.ViewModels
         {
             if (obj != null)
             {
-                float x = obj.CenterPosition.X;
-                obj.CenterPosition = new Vector2(x, y);
+                var t = obj.GetComponent<TransformComponent>(true);
+                float x = t.CenterPosition.X;
+                t.CenterPosition = new Vector2(x, y);
             }
         }
 
