@@ -11,6 +11,8 @@ namespace WPFGameEngine.WPF.GE.GameObjects
 
         public Vector2 Position { get; set; }
 
+        public Vector2 CenterPosition { get; set; }
+
         public double Rotation { get; set; }
 
         public SizeF Scale { get; set; }

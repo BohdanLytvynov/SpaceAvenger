@@ -37,6 +37,8 @@ namespace SpaceAvenger.Editor.ViewModels
         private double m_rot;
         private double m_ScaleX;
         private double m_ScaleY;
+        private double m_CenterPositionX;
+        private double m_CenterPositionY;
         private ObservableCollection<ChildObjectViewModel> m_ShipModules;
         private ObservableCollection<string> m_resourceNames;
         private IResourceLoader m_ResourceLoader;
@@ -160,6 +162,26 @@ namespace SpaceAvenger.Editor.ViewModels
             }
         }
 
+        public double CenterPositionX 
+        {
+            get=>m_CenterPositionX;
+            set 
+            {
+                Set(ref m_CenterPositionX, value);
+                UpdateCenterPositionX(GetCurrentGameObject(), (float)CenterPositionX);
+            }
+        }
+
+        public double CenterPositionY 
+        {
+            get=> m_CenterPositionY;
+            set 
+            {
+                Set(ref m_CenterPositionY, value);
+                UpdateCenterPositionY(GetCurrentGameObject(), (float)CenterPositionY);
+            }
+        }
+
         public ObservableCollection<ChildObjectViewModel> Children
         { get => m_ShipModules; set => m_ShipModules = value; }
 
@@ -198,8 +220,8 @@ namespace SpaceAvenger.Editor.ViewModels
                 Set(ref m_RootSelected, value);
                 if (m_RootSelected)
                 {
-                    LoadCurrentGameObjProperties(m_root);
                     SelectedChildIndex = -1;
+                    LoadCurrentGameObjProperties(m_root);
                 }
             }
         }
@@ -297,6 +319,8 @@ namespace SpaceAvenger.Editor.ViewModels
                 Rot = obj.Rotation;
                 ScaleX = obj.Scale.Width;
                 ScaleY = obj.Scale.Height;
+                CenterPositionX = obj.CenterPosition.X;
+                CenterPositionY = obj.CenterPosition.Y;
             }
         }
 
@@ -339,6 +363,24 @@ namespace SpaceAvenger.Editor.ViewModels
             {
                 float x = obj.Scale.Width;
                 obj.Scale = new SizeF(x, y);
+            }
+        }
+
+        private void UpdateCenterPositionX(IGameObject obj, float x)
+        {
+            if (obj != null)
+            {
+                float y = obj.CenterPosition.Y;
+                obj.CenterPosition = new Vector2(x, y);
+            }
+        }
+
+        private void UpdateCenterPositionY(IGameObject obj, float y)
+        {
+            if (obj != null)
+            {
+                float x = obj.CenterPosition.X;
+                obj.CenterPosition = new Vector2(x, y);
             }
         }
 

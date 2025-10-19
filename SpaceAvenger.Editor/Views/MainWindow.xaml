@@ -63,6 +63,16 @@
                                 Minimum="0" Maximum="1.0"
                                                  FloatValue="True"
                                                  />
+                                <controls:Slider Value="{Binding CenterPositionX, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                Margin="10" LabelText="Center Position X: "
+                                Minimum="0" Maximum="1.0"
+                                FloatValue="True"
+                                                    />
+                                <controls:Slider Value="{Binding CenterPositionY, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                    Margin="10" LabelText="Center Position Y:"
+                                    Minimum="0" Maximum="1.0"
+                                    FloatValue="True"
+                                                    />
                                 <Rectangle Style="{StaticResource BorderRectStyle}"/>
                                 <TextBlock Text="Space Ship" Style="{StaticResource DescLabel}"/>
                                 <Rectangle Style="{StaticResource BorderRectStyle}"/>

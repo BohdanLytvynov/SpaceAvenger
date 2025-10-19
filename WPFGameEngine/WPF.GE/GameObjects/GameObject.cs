@@ -2,7 +2,6 @@
 using System.Numerics;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using WPFGameEngine.GameViewControl;
 using WPFGameEngine.WPF.GE.Animations;
 using WPFGameEngine.WPF.GE.Component.Animators;
 using WPFGameEngine.WPF.GE.Component.Base;
@@ -31,9 +30,8 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         #region Propeties
 
         public Vector2 Position { get; set; }
-
+        public Vector2 CenterPosition { get; set; }
         public double Rotation { get; set; }//Degree
-
         public SizeF Scale { get; set; }
         public int Id { get; init; }
         public bool Enabled { get; set; }
@@ -49,6 +47,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects
             Position = new Vector2(0, 0);
             Rotation = 0;
             Scale = new SizeF(1, 1);
+            CenterPosition = new Vector2(0.5f, 0.5f);
             Id = ++m_globId;
 
             if (string.IsNullOrEmpty(name))
@@ -61,7 +60,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects
             }
         }
 
-        public GameObject(string name, Vector2 position, double rotation, SizeF scale)
+        public GameObject(string name, Vector2 position, Vector2 centerPosition, double rotation, SizeF scale)
         {
             Init();
             Position = position;
@@ -132,8 +131,8 @@ namespace WPFGameEngine.WPF.GE.GameObjects
                 return;
 
             //Calculate the center of the Image
-            float Xcenter = (float)(bitmapSource.Width * Scale.Width) / 2;
-            float Ycenter = (float)(bitmapSource.Height * Scale.Height) / 2;
+            float Xcenter = (float)(bitmapSource.Width * Scale.Width) * CenterPosition.X;
+            float Ycenter = (float)(bitmapSource.Height * Scale.Height) * CenterPosition.Y;
             //Get matrix for current game object
             var globalMatrix = GetGlobalTransformMatrix(new Vector2(Xcenter, Ycenter));
 
@@ -153,12 +152,12 @@ namespace WPFGameEngine.WPF.GE.GameObjects
                 dc.DrawLine(
                     GESettings.XAxisColor,
                     new System.Windows.Point(Xcenter, Ycenter),
-                    new System.Windows.Point(Xcenter + (bitmapSource.Width * Scale.Width) / 2, Ycenter));
+                    new System.Windows.Point(Xcenter + (bitmapSource.Width * Scale.Width) * (1 - CenterPosition.X), Ycenter));
 
                 dc.DrawLine(
                     GESettings.YAxisColor,
                     new System.Windows.Point(Xcenter, Ycenter),
-                    new System.Windows.Point(Xcenter, Ycenter + (bitmapSource.Height * Scale.Height) / 2));
+                    new System.Windows.Point(Xcenter, Ycenter + (bitmapSource.Height * Scale.Height) * (1 - CenterPosition.Y)));
 
                 dc.DrawEllipse(
                     GESettings.GizmoCenterBrush,

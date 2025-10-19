@@ -47,7 +47,7 @@ namespace SpaceAvenger.Editor.ViewModels.SpaceshipsParts.Base
             set=> Set(ref m_moduleName, value);
         }
 
-        public string SelectedresourceName 
+        public string SelectedResourceName 
         {
             get=> m_selectedResourceName;
             set 
@@ -56,7 +56,6 @@ namespace SpaceAvenger.Editor.ViewModels.SpaceshipsParts.Base
 
                 if (GameObject == null && !string.IsNullOrEmpty(value))
                 {
-                    GameObject = new ModuleMock(ModuleName);
                     GameObject.GetComponent<Sprite>(nameof(Sprite)).Load(m_ResourceLoader.ResourceDictionary, value);                    
                 }
                 else
@@ -109,6 +108,7 @@ namespace SpaceAvenger.Editor.ViewModels.SpaceshipsParts.Base
             IGameObject gameObject, 
             ObservableCollection<string> resNames)
         {
+            GameObject = gameObject;
             m_showNumber = showNumber;
 
             m_ResourceLoader = resourceLoader ?? throw new ArgumentNullException(nameof(resourceLoader));
@@ -117,6 +117,7 @@ namespace SpaceAvenger.Editor.ViewModels.SpaceshipsParts.Base
                 throw new ArgumentNullException(nameof(resNames));
             m_resourceNames = new ObservableCollection<string>();
             m_moduleName = moduleName;
+            m_selectedResourceName = string.Empty;
 
             foreach (string name in resNames)
             {
@@ -129,7 +130,7 @@ namespace SpaceAvenger.Editor.ViewModels.SpaceshipsParts.Base
                 );
 
             OnSelectButtonPressed = new Command(
-                OnSelectButtoPressedExecute,
+                OnSelectButtonPressedExecute,
                 CanOnSelectButtonPressedExecute
                 );
             #endregion
@@ -151,7 +152,7 @@ namespace SpaceAvenger.Editor.ViewModels.SpaceshipsParts.Base
         #region OnSelect Button pressed Execute
         private bool CanOnSelectButtonPressedExecute(object p) => true;
 
-        private void OnSelectButtoPressedExecute(object p)
+        private void OnSelectButtonPressedExecute(object p)
         {
             OnSelect?.Invoke(GameObject.Id);
         }

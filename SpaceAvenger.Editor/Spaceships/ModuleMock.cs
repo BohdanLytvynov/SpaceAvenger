@@ -7,8 +7,8 @@ namespace SpaceAvenger.Editor.Spaceships
 {
     public class ModuleMock : GameObject
     {
-        public ModuleMock(string name, Vector2 position, double rotation, SizeF scale) 
-            : base(name, position, rotation, scale)
+        public ModuleMock(string name, Vector2 position, Vector2 centerPosition, double rotation, SizeF scale) 
+            : base(name, position, centerPosition, rotation, scale)
         {
             Init();
         }

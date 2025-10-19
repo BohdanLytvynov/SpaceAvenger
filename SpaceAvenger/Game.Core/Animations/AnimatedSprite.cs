@@ -24,8 +24,8 @@ namespace SpaceAvenger.Game.Core.Animations
 
         #region ctor
 
-        public AnimatedSprite(string name, Vector2 position, double rotation, SizeF scale) 
-            : base(name, position, rotation, scale)
+        public AnimatedSprite(string name, Vector2 position, Vector2 centerPosition, double rotation, SizeF scale) 
+            : base(name, position, centerPosition, rotation, scale)
         {
             
             

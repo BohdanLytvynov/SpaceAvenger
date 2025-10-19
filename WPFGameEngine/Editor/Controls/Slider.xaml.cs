@@ -64,6 +64,17 @@ namespace WPFGameEngine.Editor.Controls
 
         #region DependencyProperties
 
+
+
+        public bool IsValid
+        {
+            get { return (bool)GetValue(IsValidProperty); }
+            set { SetValue(IsValidProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for IsValid.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty IsValidProperty;
+
         public double Maximum
         {
             get { return (double)GetValue(MaximumProperty); }
@@ -239,45 +250,63 @@ namespace WPFGameEngine.Editor.Controls
                         if (!int.TryParse(IntegerPartValueString, out v))
                         {
                             error = "Not a number!";
+                            this.IsValid = false;
+                        }
+                        else if (!InBoundsInt())
+                        {
+                            error = "Not in bounds of min max!";
+                            this.IsValid = false;
                         }
                         else
                         {
                             var value = this.Value.ToString();
+
+                            if (!value.Contains(','))
+                                value += "," + 0;
+
                             var arr = value.Split(',');
-                            if (value.Contains(','))
-                            {
-                                this.Value = double.Parse(IntegerPartValueString + "," + arr[1]);
-                            }
-                            else
-                            {
-                                this.Value = double.Parse(IntegerPartValueString);
-                            }
+                            this.Value = double.Parse(IntegerPartValueString + "," + arr[1]);
+                            this.IsValid = true;
                         }
                         break;
                     case nameof(FloatPartValueString):
                         if (!isNumbers(FloatPartValueString, out error)) { }
+                        else if (!InBoundsFloat())
+                        {
+                            error = "Not in bounds of min max!";
+                            this.IsValid = false;
+                        }
                         else
                         {
                             var value = this.Value.ToString();
+                            if (!value.Contains(','))
+                                value += "," + 0;
+
                             var arr = value.Split(',');
-                            if (value.Contains(','))
-                            {
-                                this.Value = double.Parse(arr[0] + "," + FloatPartValueString);
-                            }
+                            this.Value = double.Parse(arr[0] + "," + FloatPartValueString);
+                            this.IsValid = true;
                         }
                         break;
                     case nameof(MinimumString):
-                        if (!isNumberValid(MinimumString, out error)) { }
+                        if (!isNumberValid(MinimumString, out error))
+                        {
+                            this.IsValid = false;
+                        }
                         else
                         {
                             this.Minimum = double.Parse(MinimumString);
+                            this.IsValid = true;
                         }
                         break;
                     case nameof(MaximumString):
-                        if (!isNumberValid(MaximumString, out error)) { }
+                        if (!isNumberValid(MaximumString, out error))
+                        {
+                            this.IsValid = false;
+                        }
                         else
                         {
                             this.Maximum = double.Parse(MaximumString);
+                            this.IsValid = true;
                         }
                         break;
                 }
@@ -416,6 +445,10 @@ namespace WPFGameEngine.Editor.Controls
             DeliminatorLabelStyleProperty =
             DependencyProperty.Register("DeliminatorLabelStyle", typeof(Style),
             typeof(Slider), new PropertyMetadata(default, OnDeliminatorLabelpropertyChanged));
+
+            IsValidProperty =
+            DependencyProperty.Register("IsValid", typeof(bool),
+            typeof(Slider), new PropertyMetadata(false, OnIsValidPropertyChanged));
         }
 
         private static void OnDeliminatorLabelpropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -492,12 +525,17 @@ namespace WPFGameEngine.Editor.Controls
         {
             var This = (Slider)d;
             var newValue = (double)e.NewValue;
+
             if (This.Value != newValue)
                 This.Value = newValue;
 
             var currentValue = This.Value.ToString();
-            var arr = currentValue.Split('.');
-            if (currentValue.Contains('.'))
+
+            if (!currentValue.Contains(','))
+                currentValue = currentValue + "," + 0;
+
+            var arr = currentValue.Split(',');
+            if (arr.Length == 2)
             {
                 This.IntegerPartValueString = arr[0];
                 This.FloatPartValueString = arr[1];
@@ -605,6 +643,44 @@ namespace WPFGameEngine.Editor.Controls
                 This.Minimum = val;
             This.MinimumString = val.ToString();
             This.SliderValue.Minimum = (double)e.NewValue;
+        }
+
+        private bool InBoundsInt()
+        {
+            string value = this.Value.ToString();
+            if (!value.Contains(","))
+            {
+                value += "," + 0;
+            }
+            var arr = value.Split(',');
+
+            double toCompare = double.Parse(IntegerPartValueString + "," + arr[1]);
+
+            return toCompare >= Minimum && toCompare <= Maximum;
+        }
+
+        private bool InBoundsFloat()
+        {
+            string value = this.Value.ToString();
+            if (!value.Contains(","))
+            {
+                value += "," + 0;
+            }
+            var arr = value.Split(',');
+
+            double toCompare = double.Parse(arr[0] + "," + FloatPartValueString);
+
+            return toCompare >= Minimum && toCompare <= Maximum;
+        }
+
+        private static void OnIsValidPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var This = (Slider)d;
+            var v = (bool)e.NewValue;
+            if (v != This.IsValid)
+            {
+                This.IsValid = v;
+            }
         }
         #endregion
     }

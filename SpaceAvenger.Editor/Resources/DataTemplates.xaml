@@ -20,6 +20,7 @@
                            VerticalAlignment="Center"/>
                 <ComboBox IsEditable="True" 
                           ItemsSource="{Binding ResourceNames, UpdateSourceTrigger=PropertyChanged}"
+                          SelectedItem="{Binding SelectedResourceName, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                           Margin="10" MinWidth="150"/>
             </StackPanel>
         </Border>
