@@ -40,8 +40,12 @@ namespace SpaceAvenger.Editor.ViewModels.TreeItems
             {
                 Set(ref m_Selected, value);
                 if (Selected)
-                { 
+                {
                     ItemSelected?.Invoke(this);
+                }
+                else
+                {
+                    ItemSelected?.Invoke(null);
                 }
             }
         }

@@ -2,6 +2,7 @@
 using System.Numerics;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Shell;
 using WPFGameEngine.WPF.GE.Animations;
 using WPFGameEngine.WPF.GE.Component.Animators;
 using WPFGameEngine.WPF.GE.Component.Base;
@@ -36,6 +37,8 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         public bool Enabled { get; set; }
         public double ZIndex { get; set; }
         public string Name { get; set; }
+
+        public List<IGameObject> Children { get => m_children; }
         #endregion
 
         #region Ctor
@@ -100,7 +103,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         {
             if (!Enabled) return;
             TransformComponent transform = GetComponent<TransformComponent>();
-            Sprite? sprite = GetComponent<Sprite>();
+            Sprite? sprite = GetComponent<Sprite>(false);
             Animation? animation = GetComponent<Animation>(false);
             Animator? animator = GetComponent<Animator>(false);
             //Get An Image for Render
@@ -113,7 +116,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects
             {
                 bitmapSource = animator.GetCurrentFrame();
             }
-            else
+            else if(sprite != null)
             {
                 bitmapSource = (BitmapSource)sprite.Image;
             }
@@ -247,16 +250,103 @@ namespace WPFGameEngine.WPF.GE.GameObjects
             return default;
         }
 
-        public void AddChild(GameObject child)
+        public IEnumerable<IComponent> GetComponents()
+        { 
+            return m_components.Values;
+        }
+
+        public void AddChild(IGameObject child)
         {
             if (child == null) throw new ArgumentNullException(nameof(child));
             m_children.Add(child);
         }
 
-        public void RemoveChild(GameObject child)
+        private void RemoveChildRecursive(IGameObject child, List<IGameObject> children, Func<IGameObject, bool> predicate,
+            bool removed = false)
+        {
+            if (removed)
+                return;
+
+            foreach (var item in m_children)
+            {
+                if (removed)
+                    return;
+
+                if (predicate(item))
+                { 
+                    m_children.Remove(item);
+                    removed = true;
+                    return;
+                }
+
+                RemoveChildRecursive(child, item.Children, predicate, removed);
+            }
+        }
+
+        public void RemoveChild(IGameObject child, Func<IGameObject, bool> predicate, bool recursive = false)
         {
             if (child == null) throw new ArgumentNullException(nameof(child));
-            m_children.Remove(child);
+
+            if (!recursive)
+            {
+                foreach (var item in m_children)
+                {
+                    if (predicate(item))
+                    {
+                        m_children.Remove(item);
+                        return;
+                    }
+                }
+            }
+            else
+            {
+                RemoveChildRecursive(child, m_children, predicate);
+            }
+        }
+
+        private void GetChildRecursive(Func<IGameObject, bool> predicate, List<IGameObject> children, ref IGameObject result,
+            bool found = false)
+        {
+            if (found)
+                return;
+
+            foreach (var item in m_children)
+            {
+                if (found)
+                    return;
+
+                if (predicate(item))
+                { 
+                    result = item;
+                    found = true;
+                    return;
+                }
+
+                GetChildRecursive(predicate, item.Children, ref result, found);
+            }
+        }
+
+        public IGameObject? FindChild(Func<IGameObject, bool> predicate, bool recursiveSearch = false)
+        {
+            IGameObject result = null;
+
+            if (!recursiveSearch)
+            {
+                foreach (var item in m_children)
+                {
+                    if (predicate(item))
+                    {
+                        result = item;
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                GetChildRecursive(predicate, m_children, ref result);
+            }
+
+            return result;
         }
 
         #endregion

@@ -265,7 +265,7 @@ namespace WPFGameEngine.Editor.Controls
                                 value += "," + 0;
 
                             var arr = value.Split(',');
-                            this.Value = double.Parse(IntegerPartValueString + "," + arr[1]);
+                            SetValue(ValueProperty, double.Parse(IntegerPartValueString + "," + arr[1]));
                             this.IsValid = true;
                         }
                         break;
@@ -283,7 +283,7 @@ namespace WPFGameEngine.Editor.Controls
                                 value += "," + 0;
 
                             var arr = value.Split(',');
-                            this.Value = double.Parse(arr[0] + "," + FloatPartValueString);
+                            SetValue(ValueProperty, double.Parse(arr[0] + "," + FloatPartValueString));
                             this.IsValid = true;
                         }
                         break;

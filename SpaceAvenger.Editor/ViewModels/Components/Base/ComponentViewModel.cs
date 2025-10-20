@@ -8,7 +8,7 @@ using WPFGameEngine.WPF.GE.GameObjects;
 
 namespace SpaceAvenger.Editor.ViewModels.Components.Base
 {
-    internal class ComponentViewModel : ValidationViewModel
+    internal abstract class ComponentViewModel : ValidationViewModel
     {
         #region Fields
         private string m_name;
@@ -30,6 +30,7 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Base
             m_name = name;
             GameObject = gameObject;
         }
+
         #endregion
 
         #region Methods

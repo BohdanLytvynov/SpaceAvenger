@@ -47,4 +47,9 @@
     </ImageSource>
     <!--#endregion-->
 
+    <!--#region Empty -->
+    <ImageSource x:Key="Empty">pack://siteoforigin:,,,/Resources/Content/Empty.png
+    </ImageSource>
+    <!--#endregion-->
+
 </ResourceDictionary>

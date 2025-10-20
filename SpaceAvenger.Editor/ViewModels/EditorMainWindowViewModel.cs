@@ -17,19 +17,30 @@ using WPFGameEngine.WPF.GE.GameObjects;
 using WPFGameEngine.WPF.GE.Settings;
 using WPFGameEngine.WPF.GE.Component.Base;
 using SpaceAvenger.Editor.ViewModels.Components.Base;
+using System.Linq.Expressions;
+using SpaceAvenger.Editor.ViewModels.Components.Transform;
+using WPFGameEngine.WPF.GE.Animations;
+using WPFGameEngine.WPF.GE.Component.Animators;
+using SpaceAvenger.Editor.ViewModels.Components.Animation;
+using SpaceAvenger.Editor.ViewModels.Components.Animator;
+using System.Xaml;
+using SpaceAvenger.Editor.ViewModels.Components.Sprite;
+using System.Windows.Documents;
+using System.Windows.Media;
 
 namespace SpaceAvenger.Editor.ViewModels
 {
     internal class EditorMainWindowViewModel : ValidationViewModel
     {
         #region Fields
-        private GameObject m_root;
         private GameViewHost m_gameViewHost;
         private TreeItemViewModel? m_SelectedItem;
 
         private bool m_ShowGizmos;
         private bool m_ShowBorders;
-
+        private bool m_enabled;
+        private string m_objName;
+        private double m_ZIndex;
         
         private IResourceLoader m_ResourceLoader;
 
@@ -38,6 +49,32 @@ namespace SpaceAvenger.Editor.ViewModels
         #endregion
 
         #region Properties
+
+        public double ZIndex 
+        {
+            get=> m_ZIndex;
+            set 
+            {
+                Set(ref m_ZIndex, value);
+                UpdateZIndex((int)ZIndex);
+            }
+        }
+
+        public bool Enabled 
+        {
+            get=> m_enabled;
+            set 
+            {
+                Set(ref m_enabled, value);
+                UpdateEnabled(value);
+            }
+        }
+
+        public string ObjName
+        {
+            get=> m_objName;
+            set=> Set(ref m_objName, value);
+        }
 
         public ObservableCollection<TreeItemViewModel> Items 
         {
@@ -78,6 +115,8 @@ namespace SpaceAvenger.Editor.ViewModels
         
         #region Commands
         public ICommand OnAddGameObjectButtonPressed { get; }
+
+        public ICommand OnDeleteGameObjectButtonPressed { get; }
         #endregion
 
         #region Ctor
@@ -95,6 +134,7 @@ namespace SpaceAvenger.Editor.ViewModels
             m_SelectedItem = null;
             m_Items = new ObservableCollection<TreeItemViewModel>();
             m_Componnts = new ObservableCollection<ComponentViewModel>();
+            m_objName = string.Empty;
 
             GESettings.DrawGizmo = true;
             GESettings.DrawBorders = true;
@@ -102,6 +142,11 @@ namespace SpaceAvenger.Editor.ViewModels
             OnAddGameObjectButtonPressed = new Command(
                 OnAddGameObjectButtonPressedExecute,
                 CanOnAddGameObjectButtonPressedExecute
+                );
+
+            OnDeleteGameObjectButtonPressed = new Command(
+                OnDeleteObjectButtonPressedExecute,
+                CanOnDeleteObjectButtonPressedExecute
                 );
         }
 
@@ -114,27 +159,143 @@ namespace SpaceAvenger.Editor.ViewModels
         private void OnAddGameObjectButtonPressedExecute(object p)
         {
             IGameObject obj = new GameObjectMock();
-            TreeItemViewModel itemViewModel = new(Items.Count + 1, obj);
-            itemViewModel.ItemSelected += ItemViewModel_ItemSelected;
-            Items.Add(itemViewModel);
+            obj.RegisterComponent(new Sprite(m_ResourceLoader.Load<ImageSource>("Empty")));
+
+            if (m_SelectedItem == null)
+            {
+                TreeItemViewModel itemViewModel = new(Items.Count + 1, obj);
+                itemViewModel.ItemSelected += ItemViewModel_ItemSelected;
+                Items.Add(itemViewModel);
+                m_gameViewHost.World.Add(obj);
+            }
+            else
+            {
+                TreeItemViewModel itemViewModel = new(m_SelectedItem.Children.Count + 1, obj);
+                itemViewModel.ItemSelected += ItemViewModel_ItemSelected;                
+                m_SelectedItem.Children.Add(itemViewModel);
+                m_SelectedItem.GameObject.AddChild(obj);
+            }
 
         }
 
         private void ItemViewModel_ItemSelected(TreeItemViewModel item)
         {
             m_SelectedItem = item;
+            if (m_SelectedItem == null)
+                return;
+            UpdateGameObjectProperties();
+            UpdateComponents();
         }
 
         #endregion
 
-        private void UpdateGameObjectProperties()
-        { 
+        #region On Delete Object ButtonPressed
+
+        private bool CanOnDeleteObjectButtonPressedExecute(object p) => m_SelectedItem != null;
+
+        private void OnDeleteObjectButtonPressedExecute(object p)
+        {
+            if (m_SelectedItem != null)
+            {
+                RemoveFromWorld(m_SelectedItem.GameObject);
+                RemoveObjectRec(m_SelectedItem, Items, false);
+            }
             
         }
 
+        #endregion
+
+        private void RemoveObjectRec(TreeItemViewModel item, ObservableCollection<TreeItemViewModel> src, bool removed)
+        {
+            if (removed)
+                return;
+
+            foreach (TreeItemViewModel itemViewModel in src)
+            {
+                if (removed)
+                    break;
+
+                if (itemViewModel.Id == item.Id)
+                { 
+                    itemViewModel.GameObject = null;
+                    src.Remove(itemViewModel);
+                    removed = true;
+                    break;
+                }
+
+                RemoveObjectRec(itemViewModel, item.Children, removed);
+            }
+        }
+
+        private void UpdateGameObjectProperties()
+        {
+            if (m_SelectedItem == null && m_SelectedItem.GameObject == null)
+                return;
+
+            Enabled = m_SelectedItem.GameObject.Enabled;
+            ObjName = m_SelectedItem.GameObject.Name;
+            ZIndex = m_SelectedItem.GameObject.ZIndex;
+        }
+
         private void UpdateComponents()
-        { 
+        {
+            if (m_SelectedItem == null && m_SelectedItem.GameObject == null)
+                return;
+
             Components.Clear();
+            var currentComponents = m_SelectedItem?.GameObject?.GetComponents() ?? null;
+
+            if (currentComponents == null)
+                return;
+
+            foreach (var component in currentComponents)
+            {
+                ComponentViewModel c = null;
+                switch (component.Name)
+                {
+                    case nameof(TransformComponent):
+                        c = new TransformComponentViewModel(m_SelectedItem.GameObject);
+                        break;
+                    case nameof(Animation):
+                        c = new AnimationComponentViewModel(m_SelectedItem.GameObject);
+                        break;
+                    case nameof(Animator):
+                        c = new AnimatorComponentViewModel(m_SelectedItem.GameObject);
+                        break;
+                    case nameof(Sprite):
+                        c = new SpriteComponentViewModel(m_SelectedItem.GameObject);
+                        break;
+                }
+
+                Components.Add(c);
+            }
+        }
+
+        private void RemoveFromWorld(IGameObject item)
+        {
+            if (item != null)
+            {
+                foreach (var elem in m_gameViewHost.World)
+                {
+                    elem.RemoveChild(item, (e) => e.Id == item.Id, true);
+                }
+            }
+        }
+
+        private void UpdateEnabled(bool value)
+        {
+            if (m_SelectedItem != null && m_SelectedItem.GameObject != null)
+            { 
+                m_SelectedItem.GameObject.Enabled = value;
+            }
+        }
+
+        private void UpdateZIndex(int value)
+        {
+            if (m_SelectedItem != null && m_SelectedItem.GameObject != null)
+            {
+                m_SelectedItem.GameObject.ZIndex = value;
+            }
         }
 
         #endregion

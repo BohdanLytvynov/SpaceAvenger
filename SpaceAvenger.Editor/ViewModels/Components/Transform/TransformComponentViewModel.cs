@@ -1,11 +1,6 @@
 ﻿using SpaceAvenger.Editor.ViewModels.Components.Base;
-using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 using WPFGameEngine.WPF.GE.Component.Transforms;
 using WPFGameEngine.WPF.GE.GameObjects;
 
@@ -96,7 +91,8 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Transform
         #endregion
 
         #region Ctor
-        public TransformComponentViewModel(IGameObject gameObject) : base("Transform", gameObject)
+
+        public TransformComponentViewModel(IGameObject gameObject) : base("Transform: ", gameObject)
         {
             LoadCurrentGameObjProperties();
         }

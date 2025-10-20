@@ -16,15 +16,15 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid DataContext="{Binding ElementName=Control}">
+    <Grid>
         <Border Style="{StaticResource Border}">
             <StackPanel x:Name="StackVertical" Orientation="Vertical">
                 <StackPanel x:Name="StackHorizontal" Orientation="Horizontal">
-                    <Label x:Name="Label" Content="{Binding LabelText, UpdateSourceTrigger=PropertyChanged}"
+                    <Label x:Name="Label" Content="{Binding ElementName=Control,Path=LabelText, UpdateSourceTrigger=PropertyChanged}"
                            Style="{StaticResource InputTxtBoxLabel}"/>
                     <TextBox x:Name="IntegerPart" MinWidth="10" Style="{StaticResource TxtBoxInputStyle}">
                         <TextBox.Text>
-                            <Binding Path="IntegerPartValueString" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
+                            <Binding ElementName="Control" Path="IntegerPartValueString" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
                                 <Binding.ValidationRules>
                                     <DataErrorValidationRule/>
                                 </Binding.ValidationRules>
@@ -32,11 +32,11 @@
                         </TextBox.Text>
                     </TextBox>
                     <Label x:Name="DeliminatorLabel" 
-                           Content="{Binding Deliminator, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Bottom"
+                           Content="{Binding ElementName=Control, Path=Deliminator, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Bottom"
                            Style="{StaticResource InputTxtBoxLabel}"/>
                     <TextBox x:Name="FloatPart" MinWidth="10" Style="{StaticResource TxtBoxInputStyle}">
                         <TextBox.Text>
-                            <Binding Path="FloatPartValueString" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
+                            <Binding ElementName="Control" Path="FloatPartValueString" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
                                 <Binding.ValidationRules>
                                     <DataErrorValidationRule/>
                                 </Binding.ValidationRules>
@@ -47,7 +47,7 @@
                     <TextBox x:Name="Min" Margin="5,0,0,0" MinWidth="40"
                              Style="{StaticResource TxtBoxInputStyle}">
                         <TextBox.Text>
-                            <Binding Path="MinimumString" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
+                            <Binding ElementName="Control" Path="MinimumString" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
                                 <Binding.ValidationRules>
                                     <DataErrorValidationRule/>
                                 </Binding.ValidationRules>
@@ -58,7 +58,7 @@
                     <TextBox x:Name="Max" Margin="5,0,0,0" MinWidth="40"
                              Style="{StaticResource TxtBoxInputStyle}">
                         <TextBox.Text>
-                            <Binding Path="MaximumString" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
+                            <Binding ElementName="Control" Path="MaximumString" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
                                 <Binding.ValidationRules>
                                     <DataErrorValidationRule/>
                                 </Binding.ValidationRules>
@@ -69,7 +69,7 @@
                 <Slider x:Name="SliderValue" Style="{StaticResource SliderInternal}"
         Width="{Binding ElementName=Control,
         UpdateSourceTrigger=PropertyChanged,
-        Path=Width}" Value="{Binding Value,UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+        Path=Width}" Value="{Binding ElementName=Control, Path=Value ,UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                         />
             </StackPanel>
         </Border>

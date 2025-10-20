@@ -11,8 +11,21 @@ namespace SpaceAvenger.Editor.Services
     internal class ResourceLoader : IResourceLoader
     {
         private string m_resourceDictionaryPath;
+        private ResourceDictionary m_resourceDictionary;
 
-        public ResourceDictionary ResourceDictionary { get; set; }
+        public ResourceDictionary ResourceDictionary 
+        {
+            get
+            {
+                if (m_resourceDictionary == null)
+                {
+                    m_resourceDictionary = new ResourceDictionary();
+                    m_resourceDictionary.Source = new Uri(m_resourceDictionaryPath, UriKind.RelativeOrAbsolute);
+                }
+
+                return m_resourceDictionary;
+            }
+        }
 
         public ResourceLoader(string path)
         {
@@ -21,12 +34,20 @@ namespace SpaceAvenger.Editor.Services
 
         public IEnumerable<string> LoadAll()
         {
-            ResourceDictionary = new ResourceDictionary();
-            ResourceDictionary.Source = new Uri(m_resourceDictionaryPath, UriKind.RelativeOrAbsolute);
             foreach (var k in ResourceDictionary.Keys)
             {
                 yield return k.ToString();
             }
+        }
+
+        public TResource? Load<TResource>(string key)
+        {
+            if (ResourceDictionary.Contains(key))
+            { 
+                return (TResource)m_resourceDictionary[key];
+            }
+
+            return default;
         }
     }
 }

@@ -7,6 +7,7 @@
         xmlns:gameView ="clr-namespace:WPFGameEngine.GameViewControl;assembly=WPFGameEngine"
         xmlns:vm="clr-namespace:SpaceAvenger.Editor.ViewModels"
         xmlns:controls="clr-namespace:WPFGameEngine.Editor.Controls;assembly=WPFGameEngine"
+        xmlns:diag="clr-namespace:System.Diagnostics;assembly=WindowsBase"
         mc:Ignorable="d"
         Height="450" Width="800" WindowState="Maximized" x:Name="Root"
         d:DataContext="{d:DesignInstance vm:EditorMainWindowViewModel, IsDesignTimeCreatable=True}">
@@ -36,7 +37,7 @@
                             <Rectangle Style="{StaticResource BorderRectStyle}"/>
                             <StackPanel Orientation="Horizontal">
                                 <Button Content="Add" Margin="10,0,10,0" Command="{Binding OnAddGameObjectButtonPressed}"/>
-                                <Button Content="Remove"/>
+                                <Button Content="Remove" Command="{Binding OnDeleteGameObjectButtonPressed}"/>
                             </StackPanel>
                             <TreeView Grid.Column="1" Margin="5,10" ItemsSource="{Binding Items, 
                                 UpdateSourceTrigger=PropertyChanged}"/>
@@ -58,11 +59,13 @@
                             <Rectangle Style="{StaticResource BorderRectStyle}"/>
                             <StackPanel Orientation="Horizontal">
                                 <CheckBox Content="Enabled" Margin="10" 
-                                          IsChecked="{Binding RootEnabled, 
+                                          IsChecked="{Binding Enabled, 
                                     UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                                <TextBlock/>
+                                <TextBlock Text="{Binding ObjName, UpdateSourceTrigger=PropertyChanged, StringFormat='Object name:{0}'}"
+                                           Style="{StaticResource FieldName}"
+                                           Margin="15,0,0,0"/>
                             </StackPanel>
-                            <controls:Slider Value="{Binding PositionY, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                            <controls:Slider Value="{Binding ZIndex, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                 Margin="10" LabelText="ZIndex: "
                                 Minimum="0" Maximum="100"
                                 FloatValue="False"
@@ -71,50 +74,13 @@
                             <Rectangle Style="{StaticResource BorderRectStyle}"/>
                             <TextBlock Text="GameObject Components:" Style="{StaticResource DescLabel}"/>
                             <Rectangle Style="{StaticResource BorderRectStyle}"/>
-                            <ListView x:Name="ComponentPresenter"/>
+                            <ListView x:Name="ComponentPresenter" ItemsSource="{Binding Components, 
+                                UpdateSourceTrigger=PropertyChanged}"  VirtualizingPanel.IsVirtualizing="False" 
+                                      VirtualizingPanel.VirtualizationMode="Standard"/>
                         </StackPanel>
                         <!--<ScrollViewer VerticalScrollBarVisibility="Visible">
                             <StackPanel Orientation="Vertical" Height="1200">
-                                <Rectangle Style="{StaticResource BorderRectStyle}"/>
-                                <TextBlock Text="Transforms" Style="{StaticResource DescLabel}"/>
-                                <Rectangle Style="{StaticResource BorderRectStyle}"/>
                                 
-                                <controls:Slider Value="{Binding PositionX, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                Margin="10" LabelText="X-Position: "
-                                Minimum="0" Maximum="{Binding ElementName=GameView, Path=ActualWidth, 
-                                UpdateSourceTrigger=PropertyChanged}"
-                                                 FloatValue="True"/>
-                                <controls:Slider Value="{Binding PositionY, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                Margin="10" LabelText="Y-Position: "
-                                Minimum="0" Maximum="{Binding ElementName=GameView, Path=ActualHeight, 
-                                UpdateSourceTrigger=PropertyChanged}"
-                                                 FloatValue="True"
-                                                 />
-                                <controls:Slider Value="{Binding Rot, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                Margin="10" LabelText="Rotation: "
-                                Minimum="-360.0" Maximum="360.0"
-                                                 FloatValue="True"
-                                                 />
-                                <controls:Slider Value="{Binding ScaleX, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                Margin="10" LabelText="X-Scale: "
-                                Minimum="0" Maximum="1.0"
-                                                 FloatValue="True"
-                                                 />
-                                <controls:Slider Value="{Binding ScaleY, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                Margin="10" LabelText="Y-Scale: "
-                                Minimum="0" Maximum="1.0"
-                                                 FloatValue="True"
-                                                 />
-                                <controls:Slider Value="{Binding CenterPositionX, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                Margin="10" LabelText="Center Position X: "
-                                Minimum="0" Maximum="1.0"
-                                FloatValue="True"
-                                                    />
-                                <controls:Slider Value="{Binding CenterPositionY, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                    Margin="10" LabelText="Center Position Y:"
-                                    Minimum="0" Maximum="1.0"
-                                    FloatValue="True"
-                                                    />
                                 <Rectangle Style="{StaticResource BorderRectStyle}"/>
                                 <TextBlock Text="Space Ship" Style="{StaticResource DescLabel}"/>
                                 <Rectangle Style="{StaticResource BorderRectStyle}"/>

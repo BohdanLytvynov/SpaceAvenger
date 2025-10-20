@@ -17,6 +17,8 @@ namespace WPFGameEngine.WPF.GE.GameObjects
 
         public string Name { get; set; }
 
+        public List<IGameObject> Children { get; }
+
         void Render(DrawingContext dc, Matrix parent);
 
         void Update(List<IGameObject> world);
@@ -25,11 +27,15 @@ namespace WPFGameEngine.WPF.GE.GameObjects
 
         IGameObject UnregisterComponent(IComponent component);
 
-        void AddChild(GameObject child);
+        void AddChild(IGameObject child);
 
-        void RemoveChild(GameObject child);
+        void RemoveChild(IGameObject child, Func<IGameObject, bool> predicate, bool recursive = false);
 
-        public TComponent? GetComponent<TComponent>(bool throwException = true)
+        IGameObject? FindChild(Func<IGameObject, bool> predicate, bool recursiveSearch = false);
+        
+        TComponent? GetComponent<TComponent>(bool throwException = true)
             where TComponent : IComponent;
+
+        IEnumerable<IComponent> GetComponents();
     }
 }
