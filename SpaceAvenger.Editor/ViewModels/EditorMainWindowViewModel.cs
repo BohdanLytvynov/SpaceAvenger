@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using SpaceAvenger.Editor.Services.Base;
-using SpaceAvenger.Editor.Spaceships;
-using SpaceAvenger.Editor.ViewModels.SpaceshipsParts.Base;
+using SpaceAvenger.Editor.Mock;
 using SpaceAvenger.Editor.ViewModels.TreeItems;
 using System.Collections.ObjectModel;
 using System.Drawing;
@@ -36,12 +35,19 @@ namespace SpaceAvenger.Editor.ViewModels
         private double m_ScaleY;
         private double m_CenterPositionX;
         private double m_CenterPositionY;
-        private ObservableCollection<ChildObjectViewModel> m_ShipModules;
-        private ObservableCollection<string> m_resourceNames;
         private IResourceLoader m_ResourceLoader;
+        private int m_selectedItemId;
+
+        ObservableCollection<TreeItemViewModel> m_Items;
         #endregion
 
         #region Properties
+
+        public ObservableCollection<TreeItemViewModel> Items 
+        {
+            get=> m_Items;
+            set=> m_Items = value;
+        }
 
         public TreeItemViewModel SelectedItem 
         {
@@ -141,18 +147,9 @@ namespace SpaceAvenger.Editor.ViewModels
                 UpdateCenterPositionY(GetCurrentGameObject(), (float)CenterPositionY);
             }
         }
-
-        public ObservableCollection<ChildObjectViewModel> Children
-        { get => m_ShipModules; set => m_ShipModules = value; }
-
-        public ObservableCollection<string> ResourceNames
-        { get => m_resourceNames; set => m_resourceNames = value; }
-
                
         #endregion
-
         
-
         #region Commands
         public ICommand OnAddGameObjectButtonPressed { get; }
         #endregion
@@ -161,20 +158,16 @@ namespace SpaceAvenger.Editor.ViewModels
         public EditorMainWindowViewModel(IResourceLoader resourceLoader) : this()
         {
             m_ResourceLoader = resourceLoader ?? throw new ArgumentNullException(nameof(resourceLoader));
-
-            foreach (var resName in m_ResourceLoader.LoadAll())
-                ResourceNames.Add(resName);
         }
 
         public EditorMainWindowViewModel()
         {
-            m_ShipModules = new ObservableCollection<ChildObjectViewModel>();
-            m_resourceNames = new ObservableCollection<string>();
             m_gameViewHost = new GameViewHost();
             m_gameViewHost.StartGame();
             m_ShowBorders = true;
             m_ShowGizmos = true;
             m_SelectedItem = new TreeItemViewModel();
+            m_Items = new ObservableCollection<TreeItemViewModel>();
 
             m_ScaleX = 1f;
             m_ScaleY = 1f;
@@ -192,11 +185,20 @@ namespace SpaceAvenger.Editor.ViewModels
 
         #region Methods
         #region On Add Module Button Pressed
-        private bool CanOnAddGameObjectButtonPressedExecute(object p) => m_root != null;
+        private bool CanOnAddGameObjectButtonPressedExecute(object p) => true;
 
         private void OnAddGameObjectButtonPressedExecute(object p)
         {
-           
+            IGameObject obj = new GameObjectMock();
+            TreeItemViewModel itemViewModel = new TreeItemViewModel(obj);
+            itemViewModel.ItemSelected += ItemViewModel_ItemSelected;
+            Items.Add(itemViewModel);
+
+        }
+
+        private void ItemViewModel_ItemSelected(int id)
+        {
+            m_selectedItemId = id;
         }
         #endregion
         private void LoadCurrentGameObjProperties(IGameObject obj)

@@ -1,4 +1,4 @@
-﻿using SpaceAvenger.Editor.Spaceships;
+﻿using SpaceAvenger.Editor.Mock;
 using SpaceAvenger.Game.Core.Spaceships.F10.Destroyer;
 using SpaceAvenger.Game.Core.Spaceships.F10.Engines;
 using System.Drawing;

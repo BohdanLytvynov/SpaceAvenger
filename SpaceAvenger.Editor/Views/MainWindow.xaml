@@ -38,7 +38,8 @@
                                 <Button Content="Add" Margin="10,0,10,0" Command="{Binding OnAddGameObjectButtonPressed}"/>
                                 <Button Content="Remove"/>
                             </StackPanel>
-                            <TreeView Grid.Column="1" Margin="5,10" />
+                            <TreeView Grid.Column="1" Margin="5,10" ItemsSource="{Binding Items, 
+                                UpdateSourceTrigger=PropertyChanged}"/>
                         </StackPanel>
                     </ScrollViewer>
                     <!--<Grid Grid.Column="4">

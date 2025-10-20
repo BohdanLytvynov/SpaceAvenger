@@ -4,6 +4,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
+using ViewModelBaseLibDotNetCore.Commands;
 using ViewModelBaseLibDotNetCore.Helpers;
 using ViewModelBaseLibDotNetCore.VM;
 using WPFGameEngine.WPF.GE.GameObjects;
@@ -12,39 +14,57 @@ namespace SpaceAvenger.Editor.ViewModels.TreeItems
 {
     internal class TreeItemViewModel : ValidationViewModel
     {
+        #region Events
+        public event Action<int> ItemSelected;
+        #endregion
+
         #region Fields
         private int m_Id;
         private string m_Name;
+        private bool m_Selected;
         ObservableCollection<TreeItemViewModel> m_children;
         #endregion
 
         #region Properties
+        public bool Selected 
+        { 
+            get=> m_Selected;
+            set 
+            {
+                Set(ref m_Selected, value);
+                if (Selected)
+                { 
+                    ItemSelected?.Invoke(GameObject?.Id ?? -1);
+                }
+            }
+        }
+
         public IGameObject? GameObject { get; set; }
 
         public ObservableCollection<TreeItemViewModel> Children
         {
-            get=> m_children;
-            set=> m_children = value;
+            get => m_children;
+            set => m_children = value;
         }
 
-        public int Id 
+        public int Id
         {
-            get=> m_Id;
-            set=> Set(ref m_Id, value);
+            get => m_Id;
+            set => Set(ref m_Id, value);
         }
 
-        public string Name 
+        public string Name
         {
-            get=> m_Name;
-            set=> Set(ref m_Name, value);
+            get => m_Name;
+            set => Set(ref m_Name, value);
         }
         #endregion
-
+       
         #region IData Error Info
 
         public override string this[string columnName]
         {
-            get 
+            get
             {
                 string error = string.Empty;
 
@@ -54,7 +74,7 @@ namespace SpaceAvenger.Editor.ViewModels.TreeItems
                         if (ValidationHelper.TextIsEmpty(Name, out error))
                         {
                             if (GameObject != null)
-                            { 
+                            {
                                 GameObject.Name = Name;
                             }
                         }
@@ -69,7 +89,7 @@ namespace SpaceAvenger.Editor.ViewModels.TreeItems
 
         #region Ctor
         public TreeItemViewModel(IGameObject gameObject)
-        {            
+        {
             m_Id = gameObject.Id;
             m_Name = gameObject.Name;
             m_children = new ObservableCollection<TreeItemViewModel>();
@@ -84,7 +104,7 @@ namespace SpaceAvenger.Editor.ViewModels.TreeItems
         #endregion
 
         #region Methods
-
+        
         #endregion
     }
 }

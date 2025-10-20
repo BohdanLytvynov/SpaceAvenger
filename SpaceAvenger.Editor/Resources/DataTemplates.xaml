@@ -1,39 +1,15 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:base="clr-namespace:SpaceAvenger.Editor.ViewModels.SpaceshipsParts.Base"
                     xmlns:tvm="clr-namespace:SpaceAvenger.Editor.ViewModels.TreeItems"
                     >
-    <DataTemplate DataType="{x:Type base:ChildObjectViewModel}">
-        <Border BorderThickness="2" BorderBrush="Black" Style="{StaticResource BorderRoundStyle}">
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Style="{StaticResource DescLabel}" Text="{Binding ShowNumber, 
-                    UpdateSourceTrigger=PropertyChanged, StringFormat='№{0})'}"/>
-                <TextBox Style="{StaticResource TxtBoxInputStyle}" Margin="10">
-                    <TextBox.Text>
-                        <Binding Path="ModuleName" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
-                            <Binding.ValidationRules>
-                                <DataErrorValidationRule/>
-                            </Binding.ValidationRules>
-                        </Binding>
-                    </TextBox.Text>
-                </TextBox>
-                <TextBlock Text="Select an Image:" Style="{StaticResource DescLabel}" Margin="10"
-                           VerticalAlignment="Center"/>
-                <ComboBox IsEditable="True" 
-                          ItemsSource="{Binding ResourceNames, UpdateSourceTrigger=PropertyChanged}"
-                          SelectedItem="{Binding SelectedResourceName, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                          Margin="10" MinWidth="150"/>
-            </StackPanel>
-        </Border>
-    </DataTemplate>
-
     <!--#region Tree View -->
     <HierarchicalDataTemplate DataType="{x:Type tvm:TreeItemViewModel}" 
                               ItemsSource="{Binding Children, UpdateSourceTrigger=PropertyChanged}">
-        <Border>
+        <Border Style="{StaticResource BorderRoundStyle}" Margin="5">
             <StackPanel Orientation="Horizontal">
-                <TextBlock Text="{Binding Id, UpdateSourceTrigger=PropertyChanged}"/>
-                <TextBox Style="{StaticResource TxtBoxInputStyle}" Margin="0,10,0,0">
+                <TextBlock Text="{Binding Id}" Style="{StaticResource FieldName}"
+                           VerticalAlignment="Center"/>
+                <TextBox Style="{StaticResource TxtBoxInputStyle}" Margin="0,10,0,10">
                     <TextBox.Text>
                         <Binding Path="Name" UpdateSourceTrigger="LostFocus" Mode="TwoWay">
                             <Binding.ValidationRules>
@@ -42,6 +18,9 @@
                         </Binding>
                     </TextBox.Text>
                 </TextBox>
+                <ToggleButton IsChecked="{Binding Selected, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                              Content="Select" Margin="10"
+                              VerticalAlignment="Center"/>
             </StackPanel>
         </Border>
     </HierarchicalDataTemplate>

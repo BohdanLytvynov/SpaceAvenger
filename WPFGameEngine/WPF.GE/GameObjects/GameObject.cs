@@ -58,16 +58,16 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         {
             Init();
             RegisterComponent(new TransformComponent(position, centerPosition, rotation, scale));
-            InitName(name);
             SetId();
+            InitName(name);
         }
 
         public GameObject(string name, ITransform transform)
         {
             Init();
             RegisterComponent(transform);
-            InitName(name);
             SetId();
+            InitName(name);
         }
         #endregion
 
