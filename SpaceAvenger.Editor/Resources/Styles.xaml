@@ -31,4 +31,11 @@
             <Setter Property="BorderBrush" Value="Black"/>
         </Style.Setters>
     </Style>
+
+    <Style x:Key="IntSlider_Tick1" TargetType="Slider">
+        <Style.Setters>
+            <Setter Property="TickFrequency" Value="1"/>
+            <Setter Property="Interval" Value="1"/>
+        </Style.Setters>
+    </Style>
 </ResourceDictionary>

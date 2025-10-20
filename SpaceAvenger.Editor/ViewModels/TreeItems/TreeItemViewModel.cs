@@ -15,10 +15,11 @@ namespace SpaceAvenger.Editor.ViewModels.TreeItems
     internal class TreeItemViewModel : ValidationViewModel
     {
         #region Events
-        public event Action<int> ItemSelected;
+        public event Action<TreeItemViewModel> ItemSelected;
         #endregion
 
         #region Fields
+        private int m_ShowNumber;
         private int m_Id;
         private string m_Name;
         private bool m_Selected;
@@ -26,6 +27,12 @@ namespace SpaceAvenger.Editor.ViewModels.TreeItems
         #endregion
 
         #region Properties
+        public int ShowNumber
+        {
+            get=> m_ShowNumber;
+            set=> Set(ref m_ShowNumber, value);
+        }
+
         public bool Selected 
         { 
             get=> m_Selected;
@@ -34,7 +41,7 @@ namespace SpaceAvenger.Editor.ViewModels.TreeItems
                 Set(ref m_Selected, value);
                 if (Selected)
                 { 
-                    ItemSelected?.Invoke(GameObject?.Id ?? -1);
+                    ItemSelected?.Invoke(this);
                 }
             }
         }
@@ -88,17 +95,12 @@ namespace SpaceAvenger.Editor.ViewModels.TreeItems
         #endregion
 
         #region Ctor
-        public TreeItemViewModel(IGameObject gameObject)
+        public TreeItemViewModel(int showNumber, IGameObject gameObject)
         {
+            GameObject = gameObject;
+            m_ShowNumber = showNumber;
             m_Id = gameObject.Id;
             m_Name = gameObject.Name;
-            m_children = new ObservableCollection<TreeItemViewModel>();
-        }
-
-        public TreeItemViewModel()
-        {
-            m_Id = -1;
-            m_Name = string.Empty;
             m_children = new ObservableCollection<TreeItemViewModel>();
         }
         #endregion

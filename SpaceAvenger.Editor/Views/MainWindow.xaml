@@ -42,19 +42,43 @@
                                 UpdateSourceTrigger=PropertyChanged}"/>
                         </StackPanel>
                     </ScrollViewer>
-                    <!--<Grid Grid.Column="4">
-                        <ScrollViewer VerticalScrollBarVisibility="Visible">
+                    <Grid Grid.Column="4">
+                        <StackPanel Orientation="Vertical">
+                            <Rectangle Style="{StaticResource BorderRectStyle}"/>
+                            <TextBlock Text="Global Properties:" Style="{StaticResource DescLabel}"/>
+                            <Rectangle Style="{StaticResource BorderRectStyle}"/>
+
+                            <StackPanel Orientation="Horizontal">
+                                <CheckBox Content="ShowGizmo" Margin="10" IsChecked="{Binding ShowGizmos, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                                <CheckBox Content="ShowBorders" Margin="10" IsChecked="{Binding ShowBorders, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                            </StackPanel>
+
+                            <Rectangle Style="{StaticResource BorderRectStyle}"/>
+                            <TextBlock Text="GameObject Properties:" Style="{StaticResource DescLabel}"/>
+                            <Rectangle Style="{StaticResource BorderRectStyle}"/>
+                            <StackPanel Orientation="Horizontal">
+                                <CheckBox Content="Enabled" Margin="10" 
+                                          IsChecked="{Binding RootEnabled, 
+                                    UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                                <TextBlock/>
+                            </StackPanel>
+                            <controls:Slider Value="{Binding PositionY, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                Margin="10" LabelText="ZIndex: "
+                                Minimum="0" Maximum="100"
+                                FloatValue="False"
+                                SliderStyle="{StaticResource IntSlider_Tick1}"
+                 />
+                            <Rectangle Style="{StaticResource BorderRectStyle}"/>
+                            <TextBlock Text="GameObject Components:" Style="{StaticResource DescLabel}"/>
+                            <Rectangle Style="{StaticResource BorderRectStyle}"/>
+                            <ListView x:Name="ComponentPresenter"/>
+                        </StackPanel>
+                        <!--<ScrollViewer VerticalScrollBarVisibility="Visible">
                             <StackPanel Orientation="Vertical" Height="1200">
                                 <Rectangle Style="{StaticResource BorderRectStyle}"/>
                                 <TextBlock Text="Transforms" Style="{StaticResource DescLabel}"/>
                                 <Rectangle Style="{StaticResource BorderRectStyle}"/>
-                                <StackPanel Orientation="Vertical">
-                                    <CheckBox Content="Enabled" Margin="10" IsChecked="{Binding RootEnabled, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                                    <StackPanel Orientation="Horizontal">
-                                        <CheckBox Content="ShowGizmo" Margin="10" IsChecked="{Binding ShowGizmos, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                                        <CheckBox Content="ShowBorders" Margin="10" IsChecked="{Binding ShowBorders, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                                    </StackPanel>
-                                </StackPanel>
+                                
                                 <controls:Slider Value="{Binding PositionX, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                 Margin="10" LabelText="X-Position: "
                                 Minimum="0" Maximum="{Binding ElementName=GameView, Path=ActualWidth, 
@@ -135,8 +159,8 @@
                                     UpdateSourceTrigger=PropertyChanged, 
                                     Mode=TwoWay}"/>
                             </StackPanel>
-                        </ScrollViewer>
-                    </Grid>-->
+                        </ScrollViewer>-->
+                    </Grid>
                 </Grid>
             </TabItem>
             <TabItem Header="Level">
