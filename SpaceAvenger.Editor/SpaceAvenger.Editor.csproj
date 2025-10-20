@@ -12,4 +12,8 @@
     <ProjectReference Include="..\SpaceAvenger\SpaceAvenger.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ViewModels\Components\" />
+  </ItemGroup>
+
 </Project>

@@ -2,6 +2,7 @@
 using SpaceAvenger.Editor.Services.Base;
 using SpaceAvenger.Editor.Spaceships;
 using SpaceAvenger.Editor.ViewModels.SpaceshipsParts.Base;
+using SpaceAvenger.Editor.ViewModels.TreeItems;
 using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Numerics;
@@ -23,15 +24,10 @@ namespace SpaceAvenger.Editor.ViewModels
         #region Fields
         private GameObject m_root;
         private GameViewHost m_gameViewHost;
+        private TreeItemViewModel m_SelectedItem;
 
-        private bool m_rootEnabled;
         private bool m_ShowGizmos;
         private bool m_ShowBorders;
-        private bool m_RootSelected;
-        private string m_RootName;
-        private bool m_ChooseRootImageEnabled;
-        private bool m_SelectRootEnabled;
-        private int m_SelectedChildIndex;
 
         private double m_posX;
         private double m_posY;
@@ -43,51 +39,14 @@ namespace SpaceAvenger.Editor.ViewModels
         private ObservableCollection<ChildObjectViewModel> m_ShipModules;
         private ObservableCollection<string> m_resourceNames;
         private IResourceLoader m_ResourceLoader;
-        private string m_SelectedRoot;
         #endregion
 
         #region Properties
-        
-        public int SelectedChildIndex 
-        { 
-            get=> m_SelectedChildIndex;
-            set 
-            {
-                Set(ref m_SelectedChildIndex, value);
-                if (SelectedChildIndex >= 0)
-                {                    
-                    LoadCurrentGameObjProperties(GetCurrentGameObject());
-                    RootSelected = false;
-                }
-            }
-        }
 
-        public bool SelectRootEnabled 
+        public TreeItemViewModel SelectedItem 
         {
-            get=> m_SelectRootEnabled;
-            set=> Set(ref m_SelectRootEnabled, value); 
-        }
-
-        public bool ChooseRootImageEnabled 
-        { 
-            get=> m_ChooseRootImageEnabled; 
-            set => Set(ref m_ChooseRootImageEnabled, value);
-        }
-
-        public string RootName 
-        {
-            get=> m_RootName; 
-            set=> Set(ref m_RootName, value);
-        }
-
-        public bool RootEnabled
-        {
-            get => m_rootEnabled;
-            set
-            {
-                Set(ref m_rootEnabled, value);
-                m_root.Enabled = value;
-            }
+            get=> m_SelectedItem;
+            set=> Set(ref m_SelectedItem, value);
         }
 
         public bool ShowGizmos
@@ -189,74 +148,13 @@ namespace SpaceAvenger.Editor.ViewModels
         public ObservableCollection<string> ResourceNames
         { get => m_resourceNames; set => m_resourceNames = value; }
 
-        public string SelectedRoot
-        {
-            get => m_SelectedRoot;
-            set 
-            {
-                Set(ref m_SelectedRoot, value);
-
-                if (m_root == null && !string.IsNullOrEmpty(SelectedRoot))
-                {
-                    m_root = new ModuleMock(RootName);
-                    m_root.GetComponent<Sprite>(true).Load(m_ResourceLoader.ResourceDictionary, SelectedRoot);
-                    m_gameViewHost.World.Add(m_root);
-                    SelectRootEnabled = true;
-                    RootSelected = true;
-                }
-                else
-                {
-                    m_root.GetComponent<Sprite>(true).Load(m_ResourceLoader.ResourceDictionary, SelectedRoot);
-                    SelectRootEnabled = true;
-                    RootSelected = true;
-                }
-            }
-        }
-
-        public bool RootSelected
-        {
-            get => m_RootSelected;
-            set 
-            { 
-                Set(ref m_RootSelected, value);
-                if (m_RootSelected)
-                {
-                    SelectedChildIndex = -1;
-                    LoadCurrentGameObjProperties(m_root);
-                }
-            }
-        }
+               
         #endregion
 
-        #region IDataErrorInfo
-        public override string this[string columnName]
-        {
-            get
-            { 
-                string error = string.Empty;
-                switch (columnName)
-                {
-                    case nameof(RootName):
-                        if (!ValidationHelper.TextIsEmpty(RootName, out error))
-                        {
-                            ChooseRootImageEnabled = true;
-                            SelectRootEnabled = true;
-                        }
-                        else
-                        {
-                            ChooseRootImageEnabled = false;
-                            SelectRootEnabled = false;
-                        }
-                    break;
-                }
-
-                return error;
-            }
-        }
-        #endregion
+        
 
         #region Commands
-        public ICommand OnAddModuleButtonPressed { get; }
+        public ICommand OnAddGameObjectButtonPressed { get; }
         #endregion
 
         #region Ctor
@@ -272,16 +170,11 @@ namespace SpaceAvenger.Editor.ViewModels
         {
             m_ShipModules = new ObservableCollection<ChildObjectViewModel>();
             m_resourceNames = new ObservableCollection<string>();
-            m_SelectedRoot = string.Empty;
             m_gameViewHost = new GameViewHost();
             m_gameViewHost.StartGame();
-            m_rootEnabled = true;
             m_ShowBorders = true;
             m_ShowGizmos = true;
-            m_RootName = string.Empty;
-            m_SelectRootEnabled = false;
-            m_ChooseRootImageEnabled = false;
-            m_SelectedChildIndex = -1;
+            m_SelectedItem = new TreeItemViewModel();
 
             m_ScaleX = 1f;
             m_ScaleY = 1f;
@@ -289,9 +182,9 @@ namespace SpaceAvenger.Editor.ViewModels
             GESettings.DrawGizmo = true;
             GESettings.DrawBorders = true;
 
-            OnAddModuleButtonPressed = new Command(
-                OnAddModuleButtonPressedExecute,
-                CanOnAddModuleButtonPressedExecute
+            OnAddGameObjectButtonPressed = new Command(
+                OnAddGameObjectButtonPressedExecute,
+                CanOnAddGameObjectButtonPressedExecute
                 );
         }
 
@@ -299,16 +192,11 @@ namespace SpaceAvenger.Editor.ViewModels
 
         #region Methods
         #region On Add Module Button Pressed
-        private bool CanOnAddModuleButtonPressedExecute(object p) => m_root != null;
+        private bool CanOnAddGameObjectButtonPressedExecute(object p) => m_root != null;
 
-        private void OnAddModuleButtonPressedExecute(object p)
+        private void OnAddGameObjectButtonPressedExecute(object p)
         {
-            string name = $"Module{Children.Count + 1}";
-            var child = new ModuleMock(name);
-            var module = new ChildObjectViewModel(Children.Count + 1, name, m_ResourceLoader,
-                child, ResourceNames);
-            m_root.AddChild(child);
-            Children.Add(module);
+           
         }
         #endregion
         private void LoadCurrentGameObjProperties(IGameObject obj)
@@ -399,16 +287,7 @@ namespace SpaceAvenger.Editor.ViewModels
 
         private IGameObject GetCurrentGameObject()
         {
-            IGameObject obj = null;
-            if (SelectedChildIndex >= 0)
-            {
-                obj = Children[SelectedChildIndex].GameObject;
-            }
-            else if (RootSelected && m_root is not null)
-            {
-                obj = m_root;
-            }
-            return obj;
+            return null;
         }
 
         #endregion

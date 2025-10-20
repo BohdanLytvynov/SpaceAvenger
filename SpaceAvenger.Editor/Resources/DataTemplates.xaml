@@ -1,6 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:base="clr-namespace:SpaceAvenger.Editor.ViewModels.SpaceshipsParts.Base"
+                    xmlns:tvm="clr-namespace:SpaceAvenger.Editor.ViewModels.TreeItems"
                     >
     <DataTemplate DataType="{x:Type base:ChildObjectViewModel}">
         <Border BorderThickness="2" BorderBrush="Black" Style="{StaticResource BorderRoundStyle}">
@@ -25,4 +26,24 @@
             </StackPanel>
         </Border>
     </DataTemplate>
+
+    <!--#region Tree View -->
+    <HierarchicalDataTemplate DataType="{x:Type tvm:TreeItemViewModel}" 
+                              ItemsSource="{Binding Children, UpdateSourceTrigger=PropertyChanged}">
+        <Border>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{Binding Id, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBox Style="{StaticResource TxtBoxInputStyle}" Margin="0,10,0,0">
+                    <TextBox.Text>
+                        <Binding Path="Name" UpdateSourceTrigger="LostFocus" Mode="TwoWay">
+                            <Binding.ValidationRules>
+                                <DataErrorValidationRule/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
+            </StackPanel>
+        </Border>
+    </HierarchicalDataTemplate>
+    <!--#endregion-->
 </ResourceDictionary>

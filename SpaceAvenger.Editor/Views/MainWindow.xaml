@@ -15,7 +15,7 @@
             <TabItem Header="Game Objects">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="157*"/>
+                        <ColumnDefinition Width="170*"/>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="319*"/>
                         <ColumnDefinition Width="Auto"/>
@@ -29,6 +29,18 @@
                     <GridSplitter Grid.Column="3" Width="5" VerticalAlignment="Stretch" 
                                   HorizontalAlignment="Stretch" 
                                   Background="Black"/>
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <StackPanel Orientation="Vertical" Height="1000">
+                            <Rectangle Style="{StaticResource BorderRectStyle}"/>
+                            <TextBlock Text="Hierarchy" Style="{StaticResource DescLabel}"/>
+                            <Rectangle Style="{StaticResource BorderRectStyle}"/>
+                            <StackPanel Orientation="Horizontal">
+                                <Button Content="Add" Margin="10,0,10,0" Command="{Binding OnAddGameObjectButtonPressed}"/>
+                                <Button Content="Remove"/>
+                            </StackPanel>
+                            <TreeView Grid.Column="1" Margin="5,10" />
+                        </StackPanel>
+                    </ScrollViewer>
                     <!--<Grid Grid.Column="4">
                         <ScrollViewer VerticalScrollBarVisibility="Visible">
                             <StackPanel Orientation="Vertical" Height="1200">

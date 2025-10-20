@@ -17,6 +17,13 @@
         </Style.Setters>
     </Style>
 
+    <Style x:Key="FieldName" TargetType="TextBlock">
+        <Style.Setters>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="FontSize" Value="16"/>
+        </Style.Setters>
+    </Style>
+
     <Style x:Key="BorderRoundStyle" TargetType="Border">
         <Style.Setters>
             <Setter Property="CornerRadius" Value="5"/>
