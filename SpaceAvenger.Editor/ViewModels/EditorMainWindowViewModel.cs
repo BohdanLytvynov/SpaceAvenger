@@ -182,7 +182,10 @@ namespace SpaceAvenger.Editor.ViewModels
         {
             m_SelectedItem = item;
             if (m_SelectedItem == null)
+            {
+                Components.Clear();
                 return;
+            }
             UpdateGameObjectProperties();
             UpdateComponents();
         }
@@ -199,6 +202,8 @@ namespace SpaceAvenger.Editor.ViewModels
             {
                 RemoveFromWorld(m_SelectedItem.GameObject);
                 RemoveObjectRec(m_SelectedItem, Items, false);
+                Components.Clear();
+                m_SelectedItem = null;
             }
             
         }
@@ -217,13 +222,12 @@ namespace SpaceAvenger.Editor.ViewModels
 
                 if (itemViewModel.Id == item.Id)
                 { 
-                    itemViewModel.GameObject = null;
                     src.Remove(itemViewModel);
                     removed = true;
                     break;
                 }
 
-                RemoveObjectRec(itemViewModel, item.Children, removed);
+                RemoveObjectRec(item, itemViewModel.Children, removed);
             }
         }
 
@@ -275,10 +279,7 @@ namespace SpaceAvenger.Editor.ViewModels
         {
             if (item != null)
             {
-                foreach (var elem in m_gameViewHost.World)
-                {
-                    elem.RemoveChild(item, (e) => e.Id == item.Id, true);
-                }
+                GameObject.RemoveObject((x) => x.Id == item.Id, m_gameViewHost.World, true);
             }
         }
 

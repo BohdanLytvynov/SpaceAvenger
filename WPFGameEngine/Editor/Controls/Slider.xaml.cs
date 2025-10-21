@@ -1,79 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace WPFGameEngine.Editor.Controls
 {
     /// <summary>
     /// Interaction logic for Slider.xaml
     /// </summary>
-    public partial class Slider : UserControl, INotifyPropertyChanged, IDataErrorInfo
+    public partial class Slider : UserControl
     {
-        #region Fields
-        private string m_IntegerPartValueString;
-        private string m_FloatPartValueString;
-
-        private string m_MaximumString;
-        private string m_MinimumString;
-        #endregion
-
-        #region Properties
-        public string IntegerPartValueString
-        {
-            get => m_IntegerPartValueString;
-            set
-            {
-                Set(ref m_IntegerPartValueString, value);
-            }
-        }
-
-        public string FloatPartValueString
-        {
-            get => m_FloatPartValueString;
-            set
-            {
-                Set(ref m_FloatPartValueString, value);
-            }
-        }
-
-        public string MaximumString
-        {
-            get => m_MaximumString;
-            set => Set(ref m_MaximumString, value);
-        }
-
-        public string MinimumString
-        {
-            get => m_MinimumString;
-            set => Set(ref m_MinimumString, value);
-        }
-        #endregion
-
         #region DependencyProperties
-
-
-
-        public bool IsValid
-        {
-            get { return (bool)GetValue(IsValidProperty); }
-            set { SetValue(IsValidProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for IsValid.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty IsValidProperty;
 
         public double Maximum
         {
@@ -92,24 +29,6 @@ namespace WPFGameEngine.Editor.Controls
 
         // Using a DependencyProperty as the backing store for Minimum.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty MinimumProperty;
-
-        public bool FloatValue
-        {
-            get { return (bool)GetValue(FloatValueProperty); }
-            set { SetValue(FloatValueProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for FloatValue.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty FloatValueProperty;
-
-        public string Deliminator
-        {
-            get { return (string)GetValue(DeliminatorProperty); }
-            set { SetValue(DeliminatorProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for Deliminator.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty DeliminatorProperty;
 
         public string LabelText
         {
@@ -165,24 +84,17 @@ namespace WPFGameEngine.Editor.Controls
         // Using a DependencyProperty as the backing store for LabelStyle.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty LabelStyleProperty;
 
-        public Style IntegerPartTextBoxStyle
+        public Style TextboxValueStyle
         {
-            get { return (Style)GetValue(IntegerPartTextBoxStyleProperty); }
-            set { SetValue(IntegerPartTextBoxStyleProperty, value); }
+            get { return (Style)GetValue(TextboxValueStyleProperty); }
+            set { SetValue(TextboxValueStyleProperty, value); }
         }
 
-        // Using a DependencyProperty as the backing store for IntegerPartTextBoxStyle.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty IntegerPartTextBoxStyleProperty;
-
-        public Style FloatPartTextBoxStyleProperty
-        {
-            get { return (Style)GetValue(FloatPartTextBoxStylePropertyProperty); }
-            set { SetValue(FloatPartTextBoxStylePropertyProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for FloatPartTextBoxStyleProperty.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty FloatPartTextBoxStylePropertyProperty;
-
+        // Using a DependencyProperty as the backing store for TextboxValueStyle.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty TextboxValueStyleProperty =
+            DependencyProperty.Register("TextboxValueStyle", typeof(Style), 
+                typeof(Slider), new PropertyMetadata(default, OnTextboxValueStylePropertyChanged));
+        
         public Style SliderStyle
         {
             get { return (Style)GetValue(SliderStyleProperty); }
@@ -224,175 +136,19 @@ namespace WPFGameEngine.Editor.Controls
 
         // Using a DependencyProperty as the backing store for MinimumTextBoxStyle.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty MinimumTextBoxStyleProperty;
-
-        public Style DeliminatorLabelStyle
-        {
-            get { return (Style)GetValue(DeliminatorLabelStyleProperty); }
-            set { SetValue(DeliminatorLabelStyleProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for DeliminatorLabelStyle.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty DeliminatorLabelStyleProperty;
-
-        #region IDataErrorInfo Implementation
-        public string Error => throw new NotImplementedException();
-
-        public string this[string columnName]
-        {
-            get
-            {
-                string error = string.Empty;
-
-                switch (columnName)
-                {
-                    case nameof(IntegerPartValueString):
-                        int v;
-                        if (!int.TryParse(IntegerPartValueString, out v))
-                        {
-                            error = "Not a number!";
-                            this.IsValid = false;
-                        }
-                        else if (!InBoundsInt())
-                        {
-                            error = "Not in bounds of min max!";
-                            this.IsValid = false;
-                        }
-                        else
-                        {
-                            var value = this.Value.ToString();
-
-                            if (!value.Contains(','))
-                                value += "," + 0;
-
-                            var arr = value.Split(',');
-                            SetValue(ValueProperty, double.Parse(IntegerPartValueString + "," + arr[1]));
-                            this.IsValid = true;
-                        }
-                        break;
-                    case nameof(FloatPartValueString):
-                        if (!isNumbers(FloatPartValueString, out error)) { }
-                        else if (!InBoundsFloat())
-                        {
-                            error = "Not in bounds of min max!";
-                            this.IsValid = false;
-                        }
-                        else
-                        {
-                            var value = this.Value.ToString();
-                            if (!value.Contains(','))
-                                value += "," + 0;
-
-                            var arr = value.Split(',');
-                            SetValue(ValueProperty, double.Parse(arr[0] + "," + FloatPartValueString));
-                            this.IsValid = true;
-                        }
-                        break;
-                    case nameof(MinimumString):
-                        if (!isNumberValid(MinimumString, out error))
-                        {
-                            this.IsValid = false;
-                        }
-                        else
-                        {
-                            this.Minimum = double.Parse(MinimumString);
-                            this.IsValid = true;
-                        }
-                        break;
-                    case nameof(MaximumString):
-                        if (!isNumberValid(MaximumString, out error))
-                        {
-                            this.IsValid = false;
-                        }
-                        else
-                        {
-                            this.Maximum = double.Parse(MaximumString);
-                            this.IsValid = true;
-                        }
-                        break;
-                }
-                return error;
-            }
-        }
-
-        private bool isNumbers(string value, out string error)
-        {
-            error = string.Empty;
-            foreach (var item in value)
-            {
-                if (!Char.IsDigit(item))
-                {
-                    error = "Not a number!";
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        private bool isNumberValid(string value, out string error)
-        {
-            error = string.Empty;
-            var res = double.TryParse(value, out double _);
-            if (!res)
-                error = "Not a number!";
-            return res;
-        }
-
-        #endregion
-
+                         
         // Using a DependencyProperty as the backing store for SliderStyle.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty SliderStyleProperty;
-
-        #region INotifyPropertyChanged
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        private void OnPropertyChanged(string propName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
-        }
-
-        public virtual bool Set<T>(ref T field, T value, [CallerMemberName] string propName = "")
-        {
-            if (field == null) throw new ArgumentNullException(nameof(field));
-
-            if (value.Equals(field))
-            {
-                return false;
-            }
-            else
-            {
-                field = value;
-                OnPropertyChanged(propName);
-                return true;
-            }
-        }
-        #endregion
-
+       
         #endregion
 
         #region Ctor
 
         static Slider()
         {
-            FloatValueProperty =
-            DependencyProperty.Register("FloatValue", typeof(bool),
-            typeof(Slider), new PropertyMetadata(true, OnFloatValuePropertyChanged));
-
-            DeliminatorProperty =
-            DependencyProperty.Register("Deliminator", typeof(string),
-            typeof(Slider), new PropertyMetadata(",", OnDeliminatorPropertyChanged));
-
             LabelStyleProperty =
             DependencyProperty.Register("LabelStyle", typeof(Style),
                 typeof(Slider), new PropertyMetadata(default, OnLabelStyleChanged));
-
-            IntegerPartTextBoxStyleProperty =
-            DependencyProperty.Register("IntegerPartTextBoxStyle", typeof(Style),
-                typeof(Slider), new PropertyMetadata(default, OnIntegerPartTextBoxStyleChanged));
-
-            FloatPartTextBoxStylePropertyProperty =
-            DependencyProperty.Register("FloatPartTextBoxStyleProperty",
-                typeof(Style), typeof(Slider), new PropertyMetadata(default, OnFloatPartTextBoxStyleChanged));
 
             StackVerticalStyleProperty =
             DependencyProperty.Register("StackVerticalStyle", typeof(Style),
@@ -441,23 +197,6 @@ namespace WPFGameEngine.Editor.Controls
             MinimumTextBoxStyleProperty =
             DependencyProperty.Register("MinimumTextBoxStyle", typeof(Style),
                 typeof(Slider), new PropertyMetadata(default, OnMinimumTextBoxStylePropertyChanged));
-
-            DeliminatorLabelStyleProperty =
-            DependencyProperty.Register("DeliminatorLabelStyle", typeof(Style),
-            typeof(Slider), new PropertyMetadata(default, OnDeliminatorLabelpropertyChanged));
-
-            IsValidProperty =
-            DependencyProperty.Register("IsValid", typeof(bool),
-            typeof(Slider), new PropertyMetadata(false, OnIsValidPropertyChanged));
-        }
-
-        private static void OnDeliminatorLabelpropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var This = (Slider)d;
-            var val = (Style)e.NewValue;
-            if (val == null)
-                return;
-            This.DeliminatorLabelStyle = (Style)e.NewValue;
         }
 
         private static void OnMinimumTextBoxStylePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -466,7 +205,8 @@ namespace WPFGameEngine.Editor.Controls
             var val = (Style)e.NewValue;
             if (val == null)
                 return;
-            This.MinimumTextBoxStyle = (Style)e.NewValue;
+            This.SetValue(MinimumTextBoxStyleProperty, e.NewValue);
+            This.Min.Style = val;
         }
 
         private static void OnMaximumTextBoxStylePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -475,7 +215,8 @@ namespace WPFGameEngine.Editor.Controls
             var val = (Style)e.NewValue;
             if (val == null)
                 return;
-            This.MaximumTextBoxStyle = (Style)e.NewValue;
+            This.SetValue(MaximumTextBoxStyleProperty, e.NewValue);
+            This.Max.Style = val;
         }
 
         private static void OnMinimumLabelStylePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -484,7 +225,8 @@ namespace WPFGameEngine.Editor.Controls
             var val = (Style)e.NewValue;
             if (val == null)
                 return;
-            This.MinimumLabelStyle = (Style)e.NewValue;
+            This.SetValue(MinimumLabelStyleProperty, e.NewValue);
+            This.MinLabel.Style = val;
         }
 
         private static void OnMaximumLabelStylePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -493,71 +235,28 @@ namespace WPFGameEngine.Editor.Controls
             var val = (Style)e.NewValue;
             if (val == null)
                 return;
-            This.MaximumLabelStyle = (Style)e.NewValue;
+            This.SetValue(MaximumLabelStyleProperty, e.NewValue);
+            This.MaxLabel.Style = val;
         }
-
-        private static void OnFloatValuePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var This = (Slider)d;
-            This.FloatValue = (bool)e.NewValue;
-            if (This.FloatValue)
-            {
-                This.FloatPart.Visibility = Visibility.Visible;
-                This.DeliminatorLabel.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                This.FloatPart.Visibility = Visibility.Collapsed;
-                This.DeliminatorLabel.Visibility = Visibility.Collapsed;
-            }
-        }
-
+       
         private static void OnBorderStylePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var This = (Slider)d;
             var val = (Style)e.NewValue;
             if (val == null)
                 return;
-            This.BorderStyle = (Style)e.NewValue;
+            This.SetValue(BorderStyleProperty, e.NewValue);
+            This.Border.Style = val;
         }
 
         private static void OnValuePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var This = (Slider)d;
-            var newValue = (double)e.NewValue;
-
-            if (This.Value != newValue)
-                This.Value = newValue;
-
-            var currentValue = This.Value.ToString();
-
-            if (!currentValue.Contains(','))
-                currentValue = currentValue + "," + 0;
-
-            var arr = currentValue.Split(',');
-            if (arr.Length == 2)
-            {
-                This.IntegerPartValueString = arr[0];
-                This.FloatPartValueString = arr[1];
-            }
-            else
-            {
-                This.IntegerPartValueString = arr[0];
-            }
+            This.SetValue(ValueProperty, e.NewValue);
         }
-
-        private static void OnDeliminatorPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var This = (Slider)d;
-            This.Deliminator = e.NewValue.ToString();
-        }
-
+       
         public Slider()
         {
-            m_IntegerPartValueString = "0";
-            m_FloatPartValueString = "0";
-            m_MaximumString = "0";
-            m_MinimumString = "0";
             InitializeComponent();
         }
 
@@ -568,7 +267,7 @@ namespace WPFGameEngine.Editor.Controls
         private static void OnLabelTextPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var This = (Slider)d;
-            This.LabelText = e.NewValue.ToString();
+            This.SetValue(LabelTextProperty, e.NewValue);
         }
 
         private static void OnStackHorizontalStyleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -577,6 +276,7 @@ namespace WPFGameEngine.Editor.Controls
             var val = (Style)e.NewValue;
             if (val == null)
                 return;
+            This.SetValue(StackHorizontalStyleProperty, e.NewValue);
             This.StackHorizontal.Style = (Style)e.NewValue;
         }
 
@@ -586,6 +286,7 @@ namespace WPFGameEngine.Editor.Controls
             var val = (Style)e.NewValue;
             if (val == null)
                 return;
+            This.SetValue(StackVerticalStyleProperty, e.NewValue);
             This.StackVertical.Style = (Style)e.NewValue;
         }
 
@@ -595,25 +296,8 @@ namespace WPFGameEngine.Editor.Controls
             var val = (Style)e.NewValue;
             if (val == null)
                 return;
+            This.SetValue(LabelStyleProperty, e.NewValue);
             This.Label.Style = (Style)e.NewValue;
-        }
-
-        private static void OnFloatPartTextBoxStyleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var This = (Slider)d;
-            var val = (Style)e.NewValue;
-            if (val == null)
-                return;
-            This.IntegerPart.Style = (Style)e.NewValue;
-        }
-
-        private static void OnIntegerPartTextBoxStyleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var This = (Slider)d;
-            var val = (Style)e.NewValue;
-            if (val == null)
-                return;
-            This.FloatPart.Style = (Style)e.NewValue;
         }
 
         private static void OnSliderStyleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -622,66 +306,43 @@ namespace WPFGameEngine.Editor.Controls
             var val = (Style)e.NewValue;
             if (val == null)
                 return;
+            This.SetValue(SliderStyleProperty, e.NewValue);
             This.SliderValue.Style = (Style)e.NewValue;
         }
 
         private static void OnMaximumPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var This = (Slider)d;
-            var val = (double)e.NewValue;
-            if (This.Maximum != val)
-                This.Maximum = val;
-            This.MaximumString = val.ToString();
-            This.SliderValue.Maximum = val;
+            This.SetValue(MaximumProperty, e.NewValue);
         }
 
         private static void OnMinimumPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var This = (Slider)d;
-            var val = (double)e.NewValue;
-            if (This.Minimum != val)
-                This.Minimum = val;
-            This.MinimumString = val.ToString();
-            This.SliderValue.Minimum = (double)e.NewValue;
+            This.SetValue(MinimumProperty, e.NewValue);
         }
 
-        private bool InBoundsInt()
+        private static void OnTextboxValueStylePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            string value = this.Value.ToString();
-            if (!value.Contains(","))
-            {
-                value += "," + 0;
-            }
-            var arr = value.Split(',');
-
-            double toCompare = double.Parse(IntegerPartValueString + "," + arr[1]);
-
-            return toCompare >= Minimum && toCompare <= Maximum;
+            var This = ((Slider)d);
+            This.SetValue(TextboxValueStyleProperty, e.NewValue);
+            if (e.NewValue == null)
+                return;
+            This.SetValue(TextboxValueStyleProperty, e.NewValue);
+            This.TextValue.Style = (Style)e.NewValue;
         }
 
-        private bool InBoundsFloat()
-        {
-            string value = this.Value.ToString();
-            if (!value.Contains(","))
-            {
-                value += "," + 0;
-            }
-            var arr = value.Split(',');
-
-            double toCompare = double.Parse(arr[0] + "," + FloatPartValueString);
-
-            return toCompare >= Minimum && toCompare <= Maximum;
-        }
-
-        private static void OnIsValidPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var This = (Slider)d;
-            var v = (bool)e.NewValue;
-            if (v != This.IsValid)
-            {
-                This.IsValid = v;
-            }
-        }
         #endregion
+
+        private void Control_Loaded(object sender, RoutedEventArgs e)
+        {
+            var old = this.Maximum;
+            this.Maximum = -100;
+            this.Maximum = old;
+
+            old = this.Minimum;
+            this.Minimum = -100;
+            this.Minimum = old;
+        }
     }
 }

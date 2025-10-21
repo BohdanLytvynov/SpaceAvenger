@@ -8,7 +8,8 @@
     <!--#region Tree View Item-->
     <HierarchicalDataTemplate DataType="{x:Type tvm:TreeItemViewModel}" 
                               ItemsSource="{Binding Children, UpdateSourceTrigger=PropertyChanged}">
-        <Border Style="{StaticResource BorderRoundStyle}" Margin="5">
+        <Border Style="{StaticResource BorderRoundStyle}" Margin="5" Width="{Binding RelativeSource={RelativeSource 
+            Mode=FindAncestor, AncestorType=TreeView}, Path=ActualWidth}">
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="{Binding ShowNumber, StringFormat='№{0})'}" Style="{StaticResource FieldName}"
                            VerticalAlignment="Center"/>
@@ -31,46 +32,38 @@
 
     <!--#region Components -->
     <DataTemplate DataType="{x:Type tcvm:TransformComponentViewModel}">
-        <StackPanel Orientation="Vertical">
+        <StackPanel Orientation="Vertical" Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, 
+            AncestorType=ListView}, Path=ActualWidth}">
             <Rectangle Style="{StaticResource BorderRectStyle}"/>
             <TextBlock Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DescLabel}"/>
             <Rectangle Style="{StaticResource BorderRectStyle}"/>
-
             <controls:Slider Value="{Binding PositionX, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay 
                 }"
 Margin="10" LabelText="X-Position: "
 Minimum="0" Maximum="1000"
-                 FloatValue="True"/>
+                 />
             <controls:Slider Value="{Binding PositionY, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
 Margin="10" LabelText="Y-Position: "
 Minimum="0" Maximum="1000"
-                 FloatValue="True"
                  />
             <controls:Slider Value="{Binding Rot, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
 Margin="10" LabelText="Rotation: "
 Minimum="-360.0" Maximum="360.0"
-                 FloatValue="True"
                  />
             <controls:Slider Value="{Binding ScaleX, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
 Margin="10" LabelText="X-Scale: "
 Minimum="0" Maximum="1.0"
-                 FloatValue="True"
                  />
             <controls:Slider Value="{Binding ScaleY, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
 Margin="10" LabelText="Y-Scale: "
 Minimum="0" Maximum="1.0"
-                 FloatValue="True"
                  />
             <controls:Slider Value="{Binding CenterPositionX, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-Margin="10" LabelText="Center Position X: "
-Minimum="0" Maximum="1.0"
-FloatValue="True"
-                    />
+Margin="10" LabelText="Center Position X: " Minimum="0" Maximum="1.0"/>
             <controls:Slider Value="{Binding CenterPositionY, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
     Margin="10" LabelText="Center Position Y:"
     Minimum="0" Maximum="1.0"
-    FloatValue="True"
-                    />
+                             />
         </StackPanel>
     </DataTemplate>
     <!--#endregion-->

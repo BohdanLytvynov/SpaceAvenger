@@ -5,10 +5,12 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WPFGameEngine.Editor.Controls"
              xmlns:fa5="http://schemas.fontawesome.com/icons/"
+             xmlns:minMaxProxy="clr-namespace:WPFGameEngine.Editor.Controls.Proxy.MinMax"
+             xmlns:validators="clr-namespace:WPFGameEngine.Editor.Controls.Validators"
              mc:Ignorable="d" 
              d:DesignHeight="70" d:DesignWidth="800"
              d:DataContext="{d:DesignInstance local:Slider, IsDesignTimeCreatable=True}"
-             x:Name="Control">
+             x:Name="Control" Loaded="Control_Loaded">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -17,50 +19,49 @@
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
-        <Border Style="{StaticResource Border}">
+        <minMaxProxy:MinMaxProxy 
+            MinIn="{Binding ElementName=Control,
+            Path=Minimum, UpdateSourceTrigger=PropertyChanged}"
+            MaxIn="{Binding ElementName=Control,
+            Path=Maximum, UpdateSourceTrigger=PropertyChanged}"
+            MinOut="{Binding ElementName=DRV, Path=Min, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+            MaxOut="{Binding ElementName=DRV, Path=Max, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+            />
+        <Border Style="{StaticResource Border}" x:Name="Border">
             <StackPanel x:Name="StackVertical" Orientation="Vertical">
                 <StackPanel x:Name="StackHorizontal" Orientation="Horizontal">
                     <Label x:Name="Label" Content="{Binding ElementName=Control,Path=LabelText, UpdateSourceTrigger=PropertyChanged}"
                            Style="{StaticResource InputTxtBoxLabel}"/>
-                    <TextBox x:Name="IntegerPart" MinWidth="10" Style="{StaticResource TxtBoxInputStyle}">
+                    <TextBox MinWidth="100" x:Name="TextValue" 
+                             Style="{StaticResource TxtBoxInputStyle}">
                         <TextBox.Text>
-                            <Binding ElementName="Control" Path="IntegerPartValueString" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
+                            <Binding ElementName="Control" Path="Value" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
                                 <Binding.ValidationRules>
-                                    <DataErrorValidationRule/>
+                                    <validators:DoubleValueRangeValidator x:Name="DRV"/>
                                 </Binding.ValidationRules>
                             </Binding>
                         </TextBox.Text>
                     </TextBox>
-                    <Label x:Name="DeliminatorLabel" 
-                           Content="{Binding ElementName=Control, Path=Deliminator, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Bottom"
-                           Style="{StaticResource InputTxtBoxLabel}"/>
-                    <TextBox x:Name="FloatPart" MinWidth="10" Style="{StaticResource TxtBoxInputStyle}">
-                        <TextBox.Text>
-                            <Binding ElementName="Control" Path="FloatPartValueString" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
-                                <Binding.ValidationRules>
-                                    <DataErrorValidationRule/>
-                                </Binding.ValidationRules>
-                            </Binding>
-                        </TextBox.Text>
-                    </TextBox>
-                    <Label Margin="30,0,0,0" Content="Minimum:" Style="{StaticResource InputTxtBoxLabel}"/>
+                    <Label Margin="30,0,0,0" x:Name="MinLabel" Content="Minimum:" Style="{StaticResource InputTxtBoxLabel}"/>
                     <TextBox x:Name="Min" Margin="5,0,0,0" MinWidth="40"
-                             Style="{StaticResource TxtBoxInputStyle}">
+                             Style="{StaticResource TxtBoxInputStyle}"
+                             >
                         <TextBox.Text>
-                            <Binding ElementName="Control" Path="MinimumString" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
+                            <Binding ElementName="Control" Path="Minimum" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
                                 <Binding.ValidationRules>
-                                    <DataErrorValidationRule/>
+                                    <validators:DoubleValueValidator/>
                                 </Binding.ValidationRules>
                             </Binding>
                         </TextBox.Text>
                     </TextBox>
-                    <Label Margin="10,0,0,0" Content="Maximum:" Style="{StaticResource InputTxtBoxLabel}"/>
+                    <Label Margin="10,0,0,0" Content="Maximum:" x:Name="MaxLabel" Style="{StaticResource InputTxtBoxLabel}"/>
                     <TextBox x:Name="Max" Margin="5,0,0,0" MinWidth="40"
-                             Style="{StaticResource TxtBoxInputStyle}">
+                             Style="{StaticResource TxtBoxInputStyle}"
+                             >
                         <TextBox.Text>
-                            <Binding ElementName="Control" Path="MaximumString" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
+                            <Binding ElementName="Control" Path="Maximum" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
                                 <Binding.ValidationRules>
-                                    <DataErrorValidationRule/>
+                                    <validators:DoubleValueValidator/>
                                 </Binding.ValidationRules>
                             </Binding>
                         </TextBox.Text>
@@ -70,6 +71,8 @@
         Width="{Binding ElementName=Control,
         UpdateSourceTrigger=PropertyChanged,
         Path=Width}" Value="{Binding ElementName=Control, Path=Value ,UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                        Minimum="{Binding ElementName=Control, Path=Minimum, UpdateSourceTrigger=PropertyChanged}"
+                        Maximum="{Binding ElementName=Control, Path=Maximum, UpdateSourceTrigger=PropertyChanged}"
                         />
             </StackPanel>
         </Border>

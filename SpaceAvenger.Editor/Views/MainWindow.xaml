@@ -6,8 +6,7 @@
         xmlns:local="clr-namespace:SpaceAvenger.Editor"
         xmlns:gameView ="clr-namespace:WPFGameEngine.GameViewControl;assembly=WPFGameEngine"
         xmlns:vm="clr-namespace:SpaceAvenger.Editor.ViewModels"
-        xmlns:controls="clr-namespace:WPFGameEngine.Editor.Controls;assembly=WPFGameEngine"
-        xmlns:diag="clr-namespace:System.Diagnostics;assembly=WindowsBase"
+        xmlns:controls="clr-namespace:WPFGameEngine.Editor.Controls;assembly=WPFGameEngine"        
         mc:Ignorable="d"
         Height="450" Width="800" WindowState="Maximized" x:Name="Root"
         d:DataContext="{d:DesignInstance vm:EditorMainWindowViewModel, IsDesignTimeCreatable=True}">
@@ -44,40 +43,41 @@
                         </StackPanel>
                     </ScrollViewer>
                     <Grid Grid.Column="4">
-                        <StackPanel Orientation="Vertical">
-                            <Rectangle Style="{StaticResource BorderRectStyle}"/>
-                            <TextBlock Text="Global Properties:" Style="{StaticResource DescLabel}"/>
-                            <Rectangle Style="{StaticResource BorderRectStyle}"/>
+                        <ScrollViewer VerticalScrollBarVisibility="Visible">
+                            <StackPanel Orientation="Vertical" Height="2000">
+                                <Rectangle Style="{StaticResource BorderRectStyle}"/>
+                                <TextBlock Text="Global Properties:" Style="{StaticResource DescLabel}"/>
+                                <Rectangle Style="{StaticResource BorderRectStyle}"/>
 
-                            <StackPanel Orientation="Horizontal">
-                                <CheckBox Content="ShowGizmo" Margin="10" IsChecked="{Binding ShowGizmos, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                                <CheckBox Content="ShowBorders" Margin="10" IsChecked="{Binding ShowBorders, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                            </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <CheckBox Content="ShowGizmo" Margin="10" IsChecked="{Binding ShowGizmos, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                                    <CheckBox Content="ShowBorders" Margin="10" IsChecked="{Binding ShowBorders, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                                </StackPanel>
 
-                            <Rectangle Style="{StaticResource BorderRectStyle}"/>
-                            <TextBlock Text="GameObject Properties:" Style="{StaticResource DescLabel}"/>
-                            <Rectangle Style="{StaticResource BorderRectStyle}"/>
-                            <StackPanel Orientation="Horizontal">
-                                <CheckBox Content="Enabled" Margin="10" 
+                                <Rectangle Style="{StaticResource BorderRectStyle}"/>
+                                <TextBlock Text="GameObject Properties:" Style="{StaticResource DescLabel}"/>
+                                <Rectangle Style="{StaticResource BorderRectStyle}"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <CheckBox Content="Enabled" Margin="10" 
                                           IsChecked="{Binding Enabled, 
                                     UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                                <TextBlock Text="{Binding ObjName, UpdateSourceTrigger=PropertyChanged, StringFormat='Object name:{0}'}"
+                                    <TextBlock Text="{Binding ObjName, UpdateSourceTrigger=PropertyChanged, StringFormat='Object name:{0}'}"
                                            Style="{StaticResource FieldName}"
                                            Margin="15,0,0,0"/>
-                            </StackPanel>
-                            <controls:Slider Value="{Binding ZIndex, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                </StackPanel>
+                                <controls:Slider Value="{Binding ZIndex, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                 Margin="10" LabelText="ZIndex: "
                                 Minimum="0" Maximum="100"
-                                FloatValue="False"
                                 SliderStyle="{StaticResource IntSlider_Tick1}"
                  />
-                            <Rectangle Style="{StaticResource BorderRectStyle}"/>
-                            <TextBlock Text="GameObject Components:" Style="{StaticResource DescLabel}"/>
-                            <Rectangle Style="{StaticResource BorderRectStyle}"/>
-                            <ListView x:Name="ComponentPresenter" ItemsSource="{Binding Components, 
+                                <Rectangle Style="{StaticResource BorderRectStyle}"/>
+                                <TextBlock Text="GameObject Components:" Style="{StaticResource DescLabel}"/>
+                                <Rectangle Style="{StaticResource BorderRectStyle}"/>
+                                <ListView x:Name="ComponentPresenter" ItemsSource="{Binding Components, 
                                 UpdateSourceTrigger=PropertyChanged}"  VirtualizingPanel.IsVirtualizing="False" 
                                       VirtualizingPanel.VirtualizationMode="Standard"/>
-                        </StackPanel>
+                            </StackPanel>
+                        </ScrollViewer>
                         <!--<ScrollViewer VerticalScrollBarVisibility="Visible">
                             <StackPanel Orientation="Vertical" Height="1200">
                                 

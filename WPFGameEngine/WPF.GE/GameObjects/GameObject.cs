@@ -1,5 +1,6 @@
 ﻿using System.Drawing;
 using System.Numerics;
+using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shell;
@@ -261,13 +262,13 @@ namespace WPFGameEngine.WPF.GE.GameObjects
             m_children.Add(child);
         }
 
-        private void RemoveChildRecursive(IGameObject child, List<IGameObject> children, Func<IGameObject, bool> predicate,
-            bool removed = false)
+        private void RemoveChildRecursive(List<IGameObject> children, Func<IGameObject, bool> predicate,
+            ref bool removed)
         {
             if (removed)
                 return;
 
-            foreach (var item in m_children)
+            foreach (var item in children)
             {
                 if (removed)
                     return;
@@ -279,14 +280,12 @@ namespace WPFGameEngine.WPF.GE.GameObjects
                     return;
                 }
 
-                RemoveChildRecursive(child, item.Children, predicate, removed);
+                RemoveChildRecursive(item.Children, predicate, ref removed);
             }
         }
 
-        public void RemoveChild(IGameObject child, Func<IGameObject, bool> predicate, bool recursive = false)
+        public bool RemoveChild(Func<IGameObject, bool> predicate, bool recursive = false)
         {
-            if (child == null) throw new ArgumentNullException(nameof(child));
-
             if (!recursive)
             {
                 foreach (var item in m_children)
@@ -294,13 +293,17 @@ namespace WPFGameEngine.WPF.GE.GameObjects
                     if (predicate(item))
                     {
                         m_children.Remove(item);
-                        return;
+                        return true;
                     }
                 }
+
+                return false;
             }
             else
             {
-                RemoveChildRecursive(child, m_children, predicate);
+                bool removed = false;
+                RemoveChildRecursive(m_children, predicate, ref removed);
+                return removed;
             }
         }
 
@@ -347,6 +350,25 @@ namespace WPFGameEngine.WPF.GE.GameObjects
             }
 
             return result;
+        }
+
+        public static void RemoveObject(Func<IGameObject, bool> predicate, List<IGameObject> world, bool recursive = false)
+        {
+            foreach (var o in world)
+            {
+                if (predicate(o))
+                {
+                    world.Remove(o);
+                    return;
+                }
+                else if (recursive)
+                {
+                    bool res = o.RemoveChild(predicate, recursive);
+
+                    if(res)
+                        return;
+                }
+            }
         }
 
         #endregion

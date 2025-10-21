@@ -36,6 +36,7 @@
         <Style.Setters>
             <Setter Property="TickFrequency" Value="1"/>
             <Setter Property="Interval" Value="1"/>
+            <Setter Property="TickPlacement" Value="BottomRight"/>
         </Style.Setters>
     </Style>
 </ResourceDictionary>

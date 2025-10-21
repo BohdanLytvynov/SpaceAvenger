@@ -29,8 +29,8 @@ namespace WPFGameEngine.WPF.GE.GameObjects
 
         void AddChild(IGameObject child);
 
-        void RemoveChild(IGameObject child, Func<IGameObject, bool> predicate, bool recursive = false);
-
+        bool RemoveChild(Func<IGameObject, bool> predicate, bool recursive = false);
+            
         IGameObject? FindChild(Func<IGameObject, bool> predicate, bool recursiveSearch = false);
         
         TComponent? GetComponent<TComponent>(bool throwException = true)
