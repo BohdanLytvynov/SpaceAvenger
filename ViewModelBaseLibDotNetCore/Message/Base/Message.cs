@@ -1,8 +1,6 @@
-﻿using ViewModelBaseLibDotNetCore.Message.Base;
-
-namespace SpaceAvenger.Services.Realizations.Message
+﻿namespace ViewModelBaseLibDotNetCore.Message.Base
 {
-    internal abstract class Message<T> : IMessage<T>
+    public abstract class Message<T> : IMessage<T>
     {
         private T m_content;
 
@@ -13,7 +11,7 @@ namespace SpaceAvenger.Services.Realizations.Message
 
         public Message(T content)
         {
-            m_content = content; 
+            m_content = content;
         }
 
         public override string ToString()

@@ -1,15 +1,9 @@
-﻿using SpaceAvenger.Enums.FrameTypes;
-using SpaceAvenger.Services.Realizations.PageManager;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
+using ViewModelBaseLibDotNetCore.PageManagers;
 
-namespace SpaceAvenger.Services.Interfaces.PageManager
+namespace ViewModelBaseLibDotNetCore.PageManager.Base
 {
-    internal interface IPageManagerService<TFrameType>
+    public interface IPageManagerService<TFrameType>
         where TFrameType : struct, Enum
     {
         public EventHandler<PageManagerEventArgs<TFrameType>>? OnSwitchScreenMethodInvoked { get; set; }

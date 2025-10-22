@@ -235,7 +235,7 @@ namespace SpaceAvenger.Editor.ViewModels
             else
             {
                 TreeItemViewModel itemViewModel = new(m_SelectedItem.Children.Count + 1, obj);
-                itemViewModel.ItemSelected += ItemViewModel_ItemSelected;                
+                itemViewModel.ItemSelected += ItemViewModel_ItemSelected;
                 m_SelectedItem.Children.Add(itemViewModel);
                 m_SelectedItem.GameObject.AddChild(obj);
             }

@@ -1,9 +1,7 @@
-﻿using SpaceAvenger.Services.Interfaces.PageManager;
-using System;
-using System.Collections.Generic;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
+using ViewModelBaseLibDotNetCore.PageManager.Base;
 
-namespace SpaceAvenger.Services.Realizations.PageManager
+namespace ViewModelBaseLibDotNetCore.PageManagers
 {
     public class PageManagerEventArgs<TFrameType> : EventArgs
         where TFrameType : struct, Enum

@@ -1,22 +1,17 @@
 ﻿using SpaceAvenger.Attributes.PageManager;
 using SpaceAvenger.Enums.FrameTypes;
-using SpaceAvenger.Services.Interfaces.PageManager;
 using SpaceAvenger.ViewModels.Base;
 using System;
 using System.Windows.Media;
 using System.Windows;
-using SpaceAvenger.Services.Interfaces.MessageBus;
 using SpaceAvenger.Services.Realizations.Message;
 using WPFGameEngine.Timers;
-using System.Threading;
 using WPFGameEngine.GameViewControl;
 using c = SpaceAvenger.Services.Constants;
 using WPFGameEngine.WPF.GE.GameObjects;
-using System.Collections.Generic;
-using System.Numerics;
-using SpaceAvenger.Game.Core.Spaceships.F10.Destroyer;
 using WPFGameEngine.WPF.GE.Settings;
-using System.Drawing;
+using ViewModelBaseLibDotNetCore.PageManager.Base;
+using ViewModelBaseLibDotNetCore.MessageBus.Base;
 
 namespace SpaceAvenger.ViewModels.PagesVM
 {

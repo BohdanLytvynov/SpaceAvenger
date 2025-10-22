@@ -1,14 +1,8 @@
-﻿using SpaceAvenger.Services.Interfaces.Message;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using ViewModelBaseLibDotNetCore.Message.Base;
 
-namespace SpaceAvenger.Services.Interfaces.MessageBus
+namespace ViewModelBaseLibDotNetCore.MessageBus.Base
 {
-    internal interface IMessageBus
+    public interface IMessageBus
     {
         IDisposable RegisterHandler<T, U>(Action<T> handler)
             where T : IMessage<U>;

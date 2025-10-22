@@ -1,21 +1,11 @@
 ﻿using Models.DAL.Entities.User;
 using SpaceAvenger.Attributes.PageManager;
-using SpaceAvenger.Services.Interfaces.Message;
-using SpaceAvenger.Services.Interfaces.MessageBus;
 using SpaceAvenger.Services.Realizations.Message;
 using SpaceAvenger.ViewModels.Base;
-using SpaceAvenger.Views.Pages;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using ViewModelBaseLibDotNetCore.VM;
-using WPFGameEngine.Extensions;
+using ViewModelBaseLibDotNetCore.MessageBus.Base;
 
 namespace SpaceAvenger.ViewModels.PagesVM
 {

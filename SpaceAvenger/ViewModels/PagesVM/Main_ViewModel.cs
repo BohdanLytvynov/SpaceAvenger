@@ -2,11 +2,11 @@
 using System.Windows.Input;
 using SpaceAvenger.Attributes.PageManager;
 using SpaceAvenger.Enums.FrameTypes;
-using SpaceAvenger.Services.Interfaces.MessageBus;
-using SpaceAvenger.Services.Interfaces.PageManager;
 using SpaceAvenger.Services.Realizations.Message;
 using SpaceAvenger.Views.Pages;
 using ViewModelBaseLibDotNetCore.Commands;
+using ViewModelBaseLibDotNetCore.MessageBus.Base;
+using ViewModelBaseLibDotNetCore.PageManager.Base;
 using ViewModelBaseLibDotNetCore.VM;
 using c = SpaceAvenger.Services.Constants;
 

@@ -1,26 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using ViewModelBaseLibDotNetCore.VM;
 using ViewModelBaseLibDotNetCore.Commands;
-using SpaceAvenger.Views.Pages;
 using System.Windows.Input;
 using System.Windows.Controls;
 using Models.DAL.Entities.User;
-using System.Reflection;
 using System.Windows;
 using SpaceAvenger.Enums.FrameTypes;
-using SpaceAvenger.Managers.CommunicationManager;
-using Microsoft.Extensions.DependencyInjection;
-using SpaceAvenger.Services.Interfaces.PageManager;
-using SpaceAvenger.Services.Realizations.PageManager;
 using SpaceAvenger.Attributes.PageManager;
-using SpaceAvenger.Services.Interfaces.MessageBus;
-using SpaceAvenger.Services.Interfaces.Message;
 using SpaceAvenger.Services.Realizations.Message;
 using SpaceAvenger.ViewModels.Base;
+using ViewModelBaseLibDotNetCore.PageManager.Base;
+using ViewModelBaseLibDotNetCore.MessageBus.Base;
+using ViewModelBaseLibDotNetCore.PageManagers;
 
 namespace SpaceAvenger.ViewModels.MainWindowVM
 {
@@ -133,7 +124,7 @@ namespace SpaceAvenger.ViewModels.MainWindowVM
         private void OnMessageRecieved(ChooseProfileMessage_User message)
         {
             if (message.Content is not null)
-                OnOpenInfoButtonPressedExecute(null);            
+                OnOpenInfoButtonPressedExecute(null);
         }
 
         private void PageManager_OnSwitchScreenMethodInvoked(object? obj, PageManagerEventArgs<FrameType> args)

@@ -5,19 +5,16 @@ using SpaceAvenger.Extensions.Services;
 using System;
 using System.Windows;
 using SpaceAvenger.Views.Pages;
-using SpaceAvenger.Services.Interfaces.PageManager;
-using SpaceAvenger.Services.Realizations.PageManager;
-using SpaceAvenger.Services.Interfaces.MessageBus;
-using SpaceAvenger.Services.Realizations.MessageBus;
 using System.Reflection;
 using System.Linq;
 using System.Windows.Controls;
-using SpaceAvenger.ViewModels.PagesVM;
 using ViewModelBaseLibDotNetCore.VM;
 using SpaceAvenger.Attributes.PageManager;
-using Newtonsoft.Json.Linq;
-using System.Collections.Generic;
 using Domain.Utilities;
+using ViewModelBaseLibDotNetCore.PageManagers;
+using ViewModelBaseLibDotNetCore.PageManager.Base;
+using ViewModelBaseLibDotNetCore.MessageBus.Base;
+using ViewModelBaseLibDotNetCore.MessageBus;
 
 namespace SpaceAvenger
 {

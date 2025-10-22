@@ -1,15 +1,9 @@
-﻿using SpaceAvenger.Services.Interfaces.Message;
-using SpaceAvenger.Services.Interfaces.MessageBus;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using ViewModelBaseLibDotNetCore.Message.Base;
+using ViewModelBaseLibDotNetCore.MessageBus.Base;
 
-namespace SpaceAvenger.Services.Realizations.MessageBus
+namespace ViewModelBaseLibDotNetCore.MessageBus
 {
-    internal class MessageBusService : IMessageBus
+    public class MessageBusService : IMessageBus
     {
         #region Nested Classes
 
