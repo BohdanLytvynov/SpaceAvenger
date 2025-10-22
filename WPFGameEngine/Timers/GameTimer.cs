@@ -1,47 +1,48 @@
 ﻿using System.Diagnostics;
 using System.Windows.Media;
+using WPFGameEngine.Timers.Base;
 
 namespace WPFGameEngine.Timers
 {
-    public static class GameTimer
+    public class GameTimer : IGameTimer
     {
         #region Fields
-        private static TimeSpan m_TotalTime;
-        private static TimeSpan m_deltaTime;
-        private static Stopwatch m_stopwatch;
-        private static TimeSpan m_lastRenderTime;
-        private static bool m_started;
+        private TimeSpan m_TotalTime;
+        private TimeSpan m_deltaTime;
+        private Stopwatch m_stopwatch;
+        private TimeSpan m_lastRenderTime;
+        private bool m_started;
         #endregion
 
         #region Properties
         /// <summary>
         /// Indicates if we need to perform Update Logic of the Game
         /// </summary>
-        public static bool Started { get => m_started; }
+        public bool Started { get => m_started; }
         /// <summary>
         /// Time elapsed between frames
         /// </summary>
-        public static TimeSpan deltaTime { get => m_deltaTime; }
+        public TimeSpan deltaTime { get => m_deltaTime; }
         /// <summary>
         /// Time that passed after the game started
         /// </summary>
-        public static TimeSpan totalTime { get => m_TotalTime; }
+        public TimeSpan totalTime { get => m_TotalTime; }
         #endregion
 
         #region Ctor
-        static GameTimer()
+        public GameTimer()
         {
             ReInit();
         }
         #endregion
 
-        public static void ReInit()
+        public void ReInit()
         {
             m_stopwatch = new Stopwatch();
             m_lastRenderTime = TimeSpan.Zero;
         }
 
-        public static void Start()
+        public void Start()
         {
             if (!m_started)
             {
@@ -50,7 +51,7 @@ namespace WPFGameEngine.Timers
             }
         }
 
-        public static void UpdateTime()
+        public void UpdateTime()
         {
             if (m_started)
             {
@@ -60,7 +61,7 @@ namespace WPFGameEngine.Timers
             }
         }
 
-        public static void Stop()
+        public void Stop()
         {
             if (m_started)
             {

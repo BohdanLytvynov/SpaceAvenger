@@ -3,6 +3,7 @@ using System.Windows.Media.Imaging;
 using WPFGameEngine.Atributes;
 using WPFGameEngine.Attributes.Editor;
 using WPFGameEngine.Timers;
+using WPFGameEngine.Timers.Base;
 using WPFGameEngine.WPF.GE.AnimationFrames;
 using WPFGameEngine.WPF.GE.Component.Base;
 
@@ -202,12 +203,12 @@ namespace WPFGameEngine.WPF.GE.Component.Animations
             return cropped;
         }
 
-        public void Update()
+        public void Update(IGameTimer gameTimer)
         {
             if (!m_start)
                 return;
 
-            var totalTime = GameTimer.totalTime;
+            var totalTime = gameTimer.totalTime;
 
             if (!m_glob_start_time_set)
             {

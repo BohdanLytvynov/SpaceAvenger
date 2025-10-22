@@ -1,6 +1,7 @@
 ﻿using System.Windows.Media.Imaging;
 using WPFGameEngine.Atributes;
 using WPFGameEngine.Attributes.Editor;
+using WPFGameEngine.Timers.Base;
 using WPFGameEngine.WPF.GE.Component.Animations;
 using WPFGameEngine.WPF.GE.Component.Base;
 
@@ -69,9 +70,9 @@ namespace WPFGameEngine.WPF.GE.Component.Animators
             m_current.Reset(m_current.Reverse);
         }
 
-        public void Update()
+        public void Update(IGameTimer gameTimer)
         {
-            m_current.Update();
+            m_current.Update(gameTimer);
         }
 
         public BitmapSource GetCurrentFrame()

@@ -1,5 +1,6 @@
 ﻿using System.Windows.Controls;
 using System.Windows.Media.Imaging;
+using WPFGameEngine.Timers.Base;
 using WPFGameEngine.WPF.GE.Component.Base;
 
 namespace WPFGameEngine.WPF.GE.Component.Animations
@@ -32,7 +33,7 @@ namespace WPFGameEngine.WPF.GE.Component.Animations
 
         #region Functions
 
-        void Update();
+        void Update(IGameTimer gameTimer);
 
         void Start();
 

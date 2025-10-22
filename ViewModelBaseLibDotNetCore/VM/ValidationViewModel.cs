@@ -53,7 +53,5 @@ namespace ViewModelBaseLibDotNetCore.VM
             return true;
         }
         #endregion
-
-
     }
 }

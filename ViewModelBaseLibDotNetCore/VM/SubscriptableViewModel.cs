@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ViewModelBaseLibDotNetCore.VM;
+﻿using ViewModelBaseLibDotNetCore.VM;
 
-namespace SpaceAvenger.ViewModels.Base
+namespace ViewModelBaseLibDotNetCore.VM
 {
-    internal class SubscriptableViewModel : ViewModelBase, IDisposable
+    public class SubscriptableViewModel : ViewModelBase, IDisposable
     {
         #region Fields
 
@@ -40,9 +35,5 @@ namespace SpaceAvenger.ViewModels.Base
         }
 
         #endregion
-
-
-
-
     }
 }

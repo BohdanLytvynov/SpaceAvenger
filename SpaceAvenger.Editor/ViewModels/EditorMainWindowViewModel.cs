@@ -25,9 +25,9 @@ using System.IO;
 using WPFGameEngine.WPF.GE.Component.Base;
 using WPFGameEngine.WPF.GE.Exceptions;
 using System.Windows;
-using WPFGameEngine.Factories.Base;
-using System.CodeDom;
 using WPFGameEngine.Factories.Components;
+using ViewModelBaseLibDotNetCore.MessageBus.Base;
+using WPFGameEngine.Timers.Base;
 
 namespace SpaceAvenger.Editor.ViewModels
 {
@@ -54,10 +54,14 @@ namespace SpaceAvenger.Editor.ViewModels
         private IComponentFactory m_ComponentFactory;
 
         private List<TypeInfo> m_ComponentTypes;
+        private IGameTimer m_gameTimer;
         #endregion
 
         #region Properties
-       
+
+        public string Title 
+        { get => m_title; set => Set(ref m_title, value); }
+
         public string SelectedComponentName 
         {
             get=> m_SelectedComponentName;
@@ -150,10 +154,15 @@ namespace SpaceAvenger.Editor.ViewModels
         #endregion
 
         #region Ctor
-        public EditorMainWindowViewModel(IResourceLoader resourceLoader, IComponentFactory componentFactory) : this()
+        public EditorMainWindowViewModel(IResourceLoader resourceLoader, 
+            IComponentFactory componentFactory,
+            IGameTimer gameTimer) : this()
         {
             m_ResourceLoader = resourceLoader ?? throw new ArgumentNullException(nameof(resourceLoader));
             m_ComponentFactory = componentFactory ?? throw new ArgumentNullException(nameof(componentFactory));
+            m_gameTimer = gameTimer ?? throw new ArgumentNullException(nameof(gameTimer));
+            m_gameViewHost = new GameViewHost(m_gameTimer);
+            m_gameViewHost.StartGame();
         }
 
         public EditorMainWindowViewModel()
@@ -180,8 +189,6 @@ namespace SpaceAvenger.Editor.ViewModels
 
             #endregion
             m_title = "Game Editor";
-            m_gameViewHost = new GameViewHost();
-            m_gameViewHost.StartGame();
             m_ShowBorders = true;
             m_ShowGizmos = true;
             m_SelectedItem = null;

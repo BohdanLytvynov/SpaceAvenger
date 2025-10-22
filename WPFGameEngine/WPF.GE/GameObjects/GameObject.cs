@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shell;
+using WPFGameEngine.Timers.Base;
 using WPFGameEngine.WPF.GE.Component.Animations;
 using WPFGameEngine.WPF.GE.Component.Animators;
 using WPFGameEngine.WPF.GE.Component.Base;
@@ -77,7 +78,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects
 
         #region Methods
 
-        public virtual void Update(List<IGameObject> world)
+        public virtual void Update(List<IGameObject> world, IGameTimer gameTimer)
         {
             if (!Enabled) return;
             Animation? animation = GetComponent<Animation>(false);
@@ -85,16 +86,16 @@ namespace WPFGameEngine.WPF.GE.GameObjects
 
             if (animator != null)
             {
-                animator.Update();
+                animator.Update(gameTimer);
             }
             else if (animation != null)
             {
-                animation.Update();
+                animation.Update(gameTimer);
             }
 
             foreach (var child in m_children)
             {
-                child.Update(world);
+                child.Update(world, gameTimer);
             }
 
             //Here must be a custom logic that must be implemented in Derived classes
@@ -109,11 +110,11 @@ namespace WPFGameEngine.WPF.GE.GameObjects
             Animator? animator = GetComponent<Animator>(false);
             //Get An Image for Render
             BitmapSource bitmapSource = null;
-            if (animation != null)
+            if (animation != null && animation.Texture != null)
             {
                 bitmapSource = animation.GetCurrentFrame();
             }
-            else if (animator != null)
+            else if (animator != null && animator.Current != null)
             {
                 bitmapSource = animator.GetCurrentFrame();
             }

@@ -3,6 +3,7 @@
                     xmlns:tvm="clr-namespace:SpaceAvenger.Editor.ViewModels.TreeItems"
                     xmlns:tcvm="clr-namespace:SpaceAvenger.Editor.ViewModels.Components.Transform"
                     xmlns:scvm="clr-namespace:SpaceAvenger.Editor.ViewModels.Components.Sprites"
+                    xmlns:acvm="clr-namespace:SpaceAvenger.Editor.ViewModels.Components.Animations"
                     xmlns:controls="clr-namespace:WPFGameEngine.Editor.Controls;assembly=WPFGameEngine"
                     xmlns:diag="clr-namespace:System.Diagnostics;assembly=WindowsBase"
                     >
@@ -63,7 +64,7 @@
         <StackPanel Orientation="Vertical" Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, 
             AncestorType=ListView}, Path=ActualWidth}">
             <Rectangle Style="{StaticResource BorderRectStyle}"/>
-            <TextBlock Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DescLabel}"/>
+            <TextBlock Text="{Binding ComponentName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DescLabel}"/>
             <Rectangle Style="{StaticResource BorderRectStyle}"/>
             <controls:Slider Value="{Binding PositionX, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay 
                 }"
@@ -99,7 +100,7 @@ Margin="10" LabelText="Center Position X: " Minimum="0" Maximum="1.0"/>
         <StackPanel Orientation="Vertical" 
                     Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}, Path=ActualWidth}">
             <Rectangle Style="{StaticResource BorderRectStyle}"/>
-            <TextBlock Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DescLabel}"/>
+            <TextBlock Text="{Binding ComponentName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DescLabel}"/>
             <Rectangle Style="{StaticResource BorderRectStyle}"/>
 
             <StackPanel Orientation="Horizontal">
@@ -114,6 +115,19 @@ Margin="10" LabelText="Center Position X: " Minimum="0" Maximum="1.0"/>
                     <Button Content="Apply" Margin="20,20,200,0" Command="{Binding OnApplyButtonPressed}"/>
                 </StackPanel>
             </StackPanel>
+        </StackPanel>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type acvm:AnimationComponentViewModel}">
+        <StackPanel Orientation="Vertical"
+                    Width="{Binding Path=ActualWidth,
+            RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}}">
+            <Rectangle Style="{StaticResource BorderRectStyle}"/>
+            <TextBlock Text="{Binding ComponentName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DescLabel}"/>
+            <Rectangle Style="{StaticResource BorderRectStyle}"/>
+
+            <Button Content="Configure Animation" Margin="10,10,400,10" 
+                    Command="{Binding OnConfigureButtonPressed}"/>
         </StackPanel>
     </DataTemplate>
     <!--#endregion-->

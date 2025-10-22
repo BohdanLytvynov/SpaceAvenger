@@ -15,6 +15,8 @@ using ViewModelBaseLibDotNetCore.PageManagers;
 using ViewModelBaseLibDotNetCore.PageManager.Base;
 using ViewModelBaseLibDotNetCore.MessageBus.Base;
 using ViewModelBaseLibDotNetCore.MessageBus;
+using WPFGameEngine.Timers.Base;
+using WPFGameEngine.Timers;
 
 namespace SpaceAvenger
 {
@@ -43,6 +45,8 @@ namespace SpaceAvenger
             services.AddSingleton<IPageManagerService<FrameType>, PageManagerService<FrameType>>();
 
             services.AddSingleton<IMessageBus, MessageBusService>();
+
+            services.AddSingleton<IGameTimer, GameTimer>();
 
             return services;
         }

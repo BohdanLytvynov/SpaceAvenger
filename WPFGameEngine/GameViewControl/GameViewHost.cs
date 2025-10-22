@@ -2,6 +2,7 @@
 using System.Windows.Media;
 using WPFGameEngine.Enums;
 using WPFGameEngine.Timers;
+using WPFGameEngine.Timers.Base;
 using WPFGameEngine.WPF.GE.GameObjects;
 
 namespace WPFGameEngine.GameViewControl
@@ -11,12 +12,13 @@ namespace WPFGameEngine.GameViewControl
         #region Delegates
         public Action OnUpdate;
         #endregion
-
+         
         #region Fields
         private readonly VisualCollection m_visualCollection;
         private DrawingVisual m_drawingSurface;
         private List<IGameObject> m_world;
         private GameState m_gameState;
+        private IGameTimer m_gameTimer;
         #endregion
 
         #region Properties
@@ -26,8 +28,9 @@ namespace WPFGameEngine.GameViewControl
         #endregion
 
         #region Ctor
-        public GameViewHost()
+        public GameViewHost(IGameTimer gameTimer)
         {
+            m_gameTimer = gameTimer ?? throw new ArgumentNullException(nameof(gameTimer));
             m_world = new List<IGameObject>();
             m_drawingSurface = new DrawingVisual();
             m_visualCollection = new VisualCollection(this);
@@ -49,7 +52,7 @@ namespace WPFGameEngine.GameViewControl
 
         private void CompositionTarget_Rendering(object? sender, EventArgs e)
         {
-            GameTimer.UpdateTime();
+            m_gameTimer.UpdateTime();
             if (m_gameState == GameState.Running)
             {
                 m_visualCollection.Clear();
@@ -60,7 +63,7 @@ namespace WPFGameEngine.GameViewControl
                     {
                         if(obj != null)
                         {
-                            obj.Update(World);
+                            obj.Update(World, m_gameTimer);
                             obj.Render(dc, Matrix.Identity);
                         }
                     }
@@ -100,7 +103,7 @@ namespace WPFGameEngine.GameViewControl
 
         public void StartGame()
         { 
-            GameTimer.Start();
+            m_gameTimer.Start();
             m_gameState = GameState.Running;
         }
 
@@ -117,7 +120,7 @@ namespace WPFGameEngine.GameViewControl
         public void Stop()
         { 
             m_gameState = GameState.Stopped;
-            GameTimer.Stop();
+            m_gameTimer.Stop();
         }
         #endregion
     }

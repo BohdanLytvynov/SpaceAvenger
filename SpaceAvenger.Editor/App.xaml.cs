@@ -3,8 +3,12 @@ using SpaceAvenger.Editor.Services;
 using SpaceAvenger.Editor.Services.Base;
 using SpaceAvenger.Editor.ViewModels;
 using System.Windows;
+using ViewModelBaseLibDotNetCore.MessageBus;
+using ViewModelBaseLibDotNetCore.MessageBus.Base;
 using WPFGameEngine.Factories.Base;
 using WPFGameEngine.Factories.Components;
+using WPFGameEngine.Timers;
+using WPFGameEngine.Timers.Base;
 using WPFGameEngine.WPF.GE.Component.Base;
 
 namespace SpaceAvenger.Editor
@@ -22,17 +26,22 @@ namespace SpaceAvenger.Editor
         {
             var services = new ServiceCollection();
             services.AddSingleton<IComponentFactory, ComponentFactory>();
-
+            services.AddSingleton<IMessageBus, MessageBusService>();
             services.AddSingleton(c =>
             { 
                 IResourceLoader resourceLoader = new ResourceLoader("pack://application:,,,/SpaceAvenger;component/Resources/Content.xaml");
                 return resourceLoader;
             });
+            services.AddSingleton(c => {
+                IGameTimer gameTimer = new GameTimer();
+                return gameTimer;
+            });
             services.AddSingleton(c =>
             { 
                 var loader = c.GetRequiredService<IResourceLoader>();
                 var componentFactory = c.GetRequiredService<IComponentFactory>();
-                return new EditorMainWindowViewModel(loader, componentFactory);
+                var gameTimer = c.GetRequiredService<IGameTimer>();
+                return new EditorMainWindowViewModel(loader, componentFactory, gameTimer);
             });
             services.AddSingleton<MainWindow>(c =>
             { 

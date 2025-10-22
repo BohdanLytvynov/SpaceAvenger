@@ -9,6 +9,7 @@
         xmlns:controls="clr-namespace:WPFGameEngine.Editor.Controls;assembly=WPFGameEngine"        
         mc:Ignorable="d"
         Height="450" Width="800" WindowState="Maximized" x:Name="Root"
+        Title="{Binding Title}"
         d:DataContext="{d:DesignInstance vm:EditorMainWindowViewModel, IsDesignTimeCreatable=True}">
     <Grid>
         <TabControl>

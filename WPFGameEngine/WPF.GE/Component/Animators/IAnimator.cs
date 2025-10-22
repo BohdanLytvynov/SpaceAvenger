@@ -1,4 +1,5 @@
 ﻿using System.Windows.Media.Imaging;
+using WPFGameEngine.Timers.Base;
 using WPFGameEngine.WPF.GE.Component.Base;
 
 namespace WPFGameEngine.WPF.GE.Component.Animations
@@ -25,7 +26,7 @@ namespace WPFGameEngine.WPF.GE.Component.Animations
 
         void Reset();
 
-        void Update();
+        void Update(IGameTimer gameTimer);
 
         BitmapSource GetCurrentFrame();
 

@@ -1,6 +1,5 @@
 ﻿using SpaceAvenger.Attributes.PageManager;
 using SpaceAvenger.Enums.FrameTypes;
-using SpaceAvenger.ViewModels.Base;
 using System;
 using System.Windows.Media;
 using System.Windows;
@@ -12,6 +11,8 @@ using WPFGameEngine.WPF.GE.GameObjects;
 using WPFGameEngine.WPF.GE.Settings;
 using ViewModelBaseLibDotNetCore.PageManager.Base;
 using ViewModelBaseLibDotNetCore.MessageBus.Base;
+using ViewModelBaseLibDotNetCore.VM;
+using WPFGameEngine.Timers.Base;
 
 namespace SpaceAvenger.ViewModels.PagesVM
 {
@@ -21,19 +22,13 @@ namespace SpaceAvenger.ViewModels.PagesVM
     {
         #region Fields
         private Rect m_backViewport;
-        
         private int m_backCount = 3;
-
         private double m_BackMoveSpeed;
-
-        IPageManagerService<FrameType> m_PageManager;
-
-        IMessageBus m_MessageBus;
-        
-        ImageSource m_GameBack;
-
+        private IPageManagerService<FrameType> m_PageManager;
+        private IMessageBus m_MessageBus;
+        private ImageSource m_GameBack;
         private GameViewHost m_GameView;
-
+        private IGameTimer m_gameTimer;
         #endregion
 
         #region Properties
@@ -63,18 +58,20 @@ namespace SpaceAvenger.ViewModels.PagesVM
 
         public GamePage_ViewModel(
             IPageManagerService<FrameType> pageManager,
-            IMessageBus messageBus) : this()
+            IMessageBus messageBus,
+            IGameTimer gameTimer) : this()
         {
             m_MessageBus = messageBus ?? throw new ArgumentNullException(nameof(messageBus));
             m_PageManager = pageManager ?? throw new ArgumentNullException(nameof(pageManager));
+            m_gameTimer = gameTimer ?? throw new ArgumentNullException(nameof(gameTimer));
+            m_GameView = new GameViewHost(m_gameTimer);
+            m_GameView.OnUpdate += Update;
             Subscriptions.Add(m_MessageBus.RegisterHandler<GameMessage, string>(OnMessageRecieved));
         }
 
         public GamePage_ViewModel()
         {
             #region InitFields
-            m_GameView = new GameViewHost();
-            m_GameView.OnUpdate += Update;
             GESettings.DrawGizmo = true;
             GESettings.DrawBorders = true;
             #endregion
@@ -111,7 +108,7 @@ namespace SpaceAvenger.ViewModels.PagesVM
 
             if (xCurrent >= 1)
                 xCurrent = 0;
-            double newY = yCurrent + m_BackMoveSpeed * 0.01 * GameTimer.deltaTime.TotalSeconds;
+            double newY = yCurrent + m_BackMoveSpeed * 0.01 * m_gameTimer.deltaTime.TotalSeconds;
             BackViewport = new Rect(xCurrent, newY, 1, 1);
         }
 

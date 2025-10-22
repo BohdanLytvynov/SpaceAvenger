@@ -8,10 +8,10 @@ using System.Windows;
 using SpaceAvenger.Enums.FrameTypes;
 using SpaceAvenger.Attributes.PageManager;
 using SpaceAvenger.Services.Realizations.Message;
-using SpaceAvenger.ViewModels.Base;
 using ViewModelBaseLibDotNetCore.PageManager.Base;
 using ViewModelBaseLibDotNetCore.MessageBus.Base;
 using ViewModelBaseLibDotNetCore.PageManagers;
+using ViewModelBaseLibDotNetCore.VM;
 
 namespace SpaceAvenger.ViewModels.MainWindowVM
 {
