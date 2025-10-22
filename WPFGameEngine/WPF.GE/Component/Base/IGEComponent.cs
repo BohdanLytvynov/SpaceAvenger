@@ -1,6 +1,6 @@
 ﻿namespace WPFGameEngine.WPF.GE.Component.Base
 {
-    public interface IComponent
+    public interface IGEComponent
     {
         string Name { get; init; }
     }

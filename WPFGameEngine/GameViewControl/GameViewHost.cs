@@ -71,6 +71,33 @@ namespace WPFGameEngine.GameViewControl
             }
         }
 
+        public void AddObject(IGameObject gameObject)
+        {
+            if (gameObject == null)
+                return;
+
+            m_world.Add(gameObject);
+        }
+
+        public void AddObjects(IEnumerable<IGameObject> gameObjects)
+        {
+            if (gameObjects == null)
+                return;
+
+            if (gameObjects.Count() == 0)
+                return;
+
+            m_world.AddRange(gameObjects);
+        }
+
+        public void RemoveObject(IGameObject gameObject)
+        {
+            if(gameObject == null)
+                return;
+
+            GameObject.RemoveObject(p => p.Id == gameObject.Id, World, true);
+        }
+
         public void StartGame()
         { 
             GameTimer.Start();

@@ -4,7 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shell;
-using WPFGameEngine.WPF.GE.Animations;
+using WPFGameEngine.WPF.GE.Component.Animations;
 using WPFGameEngine.WPF.GE.Component.Animators;
 using WPFGameEngine.WPF.GE.Component.Base;
 using WPFGameEngine.WPF.GE.Component.Sprites;
@@ -26,7 +26,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         #region Fields
         private static int m_globId;
 
-        private Dictionary<string, IComponent> m_components;
+        private Dictionary<string, IGEComponent> m_components;
         private List<IGameObject> m_children;
 
         private int m_id;
@@ -189,7 +189,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects
 
         private void Init()
         {
-            m_components = new Dictionary<string, IComponent>();
+            m_components = new Dictionary<string, IGEComponent>();
             m_children = new List<IGameObject>();
             Enabled = true;
             ZIndex = 0;
@@ -212,7 +212,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects
             m_id = ++m_globId;
         }
 
-        public IGameObject RegisterComponent(IComponent component)
+        public IGameObject RegisterComponent(IGEComponent component)
         {
             if (component == null)
                 throw new ArgumentNullException(nameof(component));
@@ -225,7 +225,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects
             return this;
         }
 
-        public IGameObject UnregisterComponent(IComponent component)
+        public IGameObject UnregisterComponent(IGEComponent component)
         {
             if (component == null)
                 throw new ArgumentNullException(nameof(component));
@@ -236,14 +236,25 @@ namespace WPFGameEngine.WPF.GE.GameObjects
             return this;
         }
 
+        public IGameObject UnregisterComponent(string componentName)
+        {
+            if(string.IsNullOrEmpty(componentName))
+                throw new ArgumentNullException(nameof(componentName));
+
+            if (m_components.ContainsKey(componentName))
+                m_components.Remove(componentName);
+
+            return this;
+        }
+
         public TComponent? GetComponent<TComponent>(bool throwException = true)
-            where TComponent : IComponent
+            where TComponent : IGEComponent
         {
             var componentName = typeof(TComponent).Name;
             if (throwException && !m_components.ContainsKey(componentName))
                 throw new ComponentNotFoundException(componentName);
 
-            IComponent component = null;
+            IGEComponent component = null;
             if (m_components.TryGetValue(componentName, out component))
             {
                 return (TComponent)component;
@@ -251,7 +262,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects
             return default;
         }
 
-        public IEnumerable<IComponent> GetComponents()
+        public IEnumerable<IGEComponent> GetComponents()
         { 
             return m_components.Values;
         }

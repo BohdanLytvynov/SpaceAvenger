@@ -5,7 +5,7 @@ using WPFGameEngine.WPF.GE.Component.Base;
 
 namespace WPFGameEngine.WPF.GE.Component.Transforms
 {
-    public interface ITransform : IComponent
+    public interface ITransform : IGEComponent
     {
         public Vector2 Position { get; set; }
 

@@ -11,14 +11,14 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Base
     internal abstract class ComponentViewModel : ValidationViewModel
     {
         #region Fields
-        private string m_name;
+        private string m_componentName;
         #endregion
 
         #region Properties
-        public string Name 
+        public string ComponentName 
         {
-            get=> m_name;
-            set=> Set(ref m_name, value);
+            get=> m_componentName;
+            set=> Set(ref m_componentName, value);
         }
 
         public IGameObject GameObject { get; set; }
@@ -27,8 +27,8 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Base
         #region Ctor
         public ComponentViewModel(string name, IGameObject gameObject)
         {
-            m_name = name;
-            GameObject = gameObject;
+            m_componentName = name;
+            GameObject = gameObject ?? throw new ArgumentNullException(nameof(gameObject));
         }
 
         #endregion

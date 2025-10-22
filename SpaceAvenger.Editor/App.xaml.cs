@@ -3,6 +3,9 @@ using SpaceAvenger.Editor.Services;
 using SpaceAvenger.Editor.Services.Base;
 using SpaceAvenger.Editor.ViewModels;
 using System.Windows;
+using WPFGameEngine.Factories.Base;
+using WPFGameEngine.Factories.Components;
+using WPFGameEngine.WPF.GE.Component.Base;
 
 namespace SpaceAvenger.Editor
 {
@@ -18,6 +21,8 @@ namespace SpaceAvenger.Editor
         private static IServiceCollection InitializeServices()
         {
             var services = new ServiceCollection();
+            services.AddSingleton<IComponentFactory, ComponentFactory>();
+
             services.AddSingleton(c =>
             { 
                 IResourceLoader resourceLoader = new ResourceLoader("pack://application:,,,/SpaceAvenger;component/Resources/Content.xaml");
@@ -26,7 +31,8 @@ namespace SpaceAvenger.Editor
             services.AddSingleton(c =>
             { 
                 var loader = c.GetRequiredService<IResourceLoader>();
-                return new EditorMainWindowViewModel(loader);
+                var componentFactory = c.GetRequiredService<IComponentFactory>();
+                return new EditorMainWindowViewModel(loader, componentFactory);
             });
             services.AddSingleton<MainWindow>(c =>
             { 

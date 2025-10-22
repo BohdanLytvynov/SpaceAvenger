@@ -92,10 +92,11 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Transform
 
         #region Ctor
 
-        public TransformComponentViewModel(IGameObject gameObject) : base("Transform: ", gameObject)
+        public TransformComponentViewModel(IGameObject gameObject) : base(nameof(TransformComponent), gameObject)
         {
             LoadCurrentGameObjProperties();
         }
+
         #endregion
 
         #region Methods

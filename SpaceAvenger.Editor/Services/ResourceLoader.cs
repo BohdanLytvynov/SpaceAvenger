@@ -32,7 +32,7 @@ namespace SpaceAvenger.Editor.Services
             m_resourceDictionaryPath = path;
         }
 
-        public IEnumerable<string> LoadAll()
+        public IEnumerable<string> GetAllKeys()
         {
             foreach (var k in ResourceDictionary.Keys)
             {

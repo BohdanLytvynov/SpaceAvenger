@@ -1,38 +1,40 @@
-﻿using Newtonsoft.Json.Linq;
-using SpaceAvenger.Editor.Services.Base;
+﻿using SpaceAvenger.Editor.Services.Base;
 using SpaceAvenger.Editor.Mock;
 using SpaceAvenger.Editor.ViewModels.TreeItems;
 using System.Collections.ObjectModel;
-using System.Drawing;
-using System.Numerics;
-using System.Windows.Data;
 using System.Windows.Input;
 using ViewModelBaseLibDotNetCore.Commands;
-using ViewModelBaseLibDotNetCore.Helpers;
 using ViewModelBaseLibDotNetCore.VM;
 using WPFGameEngine.GameViewControl;
 using WPFGameEngine.WPF.GE.Component.Sprites;
 using WPFGameEngine.WPF.GE.Component.Transforms;
 using WPFGameEngine.WPF.GE.GameObjects;
 using WPFGameEngine.WPF.GE.Settings;
-using WPFGameEngine.WPF.GE.Component.Base;
 using SpaceAvenger.Editor.ViewModels.Components.Base;
-using System.Linq.Expressions;
 using SpaceAvenger.Editor.ViewModels.Components.Transform;
-using WPFGameEngine.WPF.GE.Animations;
 using WPFGameEngine.WPF.GE.Component.Animators;
-using SpaceAvenger.Editor.ViewModels.Components.Animation;
-using SpaceAvenger.Editor.ViewModels.Components.Animator;
-using System.Xaml;
-using SpaceAvenger.Editor.ViewModels.Components.Sprite;
-using System.Windows.Documents;
+using SpaceAvenger.Editor.ViewModels.Components.Animations;
+using SpaceAvenger.Editor.ViewModels.Components.Animators;
 using System.Windows.Media;
+using SpaceAvenger.Editor.ViewModels.Components.Sprites;
+using WPFGameEngine.WPF.GE.Component.Animations;
+using System.Reflection;
+using WPFGameEngine.Atributes;
+using WPFGameEngine.Attributes.Editor;
+using System.IO;
+using WPFGameEngine.WPF.GE.Component.Base;
+using WPFGameEngine.WPF.GE.Exceptions;
+using System.Windows;
+using WPFGameEngine.Factories.Base;
+using System.CodeDom;
+using WPFGameEngine.Factories.Components;
 
 namespace SpaceAvenger.Editor.ViewModels
 {
     internal class EditorMainWindowViewModel : ValidationViewModel
     {
         #region Fields
+        private string m_title;
         private GameViewHost m_gameViewHost;
         private TreeItemViewModel? m_SelectedItem;
 
@@ -41,14 +43,32 @@ namespace SpaceAvenger.Editor.ViewModels
         private bool m_enabled;
         private string m_objName;
         private double m_ZIndex;
+        private int m_SelectedComponentIndex;
+        private string m_SelectedComponentName;
         
         private IResourceLoader m_ResourceLoader;
 
-        ObservableCollection<TreeItemViewModel> m_Items;
-        ObservableCollection<ComponentViewModel> m_Componnts;
+        private ObservableCollection<TreeItemViewModel> m_Items;
+        private ObservableCollection<ComponentViewModel> m_Components;
+        private ObservableCollection<string> m_ComponentsToAdd;
+        private IComponentFactory m_ComponentFactory;
+
+        private List<TypeInfo> m_ComponentTypes;
         #endregion
 
         #region Properties
+       
+        public string SelectedComponentName 
+        {
+            get=> m_SelectedComponentName;
+            set=> Set(ref m_SelectedComponentName, value);
+        }
+
+        public int SelectedComponentIndex 
+        {
+            get=> m_SelectedComponentIndex;
+            set=> Set(ref m_SelectedComponentIndex, value);
+        }
 
         public double ZIndex 
         {
@@ -84,8 +104,14 @@ namespace SpaceAvenger.Editor.ViewModels
 
         public ObservableCollection<ComponentViewModel> Components
         {
-            get=> m_Componnts;
-            set=> m_Componnts = value;
+            get=> m_Components;
+            set=> m_Components = value;
+        }
+
+        public ObservableCollection<string> ComponentsToAdd 
+        {
+            get => m_ComponentsToAdd;
+            set => m_ComponentsToAdd = value;
         }
 
         public bool ShowGizmos
@@ -117,24 +143,53 @@ namespace SpaceAvenger.Editor.ViewModels
         public ICommand OnAddGameObjectButtonPressed { get; }
 
         public ICommand OnDeleteGameObjectButtonPressed { get; }
+
+        public ICommand OnAddComponentButtonPressed { get; }
+
+        public ICommand OnDeleteComponentButtonPressed { get; }
         #endregion
 
         #region Ctor
-        public EditorMainWindowViewModel(IResourceLoader resourceLoader) : this()
+        public EditorMainWindowViewModel(IResourceLoader resourceLoader, IComponentFactory componentFactory) : this()
         {
             m_ResourceLoader = resourceLoader ?? throw new ArgumentNullException(nameof(resourceLoader));
+            m_ComponentFactory = componentFactory ?? throw new ArgumentNullException(nameof(componentFactory));
         }
 
         public EditorMainWindowViewModel()
         {
+            #region Gett All Components From GE
+            string pathToAssembly = Environment.CurrentDirectory + Path.DirectorySeparatorChar + "WPFGameEngine.dll";
+            m_ComponentTypes = new List<TypeInfo>();
+            m_ComponentsToAdd = new ObservableCollection<string>();
+            var geAssembly = Assembly.LoadFile(pathToAssembly);
+
+            foreach (var type in geAssembly.DefinedTypes)
+            {
+                var res = type.CustomAttributes.Where(x => x.AttributeType.Name == typeof(GEComponent).Name
+                || x.AttributeType.Name == typeof(VisibleInEditor).Name);
+
+                if (res.Any())
+                {
+                    var visibleInEditor = res.Where(x => x.AttributeType.Name == typeof(VisibleInEditor).Name).FirstOrDefault();
+                    var componentname = visibleInEditor.NamedArguments.FirstOrDefault().TypedValue.Value.ToString() ?? "";
+                    m_ComponentsToAdd.Add(componentname);
+                    m_ComponentTypes.Add(type);
+                }
+            }
+
+            #endregion
+            m_title = "Game Editor";
             m_gameViewHost = new GameViewHost();
             m_gameViewHost.StartGame();
             m_ShowBorders = true;
             m_ShowGizmos = true;
             m_SelectedItem = null;
             m_Items = new ObservableCollection<TreeItemViewModel>();
-            m_Componnts = new ObservableCollection<ComponentViewModel>();
+            m_Components = new ObservableCollection<ComponentViewModel>();
             m_objName = string.Empty;
+            m_SelectedComponentIndex = -1;
+            m_SelectedComponentName = string.Empty;
 
             GESettings.DrawGizmo = true;
             GESettings.DrawBorders = true;
@@ -148,6 +203,15 @@ namespace SpaceAvenger.Editor.ViewModels
                 OnDeleteObjectButtonPressedExecute,
                 CanOnDeleteObjectButtonPressedExecute
                 );
+
+            OnAddComponentButtonPressed = new Command(
+                OnAddComponentButtonPressedExecute,
+                CanOnAddComponentButtonPressedExecute
+                );
+
+            OnDeleteComponentButtonPressed = new Command(
+                OnDeleteComponentButtonPressedExecute,
+                CanOnDeleteComponentButtonPressedExecute);
         }
 
         #endregion 
@@ -201,7 +265,8 @@ namespace SpaceAvenger.Editor.ViewModels
             if (m_SelectedItem != null)
             {
                 RemoveFromWorld(m_SelectedItem.GameObject);
-                RemoveObjectRec(m_SelectedItem, Items, false);
+                m_SelectedItem.ItemSelected -= ItemViewModel_ItemSelected;
+                RemoveObjectFromTreeRec(m_SelectedItem, Items, false);
                 Components.Clear();
                 m_SelectedItem = null;
             }
@@ -210,7 +275,49 @@ namespace SpaceAvenger.Editor.ViewModels
 
         #endregion
 
-        private void RemoveObjectRec(TreeItemViewModel item, ObservableCollection<TreeItemViewModel> src, bool removed)
+        #region On Add Component Button Pressed
+        private bool CanOnAddComponentButtonPressedExecute(object p) => 
+            m_SelectedItem != null && !string.IsNullOrEmpty(SelectedComponentName);
+
+        private void OnAddComponentButtonPressedExecute(object p)
+        { 
+            var type = m_ComponentTypes.Where(x => x.Name.Equals(SelectedComponentName)).FirstOrDefault();
+            if (type != null)
+            {
+                try
+                {
+                    var component = m_ComponentFactory.Create(SelectedComponentName);
+                    m_SelectedItem.GameObject.RegisterComponent(component);
+                    Components.Add(CreateComponentViewModel(component));
+                }
+                catch (ComponentAlreadyRegisteredException ex)
+                {
+                    MessageBox.Show(ex.Message, m_title, MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+            }
+        }
+        #endregion
+
+        #region On Delete Component Button Pressed
+
+        private bool CanOnDeleteComponentButtonPressedExecute(object p) => 
+            m_SelectedItem != null && SelectedComponentIndex >= 0;
+
+        private void OnDeleteComponentButtonPressedExecute(object p)
+        {
+            var componentViewModel = Components[SelectedComponentIndex];
+            componentViewModel.GameObject.UnregisterComponent(componentViewModel.ComponentName);
+            Components.RemoveAt(SelectedComponentIndex);
+            SelectedComponentIndex = -1;
+        }
+
+        #endregion
+
+        private void RemoveObjectFromTreeRec(TreeItemViewModel item, ObservableCollection<TreeItemViewModel> src, bool removed)
         {
             if (removed)
                 return;
@@ -227,7 +334,7 @@ namespace SpaceAvenger.Editor.ViewModels
                     break;
                 }
 
-                RemoveObjectRec(item, itemViewModel.Children, removed);
+                RemoveObjectFromTreeRec(item, itemViewModel.Children, removed);
             }
         }
 
@@ -253,34 +360,14 @@ namespace SpaceAvenger.Editor.ViewModels
                 return;
 
             foreach (var component in currentComponents)
-            {
-                ComponentViewModel c = null;
-                switch (component.Name)
-                {
-                    case nameof(TransformComponent):
-                        c = new TransformComponentViewModel(m_SelectedItem.GameObject);
-                        break;
-                    case nameof(Animation):
-                        c = new AnimationComponentViewModel(m_SelectedItem.GameObject);
-                        break;
-                    case nameof(Animator):
-                        c = new AnimatorComponentViewModel(m_SelectedItem.GameObject);
-                        break;
-                    case nameof(Sprite):
-                        c = new SpriteComponentViewModel(m_SelectedItem.GameObject);
-                        break;
-                }
-
-                Components.Add(c);
+            {               
+                Components.Add(CreateComponentViewModel(component));
             }
         }
 
         private void RemoveFromWorld(IGameObject item)
         {
-            if (item != null)
-            {
-                GameObject.RemoveObject((x) => x.Id == item.Id, m_gameViewHost.World, true);
-            }
+            m_gameViewHost.RemoveObject(item);
         }
 
         private void UpdateEnabled(bool value)
@@ -297,6 +384,30 @@ namespace SpaceAvenger.Editor.ViewModels
             {
                 m_SelectedItem.GameObject.ZIndex = value;
             }
+        }
+
+        private ComponentViewModel CreateComponentViewModel(IGEComponent component)
+        {
+            ComponentViewModel c = null;
+            switch (component.Name)
+            {
+                case nameof(TransformComponent):
+                    c = new TransformComponentViewModel(m_SelectedItem.GameObject);
+                    break;
+                case nameof(Animation):
+                    c = new AnimationComponentViewModel(m_SelectedItem.GameObject);
+                    break;
+                case nameof(Animator):
+                    c = new AnimatorComponentViewModel(m_SelectedItem.GameObject);
+                    break;
+                case nameof(Sprite):
+                    c = new SpriteComponentViewModel(m_SelectedItem.GameObject, m_ResourceLoader);
+                    break;
+                default:
+                    throw new Exception($"Unsupported component Type! Component: {component.Name}");
+            }
+
+            return c;
         }
 
         #endregion

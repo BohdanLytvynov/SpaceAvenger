@@ -1,10 +1,13 @@
 ﻿using System.Windows.Media.Imaging;
-using WPFGameEngine.WPF.GE.Animations;
+using WPFGameEngine.Atributes;
+using WPFGameEngine.Attributes.Editor;
 using WPFGameEngine.WPF.GE.Component.Animations;
 using WPFGameEngine.WPF.GE.Component.Base;
 
 namespace WPFGameEngine.WPF.GE.Component.Animators
 {
+    [GEComponent]
+    [VisibleInEditor(Name = nameof(Animator))]
     public class Animator : ComponentBase, IAnimator
     {
         private Dictionary<string, IAnimation> m_animations;
@@ -23,6 +26,11 @@ namespace WPFGameEngine.WPF.GE.Component.Animators
                 m_animations = new Dictionary<string, IAnimation>();
             else
                 m_animations = animations;
+        }
+
+        public Animator() : base(nameof(Animator))
+        {
+            m_animations = new Dictionary<string, IAnimation>();
         }
 
         public void AddAnimation(string name, IAnimation animation)

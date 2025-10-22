@@ -2,9 +2,9 @@
 using System.Windows.Media.Imaging;
 using WPFGameEngine.WPF.GE.Component.Base;
 
-namespace WPFGameEngine.WPF.GE.Animations
+namespace WPFGameEngine.WPF.GE.Component.Animations
 {
-    public interface IAnimation : IComponent
+    public interface IAnimation : IGEComponent
     {
         #region Properties
 

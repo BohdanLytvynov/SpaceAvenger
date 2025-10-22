@@ -1,10 +1,14 @@
 ﻿using System.Drawing;
 using System.Numerics;
 using System.Windows.Media;
+using WPFGameEngine.Atributes;
+using WPFGameEngine.Attributes.Editor;
 using WPFGameEngine.WPF.GE.Component.Base;
 
 namespace WPFGameEngine.WPF.GE.Component.Transforms
 {
+    [GEComponent]
+    [VisibleInEditor(Name = nameof(TransformComponent))]
     public class TransformComponent : ComponentBase, ITransform
     {
         #region Fields

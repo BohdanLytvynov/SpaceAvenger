@@ -11,7 +11,7 @@ namespace SpaceAvenger.Editor.Services.Base
     {
         public ResourceDictionary ResourceDictionary { get; }
 
-        IEnumerable<string> LoadAll();
+        IEnumerable<string> GetAllKeys();
 
         TResource? Load<TResource>(string key);
     }

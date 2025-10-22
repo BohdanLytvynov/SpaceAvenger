@@ -1,5 +1,5 @@
 ﻿using System.Windows.Media.Imaging;
-using WPFGameEngine.WPF.GE.Animations;
+using WPFGameEngine.WPF.GE.Component.Animations;
 using WPFGameEngine.WPF.GE.Component.Animators;
 using WPFGameEngine.WPF.GE.Component.Sprites;
 using WPFGameEngine.WPF.GE.GameObjects;

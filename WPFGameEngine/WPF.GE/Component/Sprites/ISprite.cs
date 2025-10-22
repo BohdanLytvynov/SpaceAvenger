@@ -4,7 +4,7 @@ using WPFGameEngine.WPF.GE.Component.Base;
 
 namespace WPFGameEngine.WPF.GE.Component.Sprites
 {
-    public interface ISprite : IComponent
+    public interface ISprite : IGEComponent
     {
         public ImageSource Image { get; set; }
 

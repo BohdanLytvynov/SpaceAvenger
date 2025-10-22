@@ -1,12 +1,8 @@
 ﻿using SpaceAvenger.Editor.ViewModels.Components.Base;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using WPFGameEngine.WPF.GE.Component.Animators;
 using WPFGameEngine.WPF.GE.GameObjects;
 
-namespace SpaceAvenger.Editor.ViewModels.Components.Animator
+namespace SpaceAvenger.Editor.ViewModels.Components.Animators
 {
     internal class AnimatorComponentViewModel : ComponentViewModel
     {
@@ -19,7 +15,7 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animator
         #endregion
 
         #region Ctor
-        public AnimatorComponentViewModel(IGameObject gameObject) : base("Animator: ", gameObject) 
+        public AnimatorComponentViewModel(IGameObject gameObject) : base(nameof(Animator), gameObject) 
         {
             
         }

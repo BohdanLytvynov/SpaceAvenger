@@ -4,20 +4,11 @@ using System.Windows.Controls;
 
 namespace WPFGameEngine.Editor.Controls.Validators
 {
-    public class DoubleValueRangeValidator : ValidationRule, INotifyPropertyChanged
+    public class DoubleValueRangeValidator : ValidationRule
     {
-        //private double m_max;
-
         public double Max { get; set; }
         public double Min { get; set; }
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        //private void OnPropertyChanged(string name)
-        //{ 
-            
-        //}
-
+        
         public override ValidationResult Validate(object value, CultureInfo cultureInfo)
         {
             double v = 0;

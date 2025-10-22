@@ -1,12 +1,15 @@
-﻿using System.Diagnostics;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Media.Imaging;
+using WPFGameEngine.Atributes;
+using WPFGameEngine.Attributes.Editor;
 using WPFGameEngine.Timers;
 using WPFGameEngine.WPF.GE.AnimationFrames;
 using WPFGameEngine.WPF.GE.Component.Base;
 
-namespace WPFGameEngine.WPF.GE.Animations
+namespace WPFGameEngine.WPF.GE.Component.Animations
 {
+    [GEComponent]
+    [VisibleInEditor(Name = nameof(Animation))]
     public class Animation : ComponentBase, IAnimation
     {
         #region Fields
@@ -39,7 +42,7 @@ namespace WPFGameEngine.WPF.GE.Animations
             get => m_Rows;
             set
             {
-                if (value <= 0)
+                if (value < 0)
                     throw new ArgumentException("The amount of Rows can't be negative or Zero!");
                 else
                     m_Rows = value;
@@ -51,7 +54,7 @@ namespace WPFGameEngine.WPF.GE.Animations
             get => m_Columns;
             set
             {
-                if (value <= 0)
+                if (value < 0)
                     throw new ArgumentException("The amount of Columns can't be negative or Zero!");
                 else
                     m_Columns = value;
@@ -114,6 +117,26 @@ namespace WPFGameEngine.WPF.GE.Animations
 
             Stop();
         }
+        public Animation() : base(nameof(Animation))
+        {
+            m_Texture = null;
+
+            Rows = 0;
+
+            Columns = 0;
+
+            IsLooping = false;
+
+            AnimationSpeed = 0;
+
+            m_frames = new List<IAnimationFrame>();
+
+            m_reverse = false;
+
+            Freeze = true;
+
+            Stop();
+        }
 
         #endregion
 
@@ -173,7 +196,7 @@ namespace WPFGameEngine.WPF.GE.Animations
 
             var cropped = new CroppedBitmap(m_Texture, rect);
 
-            if(Freeze)
+            if (Freeze)
                 cropped.Freeze();
 
             return cropped;
@@ -258,7 +281,7 @@ namespace WPFGameEngine.WPF.GE.Animations
             }
         }
 
-        
+
 
         #endregion
     }

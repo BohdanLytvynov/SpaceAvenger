@@ -1,13 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
+﻿using System.Drawing;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
-using WPFGameEngine.GameViewControl;
-using WPFGameEngine.WPF.GE.Animations;
-using WPFGameEngine.WPF.GE.Component.Sprites;
 using WPFGameEngine.WPF.GE.GameObjects;
 
 namespace SpaceAvenger.Game.Core.Animations

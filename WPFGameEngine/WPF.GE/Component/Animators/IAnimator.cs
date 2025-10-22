@@ -1,10 +1,9 @@
 ﻿using System.Windows.Media.Imaging;
-using WPFGameEngine.WPF.GE.Animations;
 using WPFGameEngine.WPF.GE.Component.Base;
 
 namespace WPFGameEngine.WPF.GE.Component.Animations
 {
-    public interface IAnimator : IComponent
+    public interface IAnimator : IGEComponent
     {
         public string Current_Animation_Name { get; }
 
