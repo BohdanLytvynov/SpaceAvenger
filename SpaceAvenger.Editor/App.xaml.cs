@@ -2,14 +2,14 @@
 using SpaceAvenger.Editor.Services;
 using SpaceAvenger.Editor.Services.Base;
 using SpaceAvenger.Editor.ViewModels;
+using System.IO;
 using System.Windows;
 using ViewModelBaseLibDotNetCore.MessageBus;
 using ViewModelBaseLibDotNetCore.MessageBus.Base;
-using WPFGameEngine.Factories.Base;
 using WPFGameEngine.Factories.Components;
+using WPFGameEngine.Factories.Ease;
 using WPFGameEngine.Timers;
 using WPFGameEngine.Timers.Base;
-using WPFGameEngine.WPF.GE.Component.Base;
 
 namespace SpaceAvenger.Editor
 {
@@ -25,6 +25,14 @@ namespace SpaceAvenger.Editor
         private static IServiceCollection InitializeServices()
         {
             var services = new ServiceCollection();
+            services.AddSingleton<IEaseFactory, EaseFactory>();
+            services.AddSingleton<IAssemblyLoader>(c =>
+            { 
+                IAssemblyLoader assemblyLoader = new AssemblyLoader();
+                string pathToAssembly = Environment.CurrentDirectory + Path.DirectorySeparatorChar + "WPFGameEngine.dll";
+                assemblyLoader.LoadAssembly(pathToAssembly);
+                return assemblyLoader;
+            });
             services.AddSingleton<IComponentFactory, ComponentFactory>();
             services.AddSingleton<IMessageBus, MessageBusService>();
             services.AddSingleton(c =>
@@ -41,7 +49,9 @@ namespace SpaceAvenger.Editor
                 var loader = c.GetRequiredService<IResourceLoader>();
                 var componentFactory = c.GetRequiredService<IComponentFactory>();
                 var gameTimer = c.GetRequiredService<IGameTimer>();
-                return new EditorMainWindowViewModel(loader, componentFactory, gameTimer);
+                var assemblyLoader = c.GetRequiredService<IAssemblyLoader>();
+                var easeFactory = c.GetRequiredService<IEaseFactory>();
+                return new EditorMainWindowViewModel(loader, componentFactory, gameTimer, assemblyLoader, easeFactory);
             });
             services.AddSingleton<MainWindow>(c =>
             { 

@@ -3,6 +3,7 @@ using SpaceAvenger.Editor.ViewModels.Components.Base;
 using SpaceAvenger.Editor.Views;
 using System.Windows.Input;
 using ViewModelBaseLibDotNetCore.Commands;
+using WPFGameEngine.Factories.Ease;
 using WPFGameEngine.WPF.GE.Component.Animations;
 using WPFGameEngine.WPF.GE.GameObjects;
 
@@ -12,6 +13,8 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animations
     {
         #region Fields
         private IResourceLoader m_resourceLoader;
+        private IAssemblyLoader m_assemblyLoader;
+        private IEaseFactory m_easeFactory;
         #endregion
 
         #region Commands
@@ -19,9 +22,13 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animations
         #endregion
 
         #region Ctor
-        public AnimationComponentViewModel(IGameObject gameObject, IResourceLoader resourceLoader) : base(nameof(Animation), gameObject) 
+        public AnimationComponentViewModel(IGameObject gameObject, 
+            IResourceLoader resourceLoader, IAssemblyLoader assemblyLoader,
+            IEaseFactory easeFactory) : base(nameof(Animation), gameObject) 
         {
             #region Init Fields
+            m_easeFactory = easeFactory ?? throw new ArgumentNullException(nameof(easeFactory));
+            m_assemblyLoader = assemblyLoader ?? throw new ArgumentNullException(nameof(assemblyLoader));
             m_resourceLoader = resourceLoader ?? throw new ArgumentNullException(nameof(resourceLoader));
             #endregion
 
@@ -50,7 +57,8 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animations
 
         private void ShowConfig()
         {
-            var animationConfigurationViewModel = new AnimationConfigurationViewModel(m_resourceLoader);
+            var animationConfigurationViewModel = new AnimationConfigurationViewModel(m_resourceLoader, m_assemblyLoader, 
+                m_easeFactory);
             var animConfigurationWindow = new AnimationConfigurationWindow();
             animationConfigurationViewModel.Dispatcher = animConfigurationWindow.Dispatcher;
             animConfigurationWindow.DataContext = animationConfigurationViewModel;

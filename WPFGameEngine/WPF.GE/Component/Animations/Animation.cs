@@ -281,8 +281,6 @@ namespace WPFGameEngine.WPF.GE.Component.Animations
             }
         }
 
-
-
         #endregion
     }
 }

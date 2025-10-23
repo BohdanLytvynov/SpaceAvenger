@@ -21,13 +21,12 @@ using WPFGameEngine.WPF.GE.Component.Animations;
 using System.Reflection;
 using WPFGameEngine.Atributes;
 using WPFGameEngine.Attributes.Editor;
-using System.IO;
 using WPFGameEngine.WPF.GE.Component.Base;
 using WPFGameEngine.WPF.GE.Exceptions;
 using System.Windows;
 using WPFGameEngine.Factories.Components;
-using ViewModelBaseLibDotNetCore.MessageBus.Base;
 using WPFGameEngine.Timers.Base;
+using WPFGameEngine.Factories.Ease;
 
 namespace SpaceAvenger.Editor.ViewModels
 {
@@ -52,6 +51,8 @@ namespace SpaceAvenger.Editor.ViewModels
         private ObservableCollection<ComponentViewModel> m_Components;
         private ObservableCollection<string> m_ComponentsToAdd;
         private IComponentFactory m_ComponentFactory;
+        private IAssemblyLoader m_assemblyLoader;
+        private IEaseFactory m_EaseFactory;
 
         private List<TypeInfo> m_ComponentTypes;
         private IGameTimer m_gameTimer;
@@ -156,22 +157,20 @@ namespace SpaceAvenger.Editor.ViewModels
         #region Ctor
         public EditorMainWindowViewModel(IResourceLoader resourceLoader, 
             IComponentFactory componentFactory,
-            IGameTimer gameTimer) : this()
+            IGameTimer gameTimer,
+            IAssemblyLoader assemblyLoader,
+            IEaseFactory easeFactory) : this()
         {
+            m_EaseFactory = easeFactory ?? throw new ArgumentNullException(nameof(easeFactory));
             m_ResourceLoader = resourceLoader ?? throw new ArgumentNullException(nameof(resourceLoader));
             m_ComponentFactory = componentFactory ?? throw new ArgumentNullException(nameof(componentFactory));
-            m_gameTimer = gameTimer ?? throw new ArgumentNullException(nameof(gameTimer));
-            m_gameViewHost = new GameViewHost(m_gameTimer);
-            m_gameViewHost.StartGame();
-        }
+            m_assemblyLoader = assemblyLoader ?? throw new ArgumentNullException(nameof(assemblyLoader));
 
-        public EditorMainWindowViewModel()
-        {
             #region Gett All Components From GE
-            string pathToAssembly = Environment.CurrentDirectory + Path.DirectorySeparatorChar + "WPFGameEngine.dll";
+
             m_ComponentTypes = new List<TypeInfo>();
             m_ComponentsToAdd = new ObservableCollection<string>();
-            var geAssembly = Assembly.LoadFile(pathToAssembly);
+            var geAssembly = m_assemblyLoader["WPFGameEngine"];
 
             foreach (var type in geAssembly.DefinedTypes)
             {
@@ -188,6 +187,15 @@ namespace SpaceAvenger.Editor.ViewModels
             }
 
             #endregion
+
+            m_gameTimer = gameTimer ?? throw new ArgumentNullException(nameof(gameTimer));
+            m_gameViewHost = new GameViewHost(m_gameTimer);
+            m_gameViewHost.StartGame();
+        }
+
+        public EditorMainWindowViewModel()
+        {
+    
             m_title = "Game Editor";
             m_ShowBorders = true;
             m_ShowGizmos = true;
@@ -402,7 +410,10 @@ namespace SpaceAvenger.Editor.ViewModels
                     c = new TransformComponentViewModel(m_SelectedItem.GameObject);
                     break;
                 case nameof(Animation):
-                    c = new AnimationComponentViewModel(m_SelectedItem.GameObject);
+                    c = new AnimationComponentViewModel(m_SelectedItem.GameObject, 
+                        m_ResourceLoader, 
+                        m_assemblyLoader, 
+                        m_EaseFactory);
                     break;
                 case nameof(Animator):
                     c = new AnimatorComponentViewModel(m_SelectedItem.GameObject);

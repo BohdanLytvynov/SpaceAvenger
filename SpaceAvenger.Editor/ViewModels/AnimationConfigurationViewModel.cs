@@ -1,4 +1,5 @@
-﻿using SpaceAvenger.Editor.Mock;
+﻿using OxyPlot;
+using SpaceAvenger.Editor.Mock;
 using SpaceAvenger.Editor.Services.Base;
 using SpaceAvenger.Editor.Views;
 using System.Collections.ObjectModel;
@@ -8,10 +9,12 @@ using System.Windows.Media.Imaging;
 using ViewModelBaseLibDotNetCore.Commands;
 using ViewModelBaseLibDotNetCore.MessageBus.Base;
 using ViewModelBaseLibDotNetCore.VM;
+using WPFGameEngine.Factories.Ease;
 using WPFGameEngine.GameViewControl;
 using WPFGameEngine.Timers;
 using WPFGameEngine.WPF.GE.Component.Animations;
 using WPFGameEngine.WPF.GE.GameObjects;
+using WPFGameEngine.WPF.GE.Math.Ease.Base;
 
 namespace SpaceAvenger.Editor.ViewModels
 {
@@ -29,6 +32,8 @@ namespace SpaceAvenger.Editor.ViewModels
         private IResourceLoader m_resourceLoader;
         private ObservableCollection<string> m_resourceNames;
         private string m_SelectedResourceName;
+        private IAssemblyLoader m_assemblyLoader;
+        private IEaseFactory m_easeFactory;
 
         private double m_Rows;
         private double m_Columns;
@@ -37,11 +42,14 @@ namespace SpaceAvenger.Editor.ViewModels
         private bool m_IsReversed;
         private int m_TotalFrameCount;
         private double m_TotalTime;
+        private PlotModel m_plot;
         #endregion
 
         #region Properties
-        public double TotalTime { get=>m_TotalTime; set => Set(ref m_TotalTime, value); }
-        public int TotalFrameCount { get => m_TotalFrameCount; set => Set(ref m_TotalFrameCount, value); }
+        public double TotalTime 
+        { get=>m_TotalTime; set => Set(ref m_TotalTime, value); }
+        public int TotalFrameCount 
+        { get => m_TotalFrameCount; set => Set(ref m_TotalFrameCount, value); }
         public double Rows
         {
             get => m_Rows;
@@ -115,6 +123,11 @@ namespace SpaceAvenger.Editor.ViewModels
             }
         }
 
+        public PlotModel Plot
+        {
+            get => m_plot; 
+            set => Set(ref m_plot, value); 
+        }
         #endregion
 
         #region Commands
@@ -124,9 +137,12 @@ namespace SpaceAvenger.Editor.ViewModels
         #endregion
 
         #region Ctor
-        public AnimationConfigurationViewModel(IResourceLoader resourceLoader)
+        public AnimationConfigurationViewModel(IResourceLoader resourceLoader, IAssemblyLoader assemblyLoader,
+            IEaseFactory easeFactory)
         {
             #region Init Fields
+            m_easeFactory = easeFactory ?? throw new ArgumentNullException(nameof(easeFactory));
+            m_assemblyLoader = assemblyLoader ?? throw new ArgumentNullException(nameof(assemblyLoader));
             m_SelectedResourceName = string.Empty;
             m_resourceLoader = resourceLoader ?? throw new ArgumentNullException(nameof(resourceLoader));
             m_resourceNames = new ObservableCollection<string>();
@@ -143,6 +159,7 @@ namespace SpaceAvenger.Editor.ViewModels
             m_gameView.AddObject(m_gameObject);
             m_gameView.StartGame();
 
+            m_plot = new PlotModel();
             #endregion
 
             #region Init Commands

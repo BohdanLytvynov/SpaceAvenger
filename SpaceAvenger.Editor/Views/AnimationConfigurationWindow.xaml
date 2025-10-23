@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:SpaceAvenger.Editor.Views"
         xmlns:vm="clr-namespace:SpaceAvenger.Editor.ViewModels"
         xmlns:controls="clr-namespace:WPFGameEngine.Editor.Controls;assembly=WPFGameEngine"
+        xmlns:oxy="http://oxyplot.org/wpf"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance vm:AnimationConfigurationViewModel, IsDesignTimeCreatable=True}"
         Title="{Binding Title}" Height="450" Width="800">
@@ -31,8 +32,15 @@
             <GridSplitter Grid.Row="1" Style="{StaticResource HorizontalGridSplitter}"/>
             <Grid Grid.Row="2">
                 <Border Style="{StaticResource BorderRoundStyle}" Margin="5">
-                    <StackPanel Orientation="Horizontal">
-                    </StackPanel>
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <StackPanel Orientation="Vertical" Height="400">
+                            <StackPanel Orientation="Horizontal" Margin="5">
+                                <TextBlock Text="Choose Easing: " Style="{StaticResource FieldName}"/>
+                                <ComboBox MinWidth="150" Style="{StaticResource ConboboxStyle}"/>
+                            </StackPanel>
+                            <oxy:PlotView Model="{Binding Plot}" Margin="5"/>
+                        </StackPanel>
+                    </ScrollViewer>
                 </Border>
             </Grid>
         </Grid>
@@ -53,9 +61,13 @@
                                      Value="{Binding Columns, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                     <StackPanel Orientation="Horizontal" Margin="5">
                         <TextBlock  Style="{StaticResource FieldName}"
-                                   Text="{Binding TotalFrameCount, UpdateSourceTrigger=PropertyChanged, StringFormat='Total Frame Count:{0}'}"
+                                   Text="{Binding TotalFrameCount, UpdateSourceTrigger=PropertyChanged, 
+                            StringFormat='Total Frame Count:{0}'}"
                                    />
                     </StackPanel>
+                    <controls:Slider Margin="5" LabelText="Total Animation Time:"
+                                     Value="{Binding TotalTime, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                     />
                     <controls:Slider LabelText="Animation Speed:" Margin="5"
                                      Value="{Binding AnimationSpeed, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                     <StackPanel Orientation="Horizontal" Margin="5">
@@ -65,7 +77,6 @@
                                   Margin="10,0,0,0"
                                   IsChecked="{Binding IsReversed, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                     </StackPanel>
-                    <TextBlock Style="{StaticResource FieldName}"/>
                 </StackPanel>
             </ScrollViewer>
         </Border>
