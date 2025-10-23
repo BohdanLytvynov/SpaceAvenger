@@ -23,5 +23,7 @@ namespace SpaceAvenger.Editor.Views
         {
             InitializeComponent();
         }
+
+        
     }
 }

@@ -122,6 +122,11 @@ namespace WPFGameEngine.GameViewControl
             m_gameState = GameState.Stopped;
             m_gameTimer.Stop();
         }
+
+        public void ClearWorld()
+        { 
+            m_world.Clear();
+        }
         #endregion
     }
 }

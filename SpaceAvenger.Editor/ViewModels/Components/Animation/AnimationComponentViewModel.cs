@@ -1,4 +1,5 @@
-﻿using SpaceAvenger.Editor.ViewModels.Components.Base;
+﻿using SpaceAvenger.Editor.Services.Base;
+using SpaceAvenger.Editor.ViewModels.Components.Base;
 using SpaceAvenger.Editor.Views;
 using System.Windows.Input;
 using ViewModelBaseLibDotNetCore.Commands;
@@ -10,11 +11,7 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animations
     internal class AnimationComponentViewModel : ComponentViewModel
     {
         #region Fields
-
-        #endregion
-
-        #region Properties
-
+        private IResourceLoader m_resourceLoader;
         #endregion
 
         #region Commands
@@ -22,8 +19,12 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animations
         #endregion
 
         #region Ctor
-        public AnimationComponentViewModel(IGameObject gameObject) : base(nameof(Animation), gameObject) 
+        public AnimationComponentViewModel(IGameObject gameObject, IResourceLoader resourceLoader) : base(nameof(Animation), gameObject) 
         {
+            #region Init Fields
+            m_resourceLoader = resourceLoader ?? throw new ArgumentNullException(nameof(resourceLoader));
+            #endregion
+
             #region Init Commands
 
             OnConfigureButtonPressed = new Command(
@@ -49,7 +50,7 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animations
 
         private void ShowConfig()
         {
-            var animationConfigurationViewModel = new AnimationConfigurationViewModel();
+            var animationConfigurationViewModel = new AnimationConfigurationViewModel(m_resourceLoader);            
             var animConfigurationWindow = new AnimationConfigurationWindow();
             animationConfigurationViewModel.Dispatcher = animConfigurationWindow.Dispatcher;
             animConfigurationWindow.DataContext = animationConfigurationViewModel;
