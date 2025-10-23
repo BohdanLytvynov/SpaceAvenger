@@ -2,7 +2,6 @@
 using System.Windows.Media.Imaging;
 using WPFGameEngine.Atributes;
 using WPFGameEngine.Attributes.Editor;
-using WPFGameEngine.Timers;
 using WPFGameEngine.Timers.Base;
 using WPFGameEngine.WPF.GE.AnimationFrames;
 using WPFGameEngine.WPF.GE.Component.Base;
@@ -35,7 +34,7 @@ namespace WPFGameEngine.WPF.GE.Component.Animations
 
         #region Properties
 
-        public bool Reverse { get => m_reverse; }
+        public bool Reverse { get => m_reverse; set => m_reverse = value; }
 
         //Amount of rows in a sprite Sheet
         public int Rows
@@ -81,7 +80,7 @@ namespace WPFGameEngine.WPF.GE.Component.Animations
         //Weather repeating is required
         public bool IsLooping { get => m_IsLooping; set => m_IsLooping = value; }
         //Texture that represents sprite sheet
-        public BitmapSource Texture { get => m_Texture; }
+        public BitmapSource Texture { get => m_Texture; set => m_Texture = value; }
         public bool Freeze { get; init; }
 
         #endregion

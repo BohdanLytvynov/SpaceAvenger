@@ -43,12 +43,29 @@
                     <StackPanel Orientation="Horizontal" Margin="5">
                         <TextBlock Text="Select an Atlas:" Margin="0,0,10,0" Style="{StaticResource FieldName}"/>
                         <ComboBox MinWidth="110" IsEditable="True" Style="{StaticResource ConboboxStyle}"
-                                  ItemsSource="{Binding ResourceNames, UpdateSourceTrigger=PropertyChanged}"/>
+                                  ItemsSource="{Binding ResourceNames, UpdateSourceTrigger=PropertyChanged}"
+                                  SelectedItem="{Binding SelectedResourceName, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                     </StackPanel>
 
-                    <controls:Slider LabelText="Rows:" Minimum="1" Maximum="100" Margin="5"/>
-                    <controls:Slider LabelText="Columns:" Margin="5"/>
-                    <controls:Slider LabelText="Animation Speed:" Margin="5"/>
+                    <controls:Slider LabelText="Rows:" Minimum="1" Maximum="100" Margin="5"
+                                     Value="{Binding Rows, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                    <controls:Slider LabelText="Columns:" Margin="5"
+                                     Value="{Binding Columns, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                    <StackPanel Orientation="Horizontal" Margin="5">
+                        <TextBlock  Style="{StaticResource FieldName}"
+                                   Text="{Binding TotalFrameCount, UpdateSourceTrigger=PropertyChanged, StringFormat='Total Frame Count:{0}'}"
+                                   />
+                    </StackPanel>
+                    <controls:Slider LabelText="Animation Speed:" Margin="5"
+                                     Value="{Binding AnimationSpeed, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                    <StackPanel Orientation="Horizontal" Margin="5">
+                        <CheckBox Content="Is Looping" FontSize="16" VerticalContentAlignment="Center"
+                                  IsChecked="{Binding IsLooping, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                        <CheckBox Content="Is Reversed" FontSize="16" VerticalContentAlignment="Center"
+                                  Margin="10,0,0,0"
+                                  IsChecked="{Binding IsReversed, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                    </StackPanel>
+                    <TextBlock Style="{StaticResource FieldName}"/>
                 </StackPanel>
             </ScrollViewer>
         </Border>

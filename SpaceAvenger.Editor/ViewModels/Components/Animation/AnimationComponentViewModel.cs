@@ -50,7 +50,7 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animations
 
         private void ShowConfig()
         {
-            var animationConfigurationViewModel = new AnimationConfigurationViewModel(m_resourceLoader);            
+            var animationConfigurationViewModel = new AnimationConfigurationViewModel(m_resourceLoader);
             var animConfigurationWindow = new AnimationConfigurationWindow();
             animationConfigurationViewModel.Dispatcher = animConfigurationWindow.Dispatcher;
             animConfigurationWindow.DataContext = animationConfigurationViewModel;

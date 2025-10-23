@@ -11,7 +11,7 @@ namespace WPFGameEngine.WPF.GE.Component.Animations
 
         public bool Freeze { get; init; }
 
-        public bool Reverse { get; }
+        public bool Reverse { get; set; }
 
         public int Rows { get; set; }
 
@@ -27,7 +27,7 @@ namespace WPFGameEngine.WPF.GE.Component.Animations
 
         public bool IsLooping { get; set; }
 
-        public BitmapSource Texture { get; }
+        public BitmapSource Texture { get; set; }
 
         #endregion
 
