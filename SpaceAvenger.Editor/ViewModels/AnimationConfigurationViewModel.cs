@@ -1,20 +1,26 @@
 ﻿using OxyPlot;
+using OxyPlot.Axes;
+using OxyPlot.Series;
 using SpaceAvenger.Editor.Mock;
 using SpaceAvenger.Editor.Services.Base;
-using SpaceAvenger.Editor.Views;
+using SpaceAvenger.Editor.ViewModels.Options;
 using System.Collections.ObjectModel;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using ViewModelBaseLibDotNetCore.Commands;
-using ViewModelBaseLibDotNetCore.MessageBus.Base;
 using ViewModelBaseLibDotNetCore.VM;
+using WPFGameEngine.Attributes.Editor;
+using WPFGameEngine.Enums;
+using WPFGameEngine.Extensions;
 using WPFGameEngine.Factories.Ease;
 using WPFGameEngine.GameViewControl;
 using WPFGameEngine.Timers;
+using WPFGameEngine.WPF.GE.AnimationFrames;
 using WPFGameEngine.WPF.GE.Component.Animations;
+using WPFGameEngine.WPF.GE.Component.Transforms;
 using WPFGameEngine.WPF.GE.GameObjects;
-using WPFGameEngine.WPF.GE.Math.Ease.Base;
 
 namespace SpaceAvenger.Editor.ViewModels
 {
@@ -31,10 +37,14 @@ namespace SpaceAvenger.Editor.ViewModels
         private Animation m_animation;
         private IResourceLoader m_resourceLoader;
         private ObservableCollection<string> m_resourceNames;
+        private ObservableCollection<OptionsViewModel> m_EasingTypes;
+        private OptionsViewModel m_SelectedEase;
         private string m_SelectedResourceName;
         private IAssemblyLoader m_assemblyLoader;
         private IEaseFactory m_easeFactory;
+        private Visibility m_ConstantCVisibility;
 
+        private double m_currentIndex;
         private double m_Rows;
         private double m_Columns;
         private double m_AnimationSpeed;
@@ -42,10 +52,14 @@ namespace SpaceAvenger.Editor.ViewModels
         private bool m_IsReversed;
         private int m_TotalFrameCount;
         private double m_TotalTime;
-        private PlotModel m_plot;
+        private PlotModel m_plotModel;
         #endregion
 
         #region Properties
+        public double CurrentIndex 
+        { get => m_currentIndex; set => Set(ref m_currentIndex, value); }
+        public Visibility ConstantCVisibility 
+        { get => m_ConstantCVisibility; set => Set(ref m_ConstantCVisibility, value); }
         public double TotalTime 
         { get=>m_TotalTime; set => Set(ref m_TotalTime, value); }
         public int TotalFrameCount 
@@ -103,6 +117,25 @@ namespace SpaceAvenger.Editor.ViewModels
             set=> Set(ref m_resourceNames, value);
         }
 
+        public ObservableCollection<OptionsViewModel> EasingTypes 
+        {
+            get=> m_EasingTypes;
+            set=> Set(ref m_EasingTypes, value);
+        }
+
+        public OptionsViewModel SelectedEase
+        {
+            get => m_SelectedEase;
+            set
+            {
+                Set(ref m_SelectedEase, value);
+                if (value != null)
+                {
+                    BuildSelectedFunction(value.FactoryName);
+                }
+            }
+        }
+
         public string Title  
         { get => m_title; set => Set(ref m_title, value); }
 
@@ -123,10 +156,10 @@ namespace SpaceAvenger.Editor.ViewModels
             }
         }
 
-        public PlotModel Plot
+        public PlotModel PlotModel
         {
-            get => m_plot; 
-            set => Set(ref m_plot, value); 
+            get => m_plotModel; 
+            set => Set(ref m_plotModel, value); 
         }
         #endregion
 
@@ -134,6 +167,7 @@ namespace SpaceAvenger.Editor.ViewModels
         public ICommand OnConfirmButtonPressed { get; }
         public ICommand OnStartButtonPressed { get; }
         public ICommand OnPauseButtonPressed { get; }
+        public ICommand OnResetButtonPressed { get; }
         #endregion
 
         #region Ctor
@@ -146,6 +180,24 @@ namespace SpaceAvenger.Editor.ViewModels
             m_SelectedResourceName = string.Empty;
             m_resourceLoader = resourceLoader ?? throw new ArgumentNullException(nameof(resourceLoader));
             m_resourceNames = new ObservableCollection<string>();
+            m_EasingTypes = new ObservableCollection<OptionsViewModel>();
+            m_SelectedEase = new OptionsViewModel();
+            m_ConstantCVisibility = Visibility.Collapsed;
+
+            var types = m_assemblyLoader["WPFGameEngine"].GetTypes();
+
+            foreach (var type in types)
+            {
+                var attr = type.GetAttribute<VisibleInEditor>();
+                if (attr != null &&
+                    attr.GetValue<GEObjectType>("GameObjectType") == GEObjectType.Ease)
+                {
+                    m_EasingTypes.Add(new OptionsViewModel(
+                        attr.GetValue<string>("DisplayName"),
+                        attr.GetValue<string>("FactoryName")));
+                }
+            }
+
             foreach (var resourceName in m_resourceLoader.GetAllKeys())
             {
                 m_resourceNames.Add(resourceName);
@@ -153,13 +205,17 @@ namespace SpaceAvenger.Editor.ViewModels
 
             m_title = "Animation Configuration";
             m_gameView = new GameViewHost(new GameTimer());
+            m_gameView.OnUpdate = Update;
+            m_gameView.SizeChanged += M_gameView_SizeChanged;
             m_gameObject = new GameObjectMock();
+            var t = m_gameObject.GetComponent<TransformComponent>();
+            t.CenterPosition = new System.Numerics.Vector2(0, 0);
             m_animation = new Animation();
             m_gameObject.RegisterComponent(m_animation);
             m_gameView.AddObject(m_gameObject);
             m_gameView.StartGame();
 
-            m_plot = new PlotModel();
+            m_plotModel = new PlotModel();
             #endregion
 
             #region Init Commands
@@ -170,7 +226,41 @@ namespace SpaceAvenger.Editor.ViewModels
                     CanOnConfirmButtonPressedExecute
                 );
 
+            OnStartButtonPressed = new Command
+                (
+                OnStartButtonPressedExecute,
+                CanOnStartButtonPressedExecute
+                );
+
+            OnPauseButtonPressed = new Command
+                (
+                    OnPauseButtonPressedExecute,
+                    CanOnPauseButtonPressedExecute
+                );
+
+            OnResetButtonPressed = new Command
+                (
+                    OnResetButtonPressedExecute,
+                    CanOnResetButtonPressedExecute
+                );
+
             #endregion
+        }
+
+        private void M_gameView_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            var texture = m_animation.Texture;
+            if (texture != null && m_gameObject != null)
+            {
+                var width = m_gameView.ActualWidth;
+                var height = m_gameView.ActualHeight;
+
+                double lamdaX = width/texture.Width;
+                double lamdaY = height/texture.Height;
+
+                m_gameObject.GetComponent<TransformComponent>().Scale = new System.Drawing.SizeF(
+                    (float)lamdaX, (float)lamdaY);
+            }
         }
         #endregion
 
@@ -189,32 +279,84 @@ namespace SpaceAvenger.Editor.ViewModels
         #endregion
 
         #region On Start Button Pressed
-        private bool CanOnStartButtonPressedExecute(object p)
-        {
-            return true;
-        }
-
+        private bool CanOnStartButtonPressedExecute(object p) => !m_animation.IsRunning;
+            
         private void OnStartButtonPressedExecute(object p)
         { 
-        
+            if(!m_animation.IsRunning)
+                m_animation.Start();
         }
         #endregion
 
         #region On Pause Button Pressed
-        private bool CanOnPauseButtonPressedExecute(object p)
-        {
-            return true;
-        }
+        private bool CanOnPauseButtonPressedExecute(object p) => m_animation.IsRunning;
 
         private void OnPauseButtonPressedExecute(object p)
-        { 
-            
+        {
+            if (m_animation.IsRunning)
+                m_animation.Stop();
+        }
+        #endregion
+
+        #region On Reset Button Pressed
+        private bool CanOnResetButtonPressedExecute(object p) => !m_animation.IsRunning;
+
+        private void OnResetButtonPressedExecute(object p)
+        {
+            if (!m_animation.IsRunning)
+                m_animation.Reset(m_animation.Reverse);
         }
         #endregion
 
         public void OnWindowClosing()
         {
             m_gameView.Stop();
+        }
+
+        private void BuildSelectedFunction(string name)
+        {
+            //1) Build Axes
+            var Plot = new PlotModel();
+            Plot.Axes.Add(new LinearColorAxis()
+            {
+                Position = AxisPosition.Bottom,
+                Title = "X",
+                AxislineColor = OxyColors.DarkRed
+            });
+            Plot.Axes.Add(new LinearColorAxis()
+            {
+                Position = AxisPosition.Left,
+                Title = "Y",
+                AxislineColor = OxyColors.DarkGreen
+            });
+
+            //2) Get Ease function
+            var func = m_easeFactory.Create(name);
+            
+            int start = 0;
+            int end = m_animation.FrameCount;
+            var graph = new LineSeries() 
+            { Title = SelectedEase.DisplayName, 
+                Color = OxyColors.DarkGray, 
+                StrokeThickness = 3 };
+            
+            for (int i = start; i < end; ++i)
+            {
+                var y0 = func.Ease((float)i/(float)end);//Normalized Ease function y0
+                var y1 = func.Ease((float)(i + 1) / (float)end);
+                var delta = y1 - y0;
+                m_animation.AnimationFrames.Add(new AnimationFrame(delta * TotalTime));
+                graph.Points.Add(new DataPoint(i, y0));
+            }
+
+            Plot.Series.Add(graph);
+            this.PlotModel = Plot;
+        }
+
+        private void Update()
+        {
+            if (m_animation.IsRunning)
+                CurrentIndex = m_animation.CurrentFrameIndex;
         }
 
         #endregion

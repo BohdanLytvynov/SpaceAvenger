@@ -1,5 +1,4 @@
 ﻿using System.Windows.Media.Imaging;
-using WPFGameEngine.Atributes;
 using WPFGameEngine.Attributes.Editor;
 using WPFGameEngine.Timers.Base;
 using WPFGameEngine.WPF.GE.Component.Animations;
@@ -7,8 +6,9 @@ using WPFGameEngine.WPF.GE.Component.Base;
 
 namespace WPFGameEngine.WPF.GE.Component.Animators
 {
-    [GEComponent]
-    [VisibleInEditor(Name = nameof(Animator))]
+    [VisibleInEditor(FactoryName = nameof(Animator),
+        DisplayName = "Animator",
+        GameObjectType = Enums.GEObjectType.Component)]
     public class Animator : ComponentBase, IAnimator
     {
         private Dictionary<string, IAnimation> m_animations;

@@ -1,4 +1,7 @@
-﻿using System;
+﻿using OxyPlot;
+using OxyPlot.Axes;
+using OxyPlot.Series;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,12 +21,10 @@ namespace SpaceAvenger.Editor.Views
     /// Interaction logic for AnimationConfigurationWindow.xaml
     /// </summary>
     public partial class AnimationConfigurationWindow : Window
-    {        
+    {
         public AnimationConfigurationWindow()
         {
             InitializeComponent();
         }
-
-        
     }
 }

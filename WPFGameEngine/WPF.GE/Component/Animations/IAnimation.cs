@@ -1,6 +1,7 @@
 ﻿using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using WPFGameEngine.Timers.Base;
+using WPFGameEngine.WPF.GE.AnimationFrames;
 using WPFGameEngine.WPF.GE.Component.Base;
 
 namespace WPFGameEngine.WPF.GE.Component.Animations
@@ -8,6 +9,9 @@ namespace WPFGameEngine.WPF.GE.Component.Animations
     public interface IAnimation : IGEComponent
     {
         #region Properties
+        public int CurrentFrameIndex { get; }
+
+        public bool IsRunning { get; }
 
         public bool Freeze { get; init; }
 
@@ -28,6 +32,8 @@ namespace WPFGameEngine.WPF.GE.Component.Animations
         public bool IsLooping { get; set; }
 
         public BitmapSource Texture { get; set; }
+
+        public List<IAnimationFrame> AnimationFrames { get; }
 
         #endregion
 

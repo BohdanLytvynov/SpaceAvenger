@@ -1,7 +1,4 @@
 ﻿using SpaceAvenger.Game.Core.Spaceships.F10.Engines;
-using System.Drawing;
-using System.Numerics;
-using WPFGameEngine.Atributes;
 using WPFGameEngine.WPF.GE.Component.Animators;
 using WPFGameEngine.WPF.GE.Component.Sprites;
 using WPFGameEngine.WPF.GE.GameObjects;

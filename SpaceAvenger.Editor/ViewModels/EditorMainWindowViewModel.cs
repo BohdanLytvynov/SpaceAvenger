@@ -18,8 +18,6 @@ using SpaceAvenger.Editor.ViewModels.Components.Animators;
 using System.Windows.Media;
 using SpaceAvenger.Editor.ViewModels.Components.Sprites;
 using WPFGameEngine.WPF.GE.Component.Animations;
-using System.Reflection;
-using WPFGameEngine.Atributes;
 using WPFGameEngine.Attributes.Editor;
 using WPFGameEngine.WPF.GE.Component.Base;
 using WPFGameEngine.WPF.GE.Exceptions;
@@ -27,6 +25,9 @@ using System.Windows;
 using WPFGameEngine.Factories.Components;
 using WPFGameEngine.Timers.Base;
 using WPFGameEngine.Factories.Ease;
+using WPFGameEngine.Extensions;
+using SpaceAvenger.Editor.ViewModels.Options;
+using WPFGameEngine.Enums;
 
 namespace SpaceAvenger.Editor.ViewModels
 {
@@ -43,52 +44,51 @@ namespace SpaceAvenger.Editor.ViewModels
         private string m_objName;
         private double m_ZIndex;
         private int m_SelectedComponentIndex;
-        private string m_SelectedComponentName;
-        
+        private OptionsViewModel m_SelectedComponent;
+
         private IResourceLoader m_ResourceLoader;
 
         private ObservableCollection<TreeItemViewModel> m_Items;
         private ObservableCollection<ComponentViewModel> m_Components;
-        private ObservableCollection<string> m_ComponentsToAdd;
+        private ObservableCollection<OptionsViewModel> m_ComponentsToAdd;
         private IComponentFactory m_ComponentFactory;
         private IAssemblyLoader m_assemblyLoader;
         private IEaseFactory m_EaseFactory;
-
-        private List<TypeInfo> m_ComponentTypes;
         private IGameTimer m_gameTimer;
+
         #endregion
 
         #region Properties
 
-        public string Title 
+        public string Title
         { get => m_title; set => Set(ref m_title, value); }
 
-        public string SelectedComponentName 
+        public OptionsViewModel SelectedComponent
         {
-            get=> m_SelectedComponentName;
-            set=> Set(ref m_SelectedComponentName, value);
+            get => m_SelectedComponent;
+            set => Set(ref m_SelectedComponent, value);
         }
 
-        public int SelectedComponentIndex 
+        public int SelectedComponentIndex
         {
-            get=> m_SelectedComponentIndex;
-            set=> Set(ref m_SelectedComponentIndex, value);
+            get => m_SelectedComponentIndex;
+            set => Set(ref m_SelectedComponentIndex, value);
         }
 
-        public double ZIndex 
+        public double ZIndex
         {
-            get=> m_ZIndex;
-            set 
+            get => m_ZIndex;
+            set
             {
                 Set(ref m_ZIndex, value);
                 UpdateZIndex((int)ZIndex);
             }
         }
 
-        public bool Enabled 
+        public bool Enabled
         {
-            get=> m_enabled;
-            set 
+            get => m_enabled;
+            set
             {
                 Set(ref m_enabled, value);
                 UpdateEnabled(value);
@@ -97,23 +97,23 @@ namespace SpaceAvenger.Editor.ViewModels
 
         public string ObjName
         {
-            get=> m_objName;
-            set=> Set(ref m_objName, value);
+            get => m_objName;
+            set => Set(ref m_objName, value);
         }
 
-        public ObservableCollection<TreeItemViewModel> Items 
+        public ObservableCollection<TreeItemViewModel> Items
         {
-            get=> m_Items;
-            set=> m_Items = value;
+            get => m_Items;
+            set => m_Items = value;
         }
 
         public ObservableCollection<ComponentViewModel> Components
         {
-            get=> m_Components;
-            set=> m_Components = value;
+            get => m_Components;
+            set => m_Components = value;
         }
 
-        public ObservableCollection<string> ComponentsToAdd 
+        public ObservableCollection<OptionsViewModel> ComponentsToAdd
         {
             get => m_ComponentsToAdd;
             set => m_ComponentsToAdd = value;
@@ -143,7 +143,7 @@ namespace SpaceAvenger.Editor.ViewModels
         { get => m_gameViewHost; set => Set(ref m_gameViewHost, value); }
 
         #endregion
-        
+
         #region Commands
         public ICommand OnAddGameObjectButtonPressed { get; }
 
@@ -155,7 +155,7 @@ namespace SpaceAvenger.Editor.ViewModels
         #endregion
 
         #region Ctor
-        public EditorMainWindowViewModel(IResourceLoader resourceLoader, 
+        public EditorMainWindowViewModel(IResourceLoader resourceLoader,
             IComponentFactory componentFactory,
             IGameTimer gameTimer,
             IAssemblyLoader assemblyLoader,
@@ -166,23 +166,18 @@ namespace SpaceAvenger.Editor.ViewModels
             m_ComponentFactory = componentFactory ?? throw new ArgumentNullException(nameof(componentFactory));
             m_assemblyLoader = assemblyLoader ?? throw new ArgumentNullException(nameof(assemblyLoader));
 
-            #region Gett All Components From GE
-
-            m_ComponentTypes = new List<TypeInfo>();
-            m_ComponentsToAdd = new ObservableCollection<string>();
+            #region Get All Components From GE
+            m_ComponentsToAdd = new ObservableCollection<OptionsViewModel>();
             var geAssembly = m_assemblyLoader["WPFGameEngine"];
 
-            foreach (var type in geAssembly.DefinedTypes)
+            foreach (var type in geAssembly.GetTypes())
             {
-                var res = type.CustomAttributes.Where(x => x.AttributeType.Name == typeof(GEComponent).Name
-                || x.AttributeType.Name == typeof(VisibleInEditor).Name);
-
-                if (res.Any())
+                var attr = type.GetAttribute<VisibleInEditor>();
+                if (attr != null && attr.GetValue<GEObjectType>("GameObjectType") == GEObjectType.Component)
                 {
-                    var visibleInEditor = res.Where(x => x.AttributeType.Name == typeof(VisibleInEditor).Name).FirstOrDefault();
-                    var componentname = visibleInEditor.NamedArguments.FirstOrDefault().TypedValue.Value.ToString() ?? "";
-                    m_ComponentsToAdd.Add(componentname);
-                    m_ComponentTypes.Add(type);
+                    m_ComponentsToAdd.Add(new OptionsViewModel(
+                        attr.GetValue<string>("DisplayName"),
+                        attr.GetValue<string>("FactoryName")));
                 }
             }
 
@@ -195,7 +190,7 @@ namespace SpaceAvenger.Editor.ViewModels
 
         public EditorMainWindowViewModel()
         {
-    
+
             m_title = "Game Editor";
             m_ShowBorders = true;
             m_ShowGizmos = true;
@@ -204,7 +199,7 @@ namespace SpaceAvenger.Editor.ViewModels
             m_Components = new ObservableCollection<ComponentViewModel>();
             m_objName = string.Empty;
             m_SelectedComponentIndex = -1;
-            m_SelectedComponentName = string.Empty;
+            m_SelectedComponent = new OptionsViewModel();
 
             GESettings.DrawGizmo = true;
             GESettings.DrawBorders = true;
@@ -285,41 +280,38 @@ namespace SpaceAvenger.Editor.ViewModels
                 Components.Clear();
                 m_SelectedItem = null;
             }
-            
+
         }
 
         #endregion
 
         #region On Add Component Button Pressed
-        private bool CanOnAddComponentButtonPressedExecute(object p) => 
-            m_SelectedItem != null && !string.IsNullOrEmpty(SelectedComponentName);
+        private bool CanOnAddComponentButtonPressedExecute(object p) =>
+            m_SelectedItem != null && SelectedComponent != null 
+            && !string.IsNullOrEmpty(SelectedComponent.FactoryName);
 
         private void OnAddComponentButtonPressedExecute(object p)
-        { 
-            var type = m_ComponentTypes.Where(x => x.Name.Equals(SelectedComponentName)).FirstOrDefault();
-            if (type != null)
+        {
+            try
             {
-                try
-                {
-                    var component = m_ComponentFactory.Create(SelectedComponentName);
-                    m_SelectedItem.GameObject.RegisterComponent(component);
-                    Components.Add(CreateComponentViewModel(component));
-                }
-                catch (ComponentAlreadyRegisteredException ex)
-                {
-                    MessageBox.Show(ex.Message, m_title, MessageBoxButton.OK, MessageBoxImage.Exclamation);
-                }
-                catch (Exception)
-                {
-                    throw;
-                }
+                var component = m_ComponentFactory.Create(SelectedComponent.FactoryName);
+                m_SelectedItem.GameObject.RegisterComponent(component);
+                Components.Add(CreateComponentViewModel(component));
+            }
+            catch (ComponentAlreadyRegisteredException ex)
+            {
+                MessageBox.Show(ex.Message, m_title, MessageBoxButton.OK, MessageBoxImage.Exclamation);
+            }
+            catch (Exception)
+            {
+                throw;
             }
         }
         #endregion
 
         #region On Delete Component Button Pressed
 
-        private bool CanOnDeleteComponentButtonPressedExecute(object p) => 
+        private bool CanOnDeleteComponentButtonPressedExecute(object p) =>
             m_SelectedItem != null && SelectedComponentIndex >= 0;
 
         private void OnDeleteComponentButtonPressedExecute(object p)
@@ -343,7 +335,7 @@ namespace SpaceAvenger.Editor.ViewModels
                     break;
 
                 if (itemViewModel.Id == item.Id)
-                { 
+                {
                     src.Remove(itemViewModel);
                     removed = true;
                     break;
@@ -375,7 +367,7 @@ namespace SpaceAvenger.Editor.ViewModels
                 return;
 
             foreach (var component in currentComponents)
-            {               
+            {
                 Components.Add(CreateComponentViewModel(component));
             }
         }
@@ -388,7 +380,7 @@ namespace SpaceAvenger.Editor.ViewModels
         private void UpdateEnabled(bool value)
         {
             if (m_SelectedItem != null && m_SelectedItem.GameObject != null)
-            { 
+            {
                 m_SelectedItem.GameObject.Enabled = value;
             }
         }
@@ -410,9 +402,9 @@ namespace SpaceAvenger.Editor.ViewModels
                     c = new TransformComponentViewModel(m_SelectedItem.GameObject);
                     break;
                 case nameof(Animation):
-                    c = new AnimationComponentViewModel(m_SelectedItem.GameObject, 
-                        m_ResourceLoader, 
-                        m_assemblyLoader, 
+                    c = new AnimationComponentViewModel(m_SelectedItem.GameObject,
+                        m_ResourceLoader,
+                        m_assemblyLoader,
                         m_EaseFactory);
                     break;
                 case nameof(Animator):

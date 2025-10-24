@@ -1,16 +1,14 @@
 ﻿using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Media;
-using WPFGameEngine.Atributes;
 using WPFGameEngine.Attributes.Editor;
 using WPFGameEngine.WPF.GE.Component.Base;
 using WPFGameEngine.WPF.GE.Exceptions;
-using WPFGameEngine.WPF.GE.Helpers;
 
 namespace WPFGameEngine.WPF.GE.Component.Sprites
-{
-    [GEComponent]
-    [VisibleInEditor(Name = nameof(Sprite))]
+{    
+    [VisibleInEditor(FactoryName = nameof(Sprite),
+        DisplayName = "Sprite",
+        GameObjectType = Enums.GEObjectType.Component)]
     public class Sprite : ComponentBase, ISprite
     {
         #region Fields

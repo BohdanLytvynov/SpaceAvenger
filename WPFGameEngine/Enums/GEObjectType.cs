@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WPFGameEngine.Atributes
+namespace WPFGameEngine.Enums
 {
-    [AttributeUsage(AttributeTargets.Class)]
-    public class GEComponent : Attribute
+    public enum GEObjectType
     {
+        None = 0,
+        Component,
+        Ease
     }
 }

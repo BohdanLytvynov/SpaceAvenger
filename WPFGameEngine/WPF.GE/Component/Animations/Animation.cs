@@ -1,6 +1,6 @@
-﻿using System.Windows;
+﻿using System.Diagnostics;
+using System.Windows;
 using System.Windows.Media.Imaging;
-using WPFGameEngine.Atributes;
 using WPFGameEngine.Attributes.Editor;
 using WPFGameEngine.Timers.Base;
 using WPFGameEngine.WPF.GE.AnimationFrames;
@@ -8,8 +8,9 @@ using WPFGameEngine.WPF.GE.Component.Base;
 
 namespace WPFGameEngine.WPF.GE.Component.Animations
 {
-    [GEComponent]
-    [VisibleInEditor(Name = nameof(Animation))]
+    [VisibleInEditor(FactoryName = nameof(Animation),
+        DisplayName = "Animation",
+        GameObjectType = Enums.GEObjectType.Component)]
     public class Animation : ComponentBase, IAnimation
     {
         #region Fields
@@ -29,10 +30,12 @@ namespace WPFGameEngine.WPF.GE.Component.Animations
         private double m_animSpeed;
         private bool m_IsLooping;
         private BitmapSource m_Texture;
-
         #endregion
 
         #region Properties
+        public int CurrentFrameIndex { get => m_curr_frame_index; }
+
+        public bool IsRunning { get => m_start; }
 
         public bool Reverse { get => m_reverse; set => m_reverse = value; }
 
@@ -68,20 +71,40 @@ namespace WPFGameEngine.WPF.GE.Component.Animations
         //Height of the frame
         public int FrameHeight
         {
-            get => Texture.PixelHeight / Rows;
+            get 
+            {
+                if (Rows > 0)
+                {
+                    return Texture.PixelHeight / Rows;
+                }
+                return 0;
+            }
         }
 
         //Animation Speed (R) 
         public double AnimationSpeed { get => m_animSpeed; set => m_animSpeed = value; }
 
         //Width of the frame
-        public int FrameWidth { get => Texture.PixelWidth / Columns; }
+        public int FrameWidth 
+        {
+            get 
+            {
+                if (Columns > 0)
+                {
+                    return Texture.PixelWidth / Columns;
+                }
+
+                return 0;
+                
+            } 
+        }
 
         //Weather repeating is required
         public bool IsLooping { get => m_IsLooping; set => m_IsLooping = value; }
         //Texture that represents sprite sheet
         public BitmapSource Texture { get => m_Texture; set => m_Texture = value; }
         public bool Freeze { get; init; }
+        public List<IAnimationFrame> AnimationFrames { get => m_frames; }
 
         #endregion
 
@@ -195,6 +218,10 @@ namespace WPFGameEngine.WPF.GE.Component.Animations
             };
 
             var cropped = new CroppedBitmap(m_Texture, rect);
+
+#if DEBUG
+            Debug.WriteLine($"Rect: X:{rect.X} Y: {rect.Y} W:{rect.Width} H:{rect.Height}");
+#endif
 
             if (Freeze)
                 cropped.Freeze();

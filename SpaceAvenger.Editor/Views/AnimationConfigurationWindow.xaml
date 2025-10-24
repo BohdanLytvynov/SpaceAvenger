@@ -26,9 +26,33 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="143*"/>
             </Grid.RowDefinitions>
-            <Border Grid.Row="0" Margin="5" Style="{StaticResource BorderRoundStyle}">
-                <Label Content="{Binding GameView, UpdateSourceTrigger=PropertyChanged}"/>
-            </Border>
+            <Grid Grid.Row="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="70"/>
+                </Grid.RowDefinitions>
+                <Border Margin="5" Style="{StaticResource BorderRoundStyle}">
+                    <Label Content="{Binding GameView, UpdateSourceTrigger=PropertyChanged}"/>
+                </Border>
+                <Border Margin="5" Style="{StaticResource BorderRoundStyle}" Grid.Row="1">
+                    <StackPanel Orientation="Vertical" Margin="4">
+                        <Slider 
+                            TickPlacement="BottomRight" TickFrequency="1"
+                            Value="{Binding CurrentIndex, UpdateSourceTrigger=PropertyChanged}"
+                            Foreground="Black"
+                            Minimum="0" 
+                            Maximum="{Binding TotalFrameCount, UpdateSourceTrigger=PropertyChanged}"/>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5,0,0">
+                            <Button Content="Start" Margin="0,0,10,0"
+                                    Command="{Binding OnStartButtonPressed}"/>
+                            <Button Content="Pause" Margin="0,0,10,0"
+                                    Command="{Binding OnPauseButtonPressed}"/>
+                            <Button Content="Reset" 
+                                    Command="{Binding OnResetButtonPressed}"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+            </Grid>
             <GridSplitter Grid.Row="1" Style="{StaticResource HorizontalGridSplitter}"/>
             <Grid Grid.Row="2">
                 <Border Style="{StaticResource BorderRoundStyle}" Margin="5">
@@ -36,9 +60,17 @@
                         <StackPanel Orientation="Vertical" Height="400">
                             <StackPanel Orientation="Horizontal" Margin="5">
                                 <TextBlock Text="Choose Easing: " Style="{StaticResource FieldName}"/>
-                                <ComboBox MinWidth="150" Style="{StaticResource ConboboxStyle}"/>
+                                <ComboBox MinWidth="150" Style="{StaticResource ConboboxStyle}"
+                                          ItemsSource="{Binding EasingTypes, 
+                                    UpdateSourceTrigger=PropertyChanged}"
+                                          SelectedItem="{Binding SelectedEase, 
+                                    UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                          DisplayMemberPath="DisplayName"
+                                          />
                             </StackPanel>
-                            <oxy:PlotView Model="{Binding Plot}" Margin="5"/>
+                            <oxy:PlotView 
+                                Model="{Binding PlotModel, UpdateSourceTrigger=PropertyChanged}" 
+                                Margin="5" Height="220"/>
                         </StackPanel>
                     </ScrollViewer>
                 </Border>
@@ -57,7 +89,7 @@
 
                     <controls:Slider LabelText="Rows:" Minimum="1" Maximum="100" Margin="5"
                                      Value="{Binding Rows, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                    <controls:Slider LabelText="Columns:" Margin="5"
+                    <controls:Slider LabelText="Columns:" Margin="5" Minimum="1" Maximum="100"
                                      Value="{Binding Columns, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                     <StackPanel Orientation="Horizontal" Margin="5">
                         <TextBlock  Style="{StaticResource FieldName}"
@@ -65,10 +97,10 @@
                             StringFormat='Total Frame Count:{0}'}"
                                    />
                     </StackPanel>
-                    <controls:Slider Margin="5" LabelText="Total Animation Time:"
+                    <controls:Slider Margin="5" LabelText="Total Animation Time:(ms)" Minimum="0" Maximum="10000000000"
                                      Value="{Binding TotalTime, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                      />
-                    <controls:Slider LabelText="Animation Speed:" Margin="5"
+                    <controls:Slider LabelText="Animation Speed:" Margin="5" Minimum="0" Maximum="1000"
                                      Value="{Binding AnimationSpeed, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                     <StackPanel Orientation="Horizontal" Margin="5">
                         <CheckBox Content="Is Looping" FontSize="16" VerticalContentAlignment="Center"
