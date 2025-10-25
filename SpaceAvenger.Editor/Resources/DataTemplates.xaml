@@ -7,6 +7,7 @@
                     xmlns:controls="clr-namespace:WPFGameEngine.Editor.Controls;assembly=WPFGameEngine"
                     xmlns:diag="clr-namespace:System.Diagnostics;assembly=WindowsBase"
                     xmlns:options="clr-namespace:SpaceAvenger.Editor.ViewModels.Options"
+                    xmlns:easeOptionsVM="clr-namespace:SpaceAvenger.Editor.ViewModels.EaseOptions"
                     >
     <!--#region Tree View Item-->
     <HierarchicalDataTemplate DataType="{x:Type tvm:TreeItemViewModel}"
@@ -129,6 +130,15 @@ Margin="10" LabelText="Center Position X: " Minimum="0" Maximum="1.0"/>
 
             <Button Content="Configure Animation" Margin="10,10,400,10" 
                     Command="{Binding OnConfigureButtonPressed}"/>
+        </StackPanel>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type easeOptionsVM:EaseOptionsViewModel}">
+        <StackPanel Orientation="Vertical">
+            <controls:Slider MinHeight="60" Minimum="1" Maximum="1000"
+                             LabelText="{Binding ConstantName, UpdateSourceTrigger=PropertyChanged}"
+                Value="{Binding Value, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                />
         </StackPanel>
     </DataTemplate>
 

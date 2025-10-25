@@ -19,8 +19,8 @@ namespace WPFGameEngine.Factories.Ease
                 case nameof(EaseInQuad):
                     ease = new EaseInQuad();
                     break;
-                case nameof(ConstantEase):
-                    ease = new ConstantEase();
+                case nameof(NoEase):
+                    ease = new NoEase();
                     break;
                 default:
                     throw new Exception("Unsupported Ease Type!");

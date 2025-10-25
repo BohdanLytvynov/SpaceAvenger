@@ -4,11 +4,11 @@ using WPFGameEngine.WPF.GE.Math.Ease.Base;
 namespace WPFGameEngine.WPF.GE.Math.Ease.Polynomial
 {
     [VisibleInEditor(FactoryName = nameof(EaseInQuad),
-        DisplayName = "Ease In Quad", 
+        DisplayName = "Ease In Quad f(t)=t^2", 
         GameObjectType = Enums.GEObjectType.Ease)]
-    public class EaseInQuad : IEase
+    public class EaseInQuad : EaseBase, IEase
     {
-        public double Ease(double t)
+        public override double Ease(double t)
         {
             return t * t;
         }

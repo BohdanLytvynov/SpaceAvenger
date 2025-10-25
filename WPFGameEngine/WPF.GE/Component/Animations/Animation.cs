@@ -217,11 +217,11 @@ namespace WPFGameEngine.WPF.GE.Component.Animations
                 Y = FrameHeight * m_current_row
             };
 
-            var cropped = new CroppedBitmap(m_Texture, rect);
-
 #if DEBUG
             Debug.WriteLine($"Rect: X:{rect.X} Y: {rect.Y} W:{rect.Width} H:{rect.Height}");
 #endif
+
+            var cropped = new CroppedBitmap(m_Texture, rect);
 
             if (Freeze)
                 cropped.Freeze();
@@ -245,6 +245,12 @@ namespace WPFGameEngine.WPF.GE.Component.Animations
             //1 Calculate local time
             m_current_local_time = (totalTime.TotalMilliseconds - m_start_global_time)
                 * AnimationSpeed;
+
+#if DEBUG
+            Debug.WriteLine($"CLT: {m_current_local_time}");
+
+            Debug.WriteLine($"CFI: {m_curr_frame_index}");
+#endif
 
             if (!Reverse)
                 Direct();

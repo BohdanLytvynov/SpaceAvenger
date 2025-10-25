@@ -4,16 +4,19 @@ using WPFGameEngine.WPF.GE.Math.Ease.Base;
 namespace WPFGameEngine.WPF.GE.Math.Ease.Polynomial
 {
     [VisibleInEditor(FactoryName = nameof(LinearEase),
-        DisplayName = "Linear Ease", 
+        DisplayName = "Linear Ease f(t)=b*t", 
         GameObjectType = Enums.GEObjectType.Ease)]
     
-    public class LinearEase : IEase
+    public class LinearEase : EaseBase, IEase
     {
-        public double B { get; set; } = 1;
-
-        public double Ease(double t)
+        public override double Ease(double t)
         {
-            return B*t;
+            return t*Constants["B"];
+        }
+
+        public LinearEase()
+        {
+            Constants.Add("B", 1);
         }
     }
 }

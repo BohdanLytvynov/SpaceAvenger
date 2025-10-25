@@ -3,12 +3,14 @@ using OxyPlot.Axes;
 using OxyPlot.Series;
 using SpaceAvenger.Editor.Mock;
 using SpaceAvenger.Editor.Services.Base;
+using SpaceAvenger.Editor.ViewModels.EaseOptions;
 using SpaceAvenger.Editor.ViewModels.Options;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Xml.Linq;
 using ViewModelBaseLibDotNetCore.Commands;
 using ViewModelBaseLibDotNetCore.VM;
 using WPFGameEngine.Attributes.Editor;
@@ -21,6 +23,7 @@ using WPFGameEngine.WPF.GE.AnimationFrames;
 using WPFGameEngine.WPF.GE.Component.Animations;
 using WPFGameEngine.WPF.GE.Component.Transforms;
 using WPFGameEngine.WPF.GE.GameObjects;
+using WPFGameEngine.WPF.GE.Math.Ease.Base;
 
 namespace SpaceAvenger.Editor.ViewModels
 {
@@ -38,11 +41,12 @@ namespace SpaceAvenger.Editor.ViewModels
         private IResourceLoader m_resourceLoader;
         private ObservableCollection<string> m_resourceNames;
         private ObservableCollection<OptionsViewModel> m_EasingTypes;
+        private ObservableCollection<EaseOptionsViewModel> m_EaseConstants;
         private OptionsViewModel m_SelectedEase;
         private string m_SelectedResourceName;
         private IAssemblyLoader m_assemblyLoader;
         private IEaseFactory m_easeFactory;
-        private Visibility m_ConstantCVisibility;
+        private IEase m_SelectedEaseFunction;
 
         private double m_currentIndex;
         private double m_Rows;
@@ -58,8 +62,7 @@ namespace SpaceAvenger.Editor.ViewModels
         #region Properties
         public double CurrentIndex 
         { get => m_currentIndex; set => Set(ref m_currentIndex, value); }
-        public Visibility ConstantCVisibility 
-        { get => m_ConstantCVisibility; set => Set(ref m_ConstantCVisibility, value); }
+
         public double TotalTime 
         { get=>m_TotalTime; set => Set(ref m_TotalTime, value); }
         public int TotalFrameCount 
@@ -111,6 +114,10 @@ namespace SpaceAvenger.Editor.ViewModels
                 m_animation.Reverse = value;
             }
         }
+
+        public ObservableCollection<EaseOptionsViewModel> EaseConstants 
+        { get=> m_EaseConstants; set => Set(ref m_EaseConstants, value); }
+
         public ObservableCollection<string> ResourceNames 
         {
             get=> m_resourceNames;
@@ -131,7 +138,11 @@ namespace SpaceAvenger.Editor.ViewModels
                 Set(ref m_SelectedEase, value);
                 if (value != null)
                 {
-                    BuildSelectedFunction(value.FactoryName);
+                    m_SelectedEaseFunction = m_easeFactory.Create(value.FactoryName);
+
+                    UpdateEaseFunctionsConstants(m_SelectedEaseFunction);
+
+                    DrawSelectedFunction(m_SelectedEaseFunction);
                 }
             }
         }
@@ -181,8 +192,8 @@ namespace SpaceAvenger.Editor.ViewModels
             m_resourceLoader = resourceLoader ?? throw new ArgumentNullException(nameof(resourceLoader));
             m_resourceNames = new ObservableCollection<string>();
             m_EasingTypes = new ObservableCollection<OptionsViewModel>();
+            m_EaseConstants = new ObservableCollection<EaseOptionsViewModel>();
             m_SelectedEase = new OptionsViewModel();
-            m_ConstantCVisibility = Visibility.Collapsed;
 
             var types = m_assemblyLoader["WPFGameEngine"].GetTypes();
 
@@ -228,8 +239,8 @@ namespace SpaceAvenger.Editor.ViewModels
 
             OnStartButtonPressed = new Command
                 (
-                OnStartButtonPressedExecute,
-                CanOnStartButtonPressedExecute
+                    OnStartButtonPressedExecute,
+                    CanOnStartButtonPressedExecute
                 );
 
             OnPauseButtonPressed = new Command
@@ -279,7 +290,8 @@ namespace SpaceAvenger.Editor.ViewModels
         #endregion
 
         #region On Start Button Pressed
-        private bool CanOnStartButtonPressedExecute(object p) => !m_animation.IsRunning;
+        private bool CanOnStartButtonPressedExecute(object p) => 
+            !m_animation.IsRunning && m_animation.AnimationFrames.Count > 0;
             
         private void OnStartButtonPressedExecute(object p)
         { 
@@ -299,7 +311,8 @@ namespace SpaceAvenger.Editor.ViewModels
         #endregion
 
         #region On Reset Button Pressed
-        private bool CanOnResetButtonPressedExecute(object p) => !m_animation.IsRunning;
+        private bool CanOnResetButtonPressedExecute(object p) => !m_animation.IsRunning
+            && m_animation.AnimationFrames.Count > 0;
 
         private void OnResetButtonPressedExecute(object p)
         {
@@ -313,7 +326,30 @@ namespace SpaceAvenger.Editor.ViewModels
             m_gameView.Stop();
         }
 
-        private void BuildSelectedFunction(string name)
+        private void UpdateEaseFunctionsConstants(IEase func)
+        {
+            foreach (var item in EaseConstants)
+            {
+                item.OnValueChanged -= EaseConstVM_OnValueChanged;
+            }
+            EaseConstants.Clear();
+            foreach (var item in func.Constants)
+            {
+                EaseOptionsViewModel easeConstVM = new EaseOptionsViewModel
+                (
+                    item.Key, item.Value
+                );
+                easeConstVM.OnValueChanged += EaseConstVM_OnValueChanged;
+                EaseConstants.Add(easeConstVM);
+            }
+        }
+
+        private void EaseConstVM_OnValueChanged()
+        {
+            DrawSelectedFunction(m_SelectedEaseFunction);
+        }
+
+        private void DrawSelectedFunction(IEase func)
         {
             //1) Build Axes
             var Plot = new PlotModel();
@@ -329,9 +365,6 @@ namespace SpaceAvenger.Editor.ViewModels
                 Title = "Y",
                 AxislineColor = OxyColors.DarkGreen
             });
-
-            //2) Get Ease function
-            var func = m_easeFactory.Create(name);
             
             int start = 0;
             int end = m_animation.FrameCount;
@@ -339,12 +372,19 @@ namespace SpaceAvenger.Editor.ViewModels
             { Title = SelectedEase.DisplayName, 
                 Color = OxyColors.DarkGray, 
                 StrokeThickness = 3 };
-            
+
+            m_animation.AnimationFrames.Clear();
+            //2) Apply Constants for Ease
+            foreach (var c in EaseConstants)
+            {
+                func.Constants[c.ConstantName] = c.Value;
+            }
+            //3) Calculate Animation LifeSpan
             for (int i = start; i < end; ++i)
             {
-                var y0 = func.Ease((float)i/(float)end);//Normalized Ease function y0
-                var y1 = func.Ease((float)(i + 1) / (float)end);
-                var delta = y1 - y0;
+                var y0 = func.Ease((float)i / (float)end);//Normalized Ease function y0
+                var y1 = func.Ease((float)(i + 1) / (float)end);//Normalized Ease function y1
+                var delta = func.GetDelta(y0, y1);
                 m_animation.AnimationFrames.Add(new AnimationFrame(delta * TotalTime));
                 graph.Points.Add(new DataPoint(i, y0));
             }
