@@ -15,6 +15,24 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animations
         private IResourceLoader m_resourceLoader;
         private IAssemblyLoader m_assemblyLoader;
         private IEaseFactory m_easeFactory;
+        private int m_rows;
+        private int m_columns;
+        private double m_duration;
+        private string m_easeFunction;
+        private string m_resourceName;
+        #endregion
+
+        #region Properties
+        public int Rows 
+        { get=> m_rows; set=> Set(ref m_rows, value); }
+        public int Columns 
+        { get=> m_columns; set=> Set(ref m_columns, value); }
+        public double Duration
+        { get=> m_duration; set=> Set(ref m_duration, value); }
+        public string EaseFunction 
+        { get=> m_easeFunction; set=> Set(ref m_easeFunction, value); }
+        public string ResourceName 
+        { get=> m_resourceName; set=> Set(ref m_resourceName, value); }
         #endregion
 
         #region Commands
@@ -30,6 +48,8 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animations
             m_easeFactory = easeFactory ?? throw new ArgumentNullException(nameof(easeFactory));
             m_assemblyLoader = assemblyLoader ?? throw new ArgumentNullException(nameof(assemblyLoader));
             m_resourceLoader = resourceLoader ?? throw new ArgumentNullException(nameof(resourceLoader));
+            m_resourceName = string.Empty;
+            m_easeFunction = string.Empty;
             #endregion
 
             #region Init Commands
@@ -58,13 +78,33 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animations
         private void ShowConfig()
         {
             var animationConfigurationViewModel = new AnimationConfigurationViewModel(m_resourceLoader, m_assemblyLoader, 
-                m_easeFactory);
+                m_easeFactory, GameObject.GetComponent<Animation>());
             var animConfigurationWindow = new AnimationConfigurationWindow();
             animationConfigurationViewModel.Dispatcher = animConfigurationWindow.Dispatcher;
+            animationConfigurationViewModel.OnConfigurationFinished += AnimationConfigurationViewModel_OnConfigurationFinished;
+            animationConfigurationViewModel.OnConfigurationCanceled += () =>
+            {
+                animConfigurationWindow.Close();
+            };
             animConfigurationWindow.DataContext = animationConfigurationViewModel;
+
+            animConfigurationWindow.Closed += (object o, EventArgs e) =>
+            {
+                animationConfigurationViewModel.OnWindowClosing();
+                animationConfigurationViewModel.OnConfigurationFinished -= AnimationConfigurationViewModel_OnConfigurationFinished;
+                animationConfigurationViewModel.OnConfigurationCanceled -= () => { };
+            };
 
             animConfigurationWindow.Topmost = true;
             animConfigurationWindow.Show();
+        }
+
+        private void AnimationConfigurationViewModel_OnConfigurationFinished(Animation obj)
+        {
+            if (GameObject.GetComponent<Animation>() != null)
+                GameObject.UnregisterComponent(nameof(Animation));
+
+            GameObject.RegisterComponent(obj);
         }
 
         #endregion

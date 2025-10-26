@@ -383,6 +383,16 @@ namespace WPFGameEngine.WPF.GE.GameObjects
             }
         }
 
+        public IGameObject UnregisterComponent<TComponent>() 
+            where TComponent : IGEComponent
+        {
+            string name = typeof(TComponent).Name;
+
+            if(m_components.ContainsKey(name))
+                m_components.Remove(name);
+            return this;
+        }
+
         #endregion
     }
 }

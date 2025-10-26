@@ -30,6 +30,9 @@ namespace WPFGameEngine.WPF.GE.GameObjects
 
         IGameObject UnregisterComponent(string componentName);
 
+        IGameObject UnregisterComponent<TComponent>()
+            where TComponent : IGEComponent;
+
         void AddChild(IGameObject child);
 
         bool RemoveChild(Func<IGameObject, bool> predicate, bool recursive = false);

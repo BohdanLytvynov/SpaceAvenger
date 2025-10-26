@@ -127,7 +127,7 @@ Margin="10" LabelText="Center Position X: " Minimum="0" Maximum="1.0"/>
             <Rectangle Style="{StaticResource BorderRectStyle}"/>
             <TextBlock Text="{Binding ComponentName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DescLabel}"/>
             <Rectangle Style="{StaticResource BorderRectStyle}"/>
-
+            
             <Button Content="Configure Animation" Margin="10,10,400,10" 
                     Command="{Binding OnConfigureButtonPressed}"/>
         </StackPanel>

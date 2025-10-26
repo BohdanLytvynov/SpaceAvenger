@@ -41,7 +41,8 @@
                             Value="{Binding CurrentIndex, UpdateSourceTrigger=PropertyChanged}"
                             Foreground="Black"
                             Minimum="0" 
-                            Maximum="{Binding TotalFrameCount, UpdateSourceTrigger=PropertyChanged}"/>
+                            Maximum="{Binding FrameIndexes, UpdateSourceTrigger=PropertyChanged}"
+                            IsEnabled="False"/>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5,0,0">
                             <Button Content="Start" Margin="0,0,10,0"
                                     Command="{Binding OnStartButtonPressed}"/>
@@ -125,8 +126,8 @@
                 <ColumnDefinition Width="120"/>
                 <ColumnDefinition Width="30"/>
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="3" Content="Confirm"/>
-            <Button Grid.Column="1" Content="Cancel"/>
+            <Button Grid.Column="3" Content="Confirm" Command="{Binding OnConfirmButtonPressed}"/>
+            <Button Grid.Column="1" Content="Cancel" Command="{Binding OnCancelButtonPressed}"/>
         </Grid>
     </Grid>
 </Window>

@@ -5,16 +5,16 @@ using WPFGameEngine.Attributes.Editor;
 using WPFGameEngine.Timers.Base;
 using WPFGameEngine.WPF.GE.AnimationFrames;
 using WPFGameEngine.WPF.GE.Component.Base;
+using WPFGameEngine.WPF.GE.Validation.Base;
 
 namespace WPFGameEngine.WPF.GE.Component.Animations
 {
     [VisibleInEditor(FactoryName = nameof(Animation),
         DisplayName = "Animation",
         GameObjectType = Enums.GEObjectType.Component)]
-    public class Animation : ComponentBase, IAnimation
+    public class Animation : ComponentBase, IAnimation, IValidatable
     {
         #region Fields
-
         private double m_start_global_time;
         private double m_current_local_time;
         private double m_acum;
@@ -33,6 +33,7 @@ namespace WPFGameEngine.WPF.GE.Component.Animations
         #endregion
 
         #region Properties
+
         public int CurrentFrameIndex { get => m_curr_frame_index; }
 
         public bool IsRunning { get => m_start; }
@@ -105,6 +106,21 @@ namespace WPFGameEngine.WPF.GE.Component.Animations
         public BitmapSource Texture { get => m_Texture; set => m_Texture = value; }
         public bool Freeze { get; init; }
         public List<IAnimationFrame> AnimationFrames { get => m_frames; }
+        public string EaseType { get; set; }
+        public string EaseFactoryName { get; set; }
+        public double TotalTime { get; set; }
+        public string ResourceName { get; set; }
+
+        public bool Completed 
+        {
+            get 
+            {
+                if (IsLooping)
+                    return false;
+                else
+                    return m_curr_frame_index == AnimationFrames.Count - 1;
+            }
+        }
 
         #endregion
 
@@ -150,7 +166,7 @@ namespace WPFGameEngine.WPF.GE.Component.Animations
 
             IsLooping = false;
 
-            AnimationSpeed = 0;
+            AnimationSpeed = 1;
 
             m_frames = new List<IAnimationFrame>();
 
@@ -217,10 +233,9 @@ namespace WPFGameEngine.WPF.GE.Component.Animations
                 Y = FrameHeight * m_current_row
             };
 
-#if DEBUG
-            Debug.WriteLine($"Rect: X:{rect.X} Y: {rect.Y} W:{rect.Width} H:{rect.Height}");
-#endif
-
+//#if DEBUG
+//            Debug.WriteLine($"Rect: X:{rect.X} Y: {rect.Y} W:{rect.Width} H:{rect.Height}");
+//#endif
             var cropped = new CroppedBitmap(m_Texture, rect);
 
             if (Freeze)
@@ -247,9 +262,9 @@ namespace WPFGameEngine.WPF.GE.Component.Animations
                 * AnimationSpeed;
 
 #if DEBUG
-            Debug.WriteLine($"CLT: {m_current_local_time}");
+            //Debug.WriteLine($"CLT: {m_current_local_time}");
 
-            Debug.WriteLine($"CFI: {m_curr_frame_index}");
+            //Debug.WriteLine($"CFI: {m_curr_frame_index}");
 #endif
 
             if (!Reverse)
@@ -305,6 +320,7 @@ namespace WPFGameEngine.WPF.GE.Component.Animations
             {
                 m_acum += m_frames[m_current_column].Lifespan;
                 m_current_column--;
+                ++m_curr_frame_index;
             }
 
             if (m_current_column <= 0)
@@ -312,6 +328,14 @@ namespace WPFGameEngine.WPF.GE.Component.Animations
                 m_current_row--;
                 m_current_column = Columns - 1;
             }
+        }
+
+        public bool Validate()
+        {
+            return AnimationFrames.Count > 0 && m_Texture != null
+                && TotalTime > 0 && AnimationSpeed > 0 
+                && !string.IsNullOrEmpty(EaseType)
+                && !string.IsNullOrEmpty(EaseFactoryName);
         }
 
         #endregion

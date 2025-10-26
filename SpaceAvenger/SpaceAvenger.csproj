@@ -14,6 +14,7 @@
     <None Remove="Resources\Content\Animations\PulsatingStar\03.png" />
     <None Remove="Resources\Content\Animations\PulsatingStar\04.png" />
     <None Remove="Resources\Content\Animations\PulsatingStar\05.png" />
+    <None Remove="Resources\Content\Animations\Test\TestAnim.png" />
     <None Remove="Resources\Content\Backgrounds\ChooseProfilePage\SAChooseLevels.jpg" />
     <None Remove="Resources\Content\Backgrounds\ChooseProfilePage\SAChooseLevels1.jpg" />
     <None Remove="Resources\Content\Backgrounds\ChooseProfilePage\SAChooseProfile.jpg" />
@@ -53,6 +54,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\Content\Animations\PulsatingStar\05.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Content\Animations\Test\TestAnim.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\Content\Backgrounds\ChooseProfilePage\SAChooseProfile.jpg">

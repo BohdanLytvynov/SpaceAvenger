@@ -9,6 +9,16 @@ namespace WPFGameEngine.WPF.GE.Component.Animations
     public interface IAnimation : IGEComponent
     {
         #region Properties
+        public bool Completed { get; }
+
+        public string ResourceName { get; set; }
+
+        public double TotalTime { get; set; }
+
+        public  string EaseFactoryName { get; set; }
+
+        public string EaseType { get; set; }
+
         public int CurrentFrameIndex { get; }
 
         public bool IsRunning { get; }

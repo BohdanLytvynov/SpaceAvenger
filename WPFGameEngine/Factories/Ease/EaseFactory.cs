@@ -1,6 +1,4 @@
-﻿using System.Reflection.Metadata;
-using WPFGameEngine.WPF.GE.Math.Ease.Base;
-using WPFGameEngine.WPF.GE.Math.Ease.Constant;
+﻿using WPFGameEngine.WPF.GE.Math.Ease.Base;
 using WPFGameEngine.WPF.GE.Math.Ease.Polynomial;
 
 namespace WPFGameEngine.Factories.Ease
@@ -11,6 +9,9 @@ namespace WPFGameEngine.Factories.Ease
         {
             IEase ease = null;
 
+            if (string.IsNullOrEmpty(name))
+                return ease;
+
             switch (name)
             {
                 case nameof(LinearEase):
@@ -18,9 +19,6 @@ namespace WPFGameEngine.Factories.Ease
                     break;
                 case nameof(EaseInQuad):
                     ease = new EaseInQuad();
-                    break;
-                case nameof(NoEase):
-                    ease = new NoEase();
                     break;
                 default:
                     throw new Exception("Unsupported Ease Type!");
