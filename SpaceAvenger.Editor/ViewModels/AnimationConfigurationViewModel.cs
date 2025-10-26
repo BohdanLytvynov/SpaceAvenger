@@ -49,6 +49,9 @@ namespace SpaceAvenger.Editor.ViewModels
         private IEaseFactory m_easeFactory;
         private IEase m_SelectedEaseFunction;
 
+        private bool m_ResourceKeyEnabled;
+        private bool m_EaseEnabled;
+
         private double m_currentIndex;
         private double m_Rows;
         private double m_Columns;
@@ -62,6 +65,10 @@ namespace SpaceAvenger.Editor.ViewModels
         #endregion
 
         #region Properties
+        public bool ResourceKeyEnabled 
+        { get=> m_ResourceKeyEnabled; set => Set(ref m_ResourceKeyEnabled, value); }
+        public bool EaseEnabled 
+        { get=> m_EaseEnabled; set => Set(ref m_EaseEnabled, value); }
         public double FrameIndexes 
         { get => m_FrameIndexes; set => Set(ref m_FrameIndexes, value); }
         public double CurrentIndex 
@@ -73,6 +80,8 @@ namespace SpaceAvenger.Editor.ViewModels
             {
                 Set(ref m_TotalTime, value); 
                 m_animation.TotalTime = value;
+                EnableEaseCombobox();
+                EnableResourceCombobox();
             }
         }
         public int TotalFrameCount 
@@ -85,7 +94,9 @@ namespace SpaceAvenger.Editor.ViewModels
                 Set(ref m_Rows, value);
                 m_animation.Rows = (int)value;
                 TotalFrameCount = m_animation.FrameCount;
-                FrameIndexes = TotalFrameCount - 1;
+                FrameIndexes = TotalFrameCount - 2;//Frame LastIndex is n-1 and also we need to subtract 1 cause we have already displayed the first frame
+                EnableEaseCombobox();
+                EnableResourceCombobox();
             }
         }
         public double Columns
@@ -96,7 +107,9 @@ namespace SpaceAvenger.Editor.ViewModels
                 Set(ref m_Columns, value);
                 m_animation.Columns = (int)value;
                 TotalFrameCount = m_animation.FrameCount;
-                FrameIndexes = TotalFrameCount - 1;
+                FrameIndexes = TotalFrameCount - 2;
+                EnableEaseCombobox();
+                EnableResourceCombobox();
             }
         }
         public double AnimationSpeed
@@ -106,6 +119,8 @@ namespace SpaceAvenger.Editor.ViewModels
             {
                 Set(ref m_AnimationSpeed, value);
                 m_animation.AnimationSpeed = value;
+                EnableEaseCombobox();
+                EnableResourceCombobox();
             }
         }
         public bool IsLooping
@@ -124,6 +139,7 @@ namespace SpaceAvenger.Editor.ViewModels
             {
                 Set(ref m_IsReversed, value);
                 m_animation.Reverse = value;
+                m_animation.Reset(m_animation.Reverse);
             }
         }
         public ObservableCollection<EaseOptionsViewModel> EaseConstants 
@@ -153,6 +169,9 @@ namespace SpaceAvenger.Editor.ViewModels
                     DrawSelectedFunction(m_SelectedEaseFunction);
                     m_animation.EaseFactoryName = value.FactoryName;
                     m_animation.EaseType = value.DisplayName;
+
+                    EnableEaseCombobox();
+                    EnableResourceCombobox();
                 }
             }
         }
@@ -246,6 +265,8 @@ namespace SpaceAvenger.Editor.ViewModels
                 m_SelectedEase = new OptionsViewModel(old.EaseType, old.EaseFactoryName);
                 m_SelectedResourceName = string.Empty;
                 m_SelectedResourceName = old.ResourceName ?? string.Empty;
+                EnableEaseCombobox();
+                EnableResourceCombobox();
             }
 
             m_gameObject.RegisterComponent(m_animation);
@@ -312,20 +333,18 @@ namespace SpaceAvenger.Editor.ViewModels
            m_animation.Validate() && !m_animation.IsRunning;
             
         private void OnStartButtonPressedExecute(object p)
-        { 
-            if(!m_animation.IsRunning)
-                m_animation.Start();
+        {
+            m_animation.Start();
         }
         #endregion
 
         #region On Pause Button Pressed
         private bool CanOnPauseButtonPressedExecute(object p) => 
-            m_animation.IsRunning && m_animation.Validate();
+            m_animation.IsRunning && m_animation.Validate() && !m_animation.Completed;
 
         private void OnPauseButtonPressedExecute(object p)
         {
-            if (m_animation.IsRunning)
-                m_animation.Stop();
+            m_animation.Stop();
         }
         #endregion
 
@@ -434,19 +453,20 @@ namespace SpaceAvenger.Editor.ViewModels
         {
             if (m_animation.IsRunning)
                 CurrentIndex = m_animation.CurrentFrameIndex;
+        }
 
-            //var texture = m_animation.Texture;
-            //if (texture != null && m_gameObject != null)
-            //{
-            //    var width = m_gameView.ActualWidth;
-            //    var height = m_gameView.ActualHeight;
+        private void EnableEaseCombobox()
+        {
+            EaseEnabled = TotalTime > 0 && TotalFrameCount > 0 && AnimationSpeed > 0;
+        }
 
-            //    double lamdaX = width / texture.Width;
-            //    double lamdaY = height / texture.Height;
-
-            //    m_gameObject.GetComponent<TransformComponent>().Scale = new System.Drawing.SizeF(
-            //        (float)lamdaX, (float)lamdaY);
-            //}
+        private void EnableResourceCombobox()
+        {
+            ResourceKeyEnabled = TotalTime > 0 && 
+                TotalFrameCount > 0 
+                && AnimationSpeed > 0 
+                && m_SelectedEaseFunction != null 
+                && m_animation.AnimationFrames.Count > 0;
         }
 
         #endregion

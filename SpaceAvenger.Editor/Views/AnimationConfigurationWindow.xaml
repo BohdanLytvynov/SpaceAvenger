@@ -67,6 +67,7 @@
                                           SelectedItem="{Binding SelectedEase, 
                                     UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                           DisplayMemberPath="DisplayName"
+                                          IsEnabled="{Binding EaseEnabled, UpdateSourceTrigger=PropertyChanged}"
                                           />
                             </StackPanel>
                             <oxy:PlotView 
@@ -85,7 +86,8 @@
                         <TextBlock Text="Select an Atlas:" Margin="0,0,10,0" Style="{StaticResource FieldName}"/>
                         <ComboBox MinWidth="110" IsEditable="True" Style="{StaticResource ConboboxStyle}"
                                   ItemsSource="{Binding ResourceNames, UpdateSourceTrigger=PropertyChanged}"
-                                  SelectedItem="{Binding SelectedResourceName, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                                  SelectedItem="{Binding SelectedResourceName, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                  IsEnabled="{Binding ResourceKeyEnabled, UpdateSourceTrigger=PropertyChanged}"/>
                     </StackPanel>
 
                     <controls:Slider LabelText="Rows:" Minimum="1" Maximum="100" Margin="5"

@@ -3,6 +3,9 @@
     <!--#region Test Anim -->
     <ImageSource x:Key="AnimTest">pack://siteoforigin:,,,/Resources/Content/Animations/Test/TestAnim.png
     </ImageSource>
+    
+    <ImageSource x:Key="AnimTest2">pack://siteoforigin:,,,/Resources/Content/Animations/Test/TestAnim2.png
+    </ImageSource>
     <!--#endregion-->
 
     <!--#region BackGrounds-GamePage -->

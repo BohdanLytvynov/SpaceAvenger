@@ -2,6 +2,7 @@
 using SpaceAvenger.Editor.ViewModels.Components.Base;
 using SpaceAvenger.Editor.Views;
 using System.Windows.Input;
+using System.Windows.Media;
 using ViewModelBaseLibDotNetCore.Commands;
 using WPFGameEngine.Factories.Ease;
 using WPFGameEngine.WPF.GE.Component.Animations;
@@ -20,6 +21,8 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animations
         private double m_duration;
         private string m_easeFunction;
         private string m_resourceName;
+        private ImageSource m_imgSource;
+        private AnimationConfigurationWindow m_animConfigurationWindow;
         #endregion
 
         #region Properties
@@ -33,6 +36,8 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animations
         { get=> m_easeFunction; set=> Set(ref m_easeFunction, value); }
         public string ResourceName 
         { get=> m_resourceName; set=> Set(ref m_resourceName, value); }
+        public ImageSource ImageSource 
+        { get=> m_imgSource; set => Set(ref m_imgSource, value); }
         #endregion
 
         #region Commands
@@ -50,6 +55,7 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animations
             m_resourceLoader = resourceLoader ?? throw new ArgumentNullException(nameof(resourceLoader));
             m_resourceName = string.Empty;
             m_easeFunction = string.Empty;
+            m_imgSource = resourceLoader.Load<ImageSource>("Empty");
             #endregion
 
             #region Init Commands
@@ -79,24 +85,24 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animations
         {
             var animationConfigurationViewModel = new AnimationConfigurationViewModel(m_resourceLoader, m_assemblyLoader, 
                 m_easeFactory, GameObject.GetComponent<Animation>());
-            var animConfigurationWindow = new AnimationConfigurationWindow();
-            animationConfigurationViewModel.Dispatcher = animConfigurationWindow.Dispatcher;
+            m_animConfigurationWindow = new AnimationConfigurationWindow();
+            animationConfigurationViewModel.Dispatcher = m_animConfigurationWindow.Dispatcher;
             animationConfigurationViewModel.OnConfigurationFinished += AnimationConfigurationViewModel_OnConfigurationFinished;
             animationConfigurationViewModel.OnConfigurationCanceled += () =>
             {
-                animConfigurationWindow.Close();
+                m_animConfigurationWindow.Close();
             };
-            animConfigurationWindow.DataContext = animationConfigurationViewModel;
+            m_animConfigurationWindow.DataContext = animationConfigurationViewModel;
 
-            animConfigurationWindow.Closed += (object o, EventArgs e) =>
+            m_animConfigurationWindow.Closed += (object o, EventArgs e) =>
             {
                 animationConfigurationViewModel.OnWindowClosing();
                 animationConfigurationViewModel.OnConfigurationFinished -= AnimationConfigurationViewModel_OnConfigurationFinished;
                 animationConfigurationViewModel.OnConfigurationCanceled -= () => { };
             };
 
-            animConfigurationWindow.Topmost = true;
-            animConfigurationWindow.Show();
+            m_animConfigurationWindow.Topmost = true;
+            m_animConfigurationWindow.Show();
         }
 
         private void AnimationConfigurationViewModel_OnConfigurationFinished(Animation obj)
@@ -105,6 +111,13 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animations
                 GameObject.UnregisterComponent(nameof(Animation));
 
             GameObject.RegisterComponent(obj);
+            Rows = obj.Rows;
+            Columns = obj.Columns;
+            Duration = obj.TotalTime;
+            EaseFunction = obj.EaseType;
+            ResourceName = obj.ResourceName;
+
+            m_animConfigurationWindow.Close();
         }
 
         #endregion

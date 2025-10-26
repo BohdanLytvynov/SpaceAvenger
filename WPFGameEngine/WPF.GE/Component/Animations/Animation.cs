@@ -205,8 +205,6 @@ namespace WPFGameEngine.WPF.GE.Component.Animations
 
             m_current_local_time = 0f;
 
-            m_curr_frame_index = 0;
-
             m_acum = 0f;
 
             if (!reverse)//Case of the direct animation
@@ -214,12 +212,16 @@ namespace WPFGameEngine.WPF.GE.Component.Animations
                 m_current_row = 0;
 
                 m_current_column = 0;
+
+                m_curr_frame_index = 0;
             }
             else//Case of the Reverse Animation
             {
                 m_current_row = Rows - 1;
 
                 m_current_column = Columns - 1;
+
+                m_curr_frame_index = AnimationFrames.Count - 1;
             }
         }
 
@@ -233,9 +235,9 @@ namespace WPFGameEngine.WPF.GE.Component.Animations
                 Y = FrameHeight * m_current_row
             };
 
-//#if DEBUG
-//            Debug.WriteLine($"Rect: X:{rect.X} Y: {rect.Y} W:{rect.Width} H:{rect.Height}");
-//#endif
+#if DEBUG
+            Debug.WriteLine($"Rect: X:{rect.X} Y: {rect.Y} W:{rect.Width} H:{rect.Height}");
+#endif
             var cropped = new CroppedBitmap(m_Texture, rect);
 
             if (Freeze)
@@ -288,6 +290,9 @@ namespace WPFGameEngine.WPF.GE.Component.Animations
                 Stop();
             }
 
+            if (!m_start)
+                return;
+
             if (m_current_local_time >= m_frames[m_curr_frame_index].Lifespan + m_acum)
             {
                 m_acum += m_frames[m_curr_frame_index].Lifespan;
@@ -300,14 +305,14 @@ namespace WPFGameEngine.WPF.GE.Component.Animations
                 ++m_current_row;
                 m_current_column = 0;
             }
-
+            
             //Debug.WriteLine($"r: {m_current_row} c: {m_current_column}" +
             //    $"  Current LT: {m_current_local_time} Acum: {m_acum} CurrFrame: {m_curr_frame_index}");
         }
         //Need modification
         private void Inverse()
         {
-            if (IsLooping && m_current_row == 0 && m_current_column == 0)
+            if (IsLooping && m_current_row == 0 && m_current_column == 0 && m_curr_frame_index == 0)
             {
                 Stop();
 
@@ -315,19 +320,29 @@ namespace WPFGameEngine.WPF.GE.Component.Animations
 
                 Start();
             }
-
-            if (m_current_local_time >= m_frames[m_current_column].Lifespan + m_acum)
+            else if(m_curr_frame_index == 0 && m_current_row == 0 && m_current_column == 0)
             {
-                m_acum += m_frames[m_current_column].Lifespan;
-                m_current_column--;
-                ++m_curr_frame_index;
+                Stop();
             }
 
-            if (m_current_column <= 0)
+            if (!m_start)
+                return;
+
+            if (m_current_local_time >= m_frames[m_curr_frame_index].Lifespan + m_acum)
+            {
+                m_acum += m_frames[m_curr_frame_index].Lifespan;
+                --m_current_column;
+                --m_curr_frame_index;
+            }
+
+            if (m_current_column < 0)
             {
                 m_current_row--;
                 m_current_column = Columns - 1;
             }
+
+            //Debug.WriteLine($"r: {m_current_row} c: {m_current_column}" +
+            //    $"  Current LT: {m_current_local_time} Acum: {m_acum} CurrFrame: {m_curr_frame_index}");
         }
 
         public bool Validate()
