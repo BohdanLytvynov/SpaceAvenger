@@ -116,6 +116,7 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animations
             Duration = obj.TotalTime;
             EaseFunction = obj.EaseType;
             ResourceName = obj.ResourceName;
+            ImageSource = m_resourceLoader.Load<ImageSource>(ResourceName);
 
             m_animConfigurationWindow.Close();
         }

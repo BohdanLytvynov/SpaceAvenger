@@ -99,10 +99,19 @@ namespace WPFGameEngine.WPF.GE.Component.Animators
             m_current_animation_name = animationName;
         }
 
+        public bool Contains(string name)
+        {
+            return m_animations.ContainsKey(name);
+        }
+
         public IAnimation? this[string key]
         {
             get => m_animations[key];
-            set => m_animations[key] = value;
+            set 
+            {
+                if(!Contains(key))
+                    m_animations[key] = value; 
+            }
         }
     }
 }

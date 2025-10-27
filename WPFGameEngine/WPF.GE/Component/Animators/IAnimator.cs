@@ -35,5 +35,7 @@ namespace WPFGameEngine.WPF.GE.Component.Animations
             get;
             set;
         }
+
+        bool Contains(string name);
     }
 }

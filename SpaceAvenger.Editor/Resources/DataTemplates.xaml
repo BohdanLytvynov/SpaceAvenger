@@ -4,10 +4,12 @@
                     xmlns:tcvm="clr-namespace:SpaceAvenger.Editor.ViewModels.Components.Transform"
                     xmlns:scvm="clr-namespace:SpaceAvenger.Editor.ViewModels.Components.Sprites"
                     xmlns:acvm="clr-namespace:SpaceAvenger.Editor.ViewModels.Components.Animations"
+                    xmlns:animcvm="clr-namespace:SpaceAvenger.Editor.ViewModels.Components.Animators"
                     xmlns:controls="clr-namespace:WPFGameEngine.Editor.Controls;assembly=WPFGameEngine"
                     xmlns:diag="clr-namespace:System.Diagnostics;assembly=WindowsBase"
                     xmlns:options="clr-namespace:SpaceAvenger.Editor.ViewModels.Options"
                     xmlns:easeOptionsVM="clr-namespace:SpaceAvenger.Editor.ViewModels.EaseOptions"
+                    xmlns:animOptions="clr-namespace:SpaceAvenger.Editor.ViewModels.AnimatorOptions"
                     >
     <!--#region Tree View Item-->
     <HierarchicalDataTemplate DataType="{x:Type tvm:TreeItemViewModel}"
@@ -127,6 +129,7 @@ Margin="10" LabelText="Center Position X: " Minimum="0" Maximum="1.0"/>
             <Rectangle Style="{StaticResource BorderRectStyle}"/>
             <TextBlock Text="{Binding ComponentName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DescLabel}"/>
             <Rectangle Style="{StaticResource BorderRectStyle}"/>
+            
             <StackPanel Orientation="Horizontal">
                 <Border Style="{StaticResource BorderRoundStyle}">
                     <Image Source="{Binding ImageSource, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
@@ -148,7 +151,57 @@ Margin="10" LabelText="Center Position X: " Minimum="0" Maximum="1.0"/>
             </StackPanel>
         </StackPanel>
     </DataTemplate>
+    
+    <DataTemplate DataType="{x:Type animOptions:AnimatorOptionViewModel}">
+        <Border Style="{StaticResource BorderRoundStyle}" Width="{Binding Path=ActualWidth,
+                    RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}}">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{Binding ShowNumber, UpdateSourceTrigger=PropertyChanged, StringFormat=№{0})}"/>
+                <Border Style="{StaticResource BorderRoundStyle}">
+                    <Image Source="{Binding ImageSource, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+           Width="150" Height="150" Stretch="Uniform" Margin="10"/>
+                </Border>
 
+                <StackPanel Orientation="Vertical" Margin="20,40,0,0">
+                    <TextBox Style="{StaticResource TxtBoxInputStyle}" Margin="0,0,0,5">
+                        <TextBox.Text>
+                            <Binding Path="AnimationName" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
+                                <Binding.ValidationRules>
+                                    <DataErrorValidationRule/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
+                    <TextBlock Text="{Binding Rows, UpdateSourceTrigger=PropertyChanged,
+            StringFormat='Rows: {0}'}" Style="{StaticResource FieldName}"/>
+                    <TextBlock Text="{Binding Columns, UpdateSourceTrigger=PropertyChanged,
+            StringFormat='Columns: {0}'}" Style="{StaticResource FieldName}"/>
+                    <TextBlock Text="{Binding Duration, UpdateSourceTrigger=PropertyChanged,
+            StringFormat='Duration: {0} ms'}" Style="{StaticResource FieldName}"/>
+                    <TextBlock Text="{Binding EaseFunction, UpdateSourceTrigger=PropertyChanged,
+            StringFormat='Easing: {0}'}" Style="{StaticResource FieldName}"/>
+                    <Button Content="Configure Animation" Margin="0,10,0,0"
+            Command="{Binding OnConfigureButtonPressed}"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+    </DataTemplate>
+    
+    <DataTemplate DataType="{x:Type animcvm:AnimatorComponentViewModel}">
+        <StackPanel Orientation="Vertical" Width="{Binding Path=ActualWidth,
+                RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}}">
+            <Rectangle Style="{StaticResource BorderRectStyle}"/>
+            <TextBlock Text="{Binding ComponentName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DescLabel}"/>
+            <Rectangle Style="{StaticResource BorderRectStyle}"/>
+            <ListView MinHeight="400" ItemsSource="{Binding AnimatorOptions, UpdateSourceTrigger=PropertyChanged}"
+                      SelectedItem="{Binding SelectedOption, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+            <StackPanel Orientation="Horizontal" Margin="5">
+                <Button Content="Add" Margin="10,0,0,0" Command="{Binding OnAddButtonPressed}"/>
+                <Button Content="Remove" Command="{Binding OnRemoveButtonPressed}"/>
+            </StackPanel>
+        </StackPanel>
+    </DataTemplate>
+        
     <DataTemplate DataType="{x:Type easeOptionsVM:EaseOptionsViewModel}">
         <StackPanel Orientation="Vertical">
             <controls:Slider MinHeight="60" Minimum="1" Maximum="1000"
