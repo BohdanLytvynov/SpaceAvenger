@@ -1,18 +1,17 @@
-﻿using System.Windows.Controls;
-using System.Windows.Media.Imaging;
+﻿using System.Windows.Media.Imaging;
 using WPFGameEngine.Timers.Base;
 using WPFGameEngine.WPF.GE.AnimationFrames;
-using WPFGameEngine.WPF.GE.Component.Base;
+using WPFGameEngine.WPF.GE.Component.Base.ImageComponents;
 
 namespace WPFGameEngine.WPF.GE.Component.Animations
 {
-    public interface IAnimation : IGEComponent
+    public interface IAnimation : IImageComponent<BitmapSource>
     {
         #region Properties
+        public Dictionary<string, double> EaseConstants { get; }
+
         public bool Completed { get; }
-
-        public string ResourceName { get; set; }
-
+        
         public double TotalTime { get; set; }
 
         public  string EaseFactoryName { get; set; }
@@ -40,11 +39,9 @@ namespace WPFGameEngine.WPF.GE.Component.Animations
         public double AnimationSpeed { get; set; }
 
         public bool IsLooping { get; set; }
-
-        public BitmapSource Texture { get; set; }
-
+  
         public List<IAnimationFrame> AnimationFrames { get; }
-
+        
         #endregion
 
         #region Functions

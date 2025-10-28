@@ -3,18 +3,16 @@ using System.Numerics;
 using System.Windows.Media;
 using WPFGameEngine.Attributes.Editor;
 using WPFGameEngine.WPF.GE.Component.Base;
+using WPFGameEngine.WPF.GE.Dto.Base;
+using WPFGameEngine.WPF.GE.Dto.Components;
 
 namespace WPFGameEngine.WPF.GE.Component.Transforms
 {    
     [VisibleInEditor(FactoryName = nameof(TransformComponent),
         DisplayName = "Transform",
         GameObjectType = Enums.GEObjectType.Component)]
-    public class TransformComponent : ComponentBase, ITransform
+    public class TransformComponent : ComponentBase, ITransform, IConvertToDto<TransformDto>
     {
-        #region Fields
-
-        #endregion
-
         #region Properties
 
         public Vector2 Position { get; set; }
@@ -64,6 +62,19 @@ namespace WPFGameEngine.WPF.GE.Component.Transforms
 
             return matrix;
         }
+
+        #region IConvertToDto
+
+        public TransformDto ToDto() =>
+            new TransformDto()
+            {
+                Position = Position,
+                Rotation = Rotation,
+                Scale = Scale,
+                CenterPosition = CenterPosition,
+            };
+
+        #endregion
 
         #endregion
     }

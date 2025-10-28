@@ -1,10 +1,10 @@
-﻿using SpaceAvenger.Editor.Services.Base;
-using SpaceAvenger.Editor.ViewModels.AnimatorOptions;
+﻿using SpaceAvenger.Editor.ViewModels.AnimatorOptions;
 using SpaceAvenger.Editor.ViewModels.Components.Base;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using ViewModelBaseLibDotNetCore.Commands;
 using WPFGameEngine.Factories.Ease;
+using WPFGameEngine.Services.Interfaces;
 using WPFGameEngine.WPF.GE.Component.Animators;
 using WPFGameEngine.WPF.GE.GameObjects;
 

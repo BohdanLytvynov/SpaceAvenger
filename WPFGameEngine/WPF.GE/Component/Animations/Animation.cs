@@ -1,10 +1,10 @@
-﻿using System.Diagnostics;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Media.Imaging;
 using WPFGameEngine.Attributes.Editor;
+using WPFGameEngine.Services.Interfaces;
 using WPFGameEngine.Timers.Base;
 using WPFGameEngine.WPF.GE.AnimationFrames;
-using WPFGameEngine.WPF.GE.Component.Base;
+using WPFGameEngine.WPF.GE.Component.Base.ImageComponents;
 using WPFGameEngine.WPF.GE.Validation.Base;
 
 namespace WPFGameEngine.WPF.GE.Component.Animations
@@ -12,7 +12,7 @@ namespace WPFGameEngine.WPF.GE.Component.Animations
     [VisibleInEditor(FactoryName = nameof(Animation),
         DisplayName = "Animation",
         GameObjectType = Enums.GEObjectType.Component)]
-    public class Animation : ComponentBase, IAnimation, IValidatable
+    public class Animation : ImageComponentBase<BitmapSource>, IAnimation, IValidatable
     {
         #region Fields
         private double m_start_global_time;
@@ -29,10 +29,11 @@ namespace WPFGameEngine.WPF.GE.Component.Animations
         private List<IAnimationFrame> m_frames;
         private double m_animSpeed;
         private bool m_IsLooping;
-        private BitmapSource m_Texture;
         #endregion
 
         #region Properties
+       
+        public Dictionary<string, double> EaseConstants { get; }
 
         public int CurrentFrameIndex { get => m_curr_frame_index; }
 
@@ -102,15 +103,13 @@ namespace WPFGameEngine.WPF.GE.Component.Animations
 
         //Weather repeating is required
         public bool IsLooping { get => m_IsLooping; set => m_IsLooping = value; }
-        //Texture that represents sprite sheet
-        public BitmapSource Texture { get => m_Texture; set => m_Texture = value; }
+        //Texture that represents sprite sheet        
         public bool Freeze { get; init; }
         public List<IAnimationFrame> AnimationFrames { get => m_frames; }
         public string EaseType { get; set; }
         public string EaseFactoryName { get; set; }
         public double TotalTime { get; set; }
-        public string ResourceName { get; set; }
-
+        
         public bool Completed 
         {
             get 
@@ -125,40 +124,15 @@ namespace WPFGameEngine.WPF.GE.Component.Animations
         #endregion
 
         #region Ctor
-
-        public Animation(
-            BitmapSource texture,
-            int rows_on_texture,
-            int columns_on_texture,
-            bool isLooping,
-            double animationSpeed,
-            List<IAnimationFrame> frames,
-            bool reverse = false,
-            bool freeze = true) : base(nameof(Animation))
+        
+        public Animation(IResourceLoader resourceLoader) : 
+            base(nameof(Animation))
         {
-            m_Texture = texture ?? throw new ArgumentNullException(nameof(texture));
+            ResourceLoader = resourceLoader ?? throw new ArgumentNullException(nameof(resourceLoader));
 
-            Rows = rows_on_texture;
+            EaseConstants = new Dictionary<string, double>();
 
-            Columns = columns_on_texture;
-
-            IsLooping = isLooping;
-
-            AnimationSpeed = animationSpeed;
-
-            m_frames = frames;
-
-            m_reverse = reverse;
-
-            Freeze = freeze;
-
-            Reset(reverse);
-
-            Stop();
-        }
-        public Animation() : base(nameof(Animation))
-        {
-            m_Texture = null;
+            Texture = null;
 
             Rows = 0;
 
@@ -235,10 +209,10 @@ namespace WPFGameEngine.WPF.GE.Component.Animations
                 Y = FrameHeight * m_current_row
             };
 
-#if DEBUG
-            Debug.WriteLine($"Rect: X:{rect.X} Y: {rect.Y} W:{rect.Width} H:{rect.Height}");
-#endif
-            var cropped = new CroppedBitmap(m_Texture, rect);
+//#if DEBUG
+//            Debug.WriteLine($"Rect: X:{rect.X} Y: {rect.Y} W:{rect.Width} H:{rect.Height}");
+//#endif
+            var cropped = new CroppedBitmap(Texture, rect);
 
             if (Freeze)
                 cropped.Freeze();
@@ -347,7 +321,7 @@ namespace WPFGameEngine.WPF.GE.Component.Animations
 
         public bool Validate()
         {
-            return AnimationFrames.Count > 0 && m_Texture != null
+            return AnimationFrames.Count > 0 && Texture != null
                 && TotalTime > 0 && AnimationSpeed > 0 
                 && !string.IsNullOrEmpty(EaseType)
                 && !string.IsNullOrEmpty(EaseFactoryName);

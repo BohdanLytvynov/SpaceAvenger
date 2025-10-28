@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <Folder Include="Serialization\" />
+    <Folder Include="WPF.GE\Serialization\Base\" />
   </ItemGroup>
 
 </Project>

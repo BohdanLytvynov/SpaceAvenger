@@ -1,9 +1,9 @@
-﻿using SpaceAvenger.Editor.Services.Base;
-using SpaceAvenger.Editor.ViewModels.Components.Base;
+﻿using SpaceAvenger.Editor.ViewModels.Components.Base;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using System.Windows.Media;
 using ViewModelBaseLibDotNetCore.Commands;
+using WPFGameEngine.Services.Interfaces;
 using WPFGameEngine.WPF.GE.Component.Sprites;
 using WPFGameEngine.WPF.GE.GameObjects;
 

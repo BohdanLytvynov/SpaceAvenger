@@ -1,53 +1,48 @@
-﻿using System.Windows;
-using System.Windows.Media;
+﻿using System.Windows.Media;
 using WPFGameEngine.Attributes.Editor;
-using WPFGameEngine.WPF.GE.Component.Base;
-using WPFGameEngine.WPF.GE.Exceptions;
+using WPFGameEngine.Services.Interfaces;
+using WPFGameEngine.WPF.GE.Component.Base.ImageComponents;
+using WPFGameEngine.WPF.GE.Dto.Base;
+using WPFGameEngine.WPF.GE.Dto.Components;
 
 namespace WPFGameEngine.WPF.GE.Component.Sprites
-{    
+{
     [VisibleInEditor(FactoryName = nameof(Sprite),
         DisplayName = "Sprite",
         GameObjectType = Enums.GEObjectType.Component)]
-    public class Sprite : ComponentBase, ISprite
+    public class Sprite : ImageComponentBase<ImageSource>, 
+        IConvertToDto<SpriteDto>
     {
         #region Fields
         private ImageSource? m_img;
+       
         #endregion
 
         #region Properties
         public ImageSource Image { get => m_img; set => m_img = value; }
-
+      
         #endregion
 
         #region Ctor
-        public Sprite(ImageSource img) : base(nameof(Sprite))
+        
+        public Sprite(IResourceLoader resourceLoader) : base(nameof(Sprite))
         {
-            m_img = img ?? throw new ArgumentNullException(nameof(img));
-        }
-
-        public Sprite() : base(nameof(Sprite))
-        {
+            ResourceLoader = resourceLoader ?? throw new ArgumentNullException(nameof(resourceLoader));
             m_img = null;
         }
         #endregion
 
         #region Methods
+        
+        #region IConvertToDto
 
-        public void Load(ResourceDictionary resourceDictionary, string resourceName)
-        {
-            if (string.IsNullOrEmpty(resourceName))
-                throw new EmptyArgumentException(nameof(resourceName));
+        public SpriteDto ToDto() =>
+            new SpriteDto()
+            {
+                ResourceKey = ResourceKey,
+            };
 
-            if(resourceDictionary == null)
-                throw new ArgumentNullException (nameof(resourceDictionary));
-
-            var imgSrc = (ImageSource)resourceDictionary[resourceName];
-            if(imgSrc == null)
-                throw new ResourceGetException(nameof(resourceName));
-
-            m_img = imgSrc;
-        }
+        #endregion
 
         #endregion
 

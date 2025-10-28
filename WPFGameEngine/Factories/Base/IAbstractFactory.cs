@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using WPFGameEngine.WPF.GE.Component.Base;
 
 namespace WPFGameEngine.Factories.Base
 {
     public interface IAbstractFactory<TType>
     {
         TType Create(string name);
+
+        TType Create<TType>();
     }
 }

@@ -1,5 +1,5 @@
-﻿using SpaceAvenger.Editor.Services.Base;
-using System.Windows;
+﻿using System.Windows;
+using WPFGameEngine.Services.Interfaces;
 
 namespace SpaceAvenger.Editor.Services
 {

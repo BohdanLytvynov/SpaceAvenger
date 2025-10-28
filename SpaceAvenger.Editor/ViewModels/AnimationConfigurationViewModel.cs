@@ -2,7 +2,6 @@
 using OxyPlot.Axes;
 using OxyPlot.Series;
 using SpaceAvenger.Editor.Mock;
-using SpaceAvenger.Editor.Services.Base;
 using SpaceAvenger.Editor.ViewModels.EaseOptions;
 using SpaceAvenger.Editor.ViewModels.Options;
 using System.Collections.ObjectModel;
@@ -16,13 +15,13 @@ using WPFGameEngine.Enums;
 using WPFGameEngine.Extensions;
 using WPFGameEngine.Factories.Ease;
 using WPFGameEngine.GameViewControl;
+using WPFGameEngine.Services.Interfaces;
 using WPFGameEngine.Timers;
 using WPFGameEngine.WPF.GE.AnimationFrames;
 using WPFGameEngine.WPF.GE.Component.Animations;
 using WPFGameEngine.WPF.GE.Component.Transforms;
 using WPFGameEngine.WPF.GE.GameObjects;
 using WPFGameEngine.WPF.GE.Math.Ease.Base;
-using WPFGameEngine.WPF.GE.Math.Ease.Polynomial;
 
 namespace SpaceAvenger.Editor.ViewModels
 {
@@ -164,6 +163,14 @@ namespace SpaceAvenger.Editor.ViewModels
                 {
                     m_SelectedEaseFunction = m_easeFactory.Create(value.FactoryName);
 
+                    if (m_animation != null && m_animation.EaseConstants.Count > 0)
+                    {
+                        foreach (var item in m_animation.EaseConstants)
+                        {
+                            m_SelectedEaseFunction.Constants.Add(item.Key, item.Value);
+                        }
+                    }
+
                     UpdateEaseFunctionsConstants(m_SelectedEaseFunction);
 
                     DrawSelectedFunction(m_SelectedEaseFunction);
@@ -189,8 +196,7 @@ namespace SpaceAvenger.Editor.ViewModels
                 if (string.IsNullOrEmpty(SelectedResourceName))
                     return;
 
-                m_animation.ResourceName = value;
-                m_animation.Texture = (BitmapSource)m_resourceLoader.Load<ImageSource>(SelectedResourceName);
+                m_animation.Load(value);
             }
         }
         public PlotModel PlotModel
@@ -213,6 +219,7 @@ namespace SpaceAvenger.Editor.ViewModels
             IEaseFactory easeFactory, Animation old)
         {
             #region Init Fields
+            m_plotModel = new PlotModel();
             m_easeFactory = easeFactory ?? throw new ArgumentNullException(nameof(easeFactory));
             m_assemblyLoader = assemblyLoader ?? throw new ArgumentNullException(nameof(assemblyLoader));
             m_SelectedResourceName = string.Empty;
@@ -248,23 +255,16 @@ namespace SpaceAvenger.Editor.ViewModels
             m_gameObject = new GameObjectMock();
             var t = m_gameObject.GetComponent<TransformComponent>();
             t.CenterPosition = new System.Numerics.Vector2(0, 0);
-            m_animation = new Animation() { Freeze = true };
+            m_animation = old;
             //Load Old Data About Animation
-            if (old != null)
+            if (old != null && old.Validate())
             { 
-                m_Rows = old.Rows;
-                m_Columns = old.Columns;
-                m_animation.Texture = old.Texture;
-                m_animation.AnimationSpeed = old.AnimationSpeed;
-                foreach (var f in old.AnimationFrames)
-                {
-                    m_animation.AnimationFrames.Add(new AnimationFrame(f.Lifespan));
-                }
-                m_TotalTime = old.TotalTime;
-                m_SelectedEaseFunction = m_easeFactory.Create(old.EaseFactoryName) ?? new LinearEase();
-                m_SelectedEase = new OptionsViewModel(old.EaseType, old.EaseFactoryName);
-                m_SelectedResourceName = string.Empty;
-                m_SelectedResourceName = old.ResourceName ?? string.Empty;
+                Rows = old.Rows;
+                Columns = old.Columns;
+                AnimationSpeed = old.AnimationSpeed;
+                TotalTime = old.TotalTime;
+                SelectedEase = new OptionsViewModel(old.EaseType, old.EaseFactoryName);
+                SelectedResourceName = old.ResourceKey;
                 EnableEaseCombobox();
                 EnableResourceCombobox();
             }
@@ -272,8 +272,6 @@ namespace SpaceAvenger.Editor.ViewModels
             m_gameObject.RegisterComponent(m_animation);
             m_gameView.AddObject(m_gameObject);
             m_gameView.StartGame();
-
-            m_plotModel = new PlotModel();
             #endregion
 
             #region Init Commands
@@ -317,7 +315,7 @@ namespace SpaceAvenger.Editor.ViewModels
 
         #region On Confirm Button Pressed
         private bool CanOnConfirmButtonPressedExecute(object p)
-            => m_animation.Validate();
+            => m_animation != null && m_animation.Validate();
 
         private void OnConfirmButtonPressedExecute(object p)
         {
@@ -430,6 +428,7 @@ namespace SpaceAvenger.Editor.ViewModels
                 StrokeThickness = 3 };
 
             m_animation.AnimationFrames.Clear();
+
             //2) Apply Constants for Ease
             foreach (var c in EaseConstants)
             {

@@ -1,4 +1,5 @@
-﻿using WPFGameEngine.WPF.GE.Math.Ease.Base;
+﻿using WPFGameEngine.WPF.GE.Component.Base;
+using WPFGameEngine.WPF.GE.Math.Ease.Base;
 using WPFGameEngine.WPF.GE.Math.Ease.Polynomial;
 
 namespace WPFGameEngine.Factories.Ease
@@ -25,6 +26,11 @@ namespace WPFGameEngine.Factories.Ease
             }
 
             return ease;
+        }
+
+        public IEase Create<IEase>()
+        {
+            throw new NotImplementedException();
         }
     }
 }

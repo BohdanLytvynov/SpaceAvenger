@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using SpaceAvenger.Editor.Services;
-using SpaceAvenger.Editor.Services.Base;
 using SpaceAvenger.Editor.ViewModels;
 using System.IO;
 using System.Windows;
@@ -8,6 +7,8 @@ using ViewModelBaseLibDotNetCore.MessageBus;
 using ViewModelBaseLibDotNetCore.MessageBus.Base;
 using WPFGameEngine.Factories.Components;
 using WPFGameEngine.Factories.Ease;
+using WPFGameEngine.Services.Interfaces;
+using WPFGameEngine.Services.Realizations;
 using WPFGameEngine.Timers;
 using WPFGameEngine.Timers.Base;
 
@@ -33,12 +34,17 @@ namespace SpaceAvenger.Editor
                 assemblyLoader.LoadAssembly(pathToAssembly);
                 return assemblyLoader;
             });
-            services.AddSingleton<IComponentFactory, ComponentFactory>();
             services.AddSingleton<IMessageBus, MessageBusService>();
             services.AddSingleton(c =>
             { 
                 IResourceLoader resourceLoader = new ResourceLoader("pack://application:,,,/SpaceAvenger;component/Resources/Content.xaml");
                 return resourceLoader;
+            });
+            services.AddSingleton<IComponentFactory>(c =>
+            {
+                var loader = c.GetRequiredService<IResourceLoader>();
+                IComponentFactory componentFactory = new ComponentFactory(loader);
+                return componentFactory;
             });
             services.AddSingleton(c => {
                 IGameTimer gameTimer = new GameTimer();
@@ -51,7 +57,7 @@ namespace SpaceAvenger.Editor
                 var gameTimer = c.GetRequiredService<IGameTimer>();
                 var assemblyLoader = c.GetRequiredService<IAssemblyLoader>();
                 var easeFactory = c.GetRequiredService<IEaseFactory>();
-                return new EditorMainWindowViewModel(loader, componentFactory, gameTimer, assemblyLoader, easeFactory);
+                return new EditorMainWindowViewModel(componentFactory, gameTimer, assemblyLoader, easeFactory);
             });
             services.AddSingleton<MainWindow>(c =>
             { 

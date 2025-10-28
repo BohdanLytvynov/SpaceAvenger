@@ -1,10 +1,10 @@
-﻿using SpaceAvenger.Editor.Services.Base;
-using SpaceAvenger.Editor.ViewModels.Components.Base;
+﻿using SpaceAvenger.Editor.ViewModels.Components.Base;
 using SpaceAvenger.Editor.Views;
 using System.Windows.Input;
 using System.Windows.Media;
 using ViewModelBaseLibDotNetCore.Commands;
 using WPFGameEngine.Factories.Ease;
+using WPFGameEngine.Services.Interfaces;
 using WPFGameEngine.WPF.GE.Component.Animations;
 using WPFGameEngine.WPF.GE.GameObjects;
 
@@ -115,7 +115,7 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animations
             Columns = obj.Columns;
             Duration = obj.TotalTime;
             EaseFunction = obj.EaseType;
-            ResourceName = obj.ResourceName;
+            ResourceName = obj.ResourceKey;
             ImageSource = m_resourceLoader.Load<ImageSource>(ResourceName);
 
             m_animConfigurationWindow.Close();

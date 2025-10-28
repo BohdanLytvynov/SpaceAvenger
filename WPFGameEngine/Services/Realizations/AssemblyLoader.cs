@@ -1,15 +1,10 @@
-﻿using SpaceAvenger.Editor.Services.Base;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using System.IO;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+using WPFGameEngine.Services.Interfaces;
 
-namespace SpaceAvenger.Editor.Services
+namespace WPFGameEngine.Services.Realizations
 {
-    internal class AssemblyLoader : IAssemblyLoader
+    public class AssemblyLoader : IAssemblyLoader
     {
         #region Propperties
 

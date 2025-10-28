@@ -1,5 +1,4 @@
-﻿using SpaceAvenger.Editor.Services.Base;
-using SpaceAvenger.Editor.Mock;
+﻿using SpaceAvenger.Editor.Mock;
 using SpaceAvenger.Editor.ViewModels.TreeItems;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
@@ -15,7 +14,6 @@ using SpaceAvenger.Editor.ViewModels.Components.Transform;
 using WPFGameEngine.WPF.GE.Component.Animators;
 using SpaceAvenger.Editor.ViewModels.Components.Animations;
 using SpaceAvenger.Editor.ViewModels.Components.Animators;
-using System.Windows.Media;
 using SpaceAvenger.Editor.ViewModels.Components.Sprites;
 using WPFGameEngine.WPF.GE.Component.Animations;
 using WPFGameEngine.Attributes.Editor;
@@ -28,6 +26,7 @@ using WPFGameEngine.Factories.Ease;
 using WPFGameEngine.Extensions;
 using SpaceAvenger.Editor.ViewModels.Options;
 using WPFGameEngine.Enums;
+using WPFGameEngine.Services.Interfaces;
 
 namespace SpaceAvenger.Editor.ViewModels
 {
@@ -45,8 +44,6 @@ namespace SpaceAvenger.Editor.ViewModels
         private double m_ZIndex;
         private int m_SelectedComponentIndex;
         private OptionsViewModel m_SelectedComponent;
-
-        private IResourceLoader m_ResourceLoader;
 
         private ObservableCollection<TreeItemViewModel> m_Items;
         private ObservableCollection<ComponentViewModel> m_Components;
@@ -155,14 +152,13 @@ namespace SpaceAvenger.Editor.ViewModels
         #endregion
 
         #region Ctor
-        public EditorMainWindowViewModel(IResourceLoader resourceLoader,
+        public EditorMainWindowViewModel(
             IComponentFactory componentFactory,
             IGameTimer gameTimer,
             IAssemblyLoader assemblyLoader,
             IEaseFactory easeFactory) : this()
         {
-            m_EaseFactory = easeFactory ?? throw new ArgumentNullException(nameof(easeFactory));
-            m_ResourceLoader = resourceLoader ?? throw new ArgumentNullException(nameof(resourceLoader));
+            m_EaseFactory = easeFactory ?? throw new ArgumentNullException(nameof(easeFactory));            
             m_ComponentFactory = componentFactory ?? throw new ArgumentNullException(nameof(componentFactory));
             m_assemblyLoader = assemblyLoader ?? throw new ArgumentNullException(nameof(assemblyLoader));
 
@@ -233,7 +229,9 @@ namespace SpaceAvenger.Editor.ViewModels
         private void OnAddGameObjectButtonPressedExecute(object p)
         {
             IGameObject obj = new GameObjectMock();
-            obj.RegisterComponent(new Sprite(m_ResourceLoader.Load<ImageSource>("Empty")));
+            var sprite = m_ComponentFactory.Create<Sprite>();
+            sprite.Load("Empty");
+            obj.RegisterComponent(sprite);
 
             if (m_SelectedItem == null)
             {
@@ -403,15 +401,16 @@ namespace SpaceAvenger.Editor.ViewModels
                     break;
                 case nameof(Animation):
                     c = new AnimationComponentViewModel(m_SelectedItem.GameObject,
-                        m_ResourceLoader,
+                        m_ComponentFactory.ResourceLoader,
                         m_assemblyLoader,
                         m_EaseFactory);
                     break;
                 case nameof(Animator):
-                    c = new AnimatorComponentViewModel(m_SelectedItem.GameObject);
+                    c = new AnimatorComponentViewModel(m_SelectedItem.GameObject,
+                        m_ComponentFactory.ResourceLoader, m_assemblyLoader, m_EaseFactory);
                     break;
                 case nameof(Sprite):
-                    c = new SpriteComponentViewModel(m_SelectedItem.GameObject, m_ResourceLoader);
+                    c = new SpriteComponentViewModel(m_SelectedItem.GameObject, m_ComponentFactory.ResourceLoader);
                     break;
                 default:
                     throw new Exception($"Unsupported component Type! Component: {component.Name}");
