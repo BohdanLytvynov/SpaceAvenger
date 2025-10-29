@@ -1,9 +1,12 @@
-﻿using SpaceAvenger.Editor.ViewModels.AnimatorOptions;
+﻿using SpaceAvenger.Editor.Services;
+using SpaceAvenger.Editor.ViewModels.AnimatorOptions;
 using SpaceAvenger.Editor.ViewModels.Components.Base;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using ViewModelBaseLibDotNetCore.Commands;
 using WPFGameEngine.Factories.Ease;
+using WPFGameEngine.FactoryWrapper.Base;
 using WPFGameEngine.Services.Interfaces;
 using WPFGameEngine.WPF.GE.Component.Animators;
 using WPFGameEngine.WPF.GE.GameObjects;
@@ -15,7 +18,7 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animators
         #region Fields
         private IResourceLoader m_resourceLodaer;
         private IAssemblyLoader m_assemblyLoader;
-        private IEaseFactory m_easeFactory;
+        private IFactoryWrapper m_factoryWrapper;
 
         private ObservableCollection<AnimatorOptionViewModel> m_animatorOptionsViewModel;
         private AnimatorOptionViewModel m_selectedOption;
@@ -39,7 +42,7 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animators
 
         #region Ctor
         public AnimatorComponentViewModel(IGameObject gameObject,
-            IResourceLoader resourceLoader, IAssemblyLoader assemblyLoader, IEaseFactory easeFactory)
+             IAssemblyLoader assemblyLoader, IFactoryWrapper factoryWrapper)
             : base(nameof(Animator), gameObject) 
         {
             #region Init Fields
@@ -54,10 +57,10 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animators
             {
                 GameObject.RegisterComponent(new Animator());
             }
-
-            m_resourceLodaer = resourceLoader ?? throw new ArgumentNullException(nameof(resourceLoader));
+            m_factoryWrapper = factoryWrapper ?? throw new ArgumentNullException(nameof(factoryWrapper));
+            m_resourceLodaer = m_factoryWrapper.ResourceLoader ?? throw new ArgumentNullException(nameof(ResourceLoader));
             m_assemblyLoader = assemblyLoader ?? throw new ArgumentNullException(nameof(assemblyLoader));
-            m_easeFactory = easeFactory ?? throw new ArgumentNullException(nameof(easeFactory));
+            
 
             m_animatorOptionsViewModel = new ObservableCollection<AnimatorOptionViewModel>();
             m_selectedOption = new AnimatorOptionViewModel();
@@ -86,7 +89,7 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animators
 
         private void OnAddButtonPressedExecute(object p)
         {
-            var option = new AnimatorOptionViewModel(AnimatorOptions.Count + 1, m_resourceLodaer, m_assemblyLoader, m_easeFactory, null);
+            var option = new AnimatorOptionViewModel(AnimatorOptions.Count + 1, m_factoryWrapper, m_assemblyLoader, null);
             option.OnAnimatorChanged += Option_OnAnimatorChanged;
             AnimatorOptions.Add(option);
         }

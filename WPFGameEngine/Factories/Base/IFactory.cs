@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace WPFGameEngine.Factories.Base
+﻿namespace WPFGameEngine.Factories.Base
 {
     public interface IFactory<TProduct>
     {
-        TProduct CreateProduct();
+        string ProductName { get; }
+
+        TProduct Create();
     }
 }

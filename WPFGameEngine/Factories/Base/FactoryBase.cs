@@ -1,13 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace WPFGameEngine.Factories.Base
+﻿namespace WPFGameEngine.Factories.Base
 {
     public abstract class FactoryBase<TProduct> : IFactory<TProduct>
     {
-        public abstract TProduct CreateProduct();
+        public string ProductName { get; init; }
+
+        protected FactoryBase()
+        {
+            ProductName = typeof(TProduct).Name;
+        }
+
+        public abstract TProduct Create();
     }
 }

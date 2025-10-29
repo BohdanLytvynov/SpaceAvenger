@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="Factories\Ease\Quadratic\" />
     <Folder Include="Serialization\" />
     <Folder Include="WPF.GE\Serialization\Base\" />
   </ItemGroup>

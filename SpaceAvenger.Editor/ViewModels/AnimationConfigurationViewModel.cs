@@ -14,6 +14,7 @@ using WPFGameEngine.Attributes.Editor;
 using WPFGameEngine.Enums;
 using WPFGameEngine.Extensions;
 using WPFGameEngine.Factories.Ease;
+using WPFGameEngine.FactoryWrapper.Base;
 using WPFGameEngine.GameViewControl;
 using WPFGameEngine.Services.Interfaces;
 using WPFGameEngine.Timers;
@@ -38,14 +39,13 @@ namespace SpaceAvenger.Editor.ViewModels
         private GameViewHost m_gameView;
         private IGameObject m_gameObject;
         private Animation m_animation;
-        private IResourceLoader m_resourceLoader;
         private ObservableCollection<string> m_resourceNames;
         private ObservableCollection<OptionsViewModel> m_EasingTypes;
         private ObservableCollection<EaseOptionsViewModel> m_EaseConstants;
         private OptionsViewModel m_SelectedEase;
         private string m_SelectedResourceName;
         private IAssemblyLoader m_assemblyLoader;
-        private IEaseFactory m_easeFactory;
+        private IFactoryWrapper m_factoryWrapper;
         private IEase m_SelectedEaseFunction;
 
         private bool m_ResourceKeyEnabled;
@@ -161,7 +161,7 @@ namespace SpaceAvenger.Editor.ViewModels
                 Set(ref m_SelectedEase, value);
                 if (value != null)
                 {
-                    m_SelectedEaseFunction = m_easeFactory.Create(value.FactoryName);
+                    m_SelectedEaseFunction = (IEase)m_factoryWrapper.CreateObject(value.FactoryName);
 
                     if (m_animation != null && m_animation.EaseConstants.Count > 0)
                     {
@@ -215,15 +215,14 @@ namespace SpaceAvenger.Editor.ViewModels
         #endregion
 
         #region Ctor
-        public AnimationConfigurationViewModel(IResourceLoader resourceLoader, IAssemblyLoader assemblyLoader,
-            IEaseFactory easeFactory, Animation old)
+        public AnimationConfigurationViewModel(IAssemblyLoader assemblyLoader,
+            IFactoryWrapper factoryWrapper, Animation old)
         {
             #region Init Fields
             m_plotModel = new PlotModel();
-            m_easeFactory = easeFactory ?? throw new ArgumentNullException(nameof(easeFactory));
+            m_factoryWrapper = factoryWrapper ?? throw new ArgumentNullException(nameof(factoryWrapper));
             m_assemblyLoader = assemblyLoader ?? throw new ArgumentNullException(nameof(assemblyLoader));
             m_SelectedResourceName = string.Empty;
-            m_resourceLoader = resourceLoader ?? throw new ArgumentNullException(nameof(resourceLoader));
             m_resourceNames = new ObservableCollection<string>();
             m_EasingTypes = new ObservableCollection<OptionsViewModel>();
             m_EaseConstants = new ObservableCollection<EaseOptionsViewModel>();
@@ -244,7 +243,7 @@ namespace SpaceAvenger.Editor.ViewModels
                 }
             }
 
-            foreach (var resourceName in m_resourceLoader.GetAllKeys())
+            foreach (var resourceName in m_factoryWrapper.ResourceLoader.GetAllKeys())
             {
                 m_resourceNames.Add(resourceName);
             }

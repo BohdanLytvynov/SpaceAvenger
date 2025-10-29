@@ -3,7 +3,7 @@ using SpaceAvenger.Editor.Views;
 using System.Windows.Input;
 using System.Windows.Media;
 using ViewModelBaseLibDotNetCore.Commands;
-using WPFGameEngine.Factories.Ease;
+using WPFGameEngine.FactoryWrapper.Base;
 using WPFGameEngine.Services.Interfaces;
 using WPFGameEngine.WPF.GE.Component.Animations;
 using WPFGameEngine.WPF.GE.GameObjects;
@@ -13,9 +13,8 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animations
     internal class AnimationComponentViewModel : ComponentViewModel
     {
         #region Fields
-        private IResourceLoader m_resourceLoader;
+        private IFactoryWrapper m_factoryWrapper;
         private IAssemblyLoader m_assemblyLoader;
-        private IEaseFactory m_easeFactory;
         private int m_rows;
         private int m_columns;
         private double m_duration;
@@ -46,16 +45,16 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animations
 
         #region Ctor
         public AnimationComponentViewModel(IGameObject gameObject, 
-            IResourceLoader resourceLoader, IAssemblyLoader assemblyLoader,
-            IEaseFactory easeFactory) : base(nameof(Animation), gameObject) 
+            IFactoryWrapper factoryWrapper, IAssemblyLoader assemblyLoader
+            ) : base(nameof(Animation), gameObject) 
         {
             #region Init Fields
-            m_easeFactory = easeFactory ?? throw new ArgumentNullException(nameof(easeFactory));
+            m_factoryWrapper = factoryWrapper ?? throw new ArgumentNullException(nameof(factoryWrapper));
             m_assemblyLoader = assemblyLoader ?? throw new ArgumentNullException(nameof(assemblyLoader));
-            m_resourceLoader = resourceLoader ?? throw new ArgumentNullException(nameof(resourceLoader));
+            
             m_resourceName = string.Empty;
             m_easeFunction = string.Empty;
-            m_imgSource = resourceLoader.Load<ImageSource>("Empty");
+            m_imgSource = m_factoryWrapper.ResourceLoader.Load<ImageSource>("Empty");
             #endregion
 
             #region Init Commands
@@ -83,8 +82,8 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animations
 
         private void ShowConfig()
         {
-            var animationConfigurationViewModel = new AnimationConfigurationViewModel(m_resourceLoader, m_assemblyLoader, 
-                m_easeFactory, GameObject.GetComponent<Animation>());
+            var animationConfigurationViewModel = new AnimationConfigurationViewModel(m_assemblyLoader, 
+                m_factoryWrapper, GameObject.GetComponent<Animation>());
             m_animConfigurationWindow = new AnimationConfigurationWindow();
             animationConfigurationViewModel.Dispatcher = m_animConfigurationWindow.Dispatcher;
             animationConfigurationViewModel.OnConfigurationFinished += AnimationConfigurationViewModel_OnConfigurationFinished;
@@ -116,7 +115,7 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animations
             Duration = obj.TotalTime;
             EaseFunction = obj.EaseType;
             ResourceName = obj.ResourceKey;
-            ImageSource = m_resourceLoader.Load<ImageSource>(ResourceName);
+            ImageSource = m_factoryWrapper.ResourceLoader.Load<ImageSource>(ResourceName);
 
             m_animConfigurationWindow.Close();
         }

@@ -1,8 +1,9 @@
 ﻿using System.Windows.Media.Imaging;
 using WPFGameEngine.Timers.Base;
+using WPFGameEngine.WPF.GE.Component.Animations;
 using WPFGameEngine.WPF.GE.Component.Base;
 
-namespace WPFGameEngine.WPF.GE.Component.Animations
+namespace WPFGameEngine.WPF.GE.Component.Animators
 {
     public interface IAnimator : IGEComponent
     {

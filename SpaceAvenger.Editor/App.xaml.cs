@@ -5,8 +5,8 @@ using System.IO;
 using System.Windows;
 using ViewModelBaseLibDotNetCore.MessageBus;
 using ViewModelBaseLibDotNetCore.MessageBus.Base;
-using WPFGameEngine.Factories.Components;
-using WPFGameEngine.Factories.Ease;
+using WPFGameEngine.FactoryWrapper;
+using WPFGameEngine.FactoryWrapper.Base;
 using WPFGameEngine.Services.Interfaces;
 using WPFGameEngine.Services.Realizations;
 using WPFGameEngine.Timers;
@@ -26,7 +26,6 @@ namespace SpaceAvenger.Editor
         private static IServiceCollection InitializeServices()
         {
             var services = new ServiceCollection();
-            services.AddSingleton<IEaseFactory, EaseFactory>();
             services.AddSingleton<IAssemblyLoader>(c =>
             { 
                 IAssemblyLoader assemblyLoader = new AssemblyLoader();
@@ -40,24 +39,22 @@ namespace SpaceAvenger.Editor
                 IResourceLoader resourceLoader = new ResourceLoader("pack://application:,,,/SpaceAvenger;component/Resources/Content.xaml");
                 return resourceLoader;
             });
-            services.AddSingleton<IComponentFactory>(c =>
-            {
-                var loader = c.GetRequiredService<IResourceLoader>();
-                IComponentFactory componentFactory = new ComponentFactory(loader);
-                return componentFactory;
-            });
+            services.AddSingleton<IFactoryWrapper>(c => 
+                {
+                    var loader = c.GetRequiredService<IResourceLoader>();
+                    return new FactoryWrapper(loader);
+                }
+                );
             services.AddSingleton(c => {
                 IGameTimer gameTimer = new GameTimer();
                 return gameTimer;
             });
             services.AddSingleton(c =>
-            { 
-                var loader = c.GetRequiredService<IResourceLoader>();
-                var componentFactory = c.GetRequiredService<IComponentFactory>();
+            {
+                var factoryWrapper = c.GetRequiredService<IFactoryWrapper>();
                 var gameTimer = c.GetRequiredService<IGameTimer>();
                 var assemblyLoader = c.GetRequiredService<IAssemblyLoader>();
-                var easeFactory = c.GetRequiredService<IEaseFactory>();
-                return new EditorMainWindowViewModel(componentFactory, gameTimer, assemblyLoader, easeFactory);
+                return new EditorMainWindowViewModel(factoryWrapper, gameTimer, assemblyLoader);
             });
             services.AddSingleton<MainWindow>(c =>
             { 

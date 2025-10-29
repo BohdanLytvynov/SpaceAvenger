@@ -27,6 +27,7 @@ using WPFGameEngine.Extensions;
 using SpaceAvenger.Editor.ViewModels.Options;
 using WPFGameEngine.Enums;
 using WPFGameEngine.Services.Interfaces;
+using WPFGameEngine.FactoryWrapper.Base;
 
 namespace SpaceAvenger.Editor.ViewModels
 {
@@ -48,9 +49,8 @@ namespace SpaceAvenger.Editor.ViewModels
         private ObservableCollection<TreeItemViewModel> m_Items;
         private ObservableCollection<ComponentViewModel> m_Components;
         private ObservableCollection<OptionsViewModel> m_ComponentsToAdd;
-        private IComponentFactory m_ComponentFactory;
         private IAssemblyLoader m_assemblyLoader;
-        private IEaseFactory m_EaseFactory;
+        private IFactoryWrapper m_factoryWrapper;
         private IGameTimer m_gameTimer;
 
         #endregion
@@ -153,13 +153,12 @@ namespace SpaceAvenger.Editor.ViewModels
 
         #region Ctor
         public EditorMainWindowViewModel(
-            IComponentFactory componentFactory,
+            IFactoryWrapper factoryWrapper,
             IGameTimer gameTimer,
-            IAssemblyLoader assemblyLoader,
-            IEaseFactory easeFactory) : this()
+            IAssemblyLoader assemblyLoader
+            ) : this()
         {
-            m_EaseFactory = easeFactory ?? throw new ArgumentNullException(nameof(easeFactory));            
-            m_ComponentFactory = componentFactory ?? throw new ArgumentNullException(nameof(componentFactory));
+            m_factoryWrapper = factoryWrapper ?? throw new ArgumentNullException(nameof(factoryWrapper));
             m_assemblyLoader = assemblyLoader ?? throw new ArgumentNullException(nameof(assemblyLoader));
 
             #region Get All Components From GE
@@ -229,7 +228,7 @@ namespace SpaceAvenger.Editor.ViewModels
         private void OnAddGameObjectButtonPressedExecute(object p)
         {
             IGameObject obj = new GameObjectMock();
-            var sprite = m_ComponentFactory.Create<Sprite>();
+            var sprite = m_factoryWrapper.CreateObject<Sprite>();
             sprite.Load("Empty");
             obj.RegisterComponent(sprite);
 
@@ -292,7 +291,7 @@ namespace SpaceAvenger.Editor.ViewModels
         {
             try
             {
-                var component = m_ComponentFactory.Create(SelectedComponent.FactoryName);
+                var component = (IGEComponent)m_factoryWrapper.CreateObject(SelectedComponent.FactoryName);
                 m_SelectedItem.GameObject.RegisterComponent(component);
                 Components.Add(CreateComponentViewModel(component));
             }
@@ -401,16 +400,15 @@ namespace SpaceAvenger.Editor.ViewModels
                     break;
                 case nameof(Animation):
                     c = new AnimationComponentViewModel(m_SelectedItem.GameObject,
-                        m_ComponentFactory.ResourceLoader,
-                        m_assemblyLoader,
-                        m_EaseFactory);
+                        m_factoryWrapper,
+                        m_assemblyLoader);
                     break;
                 case nameof(Animator):
                     c = new AnimatorComponentViewModel(m_SelectedItem.GameObject,
-                        m_ComponentFactory.ResourceLoader, m_assemblyLoader, m_EaseFactory);
+                        m_assemblyLoader, m_factoryWrapper);
                     break;
                 case nameof(Sprite):
-                    c = new SpriteComponentViewModel(m_SelectedItem.GameObject, m_ComponentFactory.ResourceLoader);
+                    c = new SpriteComponentViewModel(m_SelectedItem.GameObject, m_factoryWrapper.ResourceLoader);
                     break;
                 default:
                     throw new Exception($"Unsupported component Type! Component: {component.Name}");

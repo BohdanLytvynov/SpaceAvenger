@@ -4,7 +4,7 @@ using System.Windows.Media;
 using ViewModelBaseLibDotNetCore.Commands;
 using ViewModelBaseLibDotNetCore.Helpers;
 using ViewModelBaseLibDotNetCore.VM;
-using WPFGameEngine.Factories.Ease;
+using WPFGameEngine.FactoryWrapper.Base;
 using WPFGameEngine.Services.Interfaces;
 using WPFGameEngine.WPF.GE.Component.Animations;
 
@@ -25,9 +25,8 @@ namespace SpaceAvenger.Editor.ViewModels.AnimatorOptions
         private double m_duration;
         private string m_easeFunction;
         private string m_resourceKeyName;
-        private IResourceLoader m_resourceLoader;
         private IAssemblyLoader m_assemblyLoader;
-        private IEaseFactory m_easeFactory;
+        private IFactoryWrapper m_factoryWrapper;
         private AnimationConfigurationWindow m_animConfigurationWindow;
         private Animation m_animation;
         #endregion
@@ -82,23 +81,21 @@ namespace SpaceAvenger.Editor.ViewModels.AnimatorOptions
         }
 
         public AnimatorOptionViewModel(int showNumber, 
-            IResourceLoader resourceLoader,
+            IFactoryWrapper factoryWrapper,
             IAssemblyLoader assemblyLoader,
-            IEaseFactory easeFactory,
             Animation animation)
         {
             #region Fields
             InitValidArray(1);
-            m_easeFactory = easeFactory ?? throw new ArgumentNullException(nameof(easeFactory));
+            m_factoryWrapper = factoryWrapper ?? throw new ArgumentNullException(nameof(factoryWrapper));
             m_assemblyLoader = assemblyLoader ?? throw new ArgumentNullException(nameof(assemblyLoader));
-            m_resourceLoader = resourceLoader ?? throw new ArgumentNullException(nameof(resourceLoader));
             m_ShowNumber = showNumber;
 
             m_animation = animation;
             if (animation == null)
             {
                 m_AnimationName = string.Empty;
-                m_imageSource = m_resourceLoader.Load<ImageSource>("Empty");
+                m_imageSource = m_factoryWrapper.ResourceLoader.Load<ImageSource>("Empty");
                 m_easeFunction = string.Empty;
                 m_resourceKeyName = string.Empty;
             }
@@ -109,7 +106,7 @@ namespace SpaceAvenger.Editor.ViewModels.AnimatorOptions
                 m_duration = m_animation.TotalTime;
                 m_easeFunction = m_animation.EaseType;
                 m_resourceKeyName = m_animation.ResourceKey;
-                m_imageSource = m_resourceLoader.Load<ImageSource>(m_resourceKeyName);
+                m_imageSource = m_factoryWrapper.ResourceLoader.Load<ImageSource>(m_resourceKeyName);
             }
             
             #endregion
@@ -137,8 +134,8 @@ namespace SpaceAvenger.Editor.ViewModels.AnimatorOptions
 
         private void ShowConfig()
         {
-            var animationConfigurationViewModel = new AnimationConfigurationViewModel(m_resourceLoader, m_assemblyLoader,
-                m_easeFactory, m_animation);
+            var animationConfigurationViewModel = new AnimationConfigurationViewModel(m_assemblyLoader,
+                m_factoryWrapper, m_animation);
             m_animConfigurationWindow = new AnimationConfigurationWindow();
             animationConfigurationViewModel.Dispatcher = m_animConfigurationWindow.Dispatcher;
             animationConfigurationViewModel.OnConfigurationFinished += AnimationConfigurationViewModel_OnConfigurationFinished;
@@ -167,7 +164,7 @@ namespace SpaceAvenger.Editor.ViewModels.AnimatorOptions
             Duration = obj.TotalTime;
             EaseFunction = obj.EaseType;
             ResourceName = obj.ResourceKey;
-            ImageSource = m_resourceLoader.Load<ImageSource>(ResourceName);
+            ImageSource = m_factoryWrapper.ResourceLoader.Load<ImageSource>(ResourceName);
             m_animConfigurationWindow.Close();
 
             OnAnimatorChanged?.Invoke(AnimationName, m_animation);
