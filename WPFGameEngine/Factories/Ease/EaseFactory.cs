@@ -27,10 +27,5 @@ namespace WPFGameEngine.Factories.Ease
 
             return ease;
         }
-
-        public IEase Create<IEase>()
-        {
-            throw new NotImplementedException();
-        }
     }
 }
