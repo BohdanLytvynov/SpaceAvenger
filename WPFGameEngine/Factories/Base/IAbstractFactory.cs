@@ -5,7 +5,5 @@ namespace WPFGameEngine.Factories.Base
     public interface IAbstractFactory<TType>
     {
         TType Create(string name);
-
-        TType Create<TType>();
     }
 }
