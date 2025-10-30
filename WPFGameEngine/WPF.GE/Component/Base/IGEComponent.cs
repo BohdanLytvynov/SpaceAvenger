@@ -1,7 +1,9 @@
-﻿namespace WPFGameEngine.WPF.GE.Component.Base
+﻿using WPFGameEngine.Factories.Base;
+
+namespace WPFGameEngine.WPF.GE.Component.Base
 {
-    public interface IGEComponent
+    public interface IGEComponent : IGameEngineEntity
     {
-        string Name { get; init; }
+        string ComponentName { get; init; }
     }
 }

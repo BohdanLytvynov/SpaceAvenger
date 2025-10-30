@@ -1,14 +1,11 @@
-﻿using System.Drawing;
-using System.Numerics;
-using System.Reflection.Metadata.Ecma335;
-using System.Windows.Media;
+﻿using System.Windows.Media;
+using WPFGameEngine.Factories.Base;
 using WPFGameEngine.Timers.Base;
 using WPFGameEngine.WPF.GE.Component.Base;
-using WPFGameEngine.WPF.GE.Component.Transforms;
 
 namespace WPFGameEngine.WPF.GE.GameObjects
 {
-    public interface IGameObject 
+    public interface IGameObject : IGameEngineEntity
     {
         public int Id { get; }
         

@@ -3,12 +3,12 @@ using WPFGameEngine.WPF.GE.Component.Transforms;
 
 namespace WPFGameEngine.Factories.Components.Transform
 {
-    public class TransformFactory : FactoryBase<ITransform>, ITransformFactory
+    public class TransformFactory : FactoryBase, ITransformFactory
     {
 
-        public TransformFactory() : base()
+        public TransformFactory()
         {
-            
+            ProductName = nameof(TransformComponent);
         }
 
         public override ITransform Create()

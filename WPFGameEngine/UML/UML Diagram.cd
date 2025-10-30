@@ -48,5 +48,41 @@
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
+  <Class Name="WPFGameEngine.WPF.GE.GameObjects.GameObject" Collapsed="true">
+    <Position X="7.5" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQCICAAAAAAMIAAAAAEJAYgAAKECgYBABACAAAAgAA=</HashCode>
+      <FileName>WPF.GE\GameObjects\GameObject.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Interface Name="WPFGameEngine.WPF.GE.Component.Base.IGEComponent" Collapsed="true">
+    <Position X="7.5" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>WPF.GE\Component\Base\IGEComponent.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="WPFGameEngine.Factories.Base.IGameEngineEntity" Collapsed="true">
+    <Position X="7.25" Y="0.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Factories\Base\IGameEngineEntity.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="WPFGameEngine.WPF.GE.GameObjects.IGameObject" Collapsed="true">
+    <Position X="9.75" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQCIAAAAAAAEIAAAAAEJAQgAAIAAgABABAAAAAAAAA=</HashCode>
+      <FileName>WPF.GE\GameObjects\IGameObject.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="WPFGameEngine.WPF.GE.Math.Ease.Base.IEase" Collapsed="true">
+    <Position X="12" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAABAAAAAAAAAgAAAAAAgAAAAA=</HashCode>
+      <FileName>WPF.GE\Math\Ease\Base\IEase.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
   <Font Name="Segoe UI" Size="9" />
 </ClassDiagram>

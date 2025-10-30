@@ -4,11 +4,12 @@ using WPFGameEngine.WPF.GE.Component.Animations;
 
 namespace WPFGameEngine.Factories.Components.Animations
 {
-    internal class AnimationFactory : FactoryBase<IAnimation>, IAnimationFactory
+    internal class AnimationFactory : FactoryBase, IAnimationFactory
     {
-        public AnimationFactory(IResourceLoader resourceLoader) : base()
+        public AnimationFactory(IResourceLoader resourceLoader)
         {
             ResourceLoader = resourceLoader ?? throw new ArgumentNullException(nameof(resourceLoader));
+            ProductName = nameof(Animation);
         }
 
         public IResourceLoader ResourceLoader { get; protected set; }

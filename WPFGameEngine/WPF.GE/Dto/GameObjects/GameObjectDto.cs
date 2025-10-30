@@ -1,12 +1,13 @@
 ﻿using WPFGameEngine.WPF.GE.Dto.Base;
+using WPFGameEngine.WPF.GE.GameObjects;
 
-namespace WPFGameEngine.WPF.GE.Dto.GameObject
+namespace WPFGameEngine.WPF.GE.Dto.GameObjects
 {
     public class GameObjectDto : DtoBase
     {
 
 
-        public GameObjectDto() : base(nameof(GameObjectDto))
+        public GameObjectDto() : base(nameof(GameObject))
         {
             
         }

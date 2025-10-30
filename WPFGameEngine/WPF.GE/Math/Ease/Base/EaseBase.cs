@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace WPFGameEngine.WPF.GE.Math.Ease.Base
+﻿namespace WPFGameEngine.WPF.GE.Math.Ease.Base
 {
     public abstract class EaseBase : IEase
     {

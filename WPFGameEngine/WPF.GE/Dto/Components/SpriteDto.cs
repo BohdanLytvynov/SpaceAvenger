@@ -6,7 +6,7 @@ using WPFGameEngine.WPF.GE.Dto.Base;
 
 namespace WPFGameEngine.WPF.GE.Dto.Components
 {
-    public class SpriteDto : DtoBase, IConvertToComponent<Sprite, SpriteDto>
+    public class SpriteDto : DtoBase
     {
         public string ResourceKey { get; set; }
 
@@ -14,9 +14,6 @@ namespace WPFGameEngine.WPF.GE.Dto.Components
         {
         }
 
-        public IGEComponent ToComponent()
-        {
-            return null;
-        }
+        
     }
 }

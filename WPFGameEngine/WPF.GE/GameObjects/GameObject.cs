@@ -32,7 +32,6 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         #endregion
 
         #region Propeties
-                
         public int Id { get => m_id; }
         public bool Enabled { get; set; }
         public double ZIndex { get; set; }
@@ -118,7 +117,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects
             }
             else if(sprite != null)
             {
-                bitmapSource = (BitmapSource)sprite.Image;
+                bitmapSource = (BitmapSource)sprite.Texture;
             }
 
             if (bitmapSource == null)
@@ -216,10 +215,10 @@ namespace WPFGameEngine.WPF.GE.GameObjects
             if (component == null)
                 throw new ArgumentNullException(nameof(component));
 
-            if (m_components.ContainsKey(component.Name))
-                throw new ComponentAlreadyRegisteredException(component.Name);
+            if (m_components.ContainsKey(component.ComponentName))
+                throw new ComponentAlreadyRegisteredException(component.ComponentName);
 
-            m_components.Add(component.Name, component);
+            m_components.Add(component.ComponentName, component);
 
             return this;
         }
@@ -229,8 +228,8 @@ namespace WPFGameEngine.WPF.GE.GameObjects
             if (component == null)
                 throw new ArgumentNullException(nameof(component));
 
-            if (m_components.ContainsKey(component.Name))
-                m_components.Remove(component.Name);
+            if (m_components.ContainsKey(component.ComponentName))
+                m_components.Remove(component.ComponentName);
 
             return this;
         }

@@ -393,7 +393,7 @@ namespace SpaceAvenger.Editor.ViewModels
         private ComponentViewModel CreateComponentViewModel(IGEComponent component)
         {
             ComponentViewModel c = null;
-            switch (component.Name)
+            switch (component.ComponentName)
             {
                 case nameof(TransformComponent):
                     c = new TransformComponentViewModel(m_SelectedItem.GameObject);
@@ -411,7 +411,7 @@ namespace SpaceAvenger.Editor.ViewModels
                     c = new SpriteComponentViewModel(m_SelectedItem.GameObject, m_factoryWrapper.ResourceLoader);
                     break;
                 default:
-                    throw new Exception($"Unsupported component Type! Component: {component.Name}");
+                    throw new Exception($"Unsupported component Type! Component: {component.ComponentName}");
             }
 
             return c;

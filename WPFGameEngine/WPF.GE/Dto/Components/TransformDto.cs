@@ -6,7 +6,7 @@ using WPFGameEngine.WPF.GE.Dto.Base;
 
 namespace WPFGameEngine.WPF.GE.Dto.Components
 {
-    public class TransformDto : DtoBase, IConvertToComponent<TransformComponent, TransformDto>
+    public class TransformDto : DtoBase
     {
         public Vector2 Position { get; set; }
         public Vector2 CenterPosition { get; set; }
@@ -17,9 +17,5 @@ namespace WPFGameEngine.WPF.GE.Dto.Components
         {
             
         }
-
-        public IGEComponent ToComponent() => 
-            new TransformComponent(Position, CenterPosition, Rotation, Scale);
-
     }
 }

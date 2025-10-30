@@ -1,14 +1,9 @@
 ﻿namespace WPFGameEngine.Factories.Base
 {
-    public abstract class FactoryBase<TProduct> : IFactory<TProduct>
+    public abstract class FactoryBase : IFactory
     {
-        public string ProductName { get; init; }
+        public string? ProductName { get; init; }
 
-        protected FactoryBase()
-        {
-            ProductName = typeof(TProduct).Name;
-        }
-
-        public abstract TProduct Create();
+        public abstract IGameEngineEntity Create();
     }
 }

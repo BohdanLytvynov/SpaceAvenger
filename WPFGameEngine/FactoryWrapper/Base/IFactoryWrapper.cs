@@ -1,4 +1,5 @@
-﻿using WPFGameEngine.Factories.Components.Animations;
+﻿using WPFGameEngine.Factories.Base;
+using WPFGameEngine.Factories.Components.Animations;
 using WPFGameEngine.Factories.Components.Animators;
 using WPFGameEngine.Factories.Components.Sprites;
 using WPFGameEngine.Factories.Components.Transform;
@@ -20,7 +21,7 @@ namespace WPFGameEngine.FactoryWrapper.Base
 
         IQuadraticEaseFactory QuadraticEaseFactory { get; }
 
-        TType CreateObject<TType>();
+        TType CreateObject<TType>() where TType : IGameEngineEntity;
 
         object CreateObject(string typeName);
     }

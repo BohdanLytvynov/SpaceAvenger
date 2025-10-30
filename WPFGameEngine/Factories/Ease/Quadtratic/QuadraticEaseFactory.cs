@@ -3,11 +3,11 @@ using WPFGameEngine.WPF.GE.Math.Ease.Polynomial;
 
 namespace WPFGameEngine.Factories.Ease.Quadtratic
 {
-    internal class QuadraticEaseFactory : FactoryBase<EaseInQuad>, IQuadraticEaseFactory
+    internal class QuadraticEaseFactory : FactoryBase, IQuadraticEaseFactory
     {
-        public QuadraticEaseFactory() : base()
+        public QuadraticEaseFactory()
         {
-            
+            ProductName = nameof(EaseInQuad);
         }
 
         public override EaseInQuad Create()

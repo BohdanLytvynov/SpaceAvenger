@@ -4,7 +4,7 @@ using WPFGameEngine.WPF.GE.Math.Ease.Polynomial;
 
 namespace WPFGameEngine.Factories.Ease.Quadtratic
 {
-    public interface IQuadraticEaseFactory : IFactory<EaseInQuad>
+    public interface IQuadraticEaseFactory : IFactory
     {
 
     }

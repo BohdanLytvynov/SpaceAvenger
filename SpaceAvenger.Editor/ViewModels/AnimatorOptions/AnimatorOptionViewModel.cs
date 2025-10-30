@@ -64,7 +64,7 @@ namespace SpaceAvenger.Editor.ViewModels.AnimatorOptions
                 switch (columnName)
                 {
                     case nameof(AnimationName):
-                        SetValidArrayValue(0, ValidationHelper.TextIsEmpty(AnimationName, out error));
+                        SetValidArrayValue(0, !ValidationHelper.TextIsEmpty(AnimationName, out error));
                         break;
                 }
 
@@ -78,6 +78,7 @@ namespace SpaceAvenger.Editor.ViewModels.AnimatorOptions
         public AnimatorOptionViewModel()
         {
             m_ShowNumber = -1;
+            m_AnimationName = string.Empty;
         }
 
         public AnimatorOptionViewModel(int showNumber, 
@@ -100,7 +101,8 @@ namespace SpaceAvenger.Editor.ViewModels.AnimatorOptions
                 m_resourceKeyName = string.Empty;
             }
             else
-            { 
+            {
+                m_AnimationName = string.Empty;
                 m_rows = m_animation.Rows;
                 m_columns = m_animation.Columns;
                 m_duration = m_animation.TotalTime;

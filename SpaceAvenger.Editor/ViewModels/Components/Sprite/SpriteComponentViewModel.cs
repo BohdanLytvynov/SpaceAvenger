@@ -78,6 +78,7 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Sprites
         #endregion
 
         #region Methods
+
         #region OnApplyButtonPressedExecute
 
         private bool CanOnApplyButtonPressedExecute(object p) => 
@@ -85,7 +86,7 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Sprites
 
         private void OnApplyButtonPressedExecute(object p)
         {
-            GameObject.GetComponent<Sprite>().Image = m_ResourceLoader.Load<ImageSource>(SelectedResource);
+            GameObject.GetComponent<Sprite>().Load(SelectedResource);
         }
 
         #endregion

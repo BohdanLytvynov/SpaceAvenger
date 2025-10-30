@@ -4,11 +4,11 @@ using WPFGameEngine.WPF.GE.Math.Ease.Polynomial;
 
 namespace WPFGameEngine.Factories.Ease.Linear
 {
-    internal class LinearEaseFactory : FactoryBase<LinearEase>, ILinearEaseFactory
+    internal class LinearEaseFactory : FactoryBase, ILinearEaseFactory
     {
-        public LinearEaseFactory() : base()
+        public LinearEaseFactory()
         {
-            
+            ProductName = nameof(LinearEase);
         }
 
         public override LinearEase Create()

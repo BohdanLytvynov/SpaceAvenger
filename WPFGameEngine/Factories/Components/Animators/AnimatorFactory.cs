@@ -3,11 +3,11 @@ using WPFGameEngine.WPF.GE.Component.Animators;
 
 namespace WPFGameEngine.Factories.Components.Animators
 {
-    public class AnimatorFactory : FactoryBase<IAnimator>, IAnimatorFactory
+    public class AnimatorFactory : FactoryBase, IAnimatorFactory
     {
-        public AnimatorFactory() : base()
+        public AnimatorFactory()
         {
-            
+            ProductName = nameof(Animator);
         }
 
         public override IAnimator Create()

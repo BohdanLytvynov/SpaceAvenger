@@ -102,14 +102,13 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animators
         private void OnDeleteButtonPressedExecute(object p)
         { 
             m_selectedOption.OnAnimatorChanged -= Option_OnAnimatorChanged;
-            AnimatorOptions.Remove(m_selectedOption);
 
             var anim = GameObject.GetComponent<Animator>(false);
             if (anim != null)
             {
                 anim.RemoveAnimation(m_selectedOption.AnimationName);
             }
-
+            AnimatorOptions.Remove(m_selectedOption);
             m_selectedOption = new AnimatorOptionViewModel();
         }
         #endregion

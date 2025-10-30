@@ -57,27 +57,27 @@ namespace WPFGameEngine.WPF.GE.Component.Animators
 
         public void Start()
         {
-            m_current.Start();
+            m_current?.Start();
         }
 
         public void Stop()
         {
-            m_current.Stop();
+            m_current?.Stop();
         }
 
         public void Reset()
         {
-            m_current.Reset(m_current.Reverse);
+            m_current?.Reset(m_current.Reverse);
         }
 
         public void Update(IGameTimer gameTimer)
         {
-            m_current.Update(gameTimer);
+            m_current?.Update(gameTimer);
         }
 
         public BitmapSource GetCurrentFrame()
         { 
-            return m_current.GetCurrentFrame();
+            return m_current?.GetCurrentFrame();
         }
 
         public void SetAnimationForPlay(string animationName, bool resetPrevAnim)

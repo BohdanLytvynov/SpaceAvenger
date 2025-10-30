@@ -1,4 +1,6 @@
 ﻿using System.Reflection;
+using System.Xml.Linq;
+using WPFGameEngine.Factories.Base;
 using WPFGameEngine.Factories.Components.Animations;
 using WPFGameEngine.Factories.Components.Animators;
 using WPFGameEngine.Factories.Components.Sprites;
@@ -18,6 +20,10 @@ namespace WPFGameEngine.FactoryWrapper
         IResourceLoader m_resourceLoader;
         #endregion
 
+        #region Fields
+        private Dictionary<string, IFactory> m_ProductFactoryMap;
+        #endregion
+
         #region Properties
 
         public IAnimationFactory AnimationFactory { get; init; }
@@ -32,7 +38,9 @@ namespace WPFGameEngine.FactoryWrapper
 
         public IQuadraticEaseFactory QuadraticEaseFactory { get; init; }
 
+        #region Add Tools
         public IResourceLoader ResourceLoader => m_resourceLoader;
+        #endregion
 
         #endregion
 
@@ -48,23 +56,31 @@ namespace WPFGameEngine.FactoryWrapper
             LinearEaseFactory = new LinearEaseFactory();
             QuadraticEaseFactory = new QuadraticEaseFactory();
 
-            var type = this.GetType();
-            var props = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            m_ProductFactoryMap = new Dictionary<string, IFactory>();
 
-            foreach (var prop in props)
-            { 
-                
+            var type = this.GetType();
+            var factories = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+
+            foreach (var f in factories)
+            {
+                var obj = f.GetValue(this);
+                if (obj is IFactory)
+                {
+                    IFactory factory = (IFactory)obj;
+                    m_ProductFactoryMap.Add(factory.ProductName, factory);
+                }
             }
         }
 
-        public TType CreateObject<TType>()
+        public TType CreateObject<TType>() where TType : IGameEngineEntity
         {
-            return default;
+            var name = typeof(TType).Name;
+            return (TType)CreateObject(name);
         }
 
         public object CreateObject(string typeName)
         {
-            throw new NotImplementedException();
+            return m_ProductFactoryMap[typeName].Create();
         }
         #endregion
 

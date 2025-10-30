@@ -254,10 +254,11 @@ namespace SpaceAvenger.Editor.ViewModels
             m_gameObject = new GameObjectMock();
             var t = m_gameObject.GetComponent<TransformComponent>();
             t.CenterPosition = new System.Numerics.Vector2(0, 0);
-            m_animation = old;
+
             //Load Old Data About Animation
             if (old != null && old.Validate())
-            { 
+            {
+                m_animation = old;
                 Rows = old.Rows;
                 Columns = old.Columns;
                 AnimationSpeed = old.AnimationSpeed;
@@ -266,6 +267,10 @@ namespace SpaceAvenger.Editor.ViewModels
                 SelectedResourceName = old.ResourceKey;
                 EnableEaseCombobox();
                 EnableResourceCombobox();
+            }
+            else
+            {
+                m_animation = m_factoryWrapper.CreateObject<Animation>();
             }
 
             m_gameObject.RegisterComponent(m_animation);

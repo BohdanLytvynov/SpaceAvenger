@@ -2,11 +2,11 @@
 {
     public class ComponentBase : IGEComponent
     {
-        public string Name { get; init; }
+        public string ComponentName { get; init; }
 
         public ComponentBase(string name)
         {
-            Name = name;
+            ComponentName = name;
         }
     }
 }

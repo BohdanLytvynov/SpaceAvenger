@@ -1,9 +1,9 @@
 ﻿namespace WPFGameEngine.Factories.Base
 {
-    public interface IFactory<TProduct>
+    public interface IFactory
     {
-        string ProductName { get; }
+        string? ProductName { get; }
 
-        TProduct Create();
+        IGameEngineEntity Create();
     }
 }
