@@ -1,6 +1,5 @@
 ﻿using System.Drawing;
 using System.Numerics;
-using WPFGameEngine.WPF.GE.Component.Base;
 using WPFGameEngine.WPF.GE.Component.Transforms;
 using WPFGameEngine.WPF.GE.Dto.Base;
 

@@ -98,7 +98,7 @@ namespace WPFGameEngine.GameViewControl
             if(gameObject == null)
                 return;
 
-            GameObject.RemoveObject(p => p.Id == gameObject.Id, World, true);
+            GameObject.RemoveObject(p => p.Name.Equals(gameObject.Name), World, true);
         }
 
         public void StartGame()

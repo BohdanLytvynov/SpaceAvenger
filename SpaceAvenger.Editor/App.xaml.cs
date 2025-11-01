@@ -11,6 +11,7 @@ using WPFGameEngine.Services.Interfaces;
 using WPFGameEngine.Services.Realizations;
 using WPFGameEngine.Timers;
 using WPFGameEngine.Timers.Base;
+using WPFGameEngine.WPF.GE.Serialization.GameObjects;
 
 namespace SpaceAvenger.Editor
 {
@@ -26,6 +27,7 @@ namespace SpaceAvenger.Editor
         private static IServiceCollection InitializeServices()
         {
             var services = new ServiceCollection();
+            services.AddSingleton<IGameObjectExporter, GameObjectExporter>();
             services.AddSingleton<IAssemblyLoader>(c =>
             { 
                 IAssemblyLoader assemblyLoader = new AssemblyLoader();
@@ -54,7 +56,8 @@ namespace SpaceAvenger.Editor
                 var factoryWrapper = c.GetRequiredService<IFactoryWrapper>();
                 var gameTimer = c.GetRequiredService<IGameTimer>();
                 var assemblyLoader = c.GetRequiredService<IAssemblyLoader>();
-                return new EditorMainWindowViewModel(factoryWrapper, gameTimer, assemblyLoader);
+                var exporter = c.GetRequiredService<IGameObjectExporter>();
+                return new EditorMainWindowViewModel(factoryWrapper, gameTimer, assemblyLoader, exporter);
             });
             services.AddSingleton<MainWindow>(c =>
             { 

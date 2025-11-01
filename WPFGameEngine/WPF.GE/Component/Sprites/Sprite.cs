@@ -10,8 +10,8 @@ namespace WPFGameEngine.WPF.GE.Component.Sprites
     [VisibleInEditor(FactoryName = nameof(Sprite),
         DisplayName = "Sprite",
         GameObjectType = Enums.GEObjectType.Component)]
-    public class Sprite : ImageComponentBase<ImageSource>, 
-        IConvertToDto<SpriteDto>
+    public class Sprite : ImageComponentBase<ImageSource>, ISprite
+        
     {
         #region Ctor
         
@@ -25,7 +25,7 @@ namespace WPFGameEngine.WPF.GE.Component.Sprites
         
         #region IConvertToDto
 
-        public SpriteDto ToDto() =>
+        public override SpriteDto ToDto() =>
             new SpriteDto()
             {
                 ResourceKey = ResourceKey,

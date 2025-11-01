@@ -5,8 +5,10 @@ using WPFGameEngine.WPF.GE.GameObjects;
 
 namespace SpaceAvenger.Editor.Mock
 {
-    public class GameObjectMock : GameObject
+    public class GameObjectMock : GameObject, IGameObjectMock
     {
+        public int Id => m_id;
+
         public GameObjectMock(string name, Vector2 position, Vector2 centerPosition, double rotation, SizeF scale) 
             : base(name, position, centerPosition, rotation, scale)
         {

@@ -3,6 +3,7 @@ using WPFGameEngine.Attributes.Editor;
 using WPFGameEngine.Timers.Base;
 using WPFGameEngine.WPF.GE.Component.Animations;
 using WPFGameEngine.WPF.GE.Component.Base;
+using WPFGameEngine.WPF.GE.Dto.Components;
 
 namespace WPFGameEngine.WPF.GE.Component.Animators
 {
@@ -102,6 +103,18 @@ namespace WPFGameEngine.WPF.GE.Component.Animators
         public bool Contains(string name)
         {
             return m_animations.ContainsKey(name);
+        }
+
+        public override AnimatorDto ToDto()
+        { 
+            AnimatorDto dto = new AnimatorDto();
+
+            foreach (var item in m_animations)
+            {
+                dto.NameAnimationMap.Add(item.Key, (AnimationDto)item.Value.ToDto());
+            }
+
+            return dto;
         }
 
         public IAnimation? this[string key]

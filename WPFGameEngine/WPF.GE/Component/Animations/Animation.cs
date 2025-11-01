@@ -5,6 +5,8 @@ using WPFGameEngine.Services.Interfaces;
 using WPFGameEngine.Timers.Base;
 using WPFGameEngine.WPF.GE.AnimationFrames;
 using WPFGameEngine.WPF.GE.Component.Base.ImageComponents;
+using WPFGameEngine.WPF.GE.Dto.Base;
+using WPFGameEngine.WPF.GE.Dto.Components;
 using WPFGameEngine.WPF.GE.Validation.Base;
 
 namespace WPFGameEngine.WPF.GE.Component.Animations
@@ -326,6 +328,12 @@ namespace WPFGameEngine.WPF.GE.Component.Animations
                 && !string.IsNullOrEmpty(EaseType)
                 && !string.IsNullOrEmpty(EaseFactoryName);
         }
+
+        public override AnimationDto ToDto() => new AnimationDto()
+        { 
+            ResourceKey = ResourceKey,
+            AnimationFrames = AnimationFrames,
+        };
 
         #endregion
     }

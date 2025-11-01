@@ -129,6 +129,7 @@
   <ItemGroup>
     <Folder Include="DataBase\" />
     <Folder Include="Game.Core\Spaceships\F10\Weapons\" />
+    <Folder Include="Resources\GameObjects\" />
   </ItemGroup>
 
   <ItemGroup>

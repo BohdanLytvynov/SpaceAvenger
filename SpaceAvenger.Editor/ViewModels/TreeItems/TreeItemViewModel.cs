@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using SpaceAvenger.Editor.Mock;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using ViewModelBaseLibDotNetCore.Commands;
 using ViewModelBaseLibDotNetCore.Helpers;
 using ViewModelBaseLibDotNetCore.VM;
 using WPFGameEngine.WPF.GE.GameObjects;
@@ -23,6 +17,7 @@ namespace SpaceAvenger.Editor.ViewModels.TreeItems
         private int m_Id;
         private string m_Name;
         private bool m_Selected;
+        private bool m_Exported;
         ObservableCollection<TreeItemViewModel> m_children;
         #endregion
 
@@ -31,6 +26,16 @@ namespace SpaceAvenger.Editor.ViewModels.TreeItems
         {
             get=> m_ShowNumber;
             set=> Set(ref m_ShowNumber, value);
+        }
+
+        public bool IsExported
+        {
+            get => m_Exported;
+            set 
+            {
+                Set(ref m_Exported, value); 
+                GameObject.IsExported = value;
+            }
         }
 
         public bool Selected 
@@ -61,7 +66,6 @@ namespace SpaceAvenger.Editor.ViewModels.TreeItems
         public int Id
         {
             get => m_Id;
-            set => Set(ref m_Id, value);
         }
 
         public string Name
@@ -103,7 +107,7 @@ namespace SpaceAvenger.Editor.ViewModels.TreeItems
         {
             GameObject = gameObject;
             m_ShowNumber = showNumber;
-            m_Id = gameObject.Id;
+            m_Id = (gameObject as IGameObjectMock).Id;
             m_Name = gameObject.Name;
             m_children = new ObservableCollection<TreeItemViewModel>();
         }

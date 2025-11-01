@@ -3,15 +3,14 @@ using System.Numerics;
 using System.Windows.Media;
 using WPFGameEngine.Attributes.Editor;
 using WPFGameEngine.WPF.GE.Component.Base;
-using WPFGameEngine.WPF.GE.Dto.Base;
 using WPFGameEngine.WPF.GE.Dto.Components;
 
 namespace WPFGameEngine.WPF.GE.Component.Transforms
-{    
+{
     [VisibleInEditor(FactoryName = nameof(TransformComponent),
         DisplayName = "Transform",
         GameObjectType = Enums.GEObjectType.Component)]
-    public class TransformComponent : ComponentBase, ITransform, IConvertToDto<TransformDto>
+    public class TransformComponent : ComponentBase, ITransform
     {
         #region Properties
 
@@ -23,7 +22,6 @@ namespace WPFGameEngine.WPF.GE.Component.Transforms
         #endregion
 
         #region Ctor
-
 
         public TransformComponent() : base(nameof(TransformComponent)) 
         {
@@ -65,7 +63,7 @@ namespace WPFGameEngine.WPF.GE.Component.Transforms
 
         #region IConvertToDto
 
-        public TransformDto ToDto() =>
+        public override TransformDto ToDto() =>
             new TransformDto()
             {
                 Position = Position,

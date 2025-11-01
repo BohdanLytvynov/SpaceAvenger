@@ -41,6 +41,22 @@
                             </StackPanel>
                             <TreeView Grid.Column="1" Margin="5,10" ItemsSource="{Binding Items, 
                                 UpdateSourceTrigger=PropertyChanged}"/>
+                            <StackPanel Orientation="Horizontal" Margin="10,3">
+                                <TextBox MinWidth="200" Style="{StaticResource TxtBoxInputStyle}" FontSize="14">
+                                    <TextBox.Text>
+                                        <Binding Path="PathToExport" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
+                                            <Binding.ValidationRules>
+                                                <DataErrorValidationRule/>
+                                            </Binding.ValidationRules>
+                                        </Binding>
+                                    </TextBox.Text>
+                                </TextBox>
+                                <Button Content="..." MinWidth="20" Command="{Binding OnOpenDialogButtonPressed}"/>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal" Margin="10,3">
+                                <Button Content="Export Selected" Command="{Binding OnExportButtonPressed}"/>
+                            </StackPanel>
                         </StackPanel>
                     </ScrollViewer>
                     <Grid Grid.Column="4">

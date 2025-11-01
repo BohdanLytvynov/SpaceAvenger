@@ -1,6 +1,8 @@
-﻿namespace WPFGameEngine.WPF.GE.Component.Base
+﻿using WPFGameEngine.WPF.GE.Dto.Base;
+
+namespace WPFGameEngine.WPF.GE.Component.Base
 {
-    public class ComponentBase : IGEComponent
+    public abstract class ComponentBase : IGEComponent
     {
         public string ComponentName { get; init; }
 
@@ -8,5 +10,7 @@
         {
             ComponentName = name;
         }
+
+        public abstract DtoBase ToDto();
     }
 }

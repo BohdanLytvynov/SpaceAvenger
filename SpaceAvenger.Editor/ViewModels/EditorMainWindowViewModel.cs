@@ -20,14 +20,15 @@ using WPFGameEngine.Attributes.Editor;
 using WPFGameEngine.WPF.GE.Component.Base;
 using WPFGameEngine.WPF.GE.Exceptions;
 using System.Windows;
-using WPFGameEngine.Factories.Components;
 using WPFGameEngine.Timers.Base;
-using WPFGameEngine.Factories.Ease;
 using WPFGameEngine.Extensions;
 using SpaceAvenger.Editor.ViewModels.Options;
 using WPFGameEngine.Enums;
 using WPFGameEngine.Services.Interfaces;
 using WPFGameEngine.FactoryWrapper.Base;
+using Microsoft.Win32;
+using ViewModelBaseLibDotNetCore.Helpers;
+using WPFGameEngine.WPF.GE.Serialization.GameObjects;
 
 namespace SpaceAvenger.Editor.ViewModels
 {
@@ -52,10 +53,14 @@ namespace SpaceAvenger.Editor.ViewModels
         private IAssemblyLoader m_assemblyLoader;
         private IFactoryWrapper m_factoryWrapper;
         private IGameTimer m_gameTimer;
+        private IGameObjectExporter m_gameObjectExporter;
+        private string m_pathToExport;
 
         #endregion
 
         #region Properties
+        public string PathToExport 
+        { get => m_pathToExport; set => Set(ref m_pathToExport, value); }
 
         public string Title
         { get => m_title; set => Set(ref m_title, value); }
@@ -149,17 +154,42 @@ namespace SpaceAvenger.Editor.ViewModels
         public ICommand OnAddComponentButtonPressed { get; }
 
         public ICommand OnDeleteComponentButtonPressed { get; }
+
+        public ICommand OnExportButtonPressed { get; }
+
+        public ICommand OnOpenDialogButtonPressed { get; }
+        #endregion
+
+        #region IData Error Info
+        public override string this[string columnName]
+        {
+            get 
+            {
+                string error = string.Empty;
+
+                switch (columnName)
+                {
+                    case nameof(PathToExport):
+                        SetValidArrayValue(0, !ValidationHelper.TextIsEmpty(PathToExport, out error));
+                        break;
+                }
+
+                return error;
+            }
+        }
         #endregion
 
         #region Ctor
         public EditorMainWindowViewModel(
             IFactoryWrapper factoryWrapper,
             IGameTimer gameTimer,
-            IAssemblyLoader assemblyLoader
+            IAssemblyLoader assemblyLoader,
+            IGameObjectExporter gameObjectExporter
             ) : this()
         {
             m_factoryWrapper = factoryWrapper ?? throw new ArgumentNullException(nameof(factoryWrapper));
             m_assemblyLoader = assemblyLoader ?? throw new ArgumentNullException(nameof(assemblyLoader));
+            m_gameObjectExporter = gameObjectExporter ?? throw new ArgumentNullException(nameof(gameObjectExporter));
 
             #region Get All Components From GE
             m_ComponentsToAdd = new ObservableCollection<OptionsViewModel>();
@@ -185,7 +215,7 @@ namespace SpaceAvenger.Editor.ViewModels
 
         public EditorMainWindowViewModel()
         {
-
+            InitValidArray(1);
             m_title = "Game Editor";
             m_ShowBorders = true;
             m_ShowGizmos = true;
@@ -195,6 +225,7 @@ namespace SpaceAvenger.Editor.ViewModels
             m_objName = string.Empty;
             m_SelectedComponentIndex = -1;
             m_SelectedComponent = new OptionsViewModel();
+            m_pathToExport = string.Empty;
 
             GESettings.DrawGizmo = true;
             GESettings.DrawBorders = true;
@@ -217,6 +248,14 @@ namespace SpaceAvenger.Editor.ViewModels
             OnDeleteComponentButtonPressed = new Command(
                 OnDeleteComponentButtonPressedExecute,
                 CanOnDeleteComponentButtonPressedExecute);
+
+            OnExportButtonPressed = new Command(
+                OnExportButtonPressedExecute,
+                CanOnExportButtonPressedExecute);
+
+            OnOpenDialogButtonPressed = new Command(
+                OnOpenDialogButtonPressedExecute,
+                CanOnOpenDialogButtonPressedExecute);
         }
 
         #endregion 
@@ -319,6 +358,45 @@ namespace SpaceAvenger.Editor.ViewModels
             SelectedComponentIndex = -1;
         }
 
+        #endregion
+
+        #region On Export Button Pressed Execute
+        private bool CanOnExportButtonPressedExecute(object p) => Items.Count > 0 && GetValidArrayValue(0);
+
+        private void OnExportButtonPressedExecute(object p)
+        {
+            Exception ex = null;
+            foreach (var item in GameView.World)
+            {
+                if(item.IsExported)
+                    m_gameObjectExporter.Export(item, PathToExport, ex);
+
+                if (ex != null)
+                    break;
+            }
+
+            if (ex == null)
+                MessageBox.Show("Export successful!", Title, MessageBoxButton.OK, MessageBoxImage.Information);
+            else
+                MessageBox.Show($"Export failed! Error: {ex.Message}", Title, MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        #endregion
+
+        #region On Open Dialog Button Pressed
+        private bool CanOnOpenDialogButtonPressedExecute(object p) => true;
+
+        private void OnOpenDialogButtonPressedExecute(object p)
+        {
+            OpenFolderDialog dialog = new OpenFolderDialog();
+            if (!string.IsNullOrEmpty(PathToExport))
+            { 
+                dialog.DefaultDirectory = PathToExport;
+            }
+            if (dialog.ShowDialog() ?? false)
+            { 
+                PathToExport = dialog.FolderName;
+            }
+        }
         #endregion
 
         private void RemoveObjectFromTreeRec(TreeItemViewModel item, ObservableCollection<TreeItemViewModel> src, bool removed)

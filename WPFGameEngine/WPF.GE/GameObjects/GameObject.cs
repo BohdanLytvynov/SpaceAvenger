@@ -8,6 +8,8 @@ using WPFGameEngine.WPF.GE.Component.Animators;
 using WPFGameEngine.WPF.GE.Component.Base;
 using WPFGameEngine.WPF.GE.Component.Sprites;
 using WPFGameEngine.WPF.GE.Component.Transforms;
+using WPFGameEngine.WPF.GE.Dto.Base;
+using WPFGameEngine.WPF.GE.Dto.GameObjects;
 using WPFGameEngine.WPF.GE.Exceptions;
 using WPFGameEngine.WPF.GE.Settings;
 
@@ -28,15 +30,15 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         private Dictionary<string, IGEComponent> m_components;
         private List<IGameObject> m_children;
 
-        private int m_id;
+        protected int m_id;
         #endregion
 
         #region Propeties
-        public int Id { get => m_id; }
+        public bool IsExported { get; set; }
         public bool Enabled { get; set; }
         public double ZIndex { get; set; }
         public string Name { get; set; }
-
+        
         public List<IGameObject> Children { get => m_children; }
         #endregion
 
@@ -197,7 +199,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         {
             if (string.IsNullOrEmpty(name))
             {
-                Name = this.GetType().Name + $"_{Id}";
+                Name = this.GetType().Name + $"_{m_id}";
             }
             else
             {
@@ -388,6 +390,52 @@ namespace WPFGameEngine.WPF.GE.GameObjects
             if(m_components.ContainsKey(name))
                 m_components.Remove(name);
             return this;
+        }
+
+        public void Traverse(IGameObject root, Action<IGameObject> traverseAction)
+        { 
+            if(root == null) 
+                return;
+
+            traverseAction?.Invoke(root);
+
+            foreach (var item in root.Children)
+            {
+                Traverse(item, traverseAction);
+            }
+        }
+
+        private void ToDtoRec(IGameObject root , GameObjectDto gameObjectDto)
+        {
+            if (root == null)
+                return;
+
+            if (!root.IsExported)
+                return;
+
+            gameObjectDto.Name = root.Name;
+            gameObjectDto.Enabled = root.Enabled;
+            gameObjectDto.ZIndex = root.ZIndex;
+            var components = root.GetComponents();
+            foreach (var component in components)
+            {
+                gameObjectDto.Components.Add(component.ToDto());
+            }
+            int i  = 0;
+            foreach (var item in root.Children)
+            {
+                gameObjectDto.Children.Add(item.ToDto());
+
+                ToDtoRec(item, gameObjectDto.Children[i]);
+                i++;
+            }
+        }
+
+        public GameObjectDto ToDto()
+        {
+            GameObjectDto gameObjectDto = new GameObjectDto();
+            ToDtoRec(this, gameObjectDto);
+            return  gameObjectDto;
         }
 
         #endregion
