@@ -7,7 +7,7 @@ namespace WPFGameEngine.WPF.GE.Dto.Components
     {
         public Dictionary<string, AnimationDto> NameAnimationMap { get; set; }
 
-        public AnimatorDto() : base(nameof(Animator))
+        public AnimatorDto()
         {
             NameAnimationMap = new Dictionary<string, AnimationDto>();
         }

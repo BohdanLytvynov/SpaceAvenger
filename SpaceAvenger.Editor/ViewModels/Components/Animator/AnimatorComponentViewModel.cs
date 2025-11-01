@@ -2,10 +2,8 @@
 using SpaceAvenger.Editor.ViewModels.AnimatorOptions;
 using SpaceAvenger.Editor.ViewModels.Components.Base;
 using System.Collections.ObjectModel;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using ViewModelBaseLibDotNetCore.Commands;
-using WPFGameEngine.Factories.Ease;
 using WPFGameEngine.FactoryWrapper.Base;
 using WPFGameEngine.Services.Interfaces;
 using WPFGameEngine.WPF.GE.Component.Animators;
@@ -46,24 +44,13 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animators
             : base(nameof(Animator), gameObject) 
         {
             #region Init Fields
-
-            var anim = GameObject.GetComponent<Animator>(false);
-
-            if (anim != null)
-            {
-
-            }
-            else
-            {
-                GameObject.RegisterComponent(new Animator());
-            }
             m_factoryWrapper = factoryWrapper ?? throw new ArgumentNullException(nameof(factoryWrapper));
             m_resourceLodaer = m_factoryWrapper.ResourceLoader ?? throw new ArgumentNullException(nameof(ResourceLoader));
-            m_assemblyLoader = assemblyLoader ?? throw new ArgumentNullException(nameof(assemblyLoader));
-            
-
+            m_assemblyLoader = assemblyLoader ?? throw new ArgumentNullException(nameof(assemblyLoader));            
             m_animatorOptionsViewModel = new ObservableCollection<AnimatorOptionViewModel>();
             m_selectedOption = new AnimatorOptionViewModel();
+
+            LoadCurrentGameObjProperties();
             #endregion
 
             #region Init Commands
@@ -113,7 +100,7 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animators
         }
         #endregion
 
-        private void Option_OnAnimatorChanged(string arg1, WPFGameEngine.WPF.GE.Component.Animations.Animation arg2)
+        private void Option_OnAnimatorChanged(string arg1, WPFGameEngine.WPF.GE.Component.Animations.IAnimation arg2)
         {
             var anim = GameObject.GetComponent<Animator>(false);
             if (anim != null)
@@ -126,6 +113,23 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animators
                 {
                     anim.AddAnimation(arg1, arg2);
                 }
+            }
+        }
+
+        protected override void LoadCurrentGameObjProperties()
+        {
+            if (GameObject == null)
+                return;
+
+            var anim = GameObject.GetComponent<Animator>();
+
+            if (anim == null)
+                return;
+
+            foreach (var item in anim.GetAllKeys())
+            {
+                var option = new AnimatorOptionViewModel(AnimatorOptions.Count + 1,
+                    m_factoryWrapper, m_assemblyLoader, anim[item]);
             }
         }
 

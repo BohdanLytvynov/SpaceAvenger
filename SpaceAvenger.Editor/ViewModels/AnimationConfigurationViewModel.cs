@@ -6,14 +6,11 @@ using SpaceAvenger.Editor.ViewModels.EaseOptions;
 using SpaceAvenger.Editor.ViewModels.Options;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using ViewModelBaseLibDotNetCore.Commands;
 using ViewModelBaseLibDotNetCore.VM;
 using WPFGameEngine.Attributes.Editor;
 using WPFGameEngine.Enums;
 using WPFGameEngine.Extensions;
-using WPFGameEngine.Factories.Ease;
 using WPFGameEngine.FactoryWrapper.Base;
 using WPFGameEngine.GameViewControl;
 using WPFGameEngine.Services.Interfaces;
@@ -29,7 +26,7 @@ namespace SpaceAvenger.Editor.ViewModels
     internal class AnimationConfigurationViewModel : ViewModelBase
     {
         #region Events
-        public event Action<Animation> OnConfigurationFinished;
+        public event Action<IAnimation> OnConfigurationFinished;
 
         public event Action OnConfigurationCanceled;
         #endregion
@@ -38,7 +35,7 @@ namespace SpaceAvenger.Editor.ViewModels
         private string m_title;
         private GameViewHost m_gameView;
         private IGameObject m_gameObject;
-        private Animation m_animation;
+        private IAnimation m_animation;
         private ObservableCollection<string> m_resourceNames;
         private ObservableCollection<OptionsViewModel> m_EasingTypes;
         private ObservableCollection<EaseOptionsViewModel> m_EaseConstants;
@@ -216,7 +213,7 @@ namespace SpaceAvenger.Editor.ViewModels
 
         #region Ctor
         public AnimationConfigurationViewModel(IAssemblyLoader assemblyLoader,
-            IFactoryWrapper factoryWrapper, Animation old)
+            IFactoryWrapper factoryWrapper, IAnimation old)
         {
             #region Init Fields
             m_plotModel = new PlotModel();

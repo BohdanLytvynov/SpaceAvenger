@@ -2,10 +2,11 @@
 using WPFGameEngine.Timers.Base;
 using WPFGameEngine.WPF.GE.AnimationFrames;
 using WPFGameEngine.WPF.GE.Component.Base.ImageComponents;
+using WPFGameEngine.WPF.GE.Validation.Base;
 
 namespace WPFGameEngine.WPF.GE.Component.Animations
 {
-    public interface IAnimation : IImageComponent<BitmapSource>
+    public interface IAnimation : IImageComponent<BitmapSource>, IValidatable
     {
         #region Properties
         public Dictionary<string, double> EaseConstants { get; }

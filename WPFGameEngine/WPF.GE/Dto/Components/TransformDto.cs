@@ -12,7 +12,7 @@ namespace WPFGameEngine.WPF.GE.Dto.Components
         public double Rotation { get; set; }//Degree
         public SizeF Scale { get; set; }
 
-        public TransformDto() : base(nameof(TransformComponent))
+        public TransformDto()
         {
             
         }

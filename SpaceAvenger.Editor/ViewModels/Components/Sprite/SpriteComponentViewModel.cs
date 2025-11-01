@@ -66,6 +66,8 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Sprites
                 m_resourceNames.Add(item);
             }
 
+            LoadCurrentGameObjProperties();
+
             #endregion
 
             #region Init Commands
@@ -87,6 +89,19 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Sprites
         private void OnApplyButtonPressedExecute(object p)
         {
             GameObject.GetComponent<Sprite>().Load(SelectedResource);
+        }
+
+        protected override void LoadCurrentGameObjProperties()
+        {
+            if (GameObject == null)
+                return;
+
+            var s = GameObject.GetComponent<Sprite>();
+
+            if (s == null)
+                return;
+            if(!string.IsNullOrEmpty(s.ResourceKey))
+                SelectedResource = s.ResourceKey;
         }
 
         #endregion

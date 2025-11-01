@@ -117,6 +117,11 @@ namespace WPFGameEngine.WPF.GE.Component.Animators
             return dto;
         }
 
+        public IEnumerable<string> GetAllKeys()
+        {
+            return m_animations.Keys;
+        }
+
         public IAnimation? this[string key]
         {
             get => m_animations[key];

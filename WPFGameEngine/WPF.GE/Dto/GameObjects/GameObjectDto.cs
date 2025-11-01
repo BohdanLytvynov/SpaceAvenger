@@ -11,12 +11,7 @@ namespace WPFGameEngine.WPF.GE.Dto.GameObjects
         public List<GameObjectDto> Children { get; set; }
         public List<DtoBase> Components { get; set; }
 
-        public GameObjectDto() : base(nameof(GameObject))
-        {
-            Init();
-        }
-
-        public GameObjectDto(string typeName) : base(typeName)
+        public GameObjectDto()
         {
             Init();
         }

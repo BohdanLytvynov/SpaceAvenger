@@ -34,7 +34,7 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Base
         #endregion
 
         #region Methods
-
+        protected abstract void LoadCurrentGameObjProperties();
         #endregion
     }
 }

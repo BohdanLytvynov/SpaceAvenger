@@ -55,6 +55,8 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animations
             m_resourceName = string.Empty;
             m_easeFunction = string.Empty;
             m_imgSource = m_factoryWrapper.ResourceLoader.Load<ImageSource>("Empty");
+
+            LoadCurrentGameObjProperties();
             #endregion
 
             #region Init Commands
@@ -104,7 +106,7 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animations
             m_animConfigurationWindow.Show();
         }
 
-        private void AnimationConfigurationViewModel_OnConfigurationFinished(Animation obj)
+        private void AnimationConfigurationViewModel_OnConfigurationFinished(IAnimation obj)
         {
             if (GameObject.GetComponent<Animation>() != null)
                 GameObject.UnregisterComponent(nameof(Animation));
@@ -118,6 +120,29 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animations
             ImageSource = m_factoryWrapper.ResourceLoader.Load<ImageSource>(ResourceName);
 
             m_animConfigurationWindow.Close();
+        }
+
+        protected override void LoadCurrentGameObjProperties()
+        {
+            if(GameObject == null)
+                return;
+
+            var a = GameObject.GetComponent<Animation>();
+
+            if (a == null)
+                return;
+
+            var resource = a.ResourceKey;
+
+            if (!a.Validate())
+                return;
+
+            ResourceName = a.ResourceKey;
+            Rows = a.Rows; 
+            Columns = a.Columns;
+            Duration = a.TotalTime;
+            EaseFunction = a.EaseType;
+            ImageSource = a.Texture;
         }
 
         #endregion

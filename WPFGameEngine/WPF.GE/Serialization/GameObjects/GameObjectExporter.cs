@@ -2,6 +2,7 @@
 using System.Text.Json;
 using WPFGameEngine.WPF.GE.Dto.GameObjects;
 using WPFGameEngine.WPF.GE.GameObjects;
+using WPFGameEngine.WPF.GE.Serialization.Converters;
 
 namespace WPFGameEngine.WPF.GE.Serialization.GameObjects
 {
@@ -13,12 +14,18 @@ namespace WPFGameEngine.WPF.GE.Serialization.GameObjects
             {
                 GameObjectDto dto = inpObj.ToDto();
 
-                string str = JsonSerializer.Serialize(dto, new JsonSerializerOptions() { WriteIndented = true });
+                var options = new JsonSerializerOptions()
+                { WriteIndented = true };
+                options.Converters.Add(new JsonVector2Converter());
+
+                string str = JsonSerializer.Serialize(dto, options);
 
                 string pathToFile = path + Path.DirectorySeparatorChar + dto.Name + ".json";
-
-                using (var fs = File.Create(pathToFile))
-                {}
+                if (!File.Exists(pathToFile)) 
+                {
+                    using (var fs = File.Create(pathToFile))
+                    { }
+                }
 
                 File.WriteAllText(pathToFile, str);
             }

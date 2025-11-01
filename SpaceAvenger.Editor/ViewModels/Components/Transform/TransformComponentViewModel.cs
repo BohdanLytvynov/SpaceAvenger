@@ -100,7 +100,7 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Transform
         #endregion
 
         #region Methods
-        private void LoadCurrentGameObjProperties()
+        protected override void LoadCurrentGameObjProperties()
         {
             if (GameObject != null)
             {

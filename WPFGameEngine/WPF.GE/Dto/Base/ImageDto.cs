@@ -4,7 +4,7 @@
     {
         public string ResourceKey { get; set; }
 
-        protected ImageDto(string typeName) : base(typeName)
+        protected ImageDto(string typeName)
         {
         }
     }

@@ -14,7 +14,7 @@ namespace WPFGameEngine.WPF.GE.Component.Animations
     [VisibleInEditor(FactoryName = nameof(Animation),
         DisplayName = "Animation",
         GameObjectType = Enums.GEObjectType.Component)]
-    public class Animation : ImageComponentBase<BitmapSource>, IAnimation, IValidatable
+    public class Animation : ImageComponentBase<BitmapSource>, IAnimation
     {
         #region Fields
         private double m_start_global_time;
@@ -324,6 +324,7 @@ namespace WPFGameEngine.WPF.GE.Component.Animations
         public bool Validate()
         {
             return AnimationFrames.Count > 0 && Texture != null
+                && !string.IsNullOrEmpty(ResourceKey)
                 && TotalTime > 0 && AnimationSpeed > 0 
                 && !string.IsNullOrEmpty(EaseType)
                 && !string.IsNullOrEmpty(EaseFactoryName);

@@ -37,6 +37,8 @@ namespace WPFGameEngine.WPF.GE.Component.Animators
             set;
         }
 
+        IEnumerable<string> GetAllKeys();
+
         bool Contains(string name);
     }
 }

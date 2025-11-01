@@ -13,7 +13,7 @@ namespace SpaceAvenger.Editor.ViewModels.AnimatorOptions
     internal class AnimatorOptionViewModel : ValidationViewModel
     {
         #region Events
-        public event Action<string, Animation> OnAnimatorChanged;
+        public event Action<string, IAnimation> OnAnimatorChanged;
         #endregion
 
         #region Fields
@@ -28,7 +28,7 @@ namespace SpaceAvenger.Editor.ViewModels.AnimatorOptions
         private IAssemblyLoader m_assemblyLoader;
         private IFactoryWrapper m_factoryWrapper;
         private AnimationConfigurationWindow m_animConfigurationWindow;
-        private Animation m_animation;
+        private IAnimation m_animation;
         #endregion
 
         #region Properties
@@ -84,7 +84,7 @@ namespace SpaceAvenger.Editor.ViewModels.AnimatorOptions
         public AnimatorOptionViewModel(int showNumber, 
             IFactoryWrapper factoryWrapper,
             IAssemblyLoader assemblyLoader,
-            Animation animation)
+            IAnimation animation)
         {
             #region Fields
             InitValidArray(1);
@@ -158,7 +158,7 @@ namespace SpaceAvenger.Editor.ViewModels.AnimatorOptions
             m_animConfigurationWindow.Show();
         }
 
-        private void AnimationConfigurationViewModel_OnConfigurationFinished(Animation obj)
+        private void AnimationConfigurationViewModel_OnConfigurationFinished(IAnimation obj)
         {
             m_animation = obj;
             Rows = obj.Rows;

@@ -365,15 +365,22 @@ namespace SpaceAvenger.Editor.ViewModels
 
         private void OnExportButtonPressedExecute(object p)
         {
+            int count = 0;
             Exception ex = null;
             foreach (var item in GameView.World)
             {
-                if(item.IsExported)
+                if (item.IsExported)
+                {
                     m_gameObjectExporter.Export(item, PathToExport, ex);
+                    count++;
+                }
 
                 if (ex != null)
                     break;
             }
+
+            if(count == 0)
+                return;
 
             if (ex == null)
                 MessageBox.Show("Export successful!", Title, MessageBoxButton.OK, MessageBoxImage.Information);

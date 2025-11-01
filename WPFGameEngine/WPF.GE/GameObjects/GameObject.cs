@@ -405,37 +405,37 @@ namespace WPFGameEngine.WPF.GE.GameObjects
             }
         }
 
-        private void ToDtoRec(IGameObject root , GameObjectDto gameObjectDto)
+        private GameObjectDto ToDtoRec(IGameObject root)
         {
             if (root == null)
-                return;
+                return null;
 
             if (!root.IsExported)
-                return;
+                return null;
 
+            GameObjectDto gameObjectDto = new GameObjectDto();
             gameObjectDto.Name = root.Name;
             gameObjectDto.Enabled = root.Enabled;
             gameObjectDto.ZIndex = root.ZIndex;
+ 
             var components = root.GetComponents();
             foreach (var component in components)
             {
                 gameObjectDto.Components.Add(component.ToDto());
             }
-            int i  = 0;
+
             foreach (var item in root.Children)
             {
-                gameObjectDto.Children.Add(item.ToDto());
-
-                ToDtoRec(item, gameObjectDto.Children[i]);
-                i++;
+                var childDto = ToDtoRec(item);
+                gameObjectDto.Children.Add(childDto);
             }
+
+            return gameObjectDto;
         }
 
         public GameObjectDto ToDto()
         {
-            GameObjectDto gameObjectDto = new GameObjectDto();
-            ToDtoRec(this, gameObjectDto);
-            return  gameObjectDto;
+            return ToDtoRec(this);
         }
 
         #endregion
