@@ -4,7 +4,7 @@ using WPFGameEngine.WPF.GE.GameObjects;
 
 namespace SpaceAvenger.Game.Core.Animations
 {
-    internal class AnimatedSprite : GameObject
+    internal class AnimatedSprite
     {
         #region Fields
   
@@ -16,12 +16,12 @@ namespace SpaceAvenger.Game.Core.Animations
 
         #region ctor
 
-        public AnimatedSprite(string name, Vector2 position, Vector2 centerPosition, double rotation, SizeF scale) 
-            : base(name, position, centerPosition, rotation, scale)
+        public AnimatedSprite(string name, Vector2 position, Vector2 centerPosition, double rotation, SizeF scale)
         {
             
-            
         }
+
+        
 
         #endregion
 

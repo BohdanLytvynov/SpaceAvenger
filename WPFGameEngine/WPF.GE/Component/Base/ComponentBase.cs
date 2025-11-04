@@ -6,6 +6,8 @@ namespace WPFGameEngine.WPF.GE.Component.Base
     {
         public string ComponentName { get; init; }
 
+        public abstract List<string> IncompatibleComponents { get; }
+
         public ComponentBase(string name)
         {
             ComponentName = name;

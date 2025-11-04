@@ -1,7 +1,7 @@
-﻿using SpaceAvenger.Editor.Services;
-using SpaceAvenger.Editor.ViewModels.AnimatorOptions;
+﻿using SpaceAvenger.Editor.ViewModels.AnimatorOptions;
 using SpaceAvenger.Editor.ViewModels.Components.Base;
 using System.Collections.ObjectModel;
+using System.Resources;
 using System.Windows.Input;
 using ViewModelBaseLibDotNetCore.Commands;
 using WPFGameEngine.FactoryWrapper.Base;
@@ -45,8 +45,8 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animators
         {
             #region Init Fields
             m_factoryWrapper = factoryWrapper ?? throw new ArgumentNullException(nameof(factoryWrapper));
-            m_resourceLodaer = m_factoryWrapper.ResourceLoader ?? throw new ArgumentNullException(nameof(ResourceLoader));
-            m_assemblyLoader = assemblyLoader ?? throw new ArgumentNullException(nameof(assemblyLoader));            
+            m_resourceLodaer = m_factoryWrapper.ResourceLoader ?? throw new ArgumentNullException("ResourceLoader");
+            m_assemblyLoader = assemblyLoader ?? throw new ArgumentNullException(nameof(assemblyLoader));
             m_animatorOptionsViewModel = new ObservableCollection<AnimatorOptionViewModel>();
             m_selectedOption = new AnimatorOptionViewModel();
 

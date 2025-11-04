@@ -3,6 +3,7 @@ using System.Xml.Linq;
 using WPFGameEngine.Factories.Base;
 using WPFGameEngine.Factories.Components.Animations;
 using WPFGameEngine.Factories.Components.Animators;
+using WPFGameEngine.Factories.Components.RelativeTransforms;
 using WPFGameEngine.Factories.Components.Sprites;
 using WPFGameEngine.Factories.Components.Transform;
 using WPFGameEngine.Factories.Ease;
@@ -25,17 +26,12 @@ namespace WPFGameEngine.FactoryWrapper
         #endregion
 
         #region Properties
-
         public IAnimationFactory AnimationFactory { get; init; }
-
         public IAnimatorFactory AnimatorFactory { get; init; }
-
         public ISpriteFactory SpriteFactory { get; init; }
-
         public ITransformFactory TransformFactory { get; init; }
-
+        public IRelativeTransformFactory RelativeTransformFactory { get; init; }
         public ILinearEaseFactory LinearEaseFactory { get; init; }
-
         public IQuadraticEaseFactory QuadraticEaseFactory { get; init; }
 
         #region Add Tools
@@ -53,6 +49,7 @@ namespace WPFGameEngine.FactoryWrapper
             AnimatorFactory = new AnimatorFactory();
             SpriteFactory = new SpriteFactory(m_resourceLoader);
             TransformFactory = new TransformFactory();
+            RelativeTransformFactory = new RelativeTransformFactory();
             LinearEaseFactory = new LinearEaseFactory();
             QuadraticEaseFactory = new QuadraticEaseFactory();
 

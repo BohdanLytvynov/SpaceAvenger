@@ -1,8 +1,9 @@
 ﻿using System.Windows.Media;
 using WPFGameEngine.Attributes.Editor;
 using WPFGameEngine.Services.Interfaces;
+using WPFGameEngine.WPF.GE.Component.Animations;
+using WPFGameEngine.WPF.GE.Component.Animators;
 using WPFGameEngine.WPF.GE.Component.Base.ImageComponents;
-using WPFGameEngine.WPF.GE.Dto.Base;
 using WPFGameEngine.WPF.GE.Dto.Components;
 
 namespace WPFGameEngine.WPF.GE.Component.Sprites
@@ -13,6 +14,9 @@ namespace WPFGameEngine.WPF.GE.Component.Sprites
     public class Sprite : ImageComponentBase<ImageSource>, ISprite
         
     {
+        public override List<string> IncompatibleComponents => 
+            new List<string> { nameof(Animation), nameof(Animator) };
+
         #region Ctor
         
         public Sprite(IResourceLoader resourceLoader) : base(nameof(Sprite))

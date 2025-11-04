@@ -23,7 +23,7 @@ namespace WPFGameEngine.WPF.GE.Component.Animations
 
         public bool IsRunning { get; }
 
-        public bool Freeze { get; init; }
+        public bool Freeze { get; set; }
 
         public bool Reverse { get; set; }
 

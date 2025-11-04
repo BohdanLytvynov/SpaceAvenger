@@ -29,6 +29,10 @@ using WPFGameEngine.FactoryWrapper.Base;
 using Microsoft.Win32;
 using ViewModelBaseLibDotNetCore.Helpers;
 using WPFGameEngine.WPF.GE.Serialization.GameObjects;
+using WPFGameEngine.WPF.GE.Component.RelativeTransforms;
+using SpaceAvenger.Editor.ViewModels.Components.RelativeTransforms;
+using System.Drawing;
+using System.Numerics;
 
 namespace SpaceAvenger.Editor.ViewModels
 {
@@ -267,15 +271,16 @@ namespace SpaceAvenger.Editor.ViewModels
         private void OnAddGameObjectButtonPressedExecute(object p)
         {
             IGameObject obj = new GameObjectMock();
-            var sprite = m_factoryWrapper.CreateObject<Sprite>();
-            sprite.Load("Empty");
-            obj.RegisterComponent(sprite);
 
             if (m_SelectedItem == null)
             {
                 TreeItemViewModel itemViewModel = new(Items.Count + 1, obj);
                 itemViewModel.ItemSelected += ItemViewModel_ItemSelected;
                 Items.Add(itemViewModel);
+                var t = m_factoryWrapper.CreateObject<TransformComponent>();
+                t.Scale = new SizeF(1f, 1f);
+                t.CenterPosition = new Vector2(0.5f, 0.5f);
+                obj.RegisterComponent(t);
                 m_gameViewHost.World.Add(obj);
             }
             else
@@ -283,9 +288,16 @@ namespace SpaceAvenger.Editor.ViewModels
                 TreeItemViewModel itemViewModel = new(m_SelectedItem.Children.Count + 1, obj);
                 itemViewModel.ItemSelected += ItemViewModel_ItemSelected;
                 m_SelectedItem.Children.Add(itemViewModel);
+                var t = m_factoryWrapper.CreateObject<RelativeTransformComponent>();
+                t.Scale = new SizeF(1f, 1f);
+                t.CenterPosition = new Vector2(0.5f, 0.5f);
+                obj.RegisterComponent(t);
                 m_SelectedItem.GameObject.AddChild(obj);
             }
 
+            var sprite = m_factoryWrapper.CreateObject<Sprite>();
+            sprite.Load("Empty");
+            obj.RegisterComponent(sprite);
         }
 
         private void ItemViewModel_ItemSelected(TreeItemViewModel item)
@@ -494,6 +506,9 @@ namespace SpaceAvenger.Editor.ViewModels
                     break;
                 case nameof(Sprite):
                     c = new SpriteComponentViewModel(m_SelectedItem.GameObject, m_factoryWrapper.ResourceLoader);
+                    break;
+                case nameof(RelativeTransformComponent):
+                    c = new RelativeTransformViewModel(m_SelectedItem.GameObject);
                     break;
                 default:
                     throw new Exception($"Unsupported component Type! Component: {component.ComponentName}");

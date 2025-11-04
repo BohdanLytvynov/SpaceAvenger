@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using SpaceAvenger.Editor.Services;
 using SpaceAvenger.Editor.ViewModels;
+using SpaceAvenger.Services;
+using SpaceAvenger.Services.ResourceLoader;
 using System.IO;
 using System.Windows;
 using ViewModelBaseLibDotNetCore.MessageBus;
@@ -38,7 +39,7 @@ namespace SpaceAvenger.Editor
             services.AddSingleton<IMessageBus, MessageBusService>();
             services.AddSingleton(c =>
             { 
-                IResourceLoader resourceLoader = new ResourceLoader("pack://application:,,,/SpaceAvenger;component/Resources/Content.xaml");
+                IResourceLoader resourceLoader = new WPFResourceLoader(Constants.PATH_TO_CONTENT);
                 return resourceLoader;
             });
             services.AddSingleton<IFactoryWrapper>(c => 

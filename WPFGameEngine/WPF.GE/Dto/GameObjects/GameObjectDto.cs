@@ -1,5 +1,4 @@
 ﻿using WPFGameEngine.WPF.GE.Dto.Base;
-using WPFGameEngine.WPF.GE.GameObjects;
 
 namespace WPFGameEngine.WPF.GE.Dto.GameObjects
 {
@@ -9,7 +8,7 @@ namespace WPFGameEngine.WPF.GE.Dto.GameObjects
         public  bool Enabled { get; set; }
         public string Name { get; set; }
         public List<GameObjectDto> Children { get; set; }
-        public List<DtoBase> Components { get; set; }
+        public List<ComponentDto> Components { get; set; }
 
         public GameObjectDto()
         {
@@ -17,9 +16,9 @@ namespace WPFGameEngine.WPF.GE.Dto.GameObjects
         }
 
         private void Init()
-        { 
+        {
             Children = new List<GameObjectDto>();
-            Components = new List<DtoBase>();
+            Components = new List<ComponentDto>();
         }
     }
 }

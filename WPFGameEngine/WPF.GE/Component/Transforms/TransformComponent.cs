@@ -3,6 +3,7 @@ using System.Numerics;
 using System.Windows.Media;
 using WPFGameEngine.Attributes.Editor;
 using WPFGameEngine.WPF.GE.Component.Base;
+using WPFGameEngine.WPF.GE.Component.RelativeTransforms;
 using WPFGameEngine.WPF.GE.Dto.Components;
 
 namespace WPFGameEngine.WPF.GE.Component.Transforms
@@ -12,16 +13,26 @@ namespace WPFGameEngine.WPF.GE.Component.Transforms
         GameObjectType = Enums.GEObjectType.Component)]
     public class TransformComponent : ComponentBase, ITransform
     {
-        #region Properties
+        #region Fields
+        private Vector2 m_position;
+        #endregion
 
-        public Vector2 Position { get; set; }
+        #region Properties
+        public override List<string> IncompatibleComponents => 
+            new List<string>{ nameof(RelativeTransformComponent) };
+
+        public virtual Vector2 Position { get => m_position; set=> m_position = value; }
         public Vector2 CenterPosition { get; set; }
         public double Rotation { get; set; }//Degree
         public SizeF Scale { get; set; }
-
         #endregion
 
         #region Ctor
+
+        public TransformComponent(string componentName) : base(componentName)
+        {
+            
+        }
 
         public TransformComponent() : base(nameof(TransformComponent)) 
         {

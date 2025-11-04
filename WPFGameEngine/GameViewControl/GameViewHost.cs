@@ -79,6 +79,7 @@ namespace WPFGameEngine.GameViewControl
             if (gameObject == null)
                 return;
 
+            gameObject.StartUp();
             m_world.Add(gameObject);
         }
 

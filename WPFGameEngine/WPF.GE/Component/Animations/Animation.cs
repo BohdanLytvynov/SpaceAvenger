@@ -4,7 +4,9 @@ using WPFGameEngine.Attributes.Editor;
 using WPFGameEngine.Services.Interfaces;
 using WPFGameEngine.Timers.Base;
 using WPFGameEngine.WPF.GE.AnimationFrames;
+using WPFGameEngine.WPF.GE.Component.Animators;
 using WPFGameEngine.WPF.GE.Component.Base.ImageComponents;
+using WPFGameEngine.WPF.GE.Component.Sprites;
 using WPFGameEngine.WPF.GE.Dto.Base;
 using WPFGameEngine.WPF.GE.Dto.Components;
 using WPFGameEngine.WPF.GE.Validation.Base;
@@ -34,7 +36,10 @@ namespace WPFGameEngine.WPF.GE.Component.Animations
         #endregion
 
         #region Properties
-       
+
+        public override List<string> IncompatibleComponents => 
+            new List<string> { nameof(Sprite), nameof(Animator) };
+
         public Dictionary<string, double> EaseConstants { get; }
 
         public int CurrentFrameIndex { get => m_curr_frame_index; }
@@ -106,7 +111,7 @@ namespace WPFGameEngine.WPF.GE.Component.Animations
         //Weather repeating is required
         public bool IsLooping { get => m_IsLooping; set => m_IsLooping = value; }
         //Texture that represents sprite sheet        
-        public bool Freeze { get; init; }
+        public bool Freeze { get; set; }
         public List<IAnimationFrame> AnimationFrames { get => m_frames; }
         public string EaseType { get; set; }
         public string EaseFactoryName { get; set; }
@@ -330,11 +335,35 @@ namespace WPFGameEngine.WPF.GE.Component.Animations
                 && !string.IsNullOrEmpty(EaseFactoryName);
         }
 
-        public override AnimationDto ToDto() => new AnimationDto()
-        { 
-            ResourceKey = ResourceKey,
-            AnimationFrames = AnimationFrames,
-        };
+        public override AnimationDto ToDto()
+        {
+            var animDto = new AnimationDto()
+            {
+                ResourceKey = ResourceKey,
+                Rows = Rows,
+                Columns = Columns,
+                Duration = TotalTime,
+                Freeze = Freeze,
+                EaseFactoryName = EaseFactoryName,
+                EaseType = EaseType,
+                IsLooping = IsLooping,
+                Reverse = Reverse,
+                AnimationSpeed = AnimationSpeed,
+            };
+
+
+            foreach (var frame in AnimationFrames)
+            {
+                animDto.AnimationFrames.Add(new AnimationFrame(frame.Lifespan));
+            }
+
+            foreach (var c in EaseConstants)
+            {
+                animDto.EaseConstants.Add(c.Key, c.Value);
+            }
+
+            return animDto;
+        }
 
         #endregion
     }

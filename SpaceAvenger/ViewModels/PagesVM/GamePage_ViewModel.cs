@@ -13,6 +13,13 @@ using ViewModelBaseLibDotNetCore.PageManager.Base;
 using ViewModelBaseLibDotNetCore.MessageBus.Base;
 using ViewModelBaseLibDotNetCore.VM;
 using WPFGameEngine.Timers.Base;
+using WPFGameEngine.WPF.GE.Serialization.GameObjects;
+using System.Collections.Generic;
+using WPFGameEngine.WPF.GE.Dto.GameObjects;
+using System.Reflection;
+using System.Linq;
+using WPFGameEngine.ObjectBuilders.Base;
+using SpaceAvenger.Game.Core.Spaceships.F10.Destroyer;
 
 namespace SpaceAvenger.ViewModels.PagesVM
 {
@@ -29,6 +36,8 @@ namespace SpaceAvenger.ViewModels.PagesVM
         private ImageSource m_GameBack;
         private GameViewHost m_GameView;
         private IGameTimer m_gameTimer;
+        private IObjectBuilder m_objectBuilder;
+
         #endregion
 
         #region Properties
@@ -59,8 +68,10 @@ namespace SpaceAvenger.ViewModels.PagesVM
         public GamePage_ViewModel(
             IPageManagerService<FrameType> pageManager,
             IMessageBus messageBus,
-            IGameTimer gameTimer) : this()
+            IGameTimer gameTimer,
+            IObjectBuilder objectBuilder) : this()
         {
+            m_objectBuilder = objectBuilder ?? throw new ArgumentNullException(nameof(objectBuilder));
             m_MessageBus = messageBus ?? throw new ArgumentNullException(nameof(messageBus));
             m_PageManager = pageManager ?? throw new ArgumentNullException(nameof(pageManager));
             m_gameTimer = gameTimer ?? throw new ArgumentNullException(nameof(gameTimer));
@@ -121,21 +132,14 @@ namespace SpaceAvenger.ViewModels.PagesVM
 
         private void Initialize()
         {
-            //F10Destroyer destroyer = new F10Destroyer("Player")
-            //{
-            //    Position = new Vector2(200, 300),
-            //    Scale = new SizeF(0.7f, 0.7f),
-            //    Rotation = 45
-            //};
+            var obj = m_objectBuilder.Build<F10Destroyer>();
 
-            //RegisterNewObject(destroyer);
+            RegisterNewObject(obj);
         }
 
         private void RegisterNewObject(GameObject gameObject)
         {
-            if (gameObject == null)
-                throw new ArgumentNullException(nameof(gameObject));
-            m_GameView.World.Add(gameObject);
+            m_GameView.AddObject(gameObject);
         }
 
         #endregion

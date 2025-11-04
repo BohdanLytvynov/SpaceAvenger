@@ -12,7 +12,7 @@ namespace WPFGameEngine.WPF.GE.Component.Base.ImageComponents
 
         public IResourceLoader ResourceLoader { get; protected set; }
 
-        public string ResourceKey { get; protected set; }
+        public string ResourceKey { get; set; }
 
         public TImage Texture { get; protected set; }
 

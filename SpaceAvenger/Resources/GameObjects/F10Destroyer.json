@@ -1,0 +1,59 @@
+{
+  "ZIndex": 0,
+  "Enabled": true,
+  "Name": "F10Destroyer",
+  "Children": [
+    {
+      "ZIndex": 0,
+      "Enabled": true,
+      "Name": "F10RailGun",
+      "Children": [],
+      "Components": [
+        {
+          "RecreateType": "TransformComponent",
+          "Position": {
+            "X": 134.21454,
+            "Y": 81.4874
+          },
+          "CenterPosition": {
+            "X": 0.2331687,
+            "Y": 0.5
+          },
+          "Rotation": 0,
+          "Scale": {
+            "IsEmpty": false,
+            "Width": 1,
+            "Height": 1
+          }
+        },
+        {
+          "RecreateType": "Sprite",
+          "ResourceKey": "F10_RailGun"
+        }
+      ]
+    }
+  ],
+  "Components": [
+    {
+      "RecreateType": "TransformComponent",
+      "Position": {
+        "X": 0,
+        "Y": 0
+      },
+      "CenterPosition": {
+        "X": 0.5,
+        "Y": 0.5
+      },
+      "Rotation": 0,
+      "Scale": {
+        "IsEmpty": false,
+        "Width": 1,
+        "Height": 1
+      }
+    },
+    {
+      "RecreateType": "Sprite",
+      "ResourceKey": "F10_Destr"
+    }
+  ]
+}

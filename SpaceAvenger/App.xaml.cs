@@ -17,6 +17,16 @@ using ViewModelBaseLibDotNetCore.MessageBus.Base;
 using ViewModelBaseLibDotNetCore.MessageBus;
 using WPFGameEngine.Timers.Base;
 using WPFGameEngine.Timers;
+using WPFGameEngine.WPF.GE.Serialization.GameObjects;
+using System.IO;
+using WPFGameEngine.ObjectBuilders.Base;
+using WPFGameEngine.FactoryWrapper.Base;
+using WPFGameEngine.Services.Interfaces;
+using SpaceAvenger.Services.ResourceLoader;
+using SpaceAvenger.Services;
+using WPFGameEngine.ObjectBuilders;
+using WPFGameEngine.WPF.GE.GameObjects;
+using WPFGameEngine.FactoryWrapper;
 
 namespace SpaceAvenger
 {
@@ -34,6 +44,38 @@ namespace SpaceAvenger
         private static IServiceCollection InitializeServices()
         {
             var services = new ServiceCollection();
+
+            services.AddSingleton<IResourceLoader>(c =>
+            {
+                return new WPFResourceLoader(Constants.PATH_TO_CONTENT);
+            });
+
+            services.AddSingleton<IFactoryWrapper>(c =>
+            {
+                var loader = c.GetRequiredService<IResourceLoader>();
+                return new FactoryWrapper(loader);
+            });
+
+            services.AddSingleton<IGameObjectImporter>(c =>
+            { 
+                string pathToObjects = Environment.CurrentDirectory
+                + Path.DirectorySeparatorChar + "Resources" 
+                + Path.DirectorySeparatorChar + "GameObjects";
+
+                return new GameObjectImporter(pathToObjects);
+            });
+
+            services.AddSingleton<IObjectBuilder>(c =>
+            {
+                var assembly = Assembly.GetExecutingAssembly();
+                var importer = c.GetRequiredService<IGameObjectImporter>();
+                var factoryWrapper = c.GetRequiredService<IFactoryWrapper>();
+                return new ObjectBuilder(
+                    assembly,
+                    typeof(MapableObject),
+                    importer,
+                    factoryWrapper);
+            });
             // Add ViewModels (Windows)
             services.AddSingleton<MainWindowViewModel>();
             // Add ViewModels (Pages)
@@ -74,7 +116,7 @@ namespace SpaceAvenger
             (t.GetCustomAttribute<ViewModelType>()?.Usage.Equals(ViewModelUsage.Page) ?? false)
             && t.Name.Contains("ViewModel")
             && t.GetCustomAttribute<ReflexionDetectionIgnore>() is null); 
-                                   
+
             TypeInfo? viewModelInfo = null;
 
             Page? view = null;

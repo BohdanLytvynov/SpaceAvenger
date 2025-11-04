@@ -1,11 +1,13 @@
 ﻿using System.Drawing;
 using System.Numerics;
+using System.Security.Cryptography.Xml;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using WPFGameEngine.Timers.Base;
 using WPFGameEngine.WPF.GE.Component.Animations;
 using WPFGameEngine.WPF.GE.Component.Animators;
 using WPFGameEngine.WPF.GE.Component.Base;
+using WPFGameEngine.WPF.GE.Component.RelativeTransforms;
 using WPFGameEngine.WPF.GE.Component.Sprites;
 using WPFGameEngine.WPF.GE.Component.Transforms;
 using WPFGameEngine.WPF.GE.Dto.Base;
@@ -38,18 +40,23 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         public bool Enabled { get; set; }
         public double ZIndex { get; set; }
         public string Name { get; set; }
-        
         public List<IGameObject> Children { get => m_children; }
+        public IGameObject Parent { get; set; }
+
+        public bool IsChild 
+        {
+            get 
+            {
+                return Parent != null;
+            }
+        }
         #endregion
 
         #region Ctor
         public GameObject() : this(null)
         {
         }
-
-        public GameObject(string name) : this(name, new TransformComponent())
-        {
-        }
+        
         /// <summary>
         /// Main Ctor
         /// </summary>
@@ -58,21 +65,13 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         /// <param name="centerPosition"></param>
         /// <param name="rotation"></param>
         /// <param name="scale"></param>
-        public GameObject(string name, Vector2 position, Vector2 centerPosition, double rotation, SizeF scale)
+        public GameObject(string name)
         {
             Init();
-            RegisterComponent(new TransformComponent(position, centerPosition, rotation, scale));
             SetId();
             InitName(name);
         }
 
-        public GameObject(string name, ITransform transform)
-        {
-            Init();
-            RegisterComponent(transform);
-            SetId();
-            InitName(name);
-        }
         #endregion
 
         #region Methods
@@ -103,32 +102,26 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         public virtual void Render(DrawingContext dc, Matrix parent = default)
         {
             if (!Enabled) return;
-            TransformComponent transform = GetComponent<TransformComponent>();
-            Sprite? sprite = GetComponent<Sprite>(false);
-            Animation? animation = GetComponent<Animation>(false);
-            Animator? animator = GetComponent<Animator>(false);
-            //Get An Image for Render
-            BitmapSource bitmapSource = null;
-            if (animation != null && animation.Texture != null)
-            {
-                bitmapSource = animation.GetCurrentFrame();
-            }
-            else if (animator != null && animator.Current != null)
-            {
-                bitmapSource = animator.GetCurrentFrame();
-            }
-            else if(sprite != null)
-            {
-                bitmapSource = (BitmapSource)sprite.Texture;
-            }
 
+            TransformComponent transform = GetTransformComponent();
+            //Get An Image for Render
+            BitmapSource bitmapSource = GetTexture();
             if (bitmapSource == null)
                 return;
+            //Calculate actual size of the Image
+            float actualWidth = (float)bitmapSource.Width * transform.Scale.Width;
+            float actualHeight = (float)bitmapSource.Height * transform.Scale.Height;
 
             //Calculate the center of the Image
-            float Xcenter = (float)(bitmapSource.Width * transform.Scale.Width) * transform.CenterPosition.X;
-            float Ycenter = (float)(bitmapSource.Height * transform.Scale.Height) * transform.CenterPosition.Y;
+            float Xcenter = actualWidth * transform.CenterPosition.X;
+            float Ycenter = actualHeight * transform.CenterPosition.Y;
             //Get matrix for current game object
+            
+            if (IsChild)
+            {
+
+            }
+
             var globalMatrix = transform.GetLocalTransformMatrix(new Vector2(Xcenter, Ycenter));
 
             if (parent != default)
@@ -138,8 +131,8 @@ namespace WPFGameEngine.WPF.GE.GameObjects
 
             dc.PushTransform(new MatrixTransform(globalMatrix));
 
-            dc.DrawImage(bitmapSource, new System.Windows.Rect(0, 0, bitmapSource.Width * transform.Scale.Width,
-                bitmapSource.Height * transform.Scale.Height));
+            dc.DrawImage(bitmapSource, new System.Windows.Rect
+                (0, 0, actualWidth, actualHeight));
 
             if (GESettings.DrawGizmo)
             {
@@ -147,12 +140,12 @@ namespace WPFGameEngine.WPF.GE.GameObjects
                 dc.DrawLine(
                     GESettings.XAxisColor,
                     new System.Windows.Point(Xcenter, Ycenter),
-                    new System.Windows.Point(Xcenter + (bitmapSource.Width * transform.Scale.Width) * (1 - transform.CenterPosition.X), Ycenter));
+                    new System.Windows.Point(Xcenter + actualWidth * (1 - transform.CenterPosition.X), Ycenter));
 
                 dc.DrawLine(
                     GESettings.YAxisColor,
                     new System.Windows.Point(Xcenter, Ycenter),
-                    new System.Windows.Point(Xcenter, Ycenter + (bitmapSource.Height * transform.Scale.Height) * (1 - transform.CenterPosition.Y)));
+                    new System.Windows.Point(Xcenter, Ycenter + actualHeight * (1 - transform.CenterPosition.Y)));
 
                 dc.DrawEllipse(
                     GESettings.GizmoCenterBrush,
@@ -169,8 +162,8 @@ namespace WPFGameEngine.WPF.GE.GameObjects
                     GESettings.BorderRectanglePen,
                     new System.Windows.Rect(
                         0, 0,
-                        bitmapSource.Width * transform.Scale.Width,
-                        bitmapSource.Height * transform.Scale.Height)
+                        actualWidth,
+                        actualHeight)
                     );
             }
 
@@ -219,6 +212,15 @@ namespace WPFGameEngine.WPF.GE.GameObjects
 
             if (m_components.ContainsKey(component.ComponentName))
                 throw new ComponentAlreadyRegisteredException(component.ComponentName);
+
+            if (component.IncompatibleComponents != null)
+            {
+                var keyList = m_components.Keys.ToList();
+                var validRes = component.IncompatibleComponents.Intersect(keyList).ToList();
+
+                if (validRes.Count > 0)
+                    throw new IncompatibleComponentException(component.ComponentName, validRes);
+            }
 
             m_components.Add(component.ComponentName, component);
 
@@ -270,6 +272,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         public void AddChild(IGameObject child)
         {
             if (child == null) throw new ArgumentNullException(nameof(child));
+            child.Parent = this;
             m_children.Add(child);
         }
 
@@ -421,7 +424,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects
             var components = root.GetComponents();
             foreach (var component in components)
             {
-                gameObjectDto.Components.Add(component.ToDto());
+                gameObjectDto.Components.Add((ComponentDto)component.ToDto());
             }
 
             foreach (var item in root.Children)
@@ -436,6 +439,77 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         public GameObjectDto ToDto()
         {
             return ToDtoRec(this);
+        }
+
+        public void ClearAllComponents()
+        {
+            if(m_components.Count > 0)
+                m_components.Clear();
+        }
+
+        public virtual void StartUp()
+        {
+            foreach (var item in m_children)
+            {
+                item.StartUp();
+            }
+        }
+
+        private void ScaleRecursive(IGameObject obj, SizeF newScale)
+        {
+            if (obj == null)
+                return;
+
+            var t = obj.GetComponent<TransformComponent>();
+
+            if (t != null && t.Scale != newScale)
+            {
+                t.Scale = newScale;
+            }
+
+            foreach (var item in obj.Children)
+            {
+                ScaleRecursive(item, newScale);
+            }
+        }
+
+        public void Scale(SizeF newScale)
+        {
+            ScaleRecursive(this, newScale);
+        }
+
+        public BitmapSource GetTexture()
+        {
+            Sprite? sprite = GetComponent<Sprite>(false);
+            Animation? animation = GetComponent<Animation>(false);
+            Animator? animator = GetComponent<Animator>(false);
+
+            if (animation != null && animation.Texture != null)
+            {
+                return animation.GetCurrentFrame();
+            }
+            else if (animator != null && animator.Current != null)
+            {
+                return animator.GetCurrentFrame();
+            }
+            else if (sprite != null)
+            {
+                return (BitmapSource)sprite.Texture;
+            }
+
+            return null;
+        }
+
+        public TransformComponent GetTransformComponent()
+        {
+            if (!IsChild)
+            {
+                return GetComponent<TransformComponent>(false);
+            }
+            else
+            {
+                return GetComponent<RelativeTransformComponent>(false);
+            }
         }
 
         #endregion

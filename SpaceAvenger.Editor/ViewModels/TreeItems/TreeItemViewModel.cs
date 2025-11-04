@@ -86,7 +86,7 @@ namespace SpaceAvenger.Editor.ViewModels.TreeItems
                 switch (columnName)
                 {
                     case nameof(Name):
-                        if (ValidationHelper.TextIsEmpty(Name, out error))
+                        if (!ValidationHelper.TextIsEmpty(Name, out error))
                         {
                             if (GameObject != null)
                             {

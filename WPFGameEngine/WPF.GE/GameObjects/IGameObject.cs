@@ -1,7 +1,10 @@
-﻿using System.Windows.Media;
+﻿using System.Drawing;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using WPFGameEngine.Factories.Base;
 using WPFGameEngine.Timers.Base;
 using WPFGameEngine.WPF.GE.Component.Base;
+using WPFGameEngine.WPF.GE.Component.Transforms;
 using WPFGameEngine.WPF.GE.Dto.Base;
 using WPFGameEngine.WPF.GE.Dto.GameObjects;
 
@@ -16,7 +19,12 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         public double ZIndex { get; set; }
         public bool Enabled { get; set; }
         public string Name { get; set; }
+        public bool IsChild { get; }
         public List<IGameObject> Children { get; }
+        public IGameObject Parent { get; set; }
+        BitmapSource GetTexture();
+        TransformComponent GetTransformComponent();
+        void StartUp();
         void Render(DrawingContext dc, Matrix parent);
         void Update(List<IGameObject> world, IGameTimer gameTimer);
         IGameObject RegisterComponent(IGEComponent component);
@@ -24,11 +32,14 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         IGameObject UnregisterComponent(string componentName);
         IGameObject UnregisterComponent<TComponent>()
             where TComponent : IGEComponent;
+        void ClearAllComponents();
         void AddChild(IGameObject child);
         bool RemoveChild(Func<IGameObject, bool> predicate, bool recursive = false);
         IGameObject? FindChild(Func<IGameObject, bool> predicate, bool recursiveSearch = false);
         TComponent? GetComponent<TComponent>(bool throwException = true)
             where TComponent : IGEComponent;
         IEnumerable<IGEComponent> GetComponents();
+
+        void Scale(SizeF newScale);
     }
 }

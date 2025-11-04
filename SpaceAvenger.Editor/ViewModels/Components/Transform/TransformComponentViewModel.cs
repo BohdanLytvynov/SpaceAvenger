@@ -104,7 +104,7 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Transform
         {
             if (GameObject != null)
             {
-                var t = GameObject.GetComponent<TransformComponent>(true);
+                var t = GameObject.GetTransformComponent();
 
                 PositionX = t.Position.X;
                 PositionY = t.Position.Y;
@@ -116,7 +116,7 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Transform
             }
         }
 
-        private void UpdatePositionX(float x)
+        protected virtual void UpdatePositionX(float x)
         {
             if (GameObject != null)
             {
@@ -126,7 +126,7 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Transform
             }
         }
 
-        private void UpdatePositionY(float y)
+        protected virtual void UpdatePositionY(float y)
         {
             if (GameObject != null)
             {
@@ -140,7 +140,7 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Transform
         {
             if (GameObject != null)
             {
-                var t = GameObject.GetComponent<TransformComponent>(true);
+                var t = GameObject.GetTransformComponent();
                 t.Rotation = rotation;
             }
 
@@ -150,7 +150,7 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Transform
         {
             if (GameObject != null)
             {
-                var t = GameObject.GetComponent<TransformComponent>(true);
+                var t = GameObject.GetTransformComponent();
                 float y = t.Scale.Height;
                 t.Scale = new SizeF(x, y);
             }
@@ -160,7 +160,7 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Transform
         {
             if (GameObject != null)
             {
-                var t = GameObject.GetComponent<TransformComponent>(true);
+                var t = GameObject.GetTransformComponent();
                 float x = t.Scale.Width;
                 t.Scale = new SizeF(x, y);
             }
@@ -170,7 +170,7 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Transform
         {
             if (GameObject != null)
             {
-                var t = GameObject.GetComponent<TransformComponent>(true);
+                var t = GameObject.GetTransformComponent();
                 float y = t.CenterPosition.Y;
                 t.CenterPosition = new Vector2(x, y);
             }
@@ -180,7 +180,7 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Transform
         {
             if (GameObject != null)
             {
-                var t = GameObject.GetComponent<TransformComponent>(true);
+                var t = GameObject.GetTransformComponent();
                 float x = t.CenterPosition.X;
                 t.CenterPosition = new Vector2(x, y);
             }

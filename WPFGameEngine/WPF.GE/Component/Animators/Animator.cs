@@ -3,6 +3,7 @@ using WPFGameEngine.Attributes.Editor;
 using WPFGameEngine.Timers.Base;
 using WPFGameEngine.WPF.GE.Component.Animations;
 using WPFGameEngine.WPF.GE.Component.Base;
+using WPFGameEngine.WPF.GE.Component.Sprites;
 using WPFGameEngine.WPF.GE.Dto.Components;
 
 namespace WPFGameEngine.WPF.GE.Component.Animators
@@ -17,6 +18,9 @@ namespace WPFGameEngine.WPF.GE.Component.Animators
         private IAnimation m_current;
 
         private string m_current_animation_name;
+
+        public override List<string> IncompatibleComponents =>
+            new List<string> { nameof(Animation), nameof(Sprite) };
 
         public string Current_Animation_Name { get => m_current_animation_name; }
 
@@ -117,6 +121,7 @@ namespace WPFGameEngine.WPF.GE.Component.Animators
             return dto;
         }
 
+        
         public IEnumerable<string> GetAllKeys()
         {
             return m_animations.Keys;

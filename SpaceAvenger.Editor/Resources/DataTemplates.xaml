@@ -10,6 +10,7 @@
                     xmlns:options="clr-namespace:SpaceAvenger.Editor.ViewModels.Options"
                     xmlns:easeOptionsVM="clr-namespace:SpaceAvenger.Editor.ViewModels.EaseOptions"
                     xmlns:animOptions="clr-namespace:SpaceAvenger.Editor.ViewModels.AnimatorOptions"
+                    xmlns:relTransVM="clr-namespace:SpaceAvenger.Editor.ViewModels.Components.RelativeTransforms"
                     >
     <!--#region Tree View Item-->
     <HierarchicalDataTemplate DataType="{x:Type tvm:TreeItemViewModel}"
@@ -27,7 +28,7 @@
                 
                 <TextBox Style="{StaticResource TxtBoxInputStyle}" Margin="0,10,0,10">
                     <TextBox.Text>
-                        <Binding Path="Name" UpdateSourceTrigger="LostFocus" Mode="TwoWay">
+                        <Binding Path="Name" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
                             <Binding.ValidationRules>
                                 <DataErrorValidationRule/>
                             </Binding.ValidationRules>
@@ -104,6 +105,42 @@ Margin="10" LabelText="Center Position X: " Minimum="0" Maximum="1.0"/>
         </StackPanel>
     </DataTemplate>
 
+    <DataTemplate DataType="{x:Type relTransVM:RelativeTransformViewModel}">
+        <StackPanel Orientation="Vertical" Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, 
+            AncestorType=ListView}, Path=ActualWidth}">
+            <Rectangle Style="{StaticResource BorderRectStyle}"/>
+            <TextBlock Text="{Binding ComponentName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DescLabel}"/>
+            <Rectangle Style="{StaticResource BorderRectStyle}"/>
+            <controls:Slider Value="{Binding PositionX, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay 
+                }"
+Margin="10" LabelText="Normalized X-Position: "
+Minimum="0" Maximum="1"
+                 />
+            <controls:Slider Value="{Binding PositionY, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+Margin="10" LabelText="Normalized Y-Position: "
+Minimum="0" Maximum="1"
+                 />
+            <controls:Slider Value="{Binding Rot, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+Margin="10" LabelText="Rotation: "
+Minimum="-360.0" Maximum="360.0"
+                 />
+            <controls:Slider Value="{Binding ScaleX, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+Margin="10" LabelText="X-Scale: "
+Minimum="0" Maximum="1.0"
+                 />
+            <controls:Slider Value="{Binding ScaleY, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+Margin="10" LabelText="Y-Scale: "
+Minimum="0" Maximum="1.0"
+                 />
+            <controls:Slider Value="{Binding CenterPositionX, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+Margin="10" LabelText="Center Position X: " Minimum="0" Maximum="1.0"/>
+            <controls:Slider Value="{Binding CenterPositionY, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+    Margin="10" LabelText="Center Position Y:"
+    Minimum="0" Maximum="1.0"
+                             />
+        </StackPanel>
+    </DataTemplate>
+
     <DataTemplate DataType="{x:Type scvm:SpriteComponentViewModel}">
         <StackPanel Orientation="Vertical" 
                     Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}, Path=ActualWidth}">
@@ -119,7 +156,8 @@ Margin="10" LabelText="Center Position X: " Minimum="0" Maximum="1.0"/>
                 <StackPanel Orientation="Vertical" Margin="20,40,0,0">
                     <ComboBox ItemsSource="{Binding ResourceNames, UpdateSourceTrigger=PropertyChanged}"
                           SelectedItem="{Binding SelectedResource, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                          Style="{StaticResource ConboboxStyle}" VerticalAlignment="Center" Margin="20,0,0,0"/>
+                          Style="{StaticResource ConboboxStyle}" VerticalAlignment="Center" Margin="20,0,0,0"
+                              MinWidth="100"/>
                     <Button Content="Apply" Margin="20,20,200,0" Command="{Binding OnApplyButtonPressed}"/>
                 </StackPanel>
             </StackPanel>

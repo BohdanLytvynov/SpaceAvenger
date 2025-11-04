@@ -1,14 +1,16 @@
-﻿using System.Windows;
+﻿using System;
+using System.Collections.Generic;
+using System.Windows;
 using WPFGameEngine.Services.Interfaces;
 
-namespace SpaceAvenger.Editor.Services
+namespace SpaceAvenger.Services.ResourceLoader
 {
-    internal class ResourceLoader : IResourceLoader
+    public class WPFResourceLoader : IResourceLoader
     {
         private string m_resourceDictionaryPath;
         private ResourceDictionary m_resourceDictionary;
 
-        public ResourceDictionary ResourceDictionary 
+        public ResourceDictionary ResourceDictionary
         {
             get
             {
@@ -22,7 +24,7 @@ namespace SpaceAvenger.Editor.Services
             }
         }
 
-        public ResourceLoader(string path)
+        public WPFResourceLoader(string path)
         {
             m_resourceDictionaryPath = path;
         }
@@ -38,7 +40,7 @@ namespace SpaceAvenger.Editor.Services
         public TResource? Load<TResource>(string key)
         {
             if (ResourceDictionary.Contains(key))
-            { 
+            {
                 return (TResource)m_resourceDictionary[key];
             }
 

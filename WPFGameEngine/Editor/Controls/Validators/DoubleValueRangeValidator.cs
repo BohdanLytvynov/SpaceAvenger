@@ -13,11 +13,9 @@ namespace WPFGameEngine.Editor.Controls.Validators
         {
             double v = 0;
             string str = value.ToString();
-            if (str.Contains("."))
-                str = str.Replace(".", ",");
-
+            
             int length = str.Length;
-            if (str[length - 1].Equals(','))
+            if (length > 0 && str[length - 1].Equals('.'))
                 str += "0";
 
             if (!double.TryParse(str, out v))
