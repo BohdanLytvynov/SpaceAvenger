@@ -464,9 +464,8 @@ namespace WPFGameEngine.WPF.GE.GameObjects
 
             if (t != null && t.Scale != newScale)
             {
-                float dx = newScale.Width - t.Scale.Width;
-                float dy = newScale.Height - t.Scale.Height;
-                t.Scale = new SizeF(dx + t.Scale.Width, dy + t.Scale.Height);
+                t.Scale = new SizeF(newScale.Width + t.Scale.Width, 
+                    newScale.Height + t.Scale.Height);
             }
 
             foreach (var item in obj.Children)
@@ -477,7 +476,10 @@ namespace WPFGameEngine.WPF.GE.GameObjects
 
         public void Scale(SizeF newScale)
         {
-            ScaleRecursive(this, newScale);
+            var t = this.GetTransformComponent();
+            float dx = newScale.Width - t.Scale.Width;
+            float dy = newScale.Height - t.Scale.Height;
+            ScaleRecursive(this, new SizeF(dx, dy));
         }
 
         public BitmapSource GetTexture()
