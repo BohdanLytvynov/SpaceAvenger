@@ -33,6 +33,8 @@ using WPFGameEngine.WPF.GE.Component.RelativeTransforms;
 using SpaceAvenger.Editor.ViewModels.Components.RelativeTransforms;
 using System.Drawing;
 using System.Numerics;
+using SpaceAvenger.Editor.ViewModels.Prefabs;
+using WPFGameEngine.WPF.GE.Dto.GameObjects;
 
 namespace SpaceAvenger.Editor.ViewModels
 {
@@ -50,14 +52,17 @@ namespace SpaceAvenger.Editor.ViewModels
         private double m_ZIndex;
         private int m_SelectedComponentIndex;
         private OptionsViewModel m_SelectedComponent;
-
+        private PrefabViewModel m_SelectedPrefab;
         private ObservableCollection<TreeItemViewModel> m_Items;
         private ObservableCollection<ComponentViewModel> m_Components;
         private ObservableCollection<OptionsViewModel> m_ComponentsToAdd;
+        private ObservableCollection<PrefabViewModel> m_prefabs;
+        private List<GameObjectDto> m_Dtos;
         private IAssemblyLoader m_assemblyLoader;
         private IFactoryWrapper m_factoryWrapper;
         private IGameTimer m_gameTimer;
         private IGameObjectExporter m_gameObjectExporter;
+        private IGameObjectImporter m_gameObjectImporter;
         private string m_pathToExport;
 
         #endregion
@@ -125,6 +130,11 @@ namespace SpaceAvenger.Editor.ViewModels
             set => m_ComponentsToAdd = value;
         }
 
+        public ObservableCollection<PrefabViewModel> Prefabs 
+        {
+            get => m_prefabs;
+            set => m_prefabs = value;
+        }
         public bool ShowGizmos
         {
             get => m_ShowGizmos;
@@ -148,6 +158,8 @@ namespace SpaceAvenger.Editor.ViewModels
         public GameViewHost GameView
         { get => m_gameViewHost; set => Set(ref m_gameViewHost, value); }
 
+        public PrefabViewModel SelectedPrefab 
+        { get => m_SelectedPrefab; set => Set(ref m_SelectedPrefab, value); }
         #endregion
 
         #region Commands
@@ -162,6 +174,10 @@ namespace SpaceAvenger.Editor.ViewModels
         public ICommand OnExportButtonPressed { get; }
 
         public ICommand OnOpenDialogButtonPressed { get; }
+
+        public ICommand OnRefreshPrefabsButtonPressed { get; }
+        public ICommand OnLoadPrefabButtonPressed { get; }
+        public ICommand OnRemovePrefabButtonPressed { get; }
         #endregion
 
         #region IData Error Info
@@ -188,12 +204,16 @@ namespace SpaceAvenger.Editor.ViewModels
             IFactoryWrapper factoryWrapper,
             IGameTimer gameTimer,
             IAssemblyLoader assemblyLoader,
-            IGameObjectExporter gameObjectExporter
+            IGameObjectExporter gameObjectExporter,
+            IGameObjectImporter gameObjectImporter
             ) : this()
         {
             m_factoryWrapper = factoryWrapper ?? throw new ArgumentNullException(nameof(factoryWrapper));
             m_assemblyLoader = assemblyLoader ?? throw new ArgumentNullException(nameof(assemblyLoader));
             m_gameObjectExporter = gameObjectExporter ?? throw new ArgumentNullException(nameof(gameObjectExporter));
+            m_gameObjectImporter = gameObjectImporter ?? throw new ArgumentNullException(nameof(gameObjectImporter));
+
+            m_Dtos = new List<GameObjectDto>();
 
             #region Get All Components From GE
             m_ComponentsToAdd = new ObservableCollection<OptionsViewModel>();
@@ -226,10 +246,12 @@ namespace SpaceAvenger.Editor.ViewModels
             m_SelectedItem = null;
             m_Items = new ObservableCollection<TreeItemViewModel>();
             m_Components = new ObservableCollection<ComponentViewModel>();
+            m_prefabs = new ObservableCollection<PrefabViewModel>();
             m_objName = string.Empty;
             m_SelectedComponentIndex = -1;
             m_SelectedComponent = new OptionsViewModel();
             m_pathToExport = string.Empty;
+            m_SelectedPrefab = new PrefabViewModel();
 
             GESettings.DrawGizmo = true;
             GESettings.DrawBorders = true;
@@ -260,12 +282,78 @@ namespace SpaceAvenger.Editor.ViewModels
             OnOpenDialogButtonPressed = new Command(
                 OnOpenDialogButtonPressedExecute,
                 CanOnOpenDialogButtonPressedExecute);
+
+            OnRefreshPrefabsButtonPressed = new Command(
+                OnRefreshPrefabsButtonPressedExecute,
+                CanOnRefreshPrefabsButtonPressedExecute);
+
+            OnLoadPrefabButtonPressed = new Command(
+                OnLoadPrefabButtonPressedExecute,
+                CanOnLoadPrefabButtonPressedExecute);
+
+            OnRemovePrefabButtonPressed = new Command(
+                OnRemovePrefabButtonPressedExecute,
+                CanOnRemovePrefabButtonPressedExecute);
         }
 
         #endregion 
 
+        private void RefreshPrefabs()
+        {
+            Prefabs.Clear();
+            m_Dtos.Clear();
+            m_gameObjectImporter.PathToFolder = PathToExport;
+            foreach (var item in m_gameObjectImporter.ImportObjects())
+            {
+                Prefabs.Add(new PrefabViewModel(Prefabs.Count + 1) { PrefabName = item.ObjectName });
+                m_Dtos.Add(item);
+            }
+        }
+
+        private TreeItemViewModel LoadObjectToTree(IGameObject gameObject, int count = 1)
+        {
+            if (gameObject == null)
+                return null;
+            
+            TreeItemViewModel treeItem = new TreeItemViewModel(count, gameObject);
+            treeItem.ItemSelected += ItemViewModel_ItemSelected;
+            foreach (var item in gameObject.Children)
+            {
+                var ch = LoadObjectToTree(item, count);
+                treeItem.Children.Add(ch);
+                count++;
+            }
+
+            return treeItem;
+        }
+
+        private IGameObject LoadPrefabGameObjectRec(GameObjectDto dto)
+        {
+            if (dto == null)
+                return null;
+
+            IGameObject prefab = new GameObjectMock();
+            prefab.Enabled = dto.Enabled;
+            prefab.ZIndex = dto.ZIndex;
+            prefab.ObjectName = dto.ObjectName;
+            prefab.UniqueName = dto.UniqueName;
+
+            foreach (var c in dto.Components)
+            {
+                prefab.RegisterComponent(c.ToObject(m_factoryWrapper));
+            }
+
+            foreach (var ch in dto.Children)
+            {
+                var child = LoadPrefabGameObjectRec(ch);
+                prefab.AddChild(child);
+            }
+
+            return prefab;
+        }
+
         #region Methods
-        #region On Add Module Button Pressed
+        #region On Add Object Button Pressed
         private bool CanOnAddGameObjectButtonPressedExecute(object p) => true;
 
         private void OnAddGameObjectButtonPressedExecute(object p)
@@ -281,7 +369,7 @@ namespace SpaceAvenger.Editor.ViewModels
                 t.Scale = new SizeF(1f, 1f);
                 t.CenterPosition = new Vector2(0.5f, 0.5f);
                 obj.RegisterComponent(t);
-                m_gameViewHost.World.Add(obj);
+                m_gameViewHost.AddObject(obj);
             }
             else
             {
@@ -443,6 +531,59 @@ namespace SpaceAvenger.Editor.ViewModels
         }
         #endregion
 
+        #region On Refresh Prefabs Button Pressed
+        private bool CanOnRefreshPrefabsButtonPressedExecute(object p) =>
+            !string.IsNullOrEmpty(PathToExport);
+
+        private void OnRefreshPrefabsButtonPressedExecute(object p)
+        {
+            RefreshPrefabs();
+        }
+        #endregion
+
+        #region On Load Prefab Button Pressed
+        private bool CanOnLoadPrefabButtonPressedExecute(object p) =>
+            SelectedPrefab != null && SelectedPrefab.ShowNumber > 0;
+
+        private void OnLoadPrefabButtonPressedExecute(object p)
+        {
+            GameView.ClearWorld();
+            Items.Clear();
+            if (SelectedPrefab != null)
+            {
+                var dto = m_Dtos
+                    .Where(d => d.ObjectName.Equals(SelectedPrefab.PrefabName))
+                    .FirstOrDefault();
+
+                if (dto != null)
+                {
+                    IGameObject obj = LoadPrefabGameObjectRec(dto);
+                    GameView.AddObject(obj);
+                    var treeItem = LoadObjectToTree(obj);
+                    Items.Add(treeItem);
+                }
+                else
+                {
+                    MessageBox.Show($"Prefab <{SelectedPrefab.PrefabName}> was not found!",
+                        Title, MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+        #endregion
+
+        #region On Remove Prefab Button Pressed
+        private bool CanOnRemovePrefabButtonPressedExecute(object p) =>
+            SelectedPrefab != null && SelectedPrefab.ShowNumber > 0;
+
+        private void OnRemovePrefabButtonPressedExecute(object p)
+        {
+            Prefabs.Remove(SelectedPrefab);
+            GameObject.RemoveObject(obj => obj.ObjectName.Equals(SelectedPrefab.PrefabName), 
+                GameView.World, true);
+            SelectedPrefab = new PrefabViewModel();
+        }
+        #endregion
+
         private void RemoveObjectFromTreeRec(TreeItemViewModel item, ObservableCollection<TreeItemViewModel> src, bool removed)
         {
             if (removed)
@@ -455,6 +596,7 @@ namespace SpaceAvenger.Editor.ViewModels
 
                 if (itemViewModel.Id == item.Id)
                 {
+                    itemViewModel.ItemSelected -= ItemViewModel_ItemSelected;
                     src.Remove(itemViewModel);
                     removed = true;
                     break;
@@ -470,7 +612,7 @@ namespace SpaceAvenger.Editor.ViewModels
                 return;
 
             Enabled = m_SelectedItem.GameObject.Enabled;
-            ObjName = m_SelectedItem.GameObject.Name;
+            ObjName = m_SelectedItem.GameObject.ObjectName;
             ZIndex = m_SelectedItem.GameObject.ZIndex;
         }
 

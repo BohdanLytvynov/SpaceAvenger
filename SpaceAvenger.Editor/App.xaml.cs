@@ -28,6 +28,7 @@ namespace SpaceAvenger.Editor
         private static IServiceCollection InitializeServices()
         {
             var services = new ServiceCollection();
+            services.AddSingleton<IGameObjectImporter, GameObjectImporter>();
             services.AddSingleton<IGameObjectExporter, GameObjectExporter>();
             services.AddSingleton<IAssemblyLoader>(c =>
             { 
@@ -58,7 +59,13 @@ namespace SpaceAvenger.Editor
                 var gameTimer = c.GetRequiredService<IGameTimer>();
                 var assemblyLoader = c.GetRequiredService<IAssemblyLoader>();
                 var exporter = c.GetRequiredService<IGameObjectExporter>();
-                return new EditorMainWindowViewModel(factoryWrapper, gameTimer, assemblyLoader, exporter);
+                var importer = c.GetRequiredService<IGameObjectImporter>();
+                return new EditorMainWindowViewModel(
+                    factoryWrapper, 
+                    gameTimer, 
+                    assemblyLoader, 
+                    exporter,
+                    importer);
             });
             services.AddSingleton<MainWindow>(c =>
             { 

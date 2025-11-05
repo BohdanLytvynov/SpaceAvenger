@@ -2,7 +2,7 @@
 {
     public interface IObjectImporter<out T>
     {
-        string PathToFolder { get; init; }
+        string PathToFolder { get; set; }
 
         IEnumerable<T> ImportObjects();
     }

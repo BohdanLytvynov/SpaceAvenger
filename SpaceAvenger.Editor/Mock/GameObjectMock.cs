@@ -16,7 +16,7 @@ namespace SpaceAvenger.Editor.Mock
 
         public override void StartUp()
         {
-            throw new NotImplementedException();
+            
         }
     }
 }

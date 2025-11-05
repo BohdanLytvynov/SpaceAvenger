@@ -7,8 +7,9 @@ namespace WPFGameEngine.WPF.GE.Dto.Components
 {
     public class SpriteDto : ImageDto
     {
-        public SpriteDto() : base(nameof(Sprite))
+        public SpriteDto()
         {
+
         }
 
         public override ISprite ToObject(IFactoryWrapper factoryWrapper)

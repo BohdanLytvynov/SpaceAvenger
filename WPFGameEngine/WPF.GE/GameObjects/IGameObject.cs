@@ -18,7 +18,11 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         public bool IsExported { get; set; }
         public double ZIndex { get; set; }
         public bool Enabled { get; set; }
-        public string Name { get; set; }
+        //Name of the Object that is used for mapping during object Creation in runtime
+        //must be equal to the name of the GameObject in a game
+        public string ObjectName { get; set; }
+        //Name or Id that can be used during game for searching objects
+        public string UniqueName { get; set; }
         public bool IsChild { get; }
         public List<IGameObject> Children { get; }
         public IGameObject Parent { get; set; }

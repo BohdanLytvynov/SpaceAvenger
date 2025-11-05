@@ -1,9 +1,9 @@
 ﻿using System.Drawing;
 using System.Numerics;
-using System.Text.Json.Serialization;
 using System.Windows.Media;
 using WPFGameEngine.Attributes.Editor;
 using WPFGameEngine.WPF.GE.Component.Transforms;
+using WPFGameEngine.WPF.GE.Dto.Components;
 
 namespace WPFGameEngine.WPF.GE.Component.RelativeTransforms
 {
@@ -16,12 +16,10 @@ namespace WPFGameEngine.WPF.GE.Component.RelativeTransforms
         {
             
         }
-
-        [JsonIgnore]
+ 
         public override List<string> IncompatibleComponents => 
             new List<string> { nameof(TransformComponent) };
-
-        [JsonIgnore]
+ 
         public SizeF ActualParentSize { get; set; }
 
         public override Matrix GetLocalTransformMatrix(Vector2 center)
@@ -41,6 +39,17 @@ namespace WPFGameEngine.WPF.GE.Component.RelativeTransforms
                 ActualParentSize.Height*Position.Y);//Here Position has a normalized values
 
             return matrix;
+        }
+
+        public override RelativeTransformDto ToDto()
+        {
+            return new RelativeTransformDto()
+            { 
+                Position = Position,
+                CenterPosition = CenterPosition,
+                Scale = Scale,
+                Rotation = Rotation,
+            };
         }
     }
 }

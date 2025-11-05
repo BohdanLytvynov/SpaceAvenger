@@ -37,7 +37,6 @@ namespace WPFGameEngine.WPF.GE.Component.Animations
         #endregion
 
         #region Properties
-        [JsonIgnore]
         public override List<string> IncompatibleComponents => 
             new List<string> { nameof(Sprite), nameof(Animator) };
 

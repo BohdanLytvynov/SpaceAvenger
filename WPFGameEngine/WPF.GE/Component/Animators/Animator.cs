@@ -15,12 +15,9 @@ namespace WPFGameEngine.WPF.GE.Component.Animators
     public class Animator : ComponentBase, IAnimator
     {
         private Dictionary<string, IAnimation> m_animations;
-
         private IAnimation m_current;
-
         private string m_current_animation_name;
 
-        [JsonIgnore]
         public override List<string> IncompatibleComponents =>
             new List<string> { nameof(Animation), nameof(Sprite) };
 

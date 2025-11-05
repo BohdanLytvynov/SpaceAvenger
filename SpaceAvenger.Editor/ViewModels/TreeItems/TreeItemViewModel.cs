@@ -15,7 +15,8 @@ namespace SpaceAvenger.Editor.ViewModels.TreeItems
         #region Fields
         private int m_ShowNumber;
         private int m_Id;
-        private string m_Name;
+        private string m_ObjectName;
+        private string m_UniqueName;
         private bool m_Selected;
         private bool m_Exported;
         ObservableCollection<TreeItemViewModel> m_children;
@@ -74,13 +75,19 @@ namespace SpaceAvenger.Editor.ViewModels.TreeItems
             get => m_Id;
         }
 
-        public string Name
+        public string ObjectName
         {
-            get => m_Name;
-            set => Set(ref m_Name, value);
+            get => m_ObjectName;
+            set => Set(ref m_ObjectName, value);
+        }
+
+        public string UniqueName 
+        {
+            get => m_UniqueName;
+            set => Set(ref m_UniqueName, value); 
         }
         #endregion
-       
+
         #region IData Error Info
 
         public override string this[string columnName]
@@ -91,12 +98,21 @@ namespace SpaceAvenger.Editor.ViewModels.TreeItems
 
                 switch (columnName)
                 {
-                    case nameof(Name):
-                        if (!ValidationHelper.TextIsEmpty(Name, out error))
+                    case nameof(ObjectName):
+                        if (!ValidationHelper.TextIsEmpty(ObjectName, out error))
                         {
                             if (GameObject != null)
                             {
-                                GameObject.Name = Name;
+                                GameObject.ObjectName = ObjectName;
+                            }
+                        }
+                        break;
+                    case nameof(UniqueName):
+                        if (!ValidationHelper.TextIsEmpty(UniqueName, out error))
+                        {
+                            if (GameObject != null)
+                            { 
+                                GameObject.UniqueName = UniqueName;
                             }
                         }
                         break;
@@ -114,14 +130,11 @@ namespace SpaceAvenger.Editor.ViewModels.TreeItems
             GameObject = gameObject;
             m_ShowNumber = showNumber;
             m_Id = (gameObject as IGameObjectMock).Id;
-            m_Name = gameObject.Name;
+            m_ObjectName = gameObject.ObjectName;
+            m_UniqueName = gameObject.UniqueName;
             m_children = new ObservableCollection<TreeItemViewModel>();
             RaiseEvent = true;
         }
-        #endregion
-
-        #region Methods
-        
         #endregion
     }
 }

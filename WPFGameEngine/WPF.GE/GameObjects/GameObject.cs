@@ -1,6 +1,5 @@
 ﻿using System.Drawing;
 using System.Numerics;
-using System.Security.Cryptography.Xml;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using WPFGameEngine.Timers.Base;
@@ -39,11 +38,12 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         public bool IsExported { get; set; }
         public bool Enabled { get; set; }
         public double ZIndex { get; set; }
-        public string Name { get; set; }
+        public string ObjectName { get; set; }
+        public string UniqueName { get; set; }
         public List<IGameObject> Children { get => m_children; }
         public IGameObject Parent { get; set; }
 
-        public bool IsChild 
+        public bool IsChild
         {
             get 
             {
@@ -60,16 +60,16 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         /// <summary>
         /// Main Ctor
         /// </summary>
-        /// <param name="name"></param>
+        /// <param name="uniqueName"></param>
         /// <param name="position"></param>
         /// <param name="centerPosition"></param>
         /// <param name="rotation"></param>
         /// <param name="scale"></param>
-        public GameObject(string name)
+        public GameObject(string uniqueName)
         {
             Init();
             SetId();
-            InitName(name);
+            InitName(uniqueName);
         }
 
         #endregion
@@ -182,6 +182,8 @@ namespace WPFGameEngine.WPF.GE.GameObjects
 
         private void Init()
         {
+            ObjectName = string.Empty;
+            UniqueName = string.Empty;
             m_components = new Dictionary<string, IGEComponent>();
             m_children = new List<IGameObject>();
             Enabled = true;
@@ -192,11 +194,11 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         {
             if (string.IsNullOrEmpty(name))
             {
-                Name = this.GetType().Name + $"_{m_id}";
+                UniqueName = this.GetType().Name + $"_{m_id}";
             }
             else
             {
-                Name = name;
+                UniqueName = name;
             }
         }
 
@@ -417,7 +419,8 @@ namespace WPFGameEngine.WPF.GE.GameObjects
                 return null;
 
             GameObjectDto gameObjectDto = new GameObjectDto();
-            gameObjectDto.Name = root.Name;
+            gameObjectDto.ObjectName = root.ObjectName;
+            gameObjectDto.UniqueName = root.UniqueName;
             gameObjectDto.Enabled = root.Enabled;
             gameObjectDto.ZIndex = root.ZIndex;
  

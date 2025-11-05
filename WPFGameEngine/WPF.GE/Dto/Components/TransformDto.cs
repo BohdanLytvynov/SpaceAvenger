@@ -1,13 +1,15 @@
 ﻿using System.Drawing;
 using System.Numerics;
-using WPFGameEngine.Factories.Base;
+using System.Text.Json.Serialization;
 using WPFGameEngine.FactoryWrapper.Base;
-using WPFGameEngine.WPF.GE.Component.Base;
+using WPFGameEngine.WPF.GE.Component.RelativeTransforms;
 using WPFGameEngine.WPF.GE.Component.Transforms;
 using WPFGameEngine.WPF.GE.Dto.Base;
 
 namespace WPFGameEngine.WPF.GE.Dto.Components
 {
+    [JsonPolymorphic(TypeDiscriminatorPropertyName = "RecreateType")]
+    [JsonDerivedType(typeof(RelativeTransformDto), nameof(RelativeTransformComponent))]
     public class TransformDto : ComponentDto
     {
         public Vector2 Position { get; set; }

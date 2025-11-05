@@ -7,7 +7,12 @@ namespace WPFGameEngine.WPF.GE.Serialization.GameObjects
 {
     public class GameObjectImporter : IGameObjectImporter
     {
-        public string PathToFolder { get; init; }
+        public string PathToFolder { get; set; }
+
+        public GameObjectImporter() : this(null)
+        {
+            
+        }
 
         public GameObjectImporter(string pathToFolder)
         {

@@ -3,9 +3,5 @@
     public abstract class ImageDto : ComponentDto
     {
         public string ResourceKey { get; set; }
-
-        protected ImageDto(string typeName)
-        {
-        }
     }
 }

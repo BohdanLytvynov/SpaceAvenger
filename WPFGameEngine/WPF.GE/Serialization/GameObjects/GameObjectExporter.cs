@@ -20,7 +20,7 @@ namespace WPFGameEngine.WPF.GE.Serialization.GameObjects
 
                 string str = JsonSerializer.Serialize(dto, options);
 
-                string pathToFile = path + Path.DirectorySeparatorChar + dto.Name + ".json";
+                string pathToFile = path + Path.DirectorySeparatorChar + dto.ObjectName + ".json";
                 if (!File.Exists(pathToFile)) 
                 {
                     using (var fs = File.Create(pathToFile))

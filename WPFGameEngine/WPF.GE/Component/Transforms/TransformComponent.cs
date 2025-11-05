@@ -19,10 +19,8 @@ namespace WPFGameEngine.WPF.GE.Component.Transforms
         #endregion
 
         #region Properties
-        [JsonIgnore]
         public override List<string> IncompatibleComponents => 
             new List<string>{ nameof(RelativeTransformComponent) };
-
         public virtual Vector2 Position { get => m_position; set=> m_position = value; }
         public Vector2 CenterPosition { get; set; }
         public double Rotation { get; set; }//Degree

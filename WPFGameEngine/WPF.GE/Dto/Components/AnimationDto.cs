@@ -8,7 +8,6 @@ namespace WPFGameEngine.WPF.GE.Dto.Components
     public class AnimationDto : ImageDto
     {
         public List<IAnimationFrame> AnimationFrames { get; set; }
-
         public double Duration { get; set; }
         public int Rows { get; set; }
         public int Columns { get; set; }
@@ -20,7 +19,7 @@ namespace WPFGameEngine.WPF.GE.Dto.Components
         public bool Freeze { get; set; }
         public Dictionary<string, double> EaseConstants { get; set; }
 
-        public AnimationDto() : base(nameof(Animation))
+        public AnimationDto()
         {
             AnimationFrames = new List<IAnimationFrame>();
             EaseConstants = new Dictionary<string, double>();

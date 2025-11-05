@@ -6,7 +6,8 @@ namespace WPFGameEngine.WPF.GE.Dto.GameObjects
     {
         public double ZIndex { get; set; }
         public  bool Enabled { get; set; }
-        public string Name { get; set; }
+        public string ObjectName { get; set; }
+        public string UniqueName { get; set; }
         public List<GameObjectDto> Children { get; set; }
         public List<ComponentDto> Components { get; set; }
 

@@ -55,7 +55,7 @@ namespace WPFGameEngine.ObjectBuilders
 
             foreach (var objDto in m_objectImporter.ImportObjects())
             {
-                m_ObjectDtos.Add(objDto.Name, objDto);
+                m_ObjectDtos.Add(objDto.ObjectName, objDto);
             }
         }
         #endregion
@@ -68,7 +68,12 @@ namespace WPFGameEngine.ObjectBuilders
                 return null;
 
             //1) Create an Object
-            var mapable = CreateInstance(dto.Name);
+            var mapable = CreateInstance(dto.ObjectName);
+            mapable.ZIndex = dto.ZIndex;
+            mapable.Enabled = dto.Enabled;
+            mapable.ObjectName = dto.ObjectName;
+            mapable.UniqueName = dto.UniqueName;
+
             mapable.ClearAllComponents();
             foreach (var c in dto.Components)
             {
