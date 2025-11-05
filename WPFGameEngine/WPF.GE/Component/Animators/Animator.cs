@@ -1,4 +1,5 @@
-﻿using System.Windows.Media.Imaging;
+﻿using System.Text.Json.Serialization;
+using System.Windows.Media.Imaging;
 using WPFGameEngine.Attributes.Editor;
 using WPFGameEngine.Timers.Base;
 using WPFGameEngine.WPF.GE.Component.Animations;
@@ -19,6 +20,7 @@ namespace WPFGameEngine.WPF.GE.Component.Animators
 
         private string m_current_animation_name;
 
+        [JsonIgnore]
         public override List<string> IncompatibleComponents =>
             new List<string> { nameof(Animation), nameof(Sprite) };
 

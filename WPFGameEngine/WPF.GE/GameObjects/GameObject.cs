@@ -116,12 +116,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects
             float Xcenter = actualWidth * transform.CenterPosition.X;
             float Ycenter = actualHeight * transform.CenterPosition.Y;
             //Get matrix for current game object
-            
-            if (IsChild)
-            {
-
-            }
-
+                   
             var globalMatrix = transform.GetLocalTransformMatrix(new Vector2(Xcenter, Ycenter));
 
             if (parent != default)
@@ -176,6 +171,11 @@ namespace WPFGameEngine.WPF.GE.GameObjects
 
             foreach (var item in m_children)
             {
+                var childTransform = item.GetComponent<RelativeTransformComponent>();
+                if (childTransform != null)
+                {
+                    childTransform.ActualParentSize = new SizeF(actualWidth, actualHeight);
+                }
                 item.Render(dc, globalMatrix);
             }
         }
@@ -460,11 +460,13 @@ namespace WPFGameEngine.WPF.GE.GameObjects
             if (obj == null)
                 return;
 
-            var t = obj.GetComponent<TransformComponent>();
+            var t = obj.GetTransformComponent();
 
             if (t != null && t.Scale != newScale)
             {
-                t.Scale = newScale;
+                float dx = newScale.Width - t.Scale.Width;
+                float dy = newScale.Height - t.Scale.Height;
+                t.Scale = new SizeF(dx + t.Scale.Width, dy + t.Scale.Height);
             }
 
             foreach (var item in obj.Children)

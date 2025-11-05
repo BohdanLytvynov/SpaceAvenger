@@ -1,5 +1,6 @@
 ﻿using System.Drawing;
 using System.Numerics;
+using System.Text.Json.Serialization;
 using System.Windows.Media;
 using WPFGameEngine.Attributes.Editor;
 using WPFGameEngine.WPF.GE.Component.Base;
@@ -18,6 +19,7 @@ namespace WPFGameEngine.WPF.GE.Component.Transforms
         #endregion
 
         #region Properties
+        [JsonIgnore]
         public override List<string> IncompatibleComponents => 
             new List<string>{ nameof(RelativeTransformComponent) };
 
@@ -54,7 +56,7 @@ namespace WPFGameEngine.WPF.GE.Component.Transforms
 
         #region Methods
 
-        public Matrix GetLocalTransformMatrix(Vector2 center)
+        public virtual Matrix GetLocalTransformMatrix(Vector2 center)
         {
             //Create I matrix, diagonal is 1
             Matrix matrix = Matrix.Identity;

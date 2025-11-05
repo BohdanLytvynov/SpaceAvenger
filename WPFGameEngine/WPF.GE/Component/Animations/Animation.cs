@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Text.Json.Serialization;
+using System.Windows;
 using System.Windows.Media.Imaging;
 using WPFGameEngine.Attributes.Editor;
 using WPFGameEngine.Services.Interfaces;
@@ -36,7 +37,7 @@ namespace WPFGameEngine.WPF.GE.Component.Animations
         #endregion
 
         #region Properties
-
+        [JsonIgnore]
         public override List<string> IncompatibleComponents => 
             new List<string> { nameof(Sprite), nameof(Animator) };
 

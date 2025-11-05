@@ -312,6 +312,31 @@ namespace SpaceAvenger.Editor.ViewModels
             UpdateComponents();
         }
 
+        private void Unselect(TreeItemViewModel node)
+        {
+            if (node == null)
+                return;
+
+            foreach (var child in node.Children)
+            { 
+                child.RaiseEvent = false;
+                child.Selected = false;
+                child.RaiseEvent = true;
+                Unselect(child);
+            }
+        }
+
+        private void UnselectAll(ObservableCollection<TreeItemViewModel> tree)
+        {
+            foreach (TreeItemViewModel item in tree)
+            {
+                item.RaiseEvent = false;
+                item.Selected = false;
+                item.RaiseEvent = true;
+                Unselect(item);
+            }
+        }
+
         #endregion
 
         #region On Delete Object ButtonPressed

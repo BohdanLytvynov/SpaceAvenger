@@ -113,12 +113,12 @@ Margin="10" LabelText="Center Position X: " Minimum="0" Maximum="1.0"/>
             <Rectangle Style="{StaticResource BorderRectStyle}"/>
             <controls:Slider Value="{Binding PositionX, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay 
                 }"
-Margin="10" LabelText="Normalized X-Position: "
-Minimum="0" Maximum="1"
+Margin="10" LabelText="Relative X-Position: "
+Minimum="0" Maximum="{Binding XMax, UpdateSourceTrigger=PropertyChanged}"
                  />
             <controls:Slider Value="{Binding PositionY, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-Margin="10" LabelText="Normalized Y-Position: "
-Minimum="0" Maximum="1"
+Margin="10" LabelText="Relative Y-Position: "
+Minimum="0" Maximum="{Binding YMax, UpdateSourceTrigger=PropertyChanged}"
                  />
             <controls:Slider Value="{Binding Rot, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
 Margin="10" LabelText="Rotation: "

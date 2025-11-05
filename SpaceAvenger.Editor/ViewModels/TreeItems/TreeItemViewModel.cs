@@ -37,6 +37,8 @@ namespace SpaceAvenger.Editor.ViewModels.TreeItems
                 GameObject.IsExported = value;
             }
         }
+        //Indicates if we need to raise events
+        public bool RaiseEvent { get; set; }
 
         public bool Selected 
         { 
@@ -44,6 +46,10 @@ namespace SpaceAvenger.Editor.ViewModels.TreeItems
             set 
             {
                 Set(ref m_Selected, value);
+
+                if (!RaiseEvent)
+                    return;
+
                 if (Selected)
                 {
                     ItemSelected?.Invoke(this);
@@ -110,6 +116,7 @@ namespace SpaceAvenger.Editor.ViewModels.TreeItems
             m_Id = (gameObject as IGameObjectMock).Id;
             m_Name = gameObject.Name;
             m_children = new ObservableCollection<TreeItemViewModel>();
+            RaiseEvent = true;
         }
         #endregion
 

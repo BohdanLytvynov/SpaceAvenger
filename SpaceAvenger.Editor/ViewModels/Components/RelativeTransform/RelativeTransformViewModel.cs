@@ -15,20 +15,45 @@ namespace SpaceAvenger.Editor.ViewModels.Components.RelativeTransforms
         #endregion
 
         #region Properties
-        public double XMax 
+        public double XMax
         { get => m_XMax; set => Set(ref m_XMax, value); }
 
-        public double MyProperty { get; set; }
+        public double YMax
+        { get => m_YMax; set => Set(ref m_YMax, value); }
         #endregion
 
-        public RelativeTransformViewModel(IGameObject gameObject) : base(gameObject)
+        public RelativeTransformViewModel(IGameObject gameObject) : base(nameof(RelativeTransformComponent), gameObject)
         {
+            LoadCurrentGameObjProperties();
+            m_init = true;
+        }
 
+        protected override void LoadCurrentGameObjProperties()
+        {
+            if (GameObject != null)
+            {
+                var t = GameObject.GetTransformComponent();
+                var pt = GameObject.Parent?.GetTransformComponent();
+                var texture = GameObject.Parent.GetTexture();
+                if (texture != null && pt != null)
+                { 
+                    XMax = texture.Width * pt.Scale.Width;
+                    YMax = texture.Height * pt.Scale.Height;
+                }
+
+                PositionX = t.Position.X*XMax;
+                PositionY = t.Position.Y*YMax;
+                Rot = t.Rotation;
+                ScaleX = t.Scale.Width;
+                ScaleY = t.Scale.Height;
+                CenterPositionX = t.CenterPosition.X;
+                CenterPositionY = t.CenterPosition.Y;
+            }
         }
 
         protected override void UpdatePositionX(float x)
         {
-            if (GameObject == null)
+            if (GameObject == null && !m_init)
                 return;
 
             var currentTransform = GameObject.GetComponent<RelativeTransformComponent>();
@@ -56,7 +81,7 @@ namespace SpaceAvenger.Editor.ViewModels.Components.RelativeTransforms
 
         protected override void UpdatePositionY(float y)
         {
-            if (GameObject == null)
+            if (GameObject == null && !m_init)
                 return;
 
             var currentTransform = GameObject.GetComponent<RelativeTransformComponent>();
