@@ -10,9 +10,9 @@ namespace WPFGameEngine.WPF.GE.Component.Base
         [JsonIgnore]
         public abstract List<string> IncompatibleComponents { get; }
 
-        public ComponentBase(string name)
+        public ComponentBase(string componentName)
         {
-            ComponentName = name;
+            ComponentName = componentName;
         }
 
         public abstract DtoBase ToDto();

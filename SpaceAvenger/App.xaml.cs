@@ -27,6 +27,8 @@ using SpaceAvenger.Services;
 using WPFGameEngine.ObjectBuilders;
 using WPFGameEngine.WPF.GE.GameObjects;
 using WPFGameEngine.FactoryWrapper;
+using SpaceAvenger.ViewModels.PagesVM;
+using SpaceAvenger.Services.WPFInputControllers;
 
 namespace SpaceAvenger
 {
@@ -140,6 +142,14 @@ namespace SpaceAvenger
 
                 view.DataContext = vm;
                 vm.Dispatcher = view.Dispatcher;
+
+                if (view is Game_Page gp && vm is GamePage_ViewModel gpvm)
+                {
+                    //Init controller for player
+                    gpvm.ControlComponent = new WPFInputController();
+                    gp.OnInputFired += gpvm.ControlComponent.OnInputFired;
+                }
+
                 pm.AddPage(
                 page.Name, view);
             }
@@ -156,6 +166,11 @@ namespace SpaceAvenger
 
             pm.SwitchPage(nameof(Main_Page), FrameType.MainFrame);
             pm.SwitchPage(nameof(UserProfileInfo_Page), FrameType.InfoFrame);
+        }
+
+        protected override void OnExit(ExitEventArgs e)
+        {
+            base.OnExit(e);
         }
     }
 }

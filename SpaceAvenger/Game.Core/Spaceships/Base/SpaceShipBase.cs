@@ -7,10 +7,13 @@ namespace SpaceAvenger.Game.Core.Spaceships.Base
 {
     public abstract class SpaceShipBase : MapableObject
     {
-        protected TransformComponent transform;
-        protected Sprite sprite;
-        protected Animator animator;
+        protected TransformComponent m_transform;
+        protected Sprite m_sprite;
+        protected Animator m_animator;
 
+        #region Fields
+        
+        #endregion
 
         protected SpaceShipBase(string name) : base(name)
         {
@@ -19,8 +22,8 @@ namespace SpaceAvenger.Game.Core.Spaceships.Base
 
         public override void StartUp()
         {
-            transform = GetComponent<TransformComponent>();
-            sprite = GetComponent<Sprite>();
+            m_transform = GetComponent<TransformComponent>();
+            m_sprite = GetComponent<Sprite>();
         }
     }
 }

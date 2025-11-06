@@ -1,11 +1,11 @@
 ﻿using System.Drawing;
 using System.Numerics;
-using System.Text.Json.Serialization;
 using System.Windows.Media;
 using WPFGameEngine.Attributes.Editor;
 using WPFGameEngine.WPF.GE.Component.Base;
 using WPFGameEngine.WPF.GE.Component.RelativeTransforms;
 using WPFGameEngine.WPF.GE.Dto.Components;
+using WPFGameEngine.WPF.GE.Math.Basis;
 
 namespace WPFGameEngine.WPF.GE.Component.Transforms
 {
@@ -82,6 +82,16 @@ namespace WPFGameEngine.WPF.GE.Component.Transforms
                 Scale = Scale,
                 CenterPosition = CenterPosition,
             };
+
+        public Basis2D GetBasis(Vector2 centerPosition)
+        {
+            var m = GetLocalTransformMatrix(centerPosition);
+            Vector2 X = new Vector2((float)m.M11, (float)m.M12);
+            Vector2 Y = new Vector2((float)m.M21, (float)m.M22);
+            return new Basis2D(X, Y);
+        }
+
+
 
         #endregion
 

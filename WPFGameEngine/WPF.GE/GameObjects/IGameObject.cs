@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using System.Numerics;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using WPFGameEngine.Factories.Base;
@@ -15,6 +16,8 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         /// <summary>
         /// Use for editor only not for games, Unique key must be Name for games
         /// </summary>
+        public SizeF ActualSize { get; }
+        public Vector2 CenterPosition { get; }
         public bool IsExported { get; set; }
         public double ZIndex { get; set; }
         public bool Enabled { get; set; }

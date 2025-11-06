@@ -35,6 +35,8 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         #endregion
 
         #region Propeties
+        public Vector2 CenterPosition { get; private set; }
+        public SizeF ActualSize { get; private set; }
         public bool IsExported { get; set; }
         public bool Enabled { get; set; }
         public double ZIndex { get; set; }
@@ -102,21 +104,22 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         public virtual void Render(DrawingContext dc, Matrix parent = default)
         {
             if (!Enabled) return;
-
             TransformComponent transform = GetTransformComponent();
             //Get An Image for Render
             BitmapSource bitmapSource = GetTexture();
             if (bitmapSource == null)
                 return;
+
             //Calculate actual size of the Image
             float actualWidth = (float)bitmapSource.Width * transform.Scale.Width;
             float actualHeight = (float)bitmapSource.Height * transform.Scale.Height;
-
+            ActualSize = new SizeF(actualWidth, actualHeight);
             //Calculate the center of the Image
             float Xcenter = actualWidth * transform.CenterPosition.X;
             float Ycenter = actualHeight * transform.CenterPosition.Y;
+            CenterPosition = new Vector2(Xcenter, Ycenter);
             //Get matrix for current game object
-                   
+
             var globalMatrix = transform.GetLocalTransformMatrix(new Vector2(Xcenter, Ycenter));
 
             if (parent != default)

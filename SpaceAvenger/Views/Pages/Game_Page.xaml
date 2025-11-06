@@ -25,5 +25,13 @@
             UpdateSourceTrigger=PropertyChanged}"
                Content="{Binding GameView, UpdateSourceTrigger=PropertyChanged}">
         </Label>
+        <Canvas Background="Transparent" 
+                MouseMove="Canvas_MouseMove" 
+                MouseDown="Canvas_MouseDown" 
+                MouseUp="Canvas_MouseUp" 
+                KeyDown="Canvas_KeyDown"
+                KeyUp="Canvas_KeyUp" 
+                MouseWheel="Canvas_MouseWheel"
+                />
     </Grid>
 </Page>

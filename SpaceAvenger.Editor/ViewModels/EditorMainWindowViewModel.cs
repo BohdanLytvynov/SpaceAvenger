@@ -680,7 +680,6 @@ namespace SpaceAvenger.Editor.ViewModels
                 default:
                     throw new Exception($"Unsupported component Type! Component: {component.ComponentName}");
             }
-
             return c;
         }
 

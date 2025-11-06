@@ -1,17 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace SpaceAvenger.Views.Pages
 {
@@ -20,9 +9,41 @@ namespace SpaceAvenger.Views.Pages
     /// </summary>
     public partial class Game_Page : Page
     {
+        public event EventHandler<InputEventArgs> OnInputFired;
+
         public Game_Page()
         {
             InitializeComponent();
+        }
+
+        private void Canvas_MouseMove(object sender, MouseEventArgs e)
+        {
+            OnInputFired?.Invoke(sender, e);
+        }
+
+        private void Canvas_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            OnInputFired?.Invoke(sender, e);
+        }
+
+        private void Canvas_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            OnInputFired?.Invoke(sender, e);
+        }
+
+        private void Canvas_KeyDown(object sender, KeyEventArgs e)
+        {
+            OnInputFired?.Invoke(sender, e);
+        }
+
+        private void Canvas_KeyUp(object sender, KeyEventArgs e)
+        {
+            OnInputFired?.Invoke(sender, e);
+        }
+
+        private void Canvas_MouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            OnInputFired?.Invoke(sender, e);
         }
     }
 }

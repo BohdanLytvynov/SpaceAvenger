@@ -4,7 +4,6 @@ using System;
 using System.Windows.Media;
 using System.Windows;
 using SpaceAvenger.Services.Realizations.Message;
-using WPFGameEngine.Timers;
 using WPFGameEngine.GameViewControl;
 using c = SpaceAvenger.Services.Constants;
 using WPFGameEngine.WPF.GE.GameObjects;
@@ -13,15 +12,10 @@ using ViewModelBaseLibDotNetCore.PageManager.Base;
 using ViewModelBaseLibDotNetCore.MessageBus.Base;
 using ViewModelBaseLibDotNetCore.VM;
 using WPFGameEngine.Timers.Base;
-using WPFGameEngine.WPF.GE.Serialization.GameObjects;
-using System.Collections.Generic;
-using WPFGameEngine.WPF.GE.Dto.GameObjects;
-using System.Reflection;
-using System.Linq;
 using WPFGameEngine.ObjectBuilders.Base;
 using SpaceAvenger.Game.Core.Spaceships.F10.Destroyer;
-using System.Diagnostics;
 using System.Windows.Input;
+using WPFGameEngine.WPF.GE.Component.Controllers;
 
 namespace SpaceAvenger.ViewModels.PagesVM
 {
@@ -43,6 +37,7 @@ namespace SpaceAvenger.ViewModels.PagesVM
         #endregion
 
         #region Properties
+        public IControllerComponent ControlComponent { get; set; }
 
         public double ActualHeight
         {
@@ -78,26 +73,8 @@ namespace SpaceAvenger.ViewModels.PagesVM
             m_PageManager = pageManager ?? throw new ArgumentNullException(nameof(pageManager));
             m_gameTimer = gameTimer ?? throw new ArgumentNullException(nameof(gameTimer));
             m_GameView = new GameViewHost(m_gameTimer);
-            m_GameView.OnUpdate += Update;
-            m_GameView.MouseMove += M_GameView_MouseMove;
-            m_GameView.KeyDown += M_GameView_KeyDown;
-            m_GameView.KeyUp += M_GameView_KeyUp;
+            GameView.OnUpdate += Update;
             Subscriptions.Add(m_MessageBus.RegisterHandler<GameMessage, string>(OnMessageRecieved));
-        }
-
-        private void M_GameView_KeyUp(object sender, System.Windows.Input.KeyEventArgs e)
-        {
-            Console.WriteLine($"Key Up: {e.Key}");
-        }
-
-        private void M_GameView_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
-        {
-            Console.WriteLine($"Key Down: {e.Key}");
-        }
-
-        private void M_GameView_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
-        {
-            Debug.WriteLine($"Mouse: <{Mouse.GetPosition(m_GameView)}>");
         }
 
         public GamePage_ViewModel()
@@ -153,13 +130,18 @@ namespace SpaceAvenger.ViewModels.PagesVM
         private void Initialize()
         {
             var obj = m_objectBuilder.Build<F10Destroyer>();
-
+            obj.RegisterComponent(ControlComponent);
             RegisterNewObject(obj);
         }
 
         private void RegisterNewObject(GameObject gameObject)
         {
             m_GameView.AddObject(gameObject);
+        }
+
+        public void MouseMove(object sender, MouseEventArgs e)
+        { 
+            
         }
 
         #endregion

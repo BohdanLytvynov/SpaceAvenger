@@ -3,6 +3,7 @@ using WPFGameEngine.FactoryWrapper.Base;
 using WPFGameEngine.WPF.GE.Component.Animations;
 using WPFGameEngine.WPF.GE.Component.Animators;
 using WPFGameEngine.WPF.GE.Component.Base;
+using WPFGameEngine.WPF.GE.Component.Controllers;
 using WPFGameEngine.WPF.GE.Component.RelativeTransforms;
 using WPFGameEngine.WPF.GE.Component.Sprites;
 using WPFGameEngine.WPF.GE.Component.Transforms;

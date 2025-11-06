@@ -24,8 +24,8 @@
           "Rotation": 0,
           "Scale": {
             "IsEmpty": false,
-            "Width": 0.84999996,
-            "Height": 0.84999996
+            "Width": 0.95,
+            "Height": 0.95
           }
         },
         {
@@ -49,8 +49,8 @@
       "Rotation": 0,
       "Scale": {
         "IsEmpty": false,
-        "Width": 0.9,
-        "Height": 0.9
+        "Width": 1,
+        "Height": 1
       }
     },
     {
