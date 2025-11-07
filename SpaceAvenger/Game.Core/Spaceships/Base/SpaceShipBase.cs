@@ -12,12 +12,14 @@ namespace SpaceAvenger.Game.Core.Spaceships.Base
         protected Animator m_animator;
 
         #region Fields
-        
+        protected float m_horSpeed;
+        protected float m_vertSpeed;
         #endregion
 
         protected SpaceShipBase(string name) : base(name)
         {
-            
+            m_horSpeed = 40;
+            m_vertSpeed = 40;
         }
 
         public override void StartUp()

@@ -9,7 +9,9 @@
       Title="Game_Page"
       xmlns:vm="clr-namespace:SpaceAvenger.ViewModels.PagesVM"
       x:Name="Root"
-      d:DataContext="{d:DesignInstance vm:GamePage_ViewModel, IsDesignTimeCreatable=True}">
+      d:DataContext="{d:DesignInstance vm:GamePage_ViewModel, IsDesignTimeCreatable=True}" 
+      Background="Transparent"
+      Focusable="True">
     <Grid>
         <Grid.Background>
             <ImageBrush ImageSource="{StaticResource Back1_GamePage}" 
@@ -25,13 +27,5 @@
             UpdateSourceTrigger=PropertyChanged}"
                Content="{Binding GameView, UpdateSourceTrigger=PropertyChanged}">
         </Label>
-        <Canvas Background="Transparent" 
-                MouseMove="Canvas_MouseMove" 
-                MouseDown="Canvas_MouseDown" 
-                MouseUp="Canvas_MouseUp" 
-                KeyDown="Canvas_KeyDown"
-                KeyUp="Canvas_KeyUp" 
-                MouseWheel="Canvas_MouseWheel"
-                />
     </Grid>
 </Page>

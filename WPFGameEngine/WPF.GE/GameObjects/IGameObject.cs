@@ -47,6 +47,12 @@ namespace WPFGameEngine.WPF.GE.GameObjects
             where TComponent : IGEComponent;
         IEnumerable<IGEComponent> GetComponents();
 
+        void Translate(Vector2 position);
+        /// <summary>
+        /// Rotates an object
+        /// </summary>
+        /// <param name="angle">Degree</param>
+        void Rotate(double angle);
         void Scale(SizeF newScale);
     }
 }

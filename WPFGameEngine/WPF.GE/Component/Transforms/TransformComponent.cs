@@ -2,6 +2,7 @@
 using System.Numerics;
 using System.Windows.Media;
 using WPFGameEngine.Attributes.Editor;
+using WPFGameEngine.Extensions;
 using WPFGameEngine.WPF.GE.Component.Base;
 using WPFGameEngine.WPF.GE.Component.RelativeTransforms;
 using WPFGameEngine.WPF.GE.Dto.Components;
@@ -68,7 +69,7 @@ namespace WPFGameEngine.WPF.GE.Component.Transforms
             matrix.Translate(center.X, center.Y);
             //Apply Translate in the World
             matrix.Translate(Position.X, Position.Y);
-
+            matrix.CheckMachineZero();
             return matrix;
         }
 

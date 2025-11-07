@@ -2,6 +2,7 @@
 using System.Numerics;
 using System.Windows.Media;
 using WPFGameEngine.Attributes.Editor;
+using WPFGameEngine.Extensions;
 using WPFGameEngine.WPF.GE.Component.Transforms;
 using WPFGameEngine.WPF.GE.Dto.Components;
 
@@ -37,7 +38,7 @@ namespace WPFGameEngine.WPF.GE.Component.RelativeTransforms
             //Apply Translate in the World
             matrix.Translate(ActualParentSize.Width*Position.X, 
                 ActualParentSize.Height*Position.Y);//Here Position has a normalized values
-
+            matrix.CheckMachineZero();
             return matrix;
         }
 

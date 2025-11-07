@@ -522,6 +522,16 @@ namespace WPFGameEngine.WPF.GE.GameObjects
             }
         }
 
+        public void Translate(Vector2 position)
+        {
+            this.GetTransformComponent().Position = position;
+        }
+
+        public void Rotate(double angle)
+        { 
+            this.GetTransformComponent().Rotation = angle;
+        }
+
         #endregion
     }
 }

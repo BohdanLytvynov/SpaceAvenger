@@ -16,12 +16,14 @@ namespace WPFGameEngine.WPF.GE.Math.Basis
 
         public Vector2 GetNormalX()
         { 
-            return Vector2.Normalize(X);
+            var length = X.Length();
+            return X * (1 / length);
         }
 
         public Vector2 GetNormalY()
         {
-            return Vector2.Normalize(Y);
+            var length = Y.Length();
+            return Y * (1 / length);
         }
     }
 }

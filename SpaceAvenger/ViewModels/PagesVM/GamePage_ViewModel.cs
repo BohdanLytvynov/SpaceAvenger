@@ -14,8 +14,8 @@ using ViewModelBaseLibDotNetCore.VM;
 using WPFGameEngine.Timers.Base;
 using WPFGameEngine.ObjectBuilders.Base;
 using SpaceAvenger.Game.Core.Spaceships.F10.Destroyer;
-using System.Windows.Input;
 using WPFGameEngine.WPF.GE.Component.Controllers;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace SpaceAvenger.ViewModels.PagesVM
 {
@@ -33,22 +33,11 @@ namespace SpaceAvenger.ViewModels.PagesVM
         private GameViewHost m_GameView;
         private IGameTimer m_gameTimer;
         private IObjectBuilder m_objectBuilder;
-
+        private IServiceProvider m_serviceProvider;
+        private IControllerComponent m_controllerComponent;
         #endregion
 
         #region Properties
-        public IControllerComponent ControlComponent { get; set; }
-
-        public double ActualHeight
-        {
-            get=>App.Current.MainWindow.Height;
-        }
-
-        public double ActualWidth 
-        {
-            get => App.Current.MainWindow.Width;
-        }
-
         public Rect BackViewport 
         {
             get=> m_backViewport; 
@@ -66,8 +55,10 @@ namespace SpaceAvenger.ViewModels.PagesVM
             IPageManagerService<FrameType> pageManager,
             IMessageBus messageBus,
             IGameTimer gameTimer,
-            IObjectBuilder objectBuilder) : this()
+            IObjectBuilder objectBuilder,
+            IServiceProvider serviceProvider) : this()
         {
+            m_serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
             m_objectBuilder = objectBuilder ?? throw new ArgumentNullException(nameof(objectBuilder));
             m_MessageBus = messageBus ?? throw new ArgumentNullException(nameof(messageBus));
             m_PageManager = pageManager ?? throw new ArgumentNullException(nameof(pageManager));
@@ -129,8 +120,9 @@ namespace SpaceAvenger.ViewModels.PagesVM
 
         private void Initialize()
         {
+            m_controllerComponent = m_serviceProvider.GetRequiredService<IControllerComponent>();
             var obj = m_objectBuilder.Build<F10Destroyer>();
-            obj.RegisterComponent(ControlComponent);
+            obj.RegisterComponent(m_controllerComponent);
             RegisterNewObject(obj);
         }
 
@@ -139,9 +131,10 @@ namespace SpaceAvenger.ViewModels.PagesVM
             m_GameView.AddObject(gameObject);
         }
 
-        public void MouseMove(object sender, MouseEventArgs e)
-        { 
-            
+        protected override void Unsubscribe()
+        {
+            m_controllerComponent.Dispose();
+            base.Unsubscribe();
         }
 
         #endregion

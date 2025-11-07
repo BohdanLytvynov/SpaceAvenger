@@ -1,12 +1,15 @@
 ﻿using System.Drawing;
+using System.Windows.Input;
 using WPFGameEngine.WPF.GE.Component.Base;
 
 namespace WPFGameEngine.WPF.GE.Component.Controllers
 {
-    public interface IControllerComponent : IGEComponent
+    public interface IControllerComponent : IGEComponent, IDisposable
     {
-        public object Sender { get; }
-        
-        void OnInputFired(object sender, EventArgs e);
+        PointF MousePosition { get; }
+
+        MouseButton MouseButton { get; }
+
+        bool IsKeyDown(Key key);
     }
 }

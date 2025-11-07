@@ -10,6 +10,7 @@ using System.Windows.Input;
 using System.Windows.Controls;
 using SpaceAvenger.Extensions.Math;
 using WPFGameEngine.WPF.GE.Component.Controllers;
+using System.Diagnostics;
 
 namespace SpaceAvenger.Game.Core.Spaceships.F10.Destroyer
 {
@@ -19,7 +20,7 @@ namespace SpaceAvenger.Game.Core.Spaceships.F10.Destroyer
 
         public F10Destroyer() : base(nameof(F10Destroyer))
         {
-            
+
         }
 
         #region Methods
@@ -27,8 +28,8 @@ namespace SpaceAvenger.Game.Core.Spaceships.F10.Destroyer
         {
             base.StartUp();
 
-            m_transform.Position = new Vector2(100,200);
-            Scale(new SizeF(0.5f, 0.5f));
+            m_transform.Position = new Vector2(100, 200);
+            Scale(new SizeF(0.7f, 0.7f));
             m_transform.Rotation = -90;
 
             m_controller = (WPFInputController)GetComponent<ControllerComponent>(false);
@@ -36,33 +37,32 @@ namespace SpaceAvenger.Game.Core.Spaceships.F10.Destroyer
 
         public override void Update(List<IGameObject> world, IGameTimer gameTimer)
         {
-            if (m_controller.Sender != null)
+            if (m_controller != null)
             {
-                var key = m_controller.KeyEvents.Key;
-                var state = m_controller.KeyEvents.KeyStates;
                 var delta = gameTimer.deltaTime;
                 var basis = m_transform.GetBasis(CenterPosition);
                 var currPosition = m_transform.Position;
-                switch (key)
+                var xL = basis.GetNormalX();
+                var yL = basis.GetNormalY();
+                var curr = m_transform.Position;
+                var maxWidth = App.Current.MainWindow.Width;
+                var maxHeight = App.Current.MainWindow.Height;
+
+                if (m_controller.IsKeyDown(Key.A) && curr.X >= 0)
                 {
-                    case Key.A:
-                        m_transform.Position = new Vector2()
-                        {
-                            X = currPosition.X,
-                            Y = currPosition.Y - basis.GetNormalY().Y * (float)delta.TotalSeconds,
-                        };
-                        break;
-                    case Key.D:
-                        m_transform.Position = new Vector2()
-                        {
-                            X = currPosition.X,
-                            Y = currPosition.Y + basis.GetNormalY().Y * (float)delta.TotalSeconds,
-                        };
-                        break;
-                    case Key.W:
-                        break;
-                    case Key.S:
-                        break;
+                    Translate(curr - (yL * (float)delta.TotalSeconds * m_horSpeed));
+                }
+                if (m_controller.IsKeyDown(Key.D) && curr.X < maxWidth - ActualSize.Width)
+                {
+                    Translate(curr + (yL * (float)delta.TotalSeconds * m_horSpeed));
+                }
+                if (m_controller.IsKeyDown(Key.W) && curr.Y >= 0)
+                {
+                    Translate(m_transform.Position = curr + (xL * (float)delta.TotalSeconds * m_vertSpeed));
+                }
+                if (m_controller.IsKeyDown(Key.S) && curr.Y < maxHeight - ActualSize.Height)
+                {
+                    Translate(curr - (xL * (float)delta.TotalSeconds * m_vertSpeed));
                 }
             }
 
