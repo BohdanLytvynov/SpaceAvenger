@@ -1,5 +1,4 @@
 ﻿using System.Drawing;
-using System.Numerics;
 using System.Windows.Media;
 using WPFGameEngine.Attributes.Editor;
 using WPFGameEngine.Extensions;
@@ -23,19 +22,19 @@ namespace WPFGameEngine.WPF.GE.Component.RelativeTransforms
  
         public SizeF ActualParentSize { get; set; }
 
-        public override Matrix GetLocalTransformMatrix(Vector2 center)
+        public override Matrix GetLocalTransformMatrix()
         {
             //Create I matrix, diagonal is 1
             Matrix matrix = Matrix.Identity;
             //Move to center of the texture
-            matrix.Translate(-center.X, -center.Y);
+            matrix.Translate(-ActualCenterPosition.X, -ActualCenterPosition.Y);
             //Apply scale
             matrix.Scale(Scale.Width, Scale.Height);
             //Apply Rotation
             matrix.Rotate(Rotation);
             //Move back to initial origin
-            matrix.Translate(center.X, center.Y);
-            //Apply Translate in the World
+            matrix.Translate(ActualCenterPosition.X, ActualCenterPosition.Y);
+            //Apply Translate in the World with respect to parent
             matrix.Translate(ActualParentSize.Width*Position.X, 
                 ActualParentSize.Height*Position.Y);//Here Position has a normalized values
             matrix.CheckMachineZero();
@@ -52,5 +51,6 @@ namespace WPFGameEngine.WPF.GE.Component.RelativeTransforms
                 Rotation = Rotation,
             };
         }
+        
     }
 }

@@ -1,4 +1,7 @@
-﻿using System.Numerics;
+﻿
+
+using System.Numerics;
+using System.Windows;
 
 namespace WPFGameEngine.WPF.GE.Math.Basis
 {
@@ -12,18 +15,6 @@ namespace WPFGameEngine.WPF.GE.Math.Basis
         {
             X = x;
             Y = y;
-        }
-
-        public Vector2 GetNormalX()
-        { 
-            var length = X.Length();
-            return X * (1 / length);
-        }
-
-        public Vector2 GetNormalY()
-        {
-            var length = Y.Length();
-            return Y * (1 / length);
         }
     }
 }

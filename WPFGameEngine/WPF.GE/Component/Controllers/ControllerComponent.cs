@@ -1,4 +1,4 @@
-﻿using System.Drawing;
+﻿using System.Windows;
 using System.Windows.Input;
 using WPFGameEngine.WPF.GE.Component.Base;
 using WPFGameEngine.WPF.GE.Dto.Components;
@@ -10,7 +10,7 @@ namespace WPFGameEngine.WPF.GE.Component.Controllers
         #region Properties
         public override List<string> IncompatibleComponents => new List<string>();
 
-        public PointF MousePosition { get; protected set; }
+        public Point MousePosition { get; protected set; }
 
         public MouseButton MouseButton { get; protected set; }
         #endregion

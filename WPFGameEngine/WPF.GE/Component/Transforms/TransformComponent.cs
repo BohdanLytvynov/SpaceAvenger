@@ -6,7 +6,6 @@ using WPFGameEngine.Extensions;
 using WPFGameEngine.WPF.GE.Component.Base;
 using WPFGameEngine.WPF.GE.Component.RelativeTransforms;
 using WPFGameEngine.WPF.GE.Dto.Components;
-using WPFGameEngine.WPF.GE.Math.Basis;
 
 namespace WPFGameEngine.WPF.GE.Component.Transforms
 {
@@ -15,14 +14,18 @@ namespace WPFGameEngine.WPF.GE.Component.Transforms
         GameObjectType = Enums.GEObjectType.Component)]
     public class TransformComponent : ComponentBase, ITransform
     {
-        #region Fields
-        private Vector2 m_position;
-        #endregion
-
         #region Properties
+        /// <summary>
+        /// Actual Position of the Center with respect to texture
+        /// </summary>
+        public Vector2 ActualCenterPosition { get; set; }
+        /// <summary>
+        /// Actual Size of the Texture after Scaling applied
+        /// </summary>
+        public SizeF ActualSize { get; set; }
         public override List<string> IncompatibleComponents => 
             new List<string>{ nameof(RelativeTransformComponent) };
-        public virtual Vector2 Position { get => m_position; set=> m_position = value; }
+        public virtual Vector2 Position { get; set; }
         public Vector2 CenterPosition { get; set; }
         public double Rotation { get; set; }//Degree
         public SizeF Scale { get; set; }
@@ -55,20 +58,21 @@ namespace WPFGameEngine.WPF.GE.Component.Transforms
 
         #region Methods
 
-        public virtual Matrix GetLocalTransformMatrix(Vector2 center)
+        public virtual Matrix GetLocalTransformMatrix()
         {
             //Create I matrix, diagonal is 1
             Matrix matrix = Matrix.Identity;
             //Move to center of the texture
-            matrix.Translate(-center.X, -center.Y);
+            matrix.Translate(-ActualCenterPosition.X, -ActualCenterPosition.Y);
             //Apply scale
             matrix.Scale(Scale.Width, Scale.Height);
             //Apply Rotation
             matrix.Rotate(Rotation);
             //Move back to initial origin
-            matrix.Translate(center.X, center.Y);
+            matrix.Translate(ActualCenterPosition.X, ActualCenterPosition.Y);
             //Apply Translate in the World
             matrix.Translate(Position.X, Position.Y);
+
             matrix.CheckMachineZero();
             return matrix;
         }
@@ -83,17 +87,7 @@ namespace WPFGameEngine.WPF.GE.Component.Transforms
                 Scale = Scale,
                 CenterPosition = CenterPosition,
             };
-
-        public Basis2D GetBasis(Vector2 centerPosition)
-        {
-            var m = GetLocalTransformMatrix(centerPosition);
-            Vector2 X = new Vector2((float)m.M11, (float)m.M12);
-            Vector2 Y = new Vector2((float)m.M21, (float)m.M22);
-            return new Basis2D(X, Y);
-        }
-
-
-
+        
         #endregion
 
         #endregion

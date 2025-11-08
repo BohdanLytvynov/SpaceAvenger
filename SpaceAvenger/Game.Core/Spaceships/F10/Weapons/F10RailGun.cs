@@ -11,7 +11,7 @@ namespace SpaceAvenger.Game.Core.Spaceships.F10.Weapons
 
         public override void StartUp()
         {
-            
+            base.StartUp();
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Drawing;
 using System.Numerics;
+using System.Security.Cryptography.Xml;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using WPFGameEngine.Timers.Base;
@@ -35,8 +36,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         #endregion
 
         #region Propeties
-        public Vector2 CenterPosition { get; private set; }
-        public SizeF ActualSize { get; private set; }
+        
         public bool IsExported { get; set; }
         public bool Enabled { get; set; }
         public double ZIndex { get; set; }
@@ -113,14 +113,14 @@ namespace WPFGameEngine.WPF.GE.GameObjects
             //Calculate actual size of the Image
             float actualWidth = (float)bitmapSource.Width * transform.Scale.Width;
             float actualHeight = (float)bitmapSource.Height * transform.Scale.Height;
-            ActualSize = new SizeF(actualWidth, actualHeight);
+            transform.ActualSize = new SizeF(actualWidth, actualHeight);
             //Calculate the center of the Image
             float Xcenter = actualWidth * transform.CenterPosition.X;
             float Ycenter = actualHeight * transform.CenterPosition.Y;
-            CenterPosition = new Vector2(Xcenter, Ycenter);
+            transform.ActualCenterPosition = new Vector2(Xcenter, Ycenter);
             //Get matrix for current game object
 
-            var globalMatrix = transform.GetLocalTransformMatrix(new Vector2(Xcenter, Ycenter));
+            var globalMatrix = transform.GetLocalTransformMatrix();
 
             if (parent != default)
             {
@@ -371,25 +371,6 @@ namespace WPFGameEngine.WPF.GE.GameObjects
             return result;
         }
 
-        public static void RemoveObject(Func<IGameObject, bool> predicate, List<IGameObject> world, bool recursive = false)
-        {
-            foreach (var o in world)
-            {
-                if (predicate(o))
-                {
-                    world.Remove(o);
-                    return;
-                }
-                else if (recursive)
-                {
-                    bool res = o.RemoveChild(predicate, recursive);
-
-                    if(res)
-                        return;
-                }
-            }
-        }
-
         public IGameObject UnregisterComponent<TComponent>() 
             where TComponent : IGEComponent
         {
@@ -531,6 +512,55 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         { 
             this.GetTransformComponent().Rotation = angle;
         }
+
+        public Matrix GetGlobalTransformMatrix()
+        {
+            Matrix m = Matrix.Identity;
+            GetGlobalMatrixRec(this, ref m);
+            return m;
+        }
+        #region Static Methods
+        public static void RemoveObject(Func<IGameObject, bool> predicate, List<IGameObject> world, bool recursive = false)
+        {
+            foreach (var o in world)
+            {
+                if (predicate(o))
+                {
+                    world.Remove(o);
+                    return;
+                }
+                else if (recursive)
+                {
+                    bool res = o.RemoveChild(predicate, recursive);
+
+                    if (res)
+                        return;
+                }
+            }
+        }
+
+        private static void GetGlobalMatrixRec(IGameObject obj, ref Matrix matrix)
+        { 
+            if(obj == null)
+                return;
+
+            var t = obj.GetTransformComponent();
+            if (t != null)
+            {
+                var m = t.GetLocalTransformMatrix();
+                matrix.Append(m);
+
+                GetGlobalMatrixRec(obj.Parent, ref matrix);
+            }
+        }
+
+        public static Matrix GetGlobalTransformMatrix(IGameObject obj)
+        {
+            Matrix m = Matrix.Identity;
+            GetGlobalMatrixRec(obj, ref m);
+            return m;
+        }
+        #endregion
 
         #endregion
     }

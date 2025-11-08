@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -21,6 +20,7 @@ namespace SpaceAvenger.Services.WPFInputControllers
         private Window m_window;
         private HwndSource m_hwndSource;
         private Dictionary<Key, bool> m_activeKeys;
+        private Dictionary<MouseButton, bool> m_MouseButtons;
         #endregion
 
         #region Ctor
@@ -30,11 +30,13 @@ namespace SpaceAvenger.Services.WPFInputControllers
             IntPtr hwnd = new WindowInteropHelper(window).Handle;
             m_hwndSource = HwndSource.FromHwnd(hwnd);
 
+            m_MouseButtons = new Dictionary<MouseButton, bool>();
             m_activeKeys = new Dictionary<Key, bool>();
             m_activeKeys.Add(Key.A, false);
             m_activeKeys.Add(Key.W, false);
             m_activeKeys.Add(Key.S, false);
             m_activeKeys.Add(Key.D, false);
+            m_activeKeys.Add(Key.E, false);
 
             if (m_hwndSource != null)
             {
@@ -114,7 +116,7 @@ namespace SpaceAvenger.Services.WPFInputControllers
         {
             System.Windows.Point p = ExtractMousePosition(lParam);
 
-            MousePosition = new PointF((float)p.X, (float)p.Y);
+            MousePosition = new Point((float)p.X, (float)p.Y);
         }
 
         public override void Dispose()

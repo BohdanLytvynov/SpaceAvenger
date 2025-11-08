@@ -14,10 +14,8 @@ namespace WPFGameEngine.WPF.GE.GameObjects
     public interface IGameObject : IGameEngineEntity, IConvertToDto<GameObjectDto>
     {
         /// <summary>
-        /// Use for editor only not for games, Unique key must be Name for games
+        /// Use for editor only not for games
         /// </summary>
-        public SizeF ActualSize { get; }
-        public Vector2 CenterPosition { get; }
         public bool IsExported { get; set; }
         public double ZIndex { get; set; }
         public bool Enabled { get; set; }
@@ -51,8 +49,9 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         /// <summary>
         /// Rotates an object
         /// </summary>
-        /// <param name="angle">Degree</param>
+        /// <param name="angle"></param>
         void Rotate(double angle);
         void Scale(SizeF newScale);
+        Matrix GetGlobalTransformMatrix();
     }
 }
