@@ -28,15 +28,14 @@ namespace WPFGameEngine.WPF.GE.Component.RelativeTransforms
             Matrix matrix = Matrix.Identity;
             //Move to center of the texture
             matrix.Translate(-ActualCenterPosition.X, -ActualCenterPosition.Y);
-            //Apply scale
-            matrix.Scale(Scale.Width, Scale.Height);
             //Apply Rotation
             matrix.Rotate(Rotation);
+            //Apply Translate in the World with respect to parent
+            matrix.Translate(ActualParentSize.Width * Position.X,
+                ActualParentSize.Height * Position.Y);//Here Position has a normalized values
             //Move back to initial origin
             matrix.Translate(ActualCenterPosition.X, ActualCenterPosition.Y);
-            //Apply Translate in the World with respect to parent
-            matrix.Translate(ActualParentSize.Width*Position.X, 
-                ActualParentSize.Height*Position.Y);//Here Position has a normalized values
+            
             matrix.CheckMachineZero();
             return matrix;
         }

@@ -53,5 +53,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         void Rotate(double angle);
         void Scale(SizeF newScale);
         Matrix GetGlobalTransformMatrix();
+
+
     }
 }

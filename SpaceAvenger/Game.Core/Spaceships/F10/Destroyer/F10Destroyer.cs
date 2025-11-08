@@ -30,7 +30,7 @@ namespace SpaceAvenger.Game.Core.Spaceships.F10.Destroyer
             base.StartUp();
             m_targetMarker = new Pen();
             m_transform.Position = new Vector2(100, 200);
-            Scale(new SizeF(0.7f, 0.7f));
+            Scale(new SizeF(0.5f, 0.5f));
             m_transform.Rotation = -90;
             m_targetMarker = new Pen() { Brush = Brushes.Orange };
             m_targetMarker.Freeze();
@@ -65,8 +65,13 @@ namespace SpaceAvenger.Game.Core.Spaceships.F10.Destroyer
             var l = lx + ly;
 
 
-            dc.DrawEllipse(Brushes.Blue, new Pen(), (m.GetTranslateAsVector()).ToPoint(), 2,2);
+            dc.DrawEllipse(Brushes.Blue, new Pen(), (m.GetTranslateAsVector() + l ).ToPoint(), 2,2);
 
+            if (m_controller.IsKeyDown(Key.R))
+            {
+                var prevR = this.GetTransformComponent().Rotation;
+                this.Rotate(prevR + 5);
+            }
 
         }
 
