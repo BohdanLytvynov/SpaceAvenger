@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.Windows.Input;
 using ViewModelBaseLibDotNetCore.Commands;
 using ViewModelBaseLibDotNetCore.VM;
-using WPFGameEngine.GameViewControl;
 using WPFGameEngine.WPF.GE.Component.Sprites;
 using WPFGameEngine.WPF.GE.Component.Transforms;
 using WPFGameEngine.WPF.GE.GameObjects;
@@ -35,6 +34,7 @@ using System.Drawing;
 using System.Numerics;
 using SpaceAvenger.Editor.ViewModels.Prefabs;
 using WPFGameEngine.WPF.GE.Dto.GameObjects;
+using SpaceAvenger.Services.WpfGameViewHost;
 
 namespace SpaceAvenger.Editor.ViewModels
 {
@@ -42,7 +42,7 @@ namespace SpaceAvenger.Editor.ViewModels
     {
         #region Fields
         private string m_title;
-        private GameViewHost m_gameViewHost;
+        private WpfGameViewHost m_gameViewHost;
         private TreeItemViewModel? m_SelectedItem;
 
         private bool m_ShowGizmos;
@@ -155,7 +155,7 @@ namespace SpaceAvenger.Editor.ViewModels
             }
         }
 
-        public GameViewHost GameView
+        public WpfGameViewHost GameView
         { get => m_gameViewHost; set => Set(ref m_gameViewHost, value); }
 
         public PrefabViewModel SelectedPrefab 
@@ -233,7 +233,7 @@ namespace SpaceAvenger.Editor.ViewModels
             #endregion
 
             m_gameTimer = gameTimer ?? throw new ArgumentNullException(nameof(gameTimer));
-            m_gameViewHost = new GameViewHost(m_gameTimer);
+            m_gameViewHost = new WpfGameViewHost(m_gameTimer, null);
             m_gameViewHost.StartGame();
         }
 

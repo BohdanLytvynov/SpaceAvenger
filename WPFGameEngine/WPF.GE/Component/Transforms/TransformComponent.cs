@@ -71,7 +71,6 @@ namespace WPFGameEngine.WPF.GE.Component.Transforms
             //Move back to initial origin
             matrix.Translate(ActualCenterPosition.X, ActualCenterPosition.Y);
             
-
             matrix.CheckMachineZero();
             return matrix;
         }

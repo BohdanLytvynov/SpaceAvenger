@@ -3,6 +3,8 @@ using System.Numerics;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using WPFGameEngine.Factories.Base;
+using WPFGameEngine.GameViewControl;
+using WPFGameEngine.ObjectBuilders.Base;
 using WPFGameEngine.Timers.Base;
 using WPFGameEngine.WPF.GE.Component.Base;
 using WPFGameEngine.WPF.GE.Component.Transforms;
@@ -31,7 +33,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         TransformComponent GetTransformComponent();
         void StartUp();
         void Render(DrawingContext dc, Matrix parent);
-        void Update(List<IGameObject> world, IGameTimer gameTimer);
+        void Update(IGameViewHost gameViewHost, IGameTimer gameTimer);
         IGameObject RegisterComponent(IGEComponent component);
         IGameObject UnregisterComponent(IGEComponent component);
         IGameObject UnregisterComponent(string componentName);
@@ -54,6 +56,14 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         void Scale(SizeF newScale);
         Matrix GetGlobalTransformMatrix();
 
+        /// <summary>
+        /// Returns Center of the object in world Coordinates
+        /// </summary>
+        /// <returns></returns>
+        Vector2 GetWorldCenter();
 
+        void LookAt(Vector2 position, double rotSpeed, double deltaTime);
+
+        Vector2 GetDirection(Vector2 position);
     }
 }

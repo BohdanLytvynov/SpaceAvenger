@@ -55,6 +55,11 @@
     </ImageSource>
     <!--#endregion-->
 
+    <!--#region Projectiles -->
+    <ImageSource x:Key="F10_RailGunPrj">pack://siteoforigin:,,,/Resources/Content/Projectiles/F10/F10Prj.png
+    </ImageSource>
+    <!--#endregion-->
+
     <!--#region Empty -->
     <ImageSource x:Key="Empty">pack://siteoforigin:,,,/Resources/Content/Empty.png
     </ImageSource>

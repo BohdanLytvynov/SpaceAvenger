@@ -1,0 +1,30 @@
+{
+  "ZIndex": 0,
+  "Enabled": true,
+  "ObjectName": "F10RailGunProjectile",
+  "UniqueName": "Base",
+  "Children": [],
+  "Components": [
+    {
+      "RecreateType": "TransformComponent",
+      "Position": {
+        "X": 0,
+        "Y": 0
+      },
+      "CenterPosition": {
+        "X": 0.5,
+        "Y": 0.5
+      },
+      "Rotation": 0,
+      "Scale": {
+        "IsEmpty": false,
+        "Width": 1,
+        "Height": 1
+      }
+    },
+    {
+      "RecreateType": "Sprite",
+      "ResourceKey": "F10_RailGunPrj"
+    }
+  ]
+}

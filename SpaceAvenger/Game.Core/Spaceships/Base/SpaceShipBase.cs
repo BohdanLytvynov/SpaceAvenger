@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Windows.Input;
 using WPFGameEngine.Extensions;
+using WPFGameEngine.GameViewControl;
+using WPFGameEngine.ObjectBuilders.Base;
 using WPFGameEngine.Timers.Base;
 using WPFGameEngine.WPF.GE.Component.Animators;
 using WPFGameEngine.WPF.GE.Component.Sprites;
@@ -34,7 +36,7 @@ namespace SpaceAvenger.Game.Core.Spaceships.Base
             m_sprite = GetComponent<Sprite>();
         }
 
-        public override void Update(List<IGameObject> world, IGameTimer gameTimer)
+        public override void Update(IGameViewHost world, IGameTimer gameTimer)
         {
             if (m_controller != null)
             {

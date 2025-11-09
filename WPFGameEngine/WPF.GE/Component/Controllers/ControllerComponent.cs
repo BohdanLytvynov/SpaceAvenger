@@ -1,4 +1,4 @@
-﻿using System.Windows;
+﻿using System.Numerics;
 using System.Windows.Input;
 using WPFGameEngine.WPF.GE.Component.Base;
 using WPFGameEngine.WPF.GE.Dto.Components;
@@ -10,7 +10,7 @@ namespace WPFGameEngine.WPF.GE.Component.Controllers
         #region Properties
         public override List<string> IncompatibleComponents => new List<string>();
 
-        public Point MousePosition { get; protected set; }
+        public Vector2 MousePosition { get; protected set; }
 
         public MouseButton MouseButton { get; protected set; }
         #endregion
@@ -29,6 +29,8 @@ namespace WPFGameEngine.WPF.GE.Component.Controllers
         public abstract void Dispose();
 
         public abstract bool IsKeyDown(Key key);
+
+        public abstract bool IsMouseButtonDown(MouseButton mouseButton);
         #endregion
     }
 }

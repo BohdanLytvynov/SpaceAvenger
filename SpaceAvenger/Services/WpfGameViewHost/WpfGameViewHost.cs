@@ -1,13 +1,18 @@
-﻿using System.Windows;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows;
 using System.Windows.Media;
 using WPFGameEngine.Enums;
+using WPFGameEngine.GameViewControl;
+using WPFGameEngine.ObjectBuilders.Base;
 using WPFGameEngine.Timers;
 using WPFGameEngine.Timers.Base;
 using WPFGameEngine.WPF.GE.GameObjects;
 
-namespace WPFGameEngine.GameViewControl
+namespace SpaceAvenger.Services.WpfGameViewHost
 {
-    public class GameViewHost : FrameworkElement
+    public class WpfGameViewHost : FrameworkElement, IGameViewHost
     {
         #region Delegates
         public Action OnUpdate;
@@ -25,11 +30,14 @@ namespace WPFGameEngine.GameViewControl
         public List<IGameObject> World { get => m_world; }
         public GameState GameState { get; }
         protected override int VisualChildrenCount => m_visualCollection.Count;
+
+        public IObjectBuilder ObjectBuilder { get; init; }
         #endregion
 
         #region Ctor
-        public GameViewHost(IGameTimer gameTimer)
+        public WpfGameViewHost(IGameTimer gameTimer, IObjectBuilder objectBuilder)
         {
+            ObjectBuilder = objectBuilder;
             m_gameTimer = gameTimer ?? throw new ArgumentNullException(nameof(gameTimer));
             m_world = new List<IGameObject>();
             m_drawingSurface = new DrawingVisual();
@@ -63,7 +71,7 @@ namespace WPFGameEngine.GameViewControl
                     {
                         if(obj != null)
                         {
-                            obj.Update(World, m_gameTimer);
+                            obj.Update(this, m_gameTimer);
                             obj.Render(dc, Matrix.Identity);
                         }
                     }

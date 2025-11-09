@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
@@ -31,12 +30,15 @@ namespace SpaceAvenger.Services.WPFInputControllers
             m_hwndSource = HwndSource.FromHwnd(hwnd);
 
             m_MouseButtons = new Dictionary<MouseButton, bool>();
+            m_MouseButtons.Add(MouseButton.Left, false);
+
             m_activeKeys = new Dictionary<Key, bool>();
             m_activeKeys.Add(Key.A, false);
             m_activeKeys.Add(Key.W, false);
             m_activeKeys.Add(Key.S, false);
             m_activeKeys.Add(Key.D, false);
             m_activeKeys.Add(Key.E, false);
+            m_activeKeys.Add(Key.R, false);
 
             if (m_hwndSource != null)
             {
@@ -108,15 +110,21 @@ namespace SpaceAvenger.Services.WPFInputControllers
 
         private void ProcessMouseClick(IntPtr lParam, bool isDown, MouseButton button, ref bool handled)
         {
-            System.Windows.Point position = ExtractMousePosition(lParam);
-            MouseButton = button;
+            if (isDown)
+            {
+                m_MouseButtons[button] = true;
+            }
+            else
+            {
+                m_MouseButtons[button] = false;
+            }
         }
 
         private void ProcessMouseMove(IntPtr lParam, ref bool handled)
         {
             System.Windows.Point p = ExtractMousePosition(lParam);
 
-            MousePosition = new Point((float)p.X, (float)p.Y);
+            MousePosition = new System.Numerics.Vector2((float)p.X, (float)p.Y);
         }
 
         public override void Dispose()
@@ -128,6 +136,11 @@ namespace SpaceAvenger.Services.WPFInputControllers
         public override bool IsKeyDown(Key key)
         {
             return m_activeKeys.ContainsKey(key) && m_activeKeys[key];
+        }
+
+        public override bool IsMouseButtonDown(MouseButton mouseButton)
+        {
+            return m_MouseButtons.ContainsKey(mouseButton) && m_MouseButtons[mouseButton];
         }
         #endregion
     }

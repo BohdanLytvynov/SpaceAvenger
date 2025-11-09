@@ -3,6 +3,9 @@ using System.Numerics;
 using System.Security.Cryptography.Xml;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using WPFGameEngine.Extensions;
+using WPFGameEngine.GameViewControl;
+using WPFGameEngine.ObjectBuilders.Base;
 using WPFGameEngine.Timers.Base;
 using WPFGameEngine.WPF.GE.Component.Animations;
 using WPFGameEngine.WPF.GE.Component.Animators;
@@ -13,6 +16,7 @@ using WPFGameEngine.WPF.GE.Component.Transforms;
 using WPFGameEngine.WPF.GE.Dto.Base;
 using WPFGameEngine.WPF.GE.Dto.GameObjects;
 using WPFGameEngine.WPF.GE.Exceptions;
+using WPFGameEngine.WPF.GE.Math.Basis;
 using WPFGameEngine.WPF.GE.Settings;
 
 namespace WPFGameEngine.WPF.GE.GameObjects
@@ -78,7 +82,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects
 
         #region Methods
 
-        public virtual void Update(List<IGameObject> world, IGameTimer gameTimer)
+        public virtual void Update(IGameViewHost world,  IGameTimer gameTimer)
         {
             if (!Enabled) return;
             Animation? animation = GetComponent<Animation>(false);
@@ -128,6 +132,10 @@ namespace WPFGameEngine.WPF.GE.GameObjects
             }
 
             dc.PushTransform(new MatrixTransform(globalMatrix));
+
+            //Negative Value Protection
+            actualWidth = actualWidth < 0 ? 0 : actualWidth;
+            actualHeight = actualHeight < 0 ? 0 : actualHeight;
 
             dc.DrawImage(bitmapSource, new System.Windows.Rect
                 (0, 0, actualWidth, actualHeight));
@@ -560,7 +568,61 @@ namespace WPFGameEngine.WPF.GE.GameObjects
             GetGlobalMatrixRec(obj, ref m);
             return m;
         }
+
         #endregion
+
+        public Vector2 GetWorldCenter()
+        {
+            var m = this.GetGlobalTransformMatrix();
+            var b = m.GetBasis();
+            var center = this.GetTransformComponent().ActualCenterPosition;
+            var lx = b.X.Multiply(center.X);
+            var ly = b.Y.Multiply(center.Y);
+            var l = lx + ly;
+            return m.GetTranslateAsVector() + l;
+        }
+
+        public Vector2 GetDirection(Vector2 position)
+        {
+            var objW = GetWorldCenter();
+            return Vector2.Normalize(position - objW);
+        }
+
+        public Basis2D GetBasis()
+        { 
+            return GetGlobalTransformMatrix().GetBasis();
+        }
+
+        public void LookAt(Vector2 position, double rotSpeed, double deltaTime)
+        {
+            //Get Dir Vector to Target
+            var dir = GetDirection(position);
+            //Check that we are not in bounds of target
+            if (dir.LengthSquared() < 0.0001)
+                return;
+            //Get Local Basis -> Xl, Yl
+            var basis = GetBasis();
+            //Calculate angle to rotate to
+            var angle = dir.GetAngleDeg(basis.X);
+            //Decide the hemicircle of rotation according to Yl
+            double sign = Vector2.Dot(dir, basis.Y) < 0 ? -1 : 1;
+            //Get Current Angle
+            double currAngle = GetTransformComponent().Rotation;
+            //Calculate destination angle
+            double destAngle = currAngle + sign*angle;
+            //LERP
+            //Get short rotation Way
+            double diff = destAngle - currAngle;
+            //Clamp between -180, 180, so we can operate using hemicirles
+            while (diff > 180) diff -= 360;
+            while (diff < -180) diff += 360;
+            //Claculate rotation Step independent to FPS
+            double step = diff * rotSpeed * deltaTime;
+            //Get new Angle
+            double newAngle = currAngle + step;
+            //Apply new rotation
+            Rotate(newAngle);
+        }
 
         #endregion
     }

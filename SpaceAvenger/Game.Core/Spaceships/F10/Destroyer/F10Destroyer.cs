@@ -1,24 +1,24 @@
 ﻿using SpaceAvenger.Game.Core.Spaceships.Base;
-using System.Numerics;
-using System.Drawing;
+using SpaceAvenger.Game.Core.Spaceships.F10.Weapons;
 using SpaceAvenger.Services.WPFInputControllers;
+using System;
 using System.Collections.Generic;
-using WPFGameEngine.WPF.GE.GameObjects;
+using System.Drawing;
+using System.Numerics;
+using System.Windows.Media;
+using WPFGameEngine.Extensions;
+using WPFGameEngine.GameViewControl;
+using WPFGameEngine.ObjectBuilders.Base;
 using WPFGameEngine.Timers.Base;
 using WPFGameEngine.WPF.GE.Component.Controllers;
-using SpaceAvenger.Game.Core.Spaceships.F10.Weapons;
-using System.Windows.Media;
-using SpaceAvenger.Extensions.Math;
-using WPFGameEngine.Extensions;
-using System;
-using System.Windows.Input;
+using WPFGameEngine.WPF.GE.GameObjects;
 
 namespace SpaceAvenger.Game.Core.Spaceships.F10.Destroyer
 {
     public class F10Destroyer : SpaceShipBase
     {
         private F10RailGun m_gun1;
-        private Pen m_targetMarker;
+        private Pen m_targetMarkerPen;
         public F10Destroyer() : base(nameof(F10Destroyer))
         {
 
@@ -28,27 +28,36 @@ namespace SpaceAvenger.Game.Core.Spaceships.F10.Destroyer
         public override void StartUp()
         {
             base.StartUp();
-            m_targetMarker = new Pen();
+            m_targetMarkerPen = new Pen();
             m_transform.Position = new Vector2(100, 200);
-            Scale(new SizeF(0.5f, 0.5f));
+            Scale(new SizeF(0.3f, 0.3f));
             m_transform.Rotation = -90;
-            m_targetMarker = new Pen() { Brush = Brushes.Orange };
-            m_targetMarker.Freeze();
+            m_targetMarkerPen = new Pen() { Brush = Brushes.Orange };
+            m_targetMarkerPen.Freeze();
             m_controller = (WPFInputController)GetComponent<ControllerComponent>(false);
 
             m_gun1 = (F10RailGun)this.FindChild(o => o.UniqueName.Equals("RailGun1"));
         }
 
-        public override void Update(List<IGameObject> world, IGameTimer gameTimer)
+        public override void Update(IGameViewHost world, IGameTimer gameTimer)
         {
-            //var m = GetGlobalMatrix(this, m_gun1);
-            //var m_gun1Pos = m.GetTranslate();
+            if (m_controller != null)
+            {
+                m_gun1.LookAt(m_controller.MousePosition, 2, gameTimer.deltaTime.TotalSeconds);
 
-            //var dirVector = m_controller.MousePosition - m_gun1Pos;
+                if (m_controller.IsKeyDown(System.Windows.Input.Key.R))
+                {
+                    Rotate(GetTransformComponent().Rotation + 5);
+                }
 
-            //double angle = Math.Atan2(dirVector.Y, dirVector.X);
+                if (m_controller.IsMouseButtonDown(System.Windows.Input.MouseButton.Left))
+                {
+                    m_gun1.Shoot();
+                }
+            }
+            
 
-            //m_gun1.Rotate(angle * 180 / Math.PI);
+            
 
             base.Update(world, gameTimer);
         }
@@ -56,22 +65,10 @@ namespace SpaceAvenger.Game.Core.Spaceships.F10.Destroyer
         public override void Render(DrawingContext dc, Matrix parent = default)
         {
             base.Render(dc, parent);
-
-            var m = m_gun1.GetGlobalTransformMatrix();
-            var b = m.GetBasis();
-            var center = m_gun1.GetTransformComponent().ActualCenterPosition;
-            var lx = b.X.Multiply(center.X);
-            var ly = b.Y.Multiply(center.Y);
-            var l = lx + ly;
-
-
-            dc.DrawEllipse(Brushes.Blue, new Pen(), (m.GetTranslateAsVector() + l ).ToPoint(), 2,2);
-
-            if (m_controller.IsKeyDown(Key.R))
-            {
-                var prevR = this.GetTransformComponent().Rotation;
-                this.Rotate(prevR + 5);
-            }
+            
+            dc.DrawLine(m_targetMarkerPen, 
+                m_gun1.GetWorldCenter().ToPoint(), 
+                m_controller.MousePosition.ToPoint());
 
         }
 

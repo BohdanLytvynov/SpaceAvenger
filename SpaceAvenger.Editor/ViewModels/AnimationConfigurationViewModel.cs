@@ -4,6 +4,7 @@ using OxyPlot.Series;
 using SpaceAvenger.Editor.Mock;
 using SpaceAvenger.Editor.ViewModels.EaseOptions;
 using SpaceAvenger.Editor.ViewModels.Options;
+using SpaceAvenger.Services.WpfGameViewHost;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using ViewModelBaseLibDotNetCore.Commands;
@@ -12,7 +13,6 @@ using WPFGameEngine.Attributes.Editor;
 using WPFGameEngine.Enums;
 using WPFGameEngine.Extensions;
 using WPFGameEngine.FactoryWrapper.Base;
-using WPFGameEngine.GameViewControl;
 using WPFGameEngine.Services.Interfaces;
 using WPFGameEngine.Timers;
 using WPFGameEngine.WPF.GE.AnimationFrames;
@@ -33,7 +33,7 @@ namespace SpaceAvenger.Editor.ViewModels
 
         #region Fields
         private string m_title;
-        private GameViewHost m_gameView;
+        private WpfGameViewHost m_gameView;
         private IGameObject m_gameObject;
         private IAnimation m_animation;
         private ObservableCollection<string> m_resourceNames;
@@ -181,7 +181,7 @@ namespace SpaceAvenger.Editor.ViewModels
         }
         public string Title  
         { get => m_title; set => Set(ref m_title, value); }
-        public GameViewHost GameView 
+        public WpfGameViewHost GameView 
         { get => m_gameView; set => Set(ref m_gameView, value); }
         public string SelectedResourceName
         {
@@ -246,7 +246,7 @@ namespace SpaceAvenger.Editor.ViewModels
             }
 
             m_title = "Animation Configuration";
-            m_gameView = new GameViewHost(new GameTimer());
+            m_gameView = new WpfGameViewHost(new GameTimer(), null);
             m_gameView.OnUpdate = Update;
             m_gameObject = new GameObjectMock();
             var t = m_gameObject.GetComponent<TransformComponent>();

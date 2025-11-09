@@ -4,7 +4,6 @@ using System;
 using System.Windows.Media;
 using System.Windows;
 using SpaceAvenger.Services.Realizations.Message;
-using WPFGameEngine.GameViewControl;
 using c = SpaceAvenger.Services.Constants;
 using WPFGameEngine.WPF.GE.GameObjects;
 using WPFGameEngine.WPF.GE.Settings;
@@ -16,6 +15,7 @@ using WPFGameEngine.ObjectBuilders.Base;
 using SpaceAvenger.Game.Core.Spaceships.F10.Destroyer;
 using WPFGameEngine.WPF.GE.Component.Controllers;
 using Microsoft.Extensions.DependencyInjection;
+using SpaceAvenger.Services.WpfGameViewHost;
 
 namespace SpaceAvenger.ViewModels.PagesVM
 {
@@ -30,7 +30,7 @@ namespace SpaceAvenger.ViewModels.PagesVM
         private IPageManagerService<FrameType> m_PageManager;
         private IMessageBus m_MessageBus;
         private ImageSource m_GameBack;
-        private GameViewHost m_GameView;
+        private WpfGameViewHost m_GameView;
         private IGameTimer m_gameTimer;
         private IObjectBuilder m_objectBuilder;
         private IServiceProvider m_serviceProvider;
@@ -44,7 +44,7 @@ namespace SpaceAvenger.ViewModels.PagesVM
             set=> Set(ref m_backViewport, value);
         }
 
-        public GameViewHost GameView { get=> m_GameView; set=> Set(ref m_GameView, value); }
+        public WpfGameViewHost GameView { get=> m_GameView; set=> Set(ref m_GameView, value); }
 
         public ImageSource Background { get=> m_GameBack; set=> Set(ref m_GameBack, value); }
         #endregion
@@ -63,7 +63,7 @@ namespace SpaceAvenger.ViewModels.PagesVM
             m_MessageBus = messageBus ?? throw new ArgumentNullException(nameof(messageBus));
             m_PageManager = pageManager ?? throw new ArgumentNullException(nameof(pageManager));
             m_gameTimer = gameTimer ?? throw new ArgumentNullException(nameof(gameTimer));
-            m_GameView = new GameViewHost(m_gameTimer);
+            m_GameView = new WpfGameViewHost(m_gameTimer, m_objectBuilder);
             GameView.OnUpdate += Update;
             Subscriptions.Add(m_MessageBus.RegisterHandler<GameMessage, string>(OnMessageRecieved));
         }
