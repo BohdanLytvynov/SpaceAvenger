@@ -1,14 +1,14 @@
 ﻿using System.Reflection;
-using System.Xml.Linq;
+using WPFGameEngine.Attributes.Factories;
+using WPFGameEngine.Enums;
+using WPFGameEngine.Extensions;
 using WPFGameEngine.Factories.Base;
 using WPFGameEngine.Factories.Components.Animations;
 using WPFGameEngine.Factories.Components.Animators;
 using WPFGameEngine.Factories.Components.RelativeTransforms;
 using WPFGameEngine.Factories.Components.Sprites;
 using WPFGameEngine.Factories.Components.Transform;
-using WPFGameEngine.Factories.Ease;
-using WPFGameEngine.Factories.Ease.Linear;
-using WPFGameEngine.Factories.Ease.Quadtratic;
+using WPFGameEngine.Factories.Ease.Base;
 using WPFGameEngine.FactoryWrapper.Base;
 using WPFGameEngine.Services.Interfaces;
 
@@ -22,17 +22,15 @@ namespace WPFGameEngine.FactoryWrapper
         #endregion
 
         #region Fields
-        private Dictionary<string, IFactory> m_ProductFactoryMap;
+        public Dictionary<string, IFactory> ProductFactoryMap { get; protected set; }
         #endregion
 
         #region Properties
-        public IAnimationFactory AnimationFactory { get; init; }
-        public IAnimatorFactory AnimatorFactory { get; init; }
-        public ISpriteFactory SpriteFactory { get; init; }
-        public ITransformFactory TransformFactory { get; init; }
-        public IRelativeTransformFactory RelativeTransformFactory { get; init; }
-        public ILinearEaseFactory LinearEaseFactory { get; init; }
-        public IQuadraticEaseFactory QuadraticEaseFactory { get; init; }
+        private IAnimationFactory m_AnimationFactory;
+        private IAnimatorFactory m_AnimatorFactory;
+        private ISpriteFactory m_SpriteFactory;
+        private ITransformFactory m_TransformFactory;
+        private IRelativeTransformFactory m_RelativeTransformFactory;
 
         #region Add Tools
         public IResourceLoader ResourceLoader => m_resourceLoader;
@@ -45,29 +43,50 @@ namespace WPFGameEngine.FactoryWrapper
         {
             m_resourceLoader = resourceLoader ?? throw new ArgumentNullException(nameof(resourceLoader));
 
-            AnimationFactory = new AnimationFactory(m_resourceLoader);
-            AnimatorFactory = new AnimatorFactory();
-            SpriteFactory = new SpriteFactory(m_resourceLoader);
-            TransformFactory = new TransformFactory();
-            RelativeTransformFactory = new RelativeTransformFactory();
-            LinearEaseFactory = new LinearEaseFactory();
-            QuadraticEaseFactory = new QuadraticEaseFactory();
+            m_AnimationFactory = new AnimationFactory(m_resourceLoader);
+            m_AnimatorFactory = new AnimatorFactory();
+            m_SpriteFactory = new SpriteFactory(m_resourceLoader);
+            m_TransformFactory = new TransformFactory();
+            m_RelativeTransformFactory = new RelativeTransformFactory();
 
-            m_ProductFactoryMap = new Dictionary<string, IFactory>();
+            ProductFactoryMap = new Dictionary<string, IFactory>();
 
             var type = this.GetType();
-            var factories = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
-
+            var factories = type.GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
+            //Get Factories
             foreach (var f in factories)
             {
                 var obj = f.GetValue(this);
                 if (obj is IFactory)
                 {
                     IFactory factory = (IFactory)obj;
-                    m_ProductFactoryMap.Add(factory.ProductName, factory);
+                    ProductFactoryMap.Add(factory.ProductName, factory);
+                }
+            }
+
+            var currAssembly = Assembly.GetAssembly(type);
+            if (currAssembly != null)
+            {
+                //Get all ease types
+                var easeTypes = currAssembly.GetTypes().Where(
+                    t=> t.GetAttribute<BuildWithFactory<GEObjectType>>() != null
+                    && t.GetAttribute<BuildWithFactory<GEObjectType>>()
+                    .GetValue<GEObjectType>("GameObjectType") == GEObjectType.Ease);
+
+                Type genericFactoryImpl = typeof(EaseFactoryBase<>);
+
+                foreach (var easeType in easeTypes)
+                {
+                    Type closedFactoryType = genericFactoryImpl.MakeGenericType(easeType);
+
+                    IFactory factory = (IFactory)Activator.CreateInstance(closedFactoryType);
+
+                    ProductFactoryMap.Add(factory.ProductName, factory);
                 }
             }
         }
+
+        #endregion
 
         public TType CreateObject<TType>() where TType : IGameEngineEntity
         {
@@ -77,9 +96,9 @@ namespace WPFGameEngine.FactoryWrapper
 
         public object CreateObject(string typeName)
         {
-            return m_ProductFactoryMap[typeName].Create();
+            return ProductFactoryMap[typeName].Create();
         }
-        #endregion
+        
 
     }
 }

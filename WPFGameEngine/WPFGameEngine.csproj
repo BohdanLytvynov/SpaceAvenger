@@ -8,7 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Factories\Ease\Quadratic\" />
+    <Compile Remove="Factories\Ease\Quadratic\**" />
+    <EmbeddedResource Remove="Factories\Ease\Quadratic\**" />
+    <None Remove="Factories\Ease\Quadratic\**" />
+    <Page Remove="Factories\Ease\Quadratic\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Serialization\" />
   </ItemGroup>
 

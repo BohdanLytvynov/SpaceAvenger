@@ -33,10 +33,15 @@
     <None Remove="Resources\Content\Chars\Commanders\CommandersF.png" />
     <None Remove="Resources\Content\Chars\Commanders\CommandersM.png" />
     <None Remove="Resources\Content\Empty.png" />
+    <None Remove="Resources\Content\Explosions\Explosion1.png" />
+    <None Remove="Resources\Content\Explosions\Explosion2.png" />
+    <None Remove="Resources\Content\Explosions\Explosion3.png" />
+    <None Remove="Resources\Content\Explosions\Explosion4.png" />
     <None Remove="Resources\Content\Jets\F10\F10_Jet_Normal_Atlas.png" />
     <None Remove="Resources\Content\Projectiles\F10Prj.png" />
     <None Remove="Resources\Content\SpaceShips\F10\Destroyer\destroyer256.png" />
     <None Remove="Resources\Content\Weapons\F10\RailGun.png" />
+    <None Remove="Resources\GameObjects\Explosion1.json" />
     <None Remove="Resources\GameObjects\F10Destroyer.json" />
     <None Remove="Resources\GameObjects\F10RailGunProjectile.json" />
   </ItemGroup>
@@ -111,6 +116,18 @@
     <Content Include="Resources\Content\Empty.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resources\Content\Explosions\Explosion1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Content\Explosions\Explosion2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Content\Explosions\Explosion3.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Content\Explosions\Explosion4.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\Content\Jets\F10\F10_Jet_Normal_Atlas.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -121,6 +138,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\Content\Weapons\F10\RailGun.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\GameObjects\Explosion1.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\GameObjects\F10Destroyer.json">

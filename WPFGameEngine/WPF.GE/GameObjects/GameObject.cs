@@ -42,7 +42,6 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         private IAnimation m_animation;
         private IAnimator m_animator;
         private ISprite m_sprite;
-        private BitmapSource m_texture;
         #endregion
 
         #endregion
@@ -88,12 +87,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         }
         public BitmapSource Texture 
         {
-            get
-            {
-                if (m_texture == null)
-                    m_texture = GetTexture();
-                return m_texture;
-            }
+            get; protected set;
         }
         #endregion
 
@@ -141,6 +135,10 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         {
             if (!Enabled) return;
 
+            Texture = GetTexture();
+
+            if (Texture == null) return;
+
             //Calculate actual size of the Image
             float actualWidth = (float)Texture.Width * Transform.Scale.Width;
             float actualHeight = (float)Texture.Height * Transform.Scale.Height;
@@ -177,9 +175,8 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         public virtual void Render(DrawingContext dc, Matrix parent = default)
         {
             if (!Enabled) return;
-            
-            if (Texture == null)
-                return;
+
+            if (Texture == null) return;
 
             var actualWidth = Transform.ActualSize.Width;
             var actualHeight = Transform.ActualSize.Height;

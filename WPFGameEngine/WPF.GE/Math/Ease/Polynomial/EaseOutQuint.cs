@@ -5,15 +5,12 @@ using WPFGameEngine.WPF.GE.Math.Ease.Base;
 
 namespace WPFGameEngine.WPF.GE.Math.Ease.Polynomial
 {
-    [VisibleInEditor(FactoryName = nameof(LinearEase),
-        DisplayName = "Linear Ease f(t)=t", 
+    [VisibleInEditor(FactoryName = nameof(EaseOutQuint),
+        DisplayName = "Ease Out Quint f(t)= 1 - (1 - t)^5",
         GameObjectType = Enums.GEObjectType.Ease)]
     [BuildWithFactory<GEObjectType>(GameObjectType = GEObjectType.Ease)]
-    public class LinearEase : EaseBase, IEase
+    public class EaseOutQuint : EaseBase, IEase
     {
-        public override double Ease(double t)
-        {
-            return base.Ease(t) * t;
-        }
+        public override double Ease(double t) => base.Ease(t) * (1 - System.Math.Pow((1 - t), 5));
     }
 }

@@ -274,7 +274,7 @@ Margin="10" LabelText="Center Position X: " Minimum="0" Maximum="1.0"/>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type easeOptionsVM:EaseOptionsViewModel}">
-        <StackPanel Orientation="Vertical">
+        <StackPanel Orientation="Vertical" IsEnabled="False">
             <controls:Slider MinHeight="60" Minimum="1" Maximum="1000"
                              LabelText="{Binding ConstantName, UpdateSourceTrigger=PropertyChanged}"
                 Value="{Binding Value, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"

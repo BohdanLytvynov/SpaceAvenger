@@ -20,6 +20,7 @@ using WPFGameEngine.WPF.GE.Component.Animations;
 using WPFGameEngine.WPF.GE.Component.Transforms;
 using WPFGameEngine.WPF.GE.GameObjects;
 using WPFGameEngine.WPF.GE.Math.Ease.Base;
+using WPFGameEngine.WPF.GE.Settings;
 
 namespace SpaceAvenger.Editor.ViewModels
 {
@@ -216,6 +217,8 @@ namespace SpaceAvenger.Editor.ViewModels
             IFactoryWrapper factoryWrapper, IAnimation old)
         {
             #region Init Fields
+            GESettings.DrawGizmo = false;
+
             m_plotModel = new PlotModel();
             m_factoryWrapper = factoryWrapper ?? throw new ArgumentNullException(nameof(factoryWrapper));
             m_assemblyLoader = assemblyLoader ?? throw new ArgumentNullException(nameof(assemblyLoader));
@@ -249,8 +252,7 @@ namespace SpaceAvenger.Editor.ViewModels
             m_gameView = new WpfGameObjectViewHost(new GameTimer());
             m_gameView.OnUpdate = Update;
             m_gameObject = new GameObjectMock();
-            var t = m_gameObject.GetComponent<TransformComponent>();
-            t.CenterPosition = new System.Numerics.Vector2(0, 0);
+            m_gameObject.RegisterComponent(m_factoryWrapper.CreateObject<TransformComponent>());
 
             //Load Old Data About Animation
             if (old != null && old.Validate())
@@ -329,7 +331,8 @@ namespace SpaceAvenger.Editor.ViewModels
 
         #region On Start Button Pressed
         private bool CanOnStartButtonPressedExecute(object p) =>
-           m_animation.Validate() && !m_animation.IsRunning;
+           m_animation.Validate() && !m_animation.IsRunning
+            && !m_animation.Completed;
             
         private void OnStartButtonPressedExecute(object p)
         {
@@ -339,7 +342,7 @@ namespace SpaceAvenger.Editor.ViewModels
 
         #region On Pause Button Pressed
         private bool CanOnPauseButtonPressedExecute(object p) => 
-            m_animation.IsRunning && m_animation.Validate() && !m_animation.Completed;
+            m_animation.IsRunning && !m_animation.Completed;
 
         private void OnPauseButtonPressedExecute(object p)
         {
@@ -378,6 +381,7 @@ namespace SpaceAvenger.Editor.ViewModels
 
         public void OnWindowClosing()
         {
+            GESettings.DrawGizmo = true;
             m_gameView.Stop();
         }
 
@@ -440,7 +444,7 @@ namespace SpaceAvenger.Editor.ViewModels
             {
                 var y0 = func.Ease((float)i / (float)end);//Normalized Ease function y0
                 var y1 = func.Ease((float)(i + 1) / (float)end);//Normalized Ease function y1
-                var delta = func.GetDelta(y0, y1);
+                var delta = Math.Abs(y1 - y0);
                 m_animation.AnimationFrames.Add(new AnimationFrame(delta * TotalTime));
                 graph.Points.Add(new DataPoint(i, y0));
             }

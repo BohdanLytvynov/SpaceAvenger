@@ -1,5 +1,4 @@
-﻿using System.Text.Json.Serialization;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Media.Imaging;
 using WPFGameEngine.Attributes.Editor;
 using WPFGameEngine.Services.Interfaces;
@@ -8,9 +7,7 @@ using WPFGameEngine.WPF.GE.AnimationFrames;
 using WPFGameEngine.WPF.GE.Component.Animators;
 using WPFGameEngine.WPF.GE.Component.Base.ImageComponents;
 using WPFGameEngine.WPF.GE.Component.Sprites;
-using WPFGameEngine.WPF.GE.Dto.Base;
 using WPFGameEngine.WPF.GE.Dto.Components;
-using WPFGameEngine.WPF.GE.Validation.Base;
 
 namespace WPFGameEngine.WPF.GE.Component.Animations
 {
@@ -124,7 +121,13 @@ namespace WPFGameEngine.WPF.GE.Component.Animations
                 if (IsLooping)
                     return false;
                 else
-                    return m_curr_frame_index == AnimationFrames.Count - 1;
+                {
+                    if (!Reverse)
+                        return m_curr_frame_index == AnimationFrames.Count - 1;
+                    else
+                        return m_curr_frame_index == 0;
+                }
+                    
             }
         }
 

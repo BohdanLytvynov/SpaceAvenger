@@ -4,16 +4,16 @@
     {
         public Dictionary<string, double> Constants { get; }
 
-        public abstract double Ease(double t);
-
-        public virtual double GetDelta(double y0, double y1)
+        public virtual double Ease(double t)
         {
-            return y1 - y0;
+            return Constants["A"] + (Constants["B"] - Constants["A"]);
         }
-
+        
         protected EaseBase()
         {
             Constants = new Dictionary<string, double>();
+            Constants.Add("A", 0);
+            Constants.Add("B", 1);
         }
     }
 }
