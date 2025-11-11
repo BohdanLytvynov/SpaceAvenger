@@ -1,11 +1,9 @@
 ﻿using System.Drawing;
 using System.Numerics;
-using System.Security.Cryptography.Xml;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using WPFGameEngine.Extensions;
 using WPFGameEngine.GameViewControl;
-using WPFGameEngine.ObjectBuilders.Base;
 using WPFGameEngine.Timers.Base;
 using WPFGameEngine.WPF.GE.Component.Animations;
 using WPFGameEngine.WPF.GE.Component.Animators;
@@ -31,16 +29,74 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         #endregion
 
         #region Fields
+        protected bool m_init;
         private static int m_globId;
 
         private Dictionary<string, IGEComponent> m_components;
         private List<IGameObject> m_children;
 
         protected int m_id;
+
+        #region Lazy Loading
+        private ITransform m_transform;
+        private IAnimation m_animation;
+        private IAnimator m_animator;
+        private ISprite m_sprite;
+        private BitmapSource m_texture;
+        #endregion
+
         #endregion
 
         #region Propeties
-        
+
+        #region Lazy Loading
+        public ITransform Transform 
+        {
+            get
+            { 
+                if(m_transform == null)
+                    m_transform = GetTransformComponent();
+                return m_transform;
+            }
+        }
+        public IAnimation Animation 
+        {
+            get
+            {
+                if (m_animation == null)
+                    m_animation = GetComponent<Animation>(false);
+                return m_animation;
+            }
+        }
+        public IAnimator Animator 
+        {
+            get
+            {
+                if (m_animator == null)
+                    m_animator = GetComponent<Animator>(false);
+                return m_animator;
+            }
+        }
+        public ISprite Sprite 
+        {
+            get
+            {
+                if (m_sprite == null)
+                    m_sprite = GetComponent<Sprite>(false);
+                return m_sprite;
+            }
+        }
+        public BitmapSource Texture 
+        {
+            get
+            {
+                if (m_texture == null)
+                    m_texture = GetTexture();
+                return m_texture;
+            }
+        }
+        #endregion
+
         public bool IsExported { get; set; }
         public bool Enabled { get; set; }
         public double ZIndex { get; set; }
@@ -81,20 +137,33 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         #endregion
 
         #region Methods
-
-        public virtual void Update(IGameViewHost world,  IGameTimer gameTimer)
+        public virtual void Update(IGameObjectViewHost world,  IGameTimer gameTimer)
         {
             if (!Enabled) return;
-            Animation? animation = GetComponent<Animation>(false);
-            Animator? animator = GetComponent<Animator>(false);
 
-            if (animator != null)
+            //Calculate actual size of the Image
+            float actualWidth = (float)Texture.Width * Transform.Scale.Width;
+            float actualHeight = (float)Texture.Height * Transform.Scale.Height;
+
+            //Negative Value Protection
+            actualWidth = actualWidth < 0 ? 0 : actualWidth;
+            actualHeight = actualHeight < 0 ? 0 : actualHeight;
+
+            Transform.ActualSize = new SizeF(actualWidth, actualHeight);
+            //Calculate the center of the Image
+            float Xcenter = actualWidth * Transform.CenterPosition.X;
+            float Ycenter = actualHeight * Transform.CenterPosition.Y;
+
+            Transform.ActualCenterPosition = new Vector2(Xcenter, Ycenter);
+            //Get matrix for current game object
+
+            if (Animator != null)
             {
-                animator.Update(gameTimer);
+                Animator.Update(gameTimer);
             }
-            else if (animation != null)
+            else if (Animation != null)
             {
-                animation.Update(gameTimer);
+                Animation.Update(gameTimer);
             }
 
             foreach (var child in m_children)
@@ -108,23 +177,13 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         public virtual void Render(DrawingContext dc, Matrix parent = default)
         {
             if (!Enabled) return;
-            TransformComponent transform = GetTransformComponent();
-            //Get An Image for Render
-            BitmapSource bitmapSource = GetTexture();
-            if (bitmapSource == null)
+            
+            if (Texture == null)
                 return;
 
-            //Calculate actual size of the Image
-            float actualWidth = (float)bitmapSource.Width * transform.Scale.Width;
-            float actualHeight = (float)bitmapSource.Height * transform.Scale.Height;
-            transform.ActualSize = new SizeF(actualWidth, actualHeight);
-            //Calculate the center of the Image
-            float Xcenter = actualWidth * transform.CenterPosition.X;
-            float Ycenter = actualHeight * transform.CenterPosition.Y;
-            transform.ActualCenterPosition = new Vector2(Xcenter, Ycenter);
-            //Get matrix for current game object
-
-            var globalMatrix = transform.GetLocalTransformMatrix();
+            var actualWidth = Transform.ActualSize.Width;
+            var actualHeight = Transform.ActualSize.Height;
+            var globalMatrix = Transform.GetLocalTransformMatrix();
 
             if (parent != default)
             {
@@ -133,11 +192,10 @@ namespace WPFGameEngine.WPF.GE.GameObjects
 
             dc.PushTransform(new MatrixTransform(globalMatrix));
 
-            //Negative Value Protection
-            actualWidth = actualWidth < 0 ? 0 : actualWidth;
-            actualHeight = actualHeight < 0 ? 0 : actualHeight;
+            var Xcenter = Transform.ActualCenterPosition.X;
+            var Ycenter = Transform.ActualCenterPosition.Y;
 
-            dc.DrawImage(bitmapSource, new System.Windows.Rect
+            dc.DrawImage(Texture, new System.Windows.Rect
                 (0, 0, actualWidth, actualHeight));
 
             if (GESettings.DrawGizmo)
@@ -146,19 +204,19 @@ namespace WPFGameEngine.WPF.GE.GameObjects
                 dc.DrawLine(
                     GESettings.XAxisColor,
                     new System.Windows.Point(Xcenter, Ycenter),
-                    new System.Windows.Point(Xcenter + actualWidth * (1 - transform.CenterPosition.X), Ycenter));
+                    new System.Windows.Point(Xcenter + actualWidth * (1 - Transform.CenterPosition.X), Ycenter));
 
                 dc.DrawLine(
                     GESettings.YAxisColor,
                     new System.Windows.Point(Xcenter, Ycenter),
-                    new System.Windows.Point(Xcenter, Ycenter + actualHeight * (1 - transform.CenterPosition.Y)));
+                    new System.Windows.Point(Xcenter, Ycenter + actualHeight * (1 - Transform.CenterPosition.Y)));
 
                 dc.DrawEllipse(
                     GESettings.GizmoCenterBrush,
                     GESettings.GizmoCenterPen,
                     new System.Windows.Point(Xcenter, Ycenter),
-                    GESettings.GizmoCenterXRadius * transform.Scale.Width,
-                    GESettings.GizmoCenterYRadius * transform.Scale.Height);
+                    GESettings.GizmoCenterXRadius * Transform.Scale.Width,
+                    GESettings.GizmoCenterYRadius * Transform.Scale.Height);
             }
 
             if (GESettings.DrawBorders)
@@ -182,7 +240,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects
 
             foreach (var item in m_children)
             {
-                var childTransform = item.GetComponent<RelativeTransformComponent>();
+                var childTransform = item.Transform as IRelativeTransform;
                 if (childTransform != null)
                 {
                     childTransform.ActualParentSize = new SizeF(actualWidth, actualHeight);
@@ -199,6 +257,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects
             m_children = new List<IGameObject>();
             Enabled = true;
             ZIndex = 0;
+            m_init = false;
         }
 
         private void InitName(string name)
@@ -266,15 +325,20 @@ namespace WPFGameEngine.WPF.GE.GameObjects
             where TComponent : IGEComponent
         {
             var componentName = typeof(TComponent).Name;
+            return (TComponent)GetComponent(componentName, throwException);
+        }
+
+        public IGEComponent? GetComponent(string componentName, bool throwException = true)
+        {
             if (throwException && !m_components.ContainsKey(componentName))
                 throw new ComponentNotFoundException(componentName);
 
             IGEComponent component = null;
             if (m_components.TryGetValue(componentName, out component))
             {
-                return (TComponent)component;
+                return component;
             }
-            return default;
+            return component;
         }
 
         public IEnumerable<IGEComponent> GetComponents()
@@ -444,6 +508,10 @@ namespace WPFGameEngine.WPF.GE.GameObjects
 
         public virtual void StartUp()
         {
+            if (m_init)
+                return;
+
+            m_init = true;
             foreach (var item in m_children)
             {
                 item.StartUp();
@@ -455,7 +523,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects
             if (obj == null)
                 return;
 
-            var t = obj.GetTransformComponent();
+            var t = obj.Transform;
 
             if (t != null && t.Scale != newScale)
             {
@@ -471,13 +539,12 @@ namespace WPFGameEngine.WPF.GE.GameObjects
 
         public void Scale(SizeF newScale)
         {
-            var t = this.GetTransformComponent();
-            float dx = newScale.Width - t.Scale.Width;
-            float dy = newScale.Height - t.Scale.Height;
+            float dx = newScale.Width - Transform.Scale.Width;
+            float dy = newScale.Height - Transform.Scale.Height;
             ScaleRecursive(this, new SizeF(dx, dy));
         }
 
-        public BitmapSource GetTexture()
+        private BitmapSource GetTexture()
         {
             Sprite? sprite = GetComponent<Sprite>(false);
             Animation? animation = GetComponent<Animation>(false);
@@ -499,7 +566,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects
             return null;
         }
 
-        public TransformComponent GetTransformComponent()
+        private TransformComponent GetTransformComponent()
         {
             if (!IsChild)
             {
@@ -513,12 +580,19 @@ namespace WPFGameEngine.WPF.GE.GameObjects
 
         public void Translate(Vector2 position)
         {
-            this.GetTransformComponent().Position = position;
+            Transform.Position = position;
+        }
+
+        public void Translate(Vector2 dir, float speed, double deltaTime)
+        {
+            Translate(
+                Transform.Position + 
+                dir.Multiply(speed * deltaTime));
         }
 
         public void Rotate(double angle)
         { 
-            this.GetTransformComponent().Rotation = angle;
+            Transform.Rotation = angle;
         }
 
         public Matrix GetGlobalTransformMatrix()
@@ -552,7 +626,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects
             if(obj == null)
                 return;
 
-            var t = obj.GetTransformComponent();
+            var t = obj.Transform;
             if (t != null)
             {
                 var m = t.GetLocalTransformMatrix();
@@ -575,7 +649,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         {
             var m = this.GetGlobalTransformMatrix();
             var b = m.GetBasis();
-            var center = this.GetTransformComponent().ActualCenterPosition;
+            var center = Transform.ActualCenterPosition;
             var lx = b.X.Multiply(center.X);
             var ly = b.Y.Multiply(center.Y);
             var l = lx + ly;
@@ -607,7 +681,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects
             //Decide the hemicircle of rotation according to Yl
             double sign = Vector2.Dot(dir, basis.Y) < 0 ? -1 : 1;
             //Get Current Angle
-            double currAngle = GetTransformComponent().Rotation;
+            double currAngle = Transform.Rotation;
             //Calculate destination angle
             double destAngle = currAngle + sign*angle;
             //LERP
@@ -622,6 +696,23 @@ namespace WPFGameEngine.WPF.GE.GameObjects
             double newAngle = currAngle + step;
             //Apply new rotation
             Rotate(newAngle);
+        }
+
+        public void Enable()
+        {
+            Enabled = true;
+        }
+
+        public void Disable()
+        {
+            Enabled = false;
+        }
+
+        public SizeF GetActualSize()
+        {
+            var transform = Transform;
+            return new SizeF((float)Texture.Width * transform.Scale.Width,
+                (float)Texture.Height * transform.Scale.Height);
         }
 
         #endregion

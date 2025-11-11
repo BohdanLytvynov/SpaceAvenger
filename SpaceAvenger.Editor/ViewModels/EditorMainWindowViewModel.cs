@@ -42,7 +42,7 @@ namespace SpaceAvenger.Editor.ViewModels
     {
         #region Fields
         private string m_title;
-        private WpfGameViewHost m_gameViewHost;
+        private WpfGameObjectViewHost m_gameViewHost;
         private TreeItemViewModel? m_SelectedItem;
 
         private bool m_ShowGizmos;
@@ -155,7 +155,7 @@ namespace SpaceAvenger.Editor.ViewModels
             }
         }
 
-        public WpfGameViewHost GameView
+        public WpfGameObjectViewHost GameView
         { get => m_gameViewHost; set => Set(ref m_gameViewHost, value); }
 
         public PrefabViewModel SelectedPrefab 
@@ -233,7 +233,7 @@ namespace SpaceAvenger.Editor.ViewModels
             #endregion
 
             m_gameTimer = gameTimer ?? throw new ArgumentNullException(nameof(gameTimer));
-            m_gameViewHost = new WpfGameViewHost(m_gameTimer, null);
+            m_gameViewHost = new WpfGameObjectViewHost(m_gameTimer);
             m_gameViewHost.StartGame();
         }
 

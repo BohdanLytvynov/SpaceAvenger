@@ -30,6 +30,8 @@ using WPFGameEngine.FactoryWrapper;
 using SpaceAvenger.ViewModels.PagesVM;
 using SpaceAvenger.Services.WPFInputControllers;
 using WPFGameEngine.WPF.GE.Component.Controllers;
+using WPFGameEngine.ObjectPools.Base;
+using WPFGameEngine.ObjectPools.PoolManagers;
 
 namespace SpaceAvenger
 {
@@ -47,6 +49,8 @@ namespace SpaceAvenger
         private static IServiceCollection InitializeServices()
         {
             var services = new ServiceCollection();
+
+            services.AddSingleton<IObjectPoolManager, ObjectPoolManager>();
 
             services.AddSingleton<IControllerComponent>(c =>
             {

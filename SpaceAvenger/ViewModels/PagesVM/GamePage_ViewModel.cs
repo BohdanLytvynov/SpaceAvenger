@@ -12,10 +12,11 @@ using ViewModelBaseLibDotNetCore.MessageBus.Base;
 using ViewModelBaseLibDotNetCore.VM;
 using WPFGameEngine.Timers.Base;
 using WPFGameEngine.ObjectBuilders.Base;
-using SpaceAvenger.Game.Core.Spaceships.F10.Destroyer;
 using WPFGameEngine.WPF.GE.Component.Controllers;
 using Microsoft.Extensions.DependencyInjection;
 using SpaceAvenger.Services.WpfGameViewHost;
+using WPFGameEngine.ObjectPools.Base;
+using SpaceAvenger.Game.Core.Factions.F10.Destroyer;
 
 namespace SpaceAvenger.ViewModels.PagesVM
 {
@@ -30,9 +31,10 @@ namespace SpaceAvenger.ViewModels.PagesVM
         private IPageManagerService<FrameType> m_PageManager;
         private IMessageBus m_MessageBus;
         private ImageSource m_GameBack;
-        private WpfGameViewHost m_GameView;
+        private WpfMapableObjectViewHost m_GameView;
         private IGameTimer m_gameTimer;
         private IObjectBuilder m_objectBuilder;
+        private IObjectPoolManager m_objPoolManager;
         private IServiceProvider m_serviceProvider;
         private IControllerComponent m_controllerComponent;
         #endregion
@@ -44,7 +46,7 @@ namespace SpaceAvenger.ViewModels.PagesVM
             set=> Set(ref m_backViewport, value);
         }
 
-        public WpfGameViewHost GameView { get=> m_GameView; set=> Set(ref m_GameView, value); }
+        public WpfMapableObjectViewHost GameView { get=> m_GameView; set=> Set(ref m_GameView, value); }
 
         public ImageSource Background { get=> m_GameBack; set=> Set(ref m_GameBack, value); }
         #endregion
@@ -56,14 +58,16 @@ namespace SpaceAvenger.ViewModels.PagesVM
             IMessageBus messageBus,
             IGameTimer gameTimer,
             IObjectBuilder objectBuilder,
+            IObjectPoolManager objectPoolManager,
             IServiceProvider serviceProvider) : this()
         {
+            m_objPoolManager = objectPoolManager ?? throw new ArgumentNullException(nameof(objectPoolManager));
             m_serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
             m_objectBuilder = objectBuilder ?? throw new ArgumentNullException(nameof(objectBuilder));
             m_MessageBus = messageBus ?? throw new ArgumentNullException(nameof(messageBus));
             m_PageManager = pageManager ?? throw new ArgumentNullException(nameof(pageManager));
             m_gameTimer = gameTimer ?? throw new ArgumentNullException(nameof(gameTimer));
-            m_GameView = new WpfGameViewHost(m_gameTimer, m_objectBuilder);
+            m_GameView = new WpfMapableObjectViewHost(m_gameTimer, m_objectBuilder, m_objPoolManager);
             GameView.OnUpdate += Update;
             Subscriptions.Add(m_MessageBus.RegisterHandler<GameMessage, string>(OnMessageRecieved));
         }

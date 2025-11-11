@@ -5,14 +5,12 @@ using System.Windows;
 using System.Windows.Media;
 using WPFGameEngine.Enums;
 using WPFGameEngine.GameViewControl;
-using WPFGameEngine.ObjectBuilders.Base;
-using WPFGameEngine.Timers;
 using WPFGameEngine.Timers.Base;
 using WPFGameEngine.WPF.GE.GameObjects;
 
 namespace SpaceAvenger.Services.WpfGameViewHost
 {
-    public class WpfGameViewHost : FrameworkElement, IGameViewHost
+    public class WpfGameObjectViewHost : FrameworkElement, IGameObjectViewHost
     {
         #region Delegates
         public Action OnUpdate;
@@ -30,14 +28,12 @@ namespace SpaceAvenger.Services.WpfGameViewHost
         public List<IGameObject> World { get => m_world; }
         public GameState GameState { get; }
         protected override int VisualChildrenCount => m_visualCollection.Count;
-
-        public IObjectBuilder ObjectBuilder { get; init; }
         #endregion
 
         #region Ctor
-        public WpfGameViewHost(IGameTimer gameTimer, IObjectBuilder objectBuilder)
-        {
-            ObjectBuilder = objectBuilder;
+        public WpfGameObjectViewHost(
+            IGameTimer gameTimer)
+        {            
             m_gameTimer = gameTimer ?? throw new ArgumentNullException(nameof(gameTimer));
             m_world = new List<IGameObject>();
             m_drawingSurface = new DrawingVisual();
@@ -67,12 +63,13 @@ namespace SpaceAvenger.Services.WpfGameViewHost
                 m_world.Sort(new GameObject.ZIndexGameObjectComparer());
                 using (DrawingContext dc = m_drawingSurface.RenderOpen())
                 {
-                    foreach (var obj in World)
+                    int count = World.Count;
+                    for(int i = 0; i < count; i++)
                     {
-                        if(obj != null)
+                        if(World[i] != null)
                         {
-                            obj.Update(this, m_gameTimer);
-                            obj.Render(dc, Matrix.Identity);
+                            World[i].Update(this, m_gameTimer);
+                            World[i].Render(dc, Matrix.Identity);
                         }
                     }
                 }
@@ -85,7 +82,7 @@ namespace SpaceAvenger.Services.WpfGameViewHost
         public void AddObject(IGameObject gameObject)
         {
             if (gameObject == null)
-                return;
+                throw new ArgumentNullException(nameof(gameObject));
 
             gameObject.StartUp();
             m_world.Add(gameObject);
@@ -136,6 +133,7 @@ namespace SpaceAvenger.Services.WpfGameViewHost
         { 
             m_world.Clear();
         }
+
         #endregion
     }
 }

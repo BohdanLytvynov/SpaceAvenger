@@ -1,6 +1,6 @@
 ﻿using WPFGameEngine.WPF.GE.GameObjects;
 
-namespace SpaceAvenger.Game.Core.Spaceships.F10.Engines
+namespace SpaceAvenger.Game.Core.Factions.F10.Engines
 {
     public class F10Jet : MapableObject
     {

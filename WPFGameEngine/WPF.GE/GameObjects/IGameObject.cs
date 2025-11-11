@@ -4,9 +4,11 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using WPFGameEngine.Factories.Base;
 using WPFGameEngine.GameViewControl;
-using WPFGameEngine.ObjectBuilders.Base;
 using WPFGameEngine.Timers.Base;
+using WPFGameEngine.WPF.GE.Component.Animations;
+using WPFGameEngine.WPF.GE.Component.Animators;
 using WPFGameEngine.WPF.GE.Component.Base;
+using WPFGameEngine.WPF.GE.Component.Sprites;
 using WPFGameEngine.WPF.GE.Component.Transforms;
 using WPFGameEngine.WPF.GE.Dto.Base;
 using WPFGameEngine.WPF.GE.Dto.GameObjects;
@@ -15,6 +17,15 @@ namespace WPFGameEngine.WPF.GE.GameObjects
 {
     public interface IGameObject : IGameEngineEntity, IConvertToDto<GameObjectDto>
     {
+        #region Lazy Loading
+        public ITransform Transform { get; }
+        public IAnimation Animation { get; }
+        public IAnimator Animator { get; }
+        ISprite Sprite { get; }
+        public BitmapSource Texture { get; }
+        #endregion
+
+        #region Main Game Object Properties
         /// <summary>
         /// Use for editor only not for games
         /// </summary>
@@ -29,41 +40,60 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         public bool IsChild { get; }
         public List<IGameObject> Children { get; }
         public IGameObject Parent { get; set; }
-        BitmapSource GetTexture();
-        TransformComponent GetTransformComponent();
+        #endregion
+
+        #region Game Loop
         void StartUp();
         void Render(DrawingContext dc, Matrix parent);
-        void Update(IGameViewHost gameViewHost, IGameTimer gameTimer);
+        void Update(IGameObjectViewHost gameViewHost, IGameTimer gameTimer);
+        #endregion
+
+        #region Components
         IGameObject RegisterComponent(IGEComponent component);
         IGameObject UnregisterComponent(IGEComponent component);
         IGameObject UnregisterComponent(string componentName);
         IGameObject UnregisterComponent<TComponent>()
             where TComponent : IGEComponent;
-        void ClearAllComponents();
-        void AddChild(IGameObject child);
-        bool RemoveChild(Func<IGameObject, bool> predicate, bool recursive = false);
-        IGameObject? FindChild(Func<IGameObject, bool> predicate, bool recursiveSearch = false);
         TComponent? GetComponent<TComponent>(bool throwException = true)
             where TComponent : IGEComponent;
         IEnumerable<IGEComponent> GetComponents();
+        IGEComponent? GetComponent(string componentName, bool throwException = true);
+        /// <summary>
+        /// Clear all the Components O(C)
+        /// </summary>
+        void ClearAllComponents();
+        #endregion
 
+        #region Hirarchy
+        void AddChild(IGameObject child);
+        bool RemoveChild(Func<IGameObject, bool> predicate, bool recursive = false);
+        IGameObject? FindChild(Func<IGameObject, bool> predicate, bool recursiveSearch = false);
+        #endregion
+
+        #region Transform
         void Translate(Vector2 position);
+        void Translate(Vector2 dir, float speed, double deltaTime);
         /// <summary>
         /// Rotates an object
         /// </summary>
-        /// <param name="angle"></param>
+        /// <param name="angle">In Degrees</param>
         void Rotate(double angle);
         void Scale(SizeF newScale);
         Matrix GetGlobalTransformMatrix();
-
         /// <summary>
         /// Returns Center of the object in world Coordinates
         /// </summary>
         /// <returns></returns>
         Vector2 GetWorldCenter();
-
         void LookAt(Vector2 position, double rotSpeed, double deltaTime);
+        Vector2 GetDirection(Vector2 position);        
+        SizeF GetActualSize();
+        #endregion
 
-        Vector2 GetDirection(Vector2 position);
+        #region Enable Disable
+        void Enable();
+        void Disable();
+        #endregion
+
     }
 }

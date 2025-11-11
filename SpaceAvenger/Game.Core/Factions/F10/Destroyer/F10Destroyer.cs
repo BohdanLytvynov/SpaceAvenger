@@ -1,5 +1,5 @@
-﻿using SpaceAvenger.Game.Core.Spaceships.Base;
-using SpaceAvenger.Game.Core.Spaceships.F10.Weapons;
+﻿using SpaceAvenger.Game.Core.Base;
+using SpaceAvenger.Game.Core.Factions.F10.Weapons;
 using SpaceAvenger.Services.WPFInputControllers;
 using System;
 using System.Collections.Generic;
@@ -13,7 +13,7 @@ using WPFGameEngine.Timers.Base;
 using WPFGameEngine.WPF.GE.Component.Controllers;
 using WPFGameEngine.WPF.GE.GameObjects;
 
-namespace SpaceAvenger.Game.Core.Spaceships.F10.Destroyer
+namespace SpaceAvenger.Game.Core.Factions.F10.Destroyer
 {
     public class F10Destroyer : SpaceShipBase
     {
@@ -21,7 +21,8 @@ namespace SpaceAvenger.Game.Core.Spaceships.F10.Destroyer
         private Pen m_targetMarkerPen;
         public F10Destroyer() : base(nameof(F10Destroyer))
         {
-
+            HorSpeed = 40;
+            VertSpeed = 40;
         }
 
         #region Methods
@@ -29,17 +30,17 @@ namespace SpaceAvenger.Game.Core.Spaceships.F10.Destroyer
         {
             base.StartUp();
             m_targetMarkerPen = new Pen();
-            m_transform.Position = new Vector2(100, 200);
+            Transform.Position = new Vector2(100, 200);
             Scale(new SizeF(0.3f, 0.3f));
-            m_transform.Rotation = -90;
+            Transform.Rotation = -90;
             m_targetMarkerPen = new Pen() { Brush = Brushes.Orange };
             m_targetMarkerPen.Freeze();
             m_controller = (WPFInputController)GetComponent<ControllerComponent>(false);
 
-            m_gun1 = (F10RailGun)this.FindChild(o => o.UniqueName.Equals("RailGun1"));
+            m_gun1 = (F10RailGun)FindChild(o => o.UniqueName.Equals("RailGun1"));
         }
 
-        public override void Update(IGameViewHost world, IGameTimer gameTimer)
+        public override void Update(IGameObjectViewHost world, IGameTimer gameTimer)
         {
             if (m_controller != null)
             {
@@ -47,17 +48,14 @@ namespace SpaceAvenger.Game.Core.Spaceships.F10.Destroyer
 
                 if (m_controller.IsKeyDown(System.Windows.Input.Key.R))
                 {
-                    Rotate(GetTransformComponent().Rotation + 5);
+                    Rotate(Transform.Rotation + 5);
                 }
 
                 if (m_controller.IsMouseButtonDown(System.Windows.Input.MouseButton.Left))
                 {
-                    m_gun1.Shoot();
+                    m_gun1.Shoot(world as IMapableObjectViewHost, GetDirection(m_controller.MousePosition));
                 }
             }
-            
-
-            
 
             base.Update(world, gameTimer);
         }

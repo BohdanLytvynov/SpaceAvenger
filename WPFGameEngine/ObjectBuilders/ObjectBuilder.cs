@@ -61,23 +61,27 @@ namespace WPFGameEngine.ObjectBuilders
         #endregion
 
         #region Methods
-        
+        /// <summary>
+        /// Creates an object and Maps it. Complexity O(N)
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
         private MapableObject Map(GameObjectDto dto)
         {
             if (dto == null)
                 return null;
 
             //1) Create an Object
-            var mapable = CreateInstance(dto.ObjectName);
-            mapable.ZIndex = dto.ZIndex;
-            mapable.Enabled = dto.Enabled;
-            mapable.ObjectName = dto.ObjectName;
-            mapable.UniqueName = dto.UniqueName;
+            var mapable = CreateInstance(dto.ObjectName);//O(1)
+            mapable.ZIndex = dto.ZIndex;//O(1)
+            mapable.Enabled = dto.Enabled;//O(1)
+            mapable.ObjectName = dto.ObjectName;//O(1)
+            mapable.UniqueName = dto.UniqueName;//O(1)
 
-            mapable.ClearAllComponents();
-            foreach (var c in dto.Components)
+            mapable.ClearAllComponents();//O(1)
+            foreach (var c in dto.Components)//O(C)
             {
-                mapable.RegisterComponent(c.ToObject(m_factoryWrapper));
+                mapable.RegisterComponent(c.ToObject(m_factoryWrapper));//O(1)
             }
 
             foreach (var ch in dto.Children)
@@ -118,7 +122,7 @@ namespace WPFGameEngine.ObjectBuilders
 
         public MapableObject Build(string objName)
         {
-            var dto = GetDto(objName);
+            var dto = GetDto(objName);//O(1)
 
             return Map(dto);
         }

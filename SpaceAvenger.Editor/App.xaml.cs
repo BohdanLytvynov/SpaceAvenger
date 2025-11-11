@@ -8,6 +8,8 @@ using ViewModelBaseLibDotNetCore.MessageBus;
 using ViewModelBaseLibDotNetCore.MessageBus.Base;
 using WPFGameEngine.FactoryWrapper;
 using WPFGameEngine.FactoryWrapper.Base;
+using WPFGameEngine.ObjectPools.Base;
+using WPFGameEngine.ObjectPools.PoolManagers;
 using WPFGameEngine.Services.Interfaces;
 using WPFGameEngine.Services.Realizations;
 using WPFGameEngine.Timers;

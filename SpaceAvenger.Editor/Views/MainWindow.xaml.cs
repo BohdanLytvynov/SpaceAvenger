@@ -1,20 +1,4 @@
-﻿using SpaceAvenger.Editor.Mock;
-using SpaceAvenger.Game.Core.Spaceships.F10.Destroyer;
-using SpaceAvenger.Game.Core.Spaceships.F10.Engines;
-using System.Drawing;
-using System.Numerics;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using WPFGameEngine.WPF.GE.GameObjects;
-using WPFGameEngine.WPF.GE.Settings;
+﻿using System.Windows;
 
 namespace SpaceAvenger.Editor
 {

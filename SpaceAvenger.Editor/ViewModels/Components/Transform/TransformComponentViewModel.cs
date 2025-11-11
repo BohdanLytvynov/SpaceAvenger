@@ -113,7 +113,7 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Transform
         {
             if (GameObject != null)
             {
-                var t = GameObject.GetTransformComponent();
+                var t = GameObject.Transform;
 
                 PositionX = t.Position.X;
                 PositionY = t.Position.Y;
@@ -149,7 +149,7 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Transform
         {
             if (GameObject != null && m_init)
             {
-                var t = GameObject.GetTransformComponent();
+                var t = GameObject.Transform;
                 t.Rotation = rotation;
             }
 
@@ -159,7 +159,7 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Transform
         {
             if (GameObject != null && m_init)
             {
-                var t = GameObject.GetTransformComponent();
+                var t = GameObject.Transform;
                 float y = t.Scale.Height;
                 GameObject.Scale(new SizeF(x, y));
             }
@@ -169,7 +169,7 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Transform
         {
             if (GameObject != null && m_init)
             {
-                var t = GameObject.GetTransformComponent();
+                var t = GameObject.Transform;
                 float x = t.Scale.Width;
                 GameObject.Scale(new SizeF(x, y));
             }
@@ -179,7 +179,7 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Transform
         {
             if (GameObject != null && m_init)
             {
-                var t = GameObject.GetTransformComponent();
+                var t = GameObject.Transform;
                 float y = t.CenterPosition.Y;
                 t.CenterPosition = new Vector2(x, y);
             }
@@ -189,7 +189,7 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Transform
         {
             if (GameObject != null && m_init)
             {
-                var t = GameObject.GetTransformComponent();
+                var t = GameObject.Transform;
                 float x = t.CenterPosition.X;
                 t.CenterPosition = new Vector2(x, y);
             }

@@ -32,9 +32,9 @@ namespace SpaceAvenger.Editor.ViewModels.Components.RelativeTransforms
         {
             if (GameObject != null)
             {
-                var t = GameObject.GetTransformComponent();
-                var pt = GameObject.Parent?.GetTransformComponent();
-                var texture = GameObject.Parent.GetTexture();
+                var t = GameObject.Transform;
+                var pt = GameObject.Parent?.Transform;
+                var texture = GameObject.Parent.Texture;
                 if (texture != null && pt != null)
                 { 
                     XMax = texture.Width * pt.Scale.Width;
@@ -56,15 +56,15 @@ namespace SpaceAvenger.Editor.ViewModels.Components.RelativeTransforms
             if (GameObject == null && !m_init)
                 return;
 
-            var currentTransform = GameObject.GetComponent<RelativeTransformComponent>();
+            var currentTransform = GameObject.Transform;
             if (currentTransform == null)
                 return;
 
-            var parentTexture = GameObject.Parent?.GetTexture();
+            var parentTexture = GameObject.Parent?.Texture;
             if (parentTexture == null)
                 return;
 
-            TransformComponent parentTransform = GameObject.Parent.GetTransformComponent();
+            ITransform parentTransform = GameObject.Parent.Transform;
 
             if (parentTransform == null)
                 return;
@@ -84,15 +84,15 @@ namespace SpaceAvenger.Editor.ViewModels.Components.RelativeTransforms
             if (GameObject == null && !m_init)
                 return;
 
-            var currentTransform = GameObject.GetComponent<RelativeTransformComponent>();
+            var currentTransform = GameObject.Transform;
             if (currentTransform == null)
                 return;
 
-            var parentTexture = GameObject.Parent?.GetTexture();
+            var parentTexture = GameObject.Parent?.Texture;
             if (parentTexture == null)
                 return;
 
-            TransformComponent parentTransform = GameObject.Parent.GetTransformComponent();
+            ITransform parentTransform = GameObject.Parent.Transform;
 
             if (parentTransform == null)
                 return;

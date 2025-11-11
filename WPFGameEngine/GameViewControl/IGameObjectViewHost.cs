@@ -1,12 +1,10 @@
 ﻿using WPFGameEngine.Enums;
-using WPFGameEngine.ObjectBuilders.Base;
 using WPFGameEngine.WPF.GE.GameObjects;
 
 namespace WPFGameEngine.GameViewControl
 {
-    public interface IGameViewHost
+    public interface IGameObjectViewHost
     {
-        IObjectBuilder ObjectBuilder { get; init; }
         GameState GameState { get; }
         void AddObject(IGameObject gameObject);
         void AddObjects(IEnumerable<IGameObject> gameObjects);

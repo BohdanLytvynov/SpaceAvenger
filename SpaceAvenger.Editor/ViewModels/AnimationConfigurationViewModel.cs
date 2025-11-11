@@ -33,7 +33,7 @@ namespace SpaceAvenger.Editor.ViewModels
 
         #region Fields
         private string m_title;
-        private WpfGameViewHost m_gameView;
+        private WpfGameObjectViewHost m_gameView;
         private IGameObject m_gameObject;
         private IAnimation m_animation;
         private ObservableCollection<string> m_resourceNames;
@@ -181,7 +181,7 @@ namespace SpaceAvenger.Editor.ViewModels
         }
         public string Title  
         { get => m_title; set => Set(ref m_title, value); }
-        public WpfGameViewHost GameView 
+        public WpfGameObjectViewHost GameView 
         { get => m_gameView; set => Set(ref m_gameView, value); }
         public string SelectedResourceName
         {
@@ -246,7 +246,7 @@ namespace SpaceAvenger.Editor.ViewModels
             }
 
             m_title = "Animation Configuration";
-            m_gameView = new WpfGameViewHost(new GameTimer(), null);
+            m_gameView = new WpfGameObjectViewHost(new GameTimer());
             m_gameView.OnUpdate = Update;
             m_gameObject = new GameObjectMock();
             var t = m_gameObject.GetComponent<TransformComponent>();
