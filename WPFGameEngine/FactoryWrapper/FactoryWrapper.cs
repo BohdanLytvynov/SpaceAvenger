@@ -5,6 +5,7 @@ using WPFGameEngine.Extensions;
 using WPFGameEngine.Factories.Base;
 using WPFGameEngine.Factories.Components.Animations;
 using WPFGameEngine.Factories.Components.Animators;
+using WPFGameEngine.Factories.Components.Colliders;
 using WPFGameEngine.Factories.Components.RelativeTransforms;
 using WPFGameEngine.Factories.Components.Sprites;
 using WPFGameEngine.Factories.Components.Transform;
@@ -31,6 +32,7 @@ namespace WPFGameEngine.FactoryWrapper
         private ISpriteFactory m_SpriteFactory;
         private ITransformFactory m_TransformFactory;
         private IRelativeTransformFactory m_RelativeTransformFactory;
+        private IColliderFactory m_colliderFactory;
 
         #region Add Tools
         public IResourceLoader ResourceLoader => m_resourceLoader;
@@ -48,6 +50,7 @@ namespace WPFGameEngine.FactoryWrapper
             m_SpriteFactory = new SpriteFactory(m_resourceLoader);
             m_TransformFactory = new TransformFactory();
             m_RelativeTransformFactory = new RelativeTransformFactory();
+            m_colliderFactory = new ColliderFactory();
 
             ProductFactoryMap = new Dictionary<string, IFactory>();
 

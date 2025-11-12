@@ -27,7 +27,7 @@
   <Class Name="WPFGameEngine.WPF.GE.Component.Transforms.TransformComponent">
     <Position X="5" Y="1.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAIAAAIACAAAIAgABIAAAAAAAAAAAAABAAAAAAAAAA=</HashCode>
+      <HashCode>AAAIAAAIAAAAAIAgABIAAAAACAAAAEAABAAAAAAAAAA=</HashCode>
       <FileName>WPF.GE\Component\Transforms\TransformComponent.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -49,9 +49,9 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="WPFGameEngine.WPF.GE.GameObjects.GameObject" Collapsed="true">
-    <Position X="7.5" Y="3" Width="1.5" />
+    <Position X="5" Y="11" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAQAIKACAAAAMIAAFEIEbAIgAAKEKgYBJBCCAAAAgAA=</HashCode>
+      <HashCode>AAQAIaAKAAAIMIAAtEIEbAYgEAKGKtYZJBKmAAQAgAI=</HashCode>
       <FileName>WPF.GE\GameObjects\GameObject.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -120,6 +120,20 @@
       <FileName>WPF.GE\Dto\Components\SpriteDto.cs</FileName>
     </TypeIdentifier>
   </Class>
+  <Class Name="WPFGameEngine.WPF.GE.GameObjects.MapableObject" Collapsed="true">
+    <Position X="5" Y="12.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>WPF.GE\GameObjects\MapableObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WPFGameEngine.WPF.GE.GameObjects.СacheableObject" Collapsed="true">
+    <Position X="5" Y="13.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAABAAAAAAAAAAAAAAJAQAAAAAAAAAAAA=</HashCode>
+      <FileName>WPF.GE\GameObjects\СacheableObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
   <Interface Name="WPFGameEngine.WPF.GE.Component.Base.IGEComponent" Collapsed="true">
     <Position X="7.5" Y="2" Width="1.5" />
     <TypeIdentifier>
@@ -137,14 +151,14 @@
   <Interface Name="WPFGameEngine.WPF.GE.GameObjects.IGameObject" Collapsed="true">
     <Position X="9.75" Y="2" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAQAICACAAAAEIAAEEIEbAAgAAIAIgABIBAAAAAAAAA=</HashCode>
+      <HashCode>AAQAICAAAAAIEIAAkAIEbAQgEAIAIpAZIBIkAAQAAAI=</HashCode>
       <FileName>WPF.GE\GameObjects\IGameObject.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="WPFGameEngine.WPF.GE.Math.Ease.Base.IEase" Collapsed="true">
     <Position X="12" Y="2" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAABAAAAAAAAAgAAAAAAgAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAgAAAAA=</HashCode>
       <FileName>WPF.GE\Math\Ease\Base\IEase.cs</FileName>
     </TypeIdentifier>
   </Interface>

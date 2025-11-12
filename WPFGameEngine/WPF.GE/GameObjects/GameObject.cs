@@ -8,6 +8,7 @@ using WPFGameEngine.Timers.Base;
 using WPFGameEngine.WPF.GE.Component.Animations;
 using WPFGameEngine.WPF.GE.Component.Animators;
 using WPFGameEngine.WPF.GE.Component.Base;
+using WPFGameEngine.WPF.GE.Component.Collider;
 using WPFGameEngine.WPF.GE.Component.RelativeTransforms;
 using WPFGameEngine.WPF.GE.Component.Sprites;
 using WPFGameEngine.WPF.GE.Component.Transforms;
@@ -38,6 +39,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         protected int m_id;
 
         #region Lazy Loading
+        private ICollaider m_colliderComponent;
         private ITransform m_transform;
         private IAnimation m_animation;
         private IAnimator m_animator;
@@ -49,6 +51,14 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         #region Propeties
 
         #region Lazy Loading
+        public ICollaider Collider 
+        { get
+            {
+                if (m_colliderComponent == null)
+                    m_colliderComponent = GetComponent<ColliderComponent>(false);
+                return m_colliderComponent;
+            }
+        }
         public ITransform Transform 
         {
             get
