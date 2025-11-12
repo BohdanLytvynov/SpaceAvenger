@@ -5,21 +5,21 @@ namespace WPFGameEngine.WPF.GE.Geometry.Realizations
 { 
     public class Rectangle : Shape2D, IShape2D
     {
-        public Vector2 Min { get; private set; } // Левый верхний угол
+        public Vector2 LeftUpperCorner { get; private set; } // Left Upper Corner
         public float Width { get; }
         public float Height { get; }
 
         public Rectangle(float x, float y, float width, float height)
         {
-            Min = new Vector2(x, y);
+            LeftUpperCorner = new Vector2(x, y);
             Width = width;
             Height = height;
         }
 
         public override void Translate(Vector2 offset)
         {
-            // Min += offset;
-            Min = new Vector2(Min.X + offset.X, Min.Y + offset.Y);
+            // LeftUpperCorner += offset;
+            LeftUpperCorner = new Vector2(LeftUpperCorner.X + offset.X, LeftUpperCorner.Y + offset.Y);
         }
 
         public override Rectangle GetBounds() => this;

@@ -19,7 +19,6 @@ namespace WPFGameEngine.WPF.GE.Geometry.Realizations
 
         public override void Translate(Vector2 offset)
         {
-            // A += offset; B += offset; C += offset;
             A = new Vector2(A.X + offset.X, A.Y + offset.Y);
             B = new Vector2(B.X + offset.X, B.Y + offset.Y);
             C = new Vector2(C.X + offset.X, C.Y + offset.Y);
@@ -27,7 +26,6 @@ namespace WPFGameEngine.WPF.GE.Geometry.Realizations
 
         public override Rectangle GetBounds()
         {
-            // Расчет минимального AABB для треугольника
             float minX = SMath.Min(A.X, SMath.Min(B.X, C.X));
             float minY = SMath.Min(A.Y, SMath.Min(B.Y, C.Y));
             float maxX = SMath.Max(A.X, SMath.Max(B.X, C.X));

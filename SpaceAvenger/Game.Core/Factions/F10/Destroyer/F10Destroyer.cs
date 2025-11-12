@@ -31,7 +31,7 @@ namespace SpaceAvenger.Game.Core.Factions.F10.Destroyer
             base.StartUp();
             m_targetMarkerPen = new Pen();
             Transform.Position = new Vector2(100, 200);
-            Scale(new SizeF(0.3f, 0.3f));
+            Scale(new SizeF(0.5f, 0.5f));
             Transform.Rotation = -90;
             m_targetMarkerPen = new Pen() { Brush = Brushes.Orange };
             m_targetMarkerPen.Freeze();

@@ -39,7 +39,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         protected int m_id;
 
         #region Lazy Loading
-        private ICollaider m_colliderComponent;
+        private ICollider m_colliderComponent;
         private ITransform m_transform;
         private IAnimation m_animation;
         private IAnimator m_animator;
@@ -51,7 +51,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         #region Propeties
 
         #region Lazy Loading
-        public ICollaider Collider 
+        public ICollider Collider 
         { get
             {
                 if (m_colliderComponent == null)
@@ -181,7 +181,9 @@ namespace WPFGameEngine.WPF.GE.GameObjects
 
             //Here must be a custom logic that must be implemented in Derived classes
         }
-
+        //Need to move code that is dependent on System.Windows.Media
+        //And all related classes like Bitmapsource, DrawingContext, Matrix, SizeF,
+        //GetLocalTransform matrix
         public virtual void Render(DrawingContext dc, Matrix parent = default)
         {
             if (!Enabled) return;
@@ -238,12 +240,12 @@ namespace WPFGameEngine.WPF.GE.GameObjects
                     );
             }
 
+            dc.Pop();
+
             if (GESettings.DrawColliders)
             {
 
             }
-
-            dc.Pop();
 
             foreach (var item in m_children)
             {
@@ -517,7 +519,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         {
             if (m_init)
                 return;
-
+            Texture = GetTexture();
             m_init = true;
             foreach (var item in m_children)
             {

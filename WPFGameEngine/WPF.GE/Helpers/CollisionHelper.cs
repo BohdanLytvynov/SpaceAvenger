@@ -33,10 +33,10 @@ namespace WPFGameEngine.WPF.GE.Helpers
         
         private static bool IntersectsAABB(Rectangle a, Rectangle b)
         {
-            return a.Min.X < b.Min.X + b.Width &&
-                   a.Min.X + a.Width > b.Min.X &&
-                   a.Min.Y < b.Min.Y + b.Height &&
-                   a.Min.Y + a.Height > b.Min.Y;
+            return a.LeftUpperCorner.X < b.LeftUpperCorner.X + b.Width &&
+                   a.LeftUpperCorner.X + a.Width > b.LeftUpperCorner.X &&
+                   a.LeftUpperCorner.Y < b.LeftUpperCorner.Y + b.Height &&
+                   a.LeftUpperCorner.Y + a.Height > b.LeftUpperCorner.Y;
         }
 
         public static bool Intersects(Circle a, Circle b)
@@ -63,8 +63,8 @@ namespace WPFGameEngine.WPF.GE.Helpers
         public static bool Intersects(Circle circle, Rectangle rect)
         {
             // 1. Find Point that is the closest one to the center of the Circle
-            float closestX = SMath.Clamp(circle.Center.X, rect.Min.X, rect.Min.X + rect.Width);
-            float closestY = SMath.Clamp(circle.Center.Y, rect.Min.Y, rect.Min.Y + rect.Height);
+            float closestX = SMath.Clamp(circle.Center.X, rect.LeftUpperCorner.X, rect.LeftUpperCorner.X + rect.Width);
+            float closestY = SMath.Clamp(circle.Center.Y, rect.LeftUpperCorner.Y, rect.LeftUpperCorner.Y + rect.Height);
 
             // 2. Calculate distance between this nearest point and the Center of the Circle
             float dx = circle.Center.X - closestX;

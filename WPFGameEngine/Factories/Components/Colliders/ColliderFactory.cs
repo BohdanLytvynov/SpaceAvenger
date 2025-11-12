@@ -9,7 +9,7 @@ namespace WPFGameEngine.Factories.Components.Colliders
         {
             ProductName = nameof(ColliderComponent);
         }
-        public override ICollaider Create()
+        public override ICollider Create()
         {
             return new ColliderComponent();
         }

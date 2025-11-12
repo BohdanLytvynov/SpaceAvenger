@@ -12,9 +12,9 @@ namespace SpaceAvenger.Game.Core.Factions.F10.Weapons
 
         public override void StartUp()
         {
-            ReloadTime = 5;
+            ReloadTime = 2;
             ReloadSpeed = 1;
-            ShellScaleMultipl = 1.0f / 4.0f;
+            ShellScaleMultipl = 2.0f / 4.0f;
             base.StartUp();
         }
     }

@@ -27,5 +27,7 @@ namespace WPFGameEngine.WPF.GE.Geometry.Realizations
                 Radius * 2,
                 Radius * 2);
         }
+
+        
     }
 }
