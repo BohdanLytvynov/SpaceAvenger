@@ -1,8 +1,8 @@
 ﻿using SpaceAvenger.Editor.ViewModels.Components.Base;
-using System.Drawing;
 using System.Numerics;
 using WPFGameEngine.WPF.GE.Component.Transforms;
 using WPFGameEngine.WPF.GE.GameObjects;
+using WPFGameEngine.WPF.GE.Math.Sizes;
 
 namespace SpaceAvenger.Editor.ViewModels.Components.Transform
 {
@@ -161,7 +161,7 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Transform
             {
                 var t = GameObject.Transform;
                 float y = t.Scale.Height;
-                GameObject.Scale(new SizeF(x, y));
+                GameObject.Scale(new Size(x, y));
             }
         }
 
@@ -171,7 +171,7 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Transform
             {
                 var t = GameObject.Transform;
                 float x = t.Scale.Width;
-                GameObject.Scale(new SizeF(x, y));
+                GameObject.Scale(new Size(x, y));
             }
         }
 

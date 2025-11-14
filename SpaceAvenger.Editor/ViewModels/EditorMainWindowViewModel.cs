@@ -18,7 +18,6 @@ using WPFGameEngine.WPF.GE.Component.Animations;
 using WPFGameEngine.Attributes.Editor;
 using WPFGameEngine.WPF.GE.Component.Base;
 using WPFGameEngine.WPF.GE.Exceptions;
-using System.Windows;
 using WPFGameEngine.Timers.Base;
 using WPFGameEngine.Extensions;
 using SpaceAvenger.Editor.ViewModels.Options;
@@ -30,11 +29,14 @@ using ViewModelBaseLibDotNetCore.Helpers;
 using WPFGameEngine.WPF.GE.Serialization.GameObjects;
 using WPFGameEngine.WPF.GE.Component.RelativeTransforms;
 using SpaceAvenger.Editor.ViewModels.Components.RelativeTransforms;
-using System.Drawing;
 using System.Numerics;
 using SpaceAvenger.Editor.ViewModels.Prefabs;
 using WPFGameEngine.WPF.GE.Dto.GameObjects;
 using SpaceAvenger.Services.WpfGameViewHost;
+using WPFGameEngine.WPF.GE.Component.Collider;
+using SpaceAvenger.Editor.ViewModels.Components.Collider;
+using WPFGameEngine.WPF.GE.Math.Sizes;
+using System.Windows;
 
 namespace SpaceAvenger.Editor.ViewModels
 {
@@ -255,6 +257,7 @@ namespace SpaceAvenger.Editor.ViewModels
 
             GESettings.DrawGizmo = true;
             GESettings.DrawBorders = true;
+            GESettings.DrawColliders = true;
 
             OnAddGameObjectButtonPressed = new Command(
                 OnAddGameObjectButtonPressedExecute,
@@ -366,7 +369,7 @@ namespace SpaceAvenger.Editor.ViewModels
                 itemViewModel.ItemSelected += ItemViewModel_ItemSelected;
                 Items.Add(itemViewModel);
                 var t = m_factoryWrapper.CreateObject<TransformComponent>();
-                t.Scale = new SizeF(1f, 1f);
+                t.Scale = new WPFGameEngine.WPF.GE.Math.Sizes.Size(1f, 1f);
                 t.CenterPosition = new Vector2(0.5f, 0.5f);
                 obj.RegisterComponent(t);
                 m_gameViewHost.AddObject(obj);
@@ -377,7 +380,7 @@ namespace SpaceAvenger.Editor.ViewModels
                 itemViewModel.ItemSelected += ItemViewModel_ItemSelected;
                 m_SelectedItem.Children.Add(itemViewModel);
                 var t = m_factoryWrapper.CreateObject<RelativeTransformComponent>();
-                t.Scale = new SizeF(1f, 1f);
+                t.Scale = new WPFGameEngine.WPF.GE.Math.Sizes.Size(1f, 1f);
                 t.CenterPosition = new Vector2(0.5f, 0.5f);
                 obj.RegisterComponent(t);
                 m_SelectedItem.GameObject.AddChild(obj);
@@ -676,6 +679,11 @@ namespace SpaceAvenger.Editor.ViewModels
                     break;
                 case nameof(RelativeTransformComponent):
                     c = new RelativeTransformViewModel(m_SelectedItem.GameObject);
+                    break;
+                case nameof(ColliderComponent):
+                    c = new ColliderComponentViewModel(m_SelectedItem.GameObject, 
+                        m_assemblyLoader,
+                        m_factoryWrapper);
                     break;
                 default:
                     throw new Exception($"Unsupported component Type! Component: {component.ComponentName}");

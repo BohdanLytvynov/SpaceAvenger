@@ -1,9 +1,9 @@
 ﻿using SpaceAvenger.Game.Core.Factions.F10.Projectiles;
-using System.Drawing;
 using System.Numerics;
 using WPFGameEngine.GameViewControl;
 using WPFGameEngine.Timers.Base;
 using WPFGameEngine.WPF.GE.GameObjects;
+using WPFGameEngine.WPF.GE.Math.Sizes;
 
 namespace SpaceAvenger.Game.Core.Base
 {
@@ -53,7 +53,7 @@ namespace SpaceAvenger.Game.Core.Base
             var position = GetWorldCenter();
             var shell = world.Instantinate<TShell>();
             shell.Scale(Transform.Scale * ShellScaleMultipl);
-            SizeF shellSize = shell.GetActualSize();
+            Size shellSize = shell.GetActualSize();
             Vector2 centerPos = position - new Vector2(shellSize.Width / 2, shellSize.Height / 2);
             shell.Translate(centerPos);
             shell.Fire(dir);

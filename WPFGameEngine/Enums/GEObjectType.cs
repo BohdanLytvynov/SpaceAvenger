@@ -10,6 +10,7 @@ namespace WPFGameEngine.Enums
     {
         None = 0,
         Component,
-        Ease
+        Ease,
+        Geometry
     }
 }

@@ -1,9 +1,9 @@
-﻿using System.Drawing;
-using System.Windows.Media;
+﻿using System.Numerics;
 using WPFGameEngine.Attributes.Editor;
-using WPFGameEngine.Extensions;
 using WPFGameEngine.WPF.GE.Component.Transforms;
 using WPFGameEngine.WPF.GE.Dto.Components;
+using WPFGameEngine.WPF.GE.Math.Matrixes;
+using WPFGameEngine.WPF.GE.Math.Sizes;
 
 namespace WPFGameEngine.WPF.GE.Component.RelativeTransforms
 {
@@ -20,21 +20,21 @@ namespace WPFGameEngine.WPF.GE.Component.RelativeTransforms
         public override List<string> IncompatibleComponents => 
             new List<string> { nameof(TransformComponent) };
  
-        public SizeF ActualParentSize { get; set; }
+        public Size ActualParentSize { get; set; }
 
-        public override Matrix GetLocalTransformMatrix()
+        public override Matrix3x3 GetLocalTransformMatrix()
         {
             //Create I matrix, diagonal is 1
-            Matrix matrix = Matrix.Identity;
+            Matrix3x3 matrix = new Matrix3x3();
             //Move to center of the texture
-            matrix.Translate(-ActualCenterPosition.X, -ActualCenterPosition.Y);
+            matrix.Translate(ActualCenterPosition * -1);
             //Apply Rotation
             matrix.Rotate(Rotation);
             //Apply Translate in the World with respect to parent
-            matrix.Translate(ActualParentSize.Width * Position.X,
-                ActualParentSize.Height * Position.Y);//Here Position has a normalized values
+            matrix.Translate(new Vector2(ActualParentSize.Width * Position.X,
+                ActualParentSize.Height * Position.Y));//Here Position has a normalized values
             //Move back to initial origin
-            matrix.Translate(ActualCenterPosition.X, ActualCenterPosition.Y);
+            matrix.Translate(ActualCenterPosition);
             
             matrix.CheckMachineZero();
             return matrix;

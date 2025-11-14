@@ -1,5 +1,4 @@
-﻿using System.Drawing;
-using System.Numerics;
+﻿using System.Numerics;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using WPFGameEngine.Extensions;
@@ -16,6 +15,8 @@ using WPFGameEngine.WPF.GE.Dto.Base;
 using WPFGameEngine.WPF.GE.Dto.GameObjects;
 using WPFGameEngine.WPF.GE.Exceptions;
 using WPFGameEngine.WPF.GE.Math.Basis;
+using WPFGameEngine.WPF.GE.Math.Matrixes;
+using WPFGameEngine.WPF.GE.Math.Sizes;
 using WPFGameEngine.WPF.GE.Settings;
 
 namespace WPFGameEngine.WPF.GE.GameObjects
@@ -116,6 +117,8 @@ namespace WPFGameEngine.WPF.GE.GameObjects
                 return Parent != null;
             }
         }
+
+        public bool IsCollidable => Collider != null;
         #endregion
 
         #region Ctor
@@ -157,13 +160,26 @@ namespace WPFGameEngine.WPF.GE.GameObjects
             actualWidth = actualWidth < 0 ? 0 : actualWidth;
             actualHeight = actualHeight < 0 ? 0 : actualHeight;
 
-            Transform.ActualSize = new SizeF(actualWidth, actualHeight);
+            Transform.ActualSize = new Size(actualWidth, actualHeight);
             //Calculate the center of the Image
             float Xcenter = actualWidth * Transform.CenterPosition.X;
             float Ycenter = actualHeight * Transform.CenterPosition.Y;
 
             Transform.ActualCenterPosition = new Vector2(Xcenter, Ycenter);
             //Get matrix for current game object
+
+            if (IsCollidable && Collider.CollisionShape != null)
+            {
+                Collider.ActualObjectSize = Transform.ActualSize;
+                var globMatrix = GetGlobalTransformMatrix();
+                var leftUpperCorner = globMatrix.GetTranslate();
+                Collider.CollisionShape.Scale = Transform.Scale;
+                Collider.CollisionShape.LeftUpperCorner = leftUpperCorner;
+                Collider.Basis = globMatrix.GetBasis();
+                Collider.CollisionShape.Basis = Collider.Basis;
+                Collider.CollisionShape.CenterPosition = leftUpperCorner +
+                    Collider.ActualCenterPosition;
+            }
 
             if (Animator != null)
             {
@@ -184,7 +200,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         //Need to move code that is dependent on System.Windows.Media
         //And all related classes like Bitmapsource, DrawingContext, Matrix, SizeF,
         //GetLocalTransform matrix
-        public virtual void Render(DrawingContext dc, Matrix parent = default)
+        public virtual void Render(DrawingContext dc, Matrix3x3 parent)
         {
             if (!Enabled) return;
 
@@ -194,12 +210,20 @@ namespace WPFGameEngine.WPF.GE.GameObjects
             var actualHeight = Transform.ActualSize.Height;
             var globalMatrix = Transform.GetLocalTransformMatrix();
 
-            if (parent != default)
+            if (parent != Matrix3x3.Identity)
             {
-                globalMatrix.Append(parent);
+                globalMatrix *= parent;
             }
 
-            dc.PushTransform(new MatrixTransform(globalMatrix));
+            Matrix m = new Matrix();
+            m.M11 = globalMatrix.M11;
+            m.M12 = globalMatrix.M12;
+            m.M21 = globalMatrix.M21;
+            m.M22 = globalMatrix.M22;
+            m.OffsetX = globalMatrix.OffsetX; 
+            m.OffsetY = globalMatrix.OffsetY;
+
+            dc.PushTransform(new MatrixTransform(m));
 
             var Xcenter = Transform.ActualCenterPosition.X;
             var Ycenter = Transform.ActualCenterPosition.Y;
@@ -242,9 +266,11 @@ namespace WPFGameEngine.WPF.GE.GameObjects
 
             dc.Pop();
 
-            if (GESettings.DrawColliders)
+            if (GESettings.DrawColliders 
+                && IsCollidable 
+                && Collider.CollisionShape != null)
             {
-
+                Collider.CollisionShape.Render(dc);
             }
 
             foreach (var item in m_children)
@@ -252,7 +278,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects
                 var childTransform = item.Transform as IRelativeTransform;
                 if (childTransform != null)
                 {
-                    childTransform.ActualParentSize = new SizeF(actualWidth, actualHeight);
+                    childTransform.ActualParentSize = new Size(actualWidth, actualHeight);
                 }
                 item.Render(dc, globalMatrix);
             }
@@ -527,7 +553,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects
             }
         }
 
-        private void ScaleRecursive(IGameObject obj, SizeF newScale)
+        private void ScaleRecursive(IGameObject obj, Size newScale)
         {
             if (obj == null)
                 return;
@@ -536,7 +562,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects
 
             if (t != null && t.Scale != newScale)
             {
-                t.Scale = new SizeF(newScale.Width + t.Scale.Width, 
+                t.Scale = new Size(newScale.Width + t.Scale.Width, 
                     newScale.Height + t.Scale.Height);
             }
 
@@ -546,11 +572,11 @@ namespace WPFGameEngine.WPF.GE.GameObjects
             }
         }
 
-        public void Scale(SizeF newScale)
+        public void Scale(Size newScale)
         {
             float dx = newScale.Width - Transform.Scale.Width;
             float dy = newScale.Height - Transform.Scale.Height;
-            ScaleRecursive(this, new SizeF(dx, dy));
+            ScaleRecursive(this, new Size(dx, dy));
         }
 
         private BitmapSource GetTexture()
@@ -604,9 +630,9 @@ namespace WPFGameEngine.WPF.GE.GameObjects
             Transform.Rotation = angle;
         }
 
-        public Matrix GetGlobalTransformMatrix()
+        public Matrix3x3 GetGlobalTransformMatrix()
         {
-            Matrix m = Matrix.Identity;
+            Matrix3x3 m = Matrix3x3.Identity;
             GetGlobalMatrixRec(this, ref m);
             return m;
         }
@@ -630,7 +656,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects
             }
         }
 
-        private static void GetGlobalMatrixRec(IGameObject obj, ref Matrix matrix)
+        private static void GetGlobalMatrixRec(IGameObject obj, ref Matrix3x3 matrix)
         { 
             if(obj == null)
                 return;
@@ -639,15 +665,15 @@ namespace WPFGameEngine.WPF.GE.GameObjects
             if (t != null)
             {
                 var m = t.GetLocalTransformMatrix();
-                matrix.Append(m);
+                matrix *= m;
 
                 GetGlobalMatrixRec(obj.Parent, ref matrix);
             }
         }
 
-        public static Matrix GetGlobalTransformMatrix(IGameObject obj)
+        public static Matrix3x3 GetGlobalTransformMatrix(IGameObject obj)
         {
-            Matrix m = Matrix.Identity;
+            Matrix3x3 m = new Matrix3x3();
             GetGlobalMatrixRec(obj, ref m);
             return m;
         }
@@ -662,7 +688,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects
             var lx = b.X.Multiply(center.X);
             var ly = b.Y.Multiply(center.Y);
             var l = lx + ly;
-            return m.GetTranslateAsVector() + l;
+            return m.GetTranslate() + l;
         }
 
         public Vector2 GetDirection(Vector2 position)
@@ -717,10 +743,10 @@ namespace WPFGameEngine.WPF.GE.GameObjects
             Enabled = false;
         }
 
-        public SizeF GetActualSize()
+        public Size GetActualSize()
         {
             var transform = Transform;
-            return new SizeF((float)Texture.Width * transform.Scale.Width,
+            return new Size((float)Texture.Width * transform.Scale.Width,
                 (float)Texture.Height * transform.Scale.Height);
         }
 

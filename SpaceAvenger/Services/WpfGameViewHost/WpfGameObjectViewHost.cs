@@ -7,6 +7,7 @@ using WPFGameEngine.Enums;
 using WPFGameEngine.GameViewControl;
 using WPFGameEngine.Timers.Base;
 using WPFGameEngine.WPF.GE.GameObjects;
+using WPFGameEngine.WPF.GE.Math.Matrixes;
 
 namespace SpaceAvenger.Services.WpfGameViewHost
 {
@@ -69,7 +70,7 @@ namespace SpaceAvenger.Services.WpfGameViewHost
                         if(World[i] != null)
                         {
                             World[i].Update(this, m_gameTimer);
-                            World[i].Render(dc, Matrix.Identity);
+                            World[i].Render(dc, Matrix3x3.Identity);
                         }
                     }
                 }

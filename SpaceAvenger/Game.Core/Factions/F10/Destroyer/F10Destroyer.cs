@@ -1,17 +1,14 @@
 ﻿using SpaceAvenger.Game.Core.Base;
 using SpaceAvenger.Game.Core.Factions.F10.Weapons;
 using SpaceAvenger.Services.WPFInputControllers;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
 using System.Numerics;
 using System.Windows.Media;
 using WPFGameEngine.Extensions;
 using WPFGameEngine.GameViewControl;
-using WPFGameEngine.ObjectBuilders.Base;
 using WPFGameEngine.Timers.Base;
 using WPFGameEngine.WPF.GE.Component.Controllers;
-using WPFGameEngine.WPF.GE.GameObjects;
+using WPFGameEngine.WPF.GE.Math.Matrixes;
+using WPFGameEngine.WPF.GE.Math.Sizes;
 
 namespace SpaceAvenger.Game.Core.Factions.F10.Destroyer
 {
@@ -31,7 +28,7 @@ namespace SpaceAvenger.Game.Core.Factions.F10.Destroyer
             base.StartUp();
             m_targetMarkerPen = new Pen();
             Transform.Position = new Vector2(100, 200);
-            Scale(new SizeF(0.5f, 0.5f));
+            Scale(new Size(0.5f, 0.5f));
             Transform.Rotation = -90;
             m_targetMarkerPen = new Pen() { Brush = Brushes.Orange };
             m_targetMarkerPen.Freeze();
@@ -60,7 +57,7 @@ namespace SpaceAvenger.Game.Core.Factions.F10.Destroyer
             base.Update(world, gameTimer);
         }
 
-        public override void Render(DrawingContext dc, Matrix parent = default)
+        public override void Render(DrawingContext dc, Matrix3x3 parent = default)
         {
             base.Render(dc, parent);
             

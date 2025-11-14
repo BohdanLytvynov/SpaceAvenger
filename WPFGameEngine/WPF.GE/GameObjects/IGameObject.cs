@@ -1,5 +1,4 @@
-﻿using System.Drawing;
-using System.Numerics;
+﻿using System.Numerics;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using WPFGameEngine.Factories.Base;
@@ -8,24 +7,29 @@ using WPFGameEngine.Timers.Base;
 using WPFGameEngine.WPF.GE.Component.Animations;
 using WPFGameEngine.WPF.GE.Component.Animators;
 using WPFGameEngine.WPF.GE.Component.Base;
+using WPFGameEngine.WPF.GE.Component.Collider;
 using WPFGameEngine.WPF.GE.Component.Sprites;
 using WPFGameEngine.WPF.GE.Component.Transforms;
 using WPFGameEngine.WPF.GE.Dto.Base;
 using WPFGameEngine.WPF.GE.Dto.GameObjects;
+using WPFGameEngine.WPF.GE.Math.Matrixes;
+using WPFGameEngine.WPF.GE.Math.Sizes;
 
 namespace WPFGameEngine.WPF.GE.GameObjects
 {
     public interface IGameObject : IGameEngineEntity, IConvertToDto<GameObjectDto>
     {
         #region Lazy Loading
-        public ITransform Transform { get; }
-        public IAnimation Animation { get; }
-        public IAnimator Animator { get; }
+        ITransform Transform { get; }
+        IAnimation Animation { get; }
+        IAnimator Animator { get; }
         ISprite Sprite { get; }
+        ICollider Collider { get; }
         public BitmapSource Texture { get; }
         #endregion
 
         #region Main Game Object Properties
+        public bool IsCollidable { get; }
         /// <summary>
         /// Use for editor only not for games
         /// </summary>
@@ -44,7 +48,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects
 
         #region Game Loop
         void StartUp();
-        void Render(DrawingContext dc, Matrix parent);
+        void Render(DrawingContext dc, Matrix3x3 parent);
         void Update(IGameObjectViewHost gameViewHost, IGameTimer gameTimer);
         #endregion
 
@@ -78,16 +82,16 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         /// </summary>
         /// <param name="angle">In Degrees</param>
         void Rotate(double angle);
-        void Scale(SizeF newScale);
-        Matrix GetGlobalTransformMatrix();
+        void Scale(Size newScale);
+        Matrix3x3 GetGlobalTransformMatrix();
         /// <summary>
         /// Returns Center of the object in world Coordinates
         /// </summary>
         /// <returns></returns>
         Vector2 GetWorldCenter();
         void LookAt(Vector2 position, double rotSpeed, double deltaTime);
-        Vector2 GetDirection(Vector2 position);        
-        SizeF GetActualSize();
+        Vector2 GetDirection(Vector2 position);
+        Size GetActualSize();
         #endregion
 
         #region Enable Disable

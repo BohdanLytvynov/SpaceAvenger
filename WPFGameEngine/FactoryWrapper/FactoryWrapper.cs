@@ -10,6 +10,7 @@ using WPFGameEngine.Factories.Components.RelativeTransforms;
 using WPFGameEngine.Factories.Components.Sprites;
 using WPFGameEngine.Factories.Components.Transform;
 using WPFGameEngine.Factories.Ease.Base;
+using WPFGameEngine.Factories.Geometry.Base;
 using WPFGameEngine.FactoryWrapper.Base;
 using WPFGameEngine.Services.Interfaces;
 
@@ -83,6 +84,23 @@ namespace WPFGameEngine.FactoryWrapper
                     Type closedFactoryType = genericFactoryImpl.MakeGenericType(easeType);
 
                     IFactory factory = (IFactory)Activator.CreateInstance(closedFactoryType);
+
+                    ProductFactoryMap.Add(factory.ProductName, factory);
+                }
+
+                //Get all geometry types
+                var geomTypes = currAssembly.GetTypes().Where(
+                    t => t.GetAttribute<BuildWithFactory<GEObjectType>>() != null
+                    && t.GetAttribute<BuildWithFactory<GEObjectType>>()
+                    .GetValue<GEObjectType>("GameObjectType") == GEObjectType.Geometry);
+
+                Type geomFactoryImpl = typeof(GeometryFactoryBase<>);
+
+                foreach (var geomType in geomTypes)
+                {
+                    Type closedGeomFactoryType = geomFactoryImpl.MakeGenericType(geomType);
+
+                    IFactory factory = (IFactory)Activator.CreateInstance(closedGeomFactoryType);
 
                     ProductFactoryMap.Add(factory.ProductName, factory);
                 }

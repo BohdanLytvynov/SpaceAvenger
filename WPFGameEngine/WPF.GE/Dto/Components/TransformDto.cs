@@ -1,10 +1,10 @@
-﻿using System.Drawing;
-using System.Numerics;
+﻿using System.Numerics;
 using System.Text.Json.Serialization;
 using WPFGameEngine.FactoryWrapper.Base;
 using WPFGameEngine.WPF.GE.Component.RelativeTransforms;
 using WPFGameEngine.WPF.GE.Component.Transforms;
 using WPFGameEngine.WPF.GE.Dto.Base;
+using WPFGameEngine.WPF.GE.Math.Sizes;
 
 namespace WPFGameEngine.WPF.GE.Dto.Components
 {
@@ -15,7 +15,7 @@ namespace WPFGameEngine.WPF.GE.Dto.Components
         public Vector2 Position { get; set; }
         public Vector2 CenterPosition { get; set; }
         public double Rotation { get; set; }//Degree
-        public SizeF Scale { get; set; }
+        public Size Scale { get; set; }
 
         public TransformDto()
         {
