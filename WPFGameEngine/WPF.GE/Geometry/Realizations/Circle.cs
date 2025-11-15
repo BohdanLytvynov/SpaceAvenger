@@ -4,6 +4,7 @@ using WPFGameEngine.Attributes.Editor;
 using WPFGameEngine.Attributes.Factories;
 using WPFGameEngine.Enums;
 using WPFGameEngine.WPF.GE.Geometry.Base;
+using WPFGameEngine.WPF.GE.Math.Sizes;
 using WPFGameEngine.WPF.GE.Settings;
 
 namespace WPFGameEngine.WPF.GE.Geometry.Realizations
@@ -16,29 +17,31 @@ namespace WPFGameEngine.WPF.GE.Geometry.Realizations
     {
         public float Radius { get; set; }
 
-        //public override void Translate(Vector2 offset)
-        //{
-        //    CenterPosition = new Vector2(CenterPosition.X + offset.X, CenterPosition.Y + offset.Y);
-        //}
+        public override Rectangle GetBounds()
+        {
+            return new Rectangle(
+                LeftUpperCorner,
+                new Size(Radius * 2, Radius * 2),
+                Basis);
+        }
+        public Circle()
+        {
+            
+        }
 
-        //public override Rectangle GetBounds()
-        //{
-        //    return new Rectangle(
-        //        CenterPosition.X - Radius,
-        //        CenterPosition.Y - Radius,
-        //        Radius * 2,
-        //        Radius * 2);
-        //}
+        public override List<Vector2> GetNormals() => new List<Vector2>();//Infinite number of Normals
 
         public override void Render(DrawingContext drawingContext)
         {
+            base.Render(drawingContext);
             drawingContext.DrawEllipse(GESettings.ColliderFillBrush, GESettings.ColliderBorderPen,
                     new System.Windows.Point(CenterPosition.X, CenterPosition.Y),
                     Radius * Scale.Width, Radius * Scale.Height);
+        }
 
-            drawingContext.DrawEllipse(GESettings.ColliderPointFillBrush, GESettings.ColliderPointPen,
-                    new System.Windows.Point(CenterPosition.X, CenterPosition.Y),
-                    5, 5);
+        protected override void CalculatePoints()
+        {
+            
         }
     }
 }

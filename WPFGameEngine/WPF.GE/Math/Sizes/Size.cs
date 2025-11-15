@@ -37,5 +37,13 @@
         {
             return new Size(l.Width * n, l.Height * n);
         }
+
+        public void CheckNegativeSize()
+        {
+            if (Width < 0)
+                Width = 0;
+            if (Height < 0)
+                Height = 0;
+        }
     }
 }

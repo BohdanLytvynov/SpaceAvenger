@@ -13,7 +13,7 @@
                     xmlns:relTransVM="clr-namespace:SpaceAvenger.Editor.ViewModels.Components.RelativeTransforms"
                     xmlns:prefabVM="clr-namespace:SpaceAvenger.Editor.ViewModels.Prefabs"
                     xmlns:colliderVM="clr-namespace:SpaceAvenger.Editor.ViewModels.Components.Collider"
-                    xmlns:circleConfVM="clr-namespace:SpaceAvenger.Editor.ViewModels.GeometryConfigViewModel"
+                    xmlns:geomConfVM="clr-namespace:SpaceAvenger.Editor.ViewModels.GeometryConfigViewModel"
                     >
     <!--#region Tree View Item-->
     <HierarchicalDataTemplate DataType="{x:Type tvm:TreeItemViewModel}"
@@ -275,14 +275,46 @@ Margin="10" LabelText="Center Position X: " Minimum="0" Maximum="1.0"/>
         </StackPanel>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type circleConfVM:CircleConfigViewModel}">
+    <DataTemplate DataType="{x:Type geomConfVM:CircleConfigViewModel}">
         <Border Style="{StaticResource BorderRoundStyle}" Width="{Binding Path=ActualWidth,
                 RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}}">
             <StackPanel Orientation="Vertical">
                 <controls:Slider Value="{Binding Radius, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                 Margin="10" LabelText="Radius: "
-                Minimum="0" Maximum="100"
+                Minimum="0" Maximum="1000"
                  />
+            </StackPanel>
+        </Border>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type geomConfVM:RectangleConfigViewModel}">
+        <Border Style="{StaticResource BorderRoundStyle}" Width="{Binding Path=ActualWidth,
+            RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}}">
+            <StackPanel Orientation="Vertical">
+                <controls:Slider Value="{Binding Width, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+            Margin="10" LabelText="Width: "
+            Minimum="0" Maximum="1000"
+             />
+                <controls:Slider Value="{Binding Height, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                Margin="10" LabelText="Height: "
+                Minimum="0" Maximum="1000"
+ />
+            </StackPanel>
+        </Border>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type geomConfVM:TriangleConfigViewModel}">
+        <Border Style="{StaticResource BorderRoundStyle}" Width="{Binding Path=ActualWidth,
+           RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}}">
+            <StackPanel Orientation="Vertical">
+                <controls:Slider Value="{Binding Height, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+           Margin="10" LabelText="Height: "
+           Minimum="0" Maximum="1000"
+            />
+                <controls:Slider Value="{Binding Base, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+               Margin="10" LabelText="Base: "
+               Minimum="0" Maximum="1000"
+            />
             </StackPanel>
         </Border>
     </DataTemplate>

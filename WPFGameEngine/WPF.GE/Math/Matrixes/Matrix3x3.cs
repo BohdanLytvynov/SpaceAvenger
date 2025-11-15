@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System.Configuration;
+using System.Numerics;
 using WPFGameEngine.WPF.GE.Math.Basis;
 using WPFGameEngine.WPF.GE.Math.Sizes;
 using SMath = System.Math;
@@ -171,15 +172,36 @@ namespace WPFGameEngine.WPF.GE.Math.Matrixes
 
         }
 
-        public static bool operator !=(Matrix3x3 l, Matrix3x3 r)
-        {
-            return !(l == r);
-        }
+        public static bool operator !=(Matrix3x3 l, Matrix3x3 r) => !(l == r);
 
-        public Basis2D GetBasis() => 
-            new Basis2D(new Vector2(M11, M12), new Vector2(M21, M22));
+        public Basis2D GetBasis() =>
+            new Basis2D(CheckNormalize(new Vector2(M11, M12)), CheckNormalize(new Vector2(M21, M22)));
 
         public Vector2 GetTranslate() => new Vector2(m_Matrix[2, 0], m_Matrix[2, 1]);
+
+        public void CheckMachineZero()
+        {
+            var eps = GEConstants.Epsilon;
+            if (SMath.Abs(m_Matrix[0, 0]) < eps)
+                m_Matrix[0, 0] = 0.0f;
+            if (SMath.Abs(m_Matrix[0, 1]) < eps)
+                m_Matrix[0, 1] = 0.0f;
+            if (SMath.Abs(m_Matrix[1, 0]) < eps)
+                m_Matrix[1, 0] = 0.0f;
+            if (SMath.Abs(m_Matrix[1, 1]) < eps)
+                m_Matrix[1, 1] = 0.0f;
+            if (SMath.Abs(m_Matrix[2, 0]) < eps)
+                m_Matrix[2, 0] = 0.0f;
+            if (SMath.Abs(m_Matrix[2, 1]) < eps)
+                m_Matrix[2, 1] = 0.0f;
+        }
+
+        private static Vector2 CheckNormalize(Vector2 input)
+        { 
+            if(input.Length() != 1.0f)
+                return Vector2.Normalize(input);
+            return input;
+        }
 
         #region Private Methods
         private static float[,] Multiply(float[,] l, float[,] r)
@@ -204,22 +226,6 @@ namespace WPFGameEngine.WPF.GE.Math.Matrixes
             return res;
         }
 
-        public void CheckMachineZero()
-        {
-            var eps = GEConstants.Epsilon;
-            if (SMath.Abs(m_Matrix[0,0]) < eps)
-                m_Matrix[0,0] = 0.0f;
-            if (SMath.Abs(m_Matrix[0,1]) < eps)
-                m_Matrix[0, 1] = 0.0f;
-            if (SMath.Abs(m_Matrix[1,0]) < eps)
-                m_Matrix[1,0] = 0.0f;
-            if (SMath.Abs(m_Matrix[1,1]) < eps)
-                m_Matrix[1, 1] = 0.0f;
-            if (SMath.Abs(m_Matrix[2,0]) < eps)
-                m_Matrix[2,0] = 0.0f;
-            if (SMath.Abs(m_Matrix[2,1]) < eps)
-                m_Matrix[2,1] = 0.0f;
-        }
         #endregion
 
     }

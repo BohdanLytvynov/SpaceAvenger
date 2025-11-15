@@ -30,8 +30,8 @@ namespace SpaceAvenger.Editor.ViewModels.GeometryConfigViewModel
         protected override void LoadCurrentGeometryProperties()
         {
             if(Shape2D == null) return;
-
-            var circle = (Circle)Shape2D;
+            var circle = Shape2D as Circle;
+            if(circle == null) return;
             m_Radius = circle.Radius;
         }
 
@@ -39,7 +39,9 @@ namespace SpaceAvenger.Editor.ViewModels.GeometryConfigViewModel
         {
             if (Shape2D == null) return;
             if (value < 0) return;
-            (Shape2D as Circle).Radius = (float)value;
+            var circle = Shape2D as Circle;
+            if (circle == null) return;
+            circle.Radius = (float)value;
         }
     }
 }

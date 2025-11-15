@@ -174,7 +174,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects
                 var globMatrix = GetGlobalTransformMatrix();
                 var leftUpperCorner = globMatrix.GetTranslate();
                 Collider.CollisionShape.Scale = Transform.Scale;
-                Collider.CollisionShape.LeftUpperCorner = leftUpperCorner;
+                Collider.CollisionShape.Scale.CheckNegativeSize();
                 Collider.Basis = globMatrix.GetBasis();
                 Collider.CollisionShape.Basis = Collider.Basis;
                 Collider.CollisionShape.CenterPosition = leftUpperCorner +

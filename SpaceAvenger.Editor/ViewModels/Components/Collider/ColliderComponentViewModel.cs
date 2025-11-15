@@ -149,9 +149,16 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Collider
             switch (factoryName)
             {
                 case nameof(Circle):
-                    if (shape == null)
-                        shape = m_factoryWrapper.CreateObject<Circle>();
+                    shape = m_factoryWrapper.CreateObject<Circle>();
                     geomConfig = new CircleConfigViewModel(shape);
+                    break;
+                case nameof(Rectangle):
+                    shape = m_factoryWrapper.CreateObject<Rectangle>();
+                    geomConfig = new RectangleConfigViewModel(shape); 
+                    break;
+                case nameof(Triangle):
+                    shape = m_factoryWrapper.CreateObject<Triangle>();
+                    geomConfig = new TriangleConfigViewModel(shape);
                     break;
                 default:
                     throw new NotImplementedException();
