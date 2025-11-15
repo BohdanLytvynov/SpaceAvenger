@@ -14,7 +14,7 @@ namespace WPFGameEngine.WPF.GE.Dto.Components
 
         public override IGEComponent ToObject(IFactoryWrapper factoryWrapper)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException();//Not used in Editor
         }
     }
 }

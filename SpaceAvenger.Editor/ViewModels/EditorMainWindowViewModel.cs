@@ -50,6 +50,7 @@ namespace SpaceAvenger.Editor.ViewModels
         private bool m_ShowGizmos;
         private bool m_ShowBorders;
         private bool m_enabled;
+        private bool m_showColliders;
         private string m_objName;
         private double m_ZIndex;
         private int m_SelectedComponentIndex;
@@ -157,6 +158,16 @@ namespace SpaceAvenger.Editor.ViewModels
             }
         }
 
+        public bool ShowColliders 
+        { 
+            get => m_showColliders;
+            set
+            {
+                Set(ref m_showColliders, value);
+                GESettings.DrawColliders = value;
+            }
+        }
+
         public WpfGameObjectViewHost GameView
         { get => m_gameViewHost; set => Set(ref m_gameViewHost, value); }
 
@@ -245,6 +256,7 @@ namespace SpaceAvenger.Editor.ViewModels
             m_title = "Game Editor";
             m_ShowBorders = true;
             m_ShowGizmos = true;
+            m_showColliders = true;
             m_SelectedItem = null;
             m_Items = new ObservableCollection<TreeItemViewModel>();
             m_Components = new ObservableCollection<ComponentViewModel>();
@@ -311,6 +323,8 @@ namespace SpaceAvenger.Editor.ViewModels
                 Prefabs.Add(new PrefabViewModel(Prefabs.Count + 1) { PrefabName = item.ObjectName });
                 m_Dtos.Add(item);
             }
+
+            m_SelectedPrefab = new PrefabViewModel();
         }
 
         private TreeItemViewModel LoadObjectToTree(IGameObject gameObject, int count = 1)

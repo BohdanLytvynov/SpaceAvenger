@@ -4,6 +4,7 @@ using WPFGameEngine.Attributes.Editor;
 using WPFGameEngine.Attributes.Factories;
 using WPFGameEngine.Enums;
 using WPFGameEngine.WPF.GE.Geometry.Base;
+using WPFGameEngine.WPF.GE.Math.Basis;
 using WPFGameEngine.WPF.GE.Math.Sizes;
 using WPFGameEngine.WPF.GE.Settings;
 
@@ -41,7 +42,7 @@ namespace WPFGameEngine.WPF.GE.Geometry.Realizations
 
         protected override void CalculatePoints()
         {
-            
+            //NoPoints to Calculate
         }
     }
 }

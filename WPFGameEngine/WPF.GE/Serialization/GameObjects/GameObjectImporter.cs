@@ -23,6 +23,7 @@ namespace WPFGameEngine.WPF.GE.Serialization.GameObjects
         {
             var options = new JsonSerializerOptions() { WriteIndented = true };
             options.Converters.Add(new JsonVector2Converter());
+            options.Converters.Add(new JsonSizeConverter());
 
             var files = Directory.GetFiles(PathToFolder, "*.json");
 

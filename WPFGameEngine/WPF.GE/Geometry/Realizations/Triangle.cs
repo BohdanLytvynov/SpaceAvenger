@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using System.Text.Json.Serialization;
 using System.Windows.Media;
 using WPFGameEngine.Attributes.Editor;
 using WPFGameEngine.Attributes.Factories;
@@ -16,9 +17,10 @@ namespace WPFGameEngine.WPF.GE.Geometry.Realizations
     [BuildWithFactory<GEObjectType>(GameObjectType = GEObjectType.Geometry)]
     public class Triangle : Shape2D, IShape2D
     {
+        [JsonIgnore]
         public Vector2 Vertex { get; private set; }
+        [JsonIgnore]
         public Vector2 LeftLowerCorner { get; private set; }
-        public Vector2 BaseCenter { get; set; }
         public float Height { get; set; }
         public float Base { get; set; }
 
@@ -48,48 +50,33 @@ namespace WPFGameEngine.WPF.GE.Geometry.Realizations
         public override void Render(DrawingContext drawingContext)
         {
             base.Render(drawingContext);
-
-            drawingContext.DrawEllipse(Brushes.Red, new Pen(),
-                   new System.Windows.Point(LeftUpperCorner.X, LeftUpperCorner.Y),
-                   5, 5);
-
-            drawingContext.DrawEllipse(Brushes.Green, new Pen(),
-                   new System.Windows.Point(Vertex.X, Vertex.Y),
-                   5, 5);
-
-            drawingContext.DrawEllipse(Brushes.Blue, new Pen(),
-                   new System.Windows.Point(BaseCenter.X, BaseCenter.Y),
-                   5, 5);
-
-            drawingContext.DrawEllipse(Brushes.Pink, new Pen(),
-                   new System.Windows.Point(CenterPosition.X, CenterPosition.Y),
-                   5, 5);
-
-            //DrawLine(drawingContext,
-            //    LeftUpperCorner,
-            //    Vertex,
-            //    GESettings.ColliderPointFillBrush,
-            //    GESettings.ColliderPointPen,
-            //    5, 5, GESettings.ColliderBorderPen);
-            //DrawLine(drawingContext,
-            //    Vertex,
-            //    LeftLowerCorner,
-            //    GESettings.ColliderPointFillBrush,
-            //    GESettings.ColliderPointPen,
-            //    5, 5, GESettings.ColliderBorderPen);
-            //DrawLine(drawingContext,
-            //    LeftLowerCorner,
-            //    LeftUpperCorner,
-            //    GESettings.ColliderPointFillBrush,
-            //    GESettings.ColliderPointPen,
-            //    5, 5, GESettings.ColliderBorderPen);
+            DrawLine(drawingContext,
+                LeftUpperCorner,
+                Vertex,
+                GESettings.ColliderPointFillBrush,
+                GESettings.ColliderPointPen,
+                5, 5, GESettings.ColliderBorderPen);
+            DrawLine(drawingContext,
+                Vertex,
+                LeftLowerCorner,
+                GESettings.ColliderPointFillBrush,
+                GESettings.ColliderPointPen,
+                5, 5, GESettings.ColliderBorderPen);
+            DrawLine(drawingContext,
+                LeftLowerCorner,
+                LeftUpperCorner,
+                GESettings.ColliderPointFillBrush,
+                GESettings.ColliderPointPen,
+                5, 5, GESettings.ColliderBorderPen);
         }
 
         public override List<Vector2> GetNormals()
         {
             List<Vector2> result = new List<Vector2>();
 
-
+            //result.Add(-Basis.X);
+            //var sideNormal = Vector2.Normalize(Vertex - LeftLowerCorner);
+            //result.Add(sideNormal);
 
             return result;
         }
@@ -97,9 +84,10 @@ namespace WPFGameEngine.WPF.GE.Geometry.Realizations
         protected override void CalculatePoints()
         {
             Vertex = CenterPosition + Basis.X * (2f / 3f * Height * Scale.Width);
-            BaseCenter = CenterPosition + (-Basis.X * (1f / 3f * Height * Scale.Height));
-            //LeftLowerCorner = CenterPosition + (Basis.Y * (Base / 2 * Scale.Width)) + baseCenter;
-            LeftUpperCorner = CenterPosition - ((-Basis.Y * (Base / 2f * Scale.Width)) + BaseCenter);
+            var BaseCenter = CenterPosition + (-Basis.X * (1f / 3f * Height * Scale.Width));
+            var Y = (Basis.Y * (Base / 2f) * Scale.Height);
+            LeftLowerCorner = BaseCenter + Y;
+            LeftUpperCorner = BaseCenter - Y;
         }
     }
 }

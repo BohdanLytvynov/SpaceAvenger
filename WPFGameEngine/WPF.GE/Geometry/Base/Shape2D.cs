@@ -11,6 +11,8 @@ namespace WPFGameEngine.WPF.GE.Geometry.Base
 {
     [JsonPolymorphic(TypeDiscriminatorPropertyName = "RecreateType")]
     [JsonDerivedType(typeof(Circle), nameof(Circle))]
+    [JsonDerivedType(typeof(Rectangle), nameof(Rectangle))]
+    [JsonDerivedType(typeof(Triangle), nameof(Triangle))]
     public abstract class Shape2D : IShape2D
     {
         [JsonIgnore]
@@ -22,6 +24,11 @@ namespace WPFGameEngine.WPF.GE.Geometry.Base
         [JsonIgnore]
         public Size Scale { get; set; }
 
+        public Shape2D()
+        {
+            
+        }
+
         public bool IntersectsWith(IShape2D other)
         { 
             return CollisionHelper.Intersects(this, other);
@@ -30,6 +37,16 @@ namespace WPFGameEngine.WPF.GE.Geometry.Base
         public virtual void Render(DrawingContext drawingContext)
         {
             CalculatePoints();
+            var normals = GetNormals();
+            foreach (var normal in normals)
+            {
+                DrawLine(drawingContext,
+                    CenterPosition, CenterPosition + normal*40,
+                    Brushes.Blue,
+                    GESettings.ColliderPointPen,
+                    5, 5, new Pen(Brushes.Blue, 2)
+                    );
+            }
             drawingContext.DrawEllipse(GESettings.ColliderPointFillBrush, GESettings.ColliderPointPen,
                    new System.Windows.Point(CenterPosition.X, CenterPosition.Y),
                    5, 5);

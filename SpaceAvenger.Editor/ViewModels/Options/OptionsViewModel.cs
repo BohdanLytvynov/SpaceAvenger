@@ -28,5 +28,20 @@ namespace SpaceAvenger.Editor.ViewModels.Options
             
         }
         #endregion
+
+        #region Methods
+
+        public override bool Equals(object obj)
+        {
+            return obj is OptionsViewModel other &&
+                   FactoryName.Equals(other.FactoryName, StringComparison.OrdinalIgnoreCase);
+        }
+
+        public override int GetHashCode()
+        {
+            return FactoryName.GetHashCode();
+        }
+
+        #endregion
     }
 }

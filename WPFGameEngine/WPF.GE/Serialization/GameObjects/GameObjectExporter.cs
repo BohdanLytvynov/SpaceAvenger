@@ -17,6 +17,7 @@ namespace WPFGameEngine.WPF.GE.Serialization.GameObjects
                 var options = new JsonSerializerOptions()
                 { WriteIndented = true };
                 options.Converters.Add(new JsonVector2Converter());
+                options.Converters.Add(new JsonSizeConverter());
 
                 string str = JsonSerializer.Serialize(dto, options);
 

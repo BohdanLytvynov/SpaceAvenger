@@ -86,8 +86,9 @@
                                 <Rectangle Style="{StaticResource BorderRectStyle}"/>
 
                                 <StackPanel Orientation="Horizontal">
-                                    <CheckBox Content="ShowGizmo" Margin="10" IsChecked="{Binding ShowGizmos, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                                    <CheckBox Content="ShowBorders" Margin="10" IsChecked="{Binding ShowBorders, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                                    <CheckBox Content="Show Gizmo" Margin="10" IsChecked="{Binding ShowGizmos, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                                    <CheckBox Content="Show Borders" Margin="10" IsChecked="{Binding ShowBorders, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                                    <CheckBox Content="Show Colliders" Margin="10"/>
                                 </StackPanel>
 
                                 <Rectangle Style="{StaticResource BorderRectStyle}"/>

@@ -7,6 +7,7 @@ using System.Windows;
 using WPFGameEngine.Attributes.Editor;
 using WPFGameEngine.Enums;
 using WPFGameEngine.Extensions;
+using WPFGameEngine.Factories.Base;
 using WPFGameEngine.FactoryWrapper.Base;
 using WPFGameEngine.Services.Interfaces;
 using WPFGameEngine.WPF.GE.Component.Collider;
@@ -19,6 +20,7 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Collider
     internal class ColliderComponentViewModel : ComponentViewModel
     {
         #region Fields
+        private bool m_init;
         private IFactoryWrapper m_factoryWrapper;
         private IAssemblyLoader m_assemblyLoader;
         private ObservableCollection<OptionsViewModel> m_geometryTypes;
@@ -82,7 +84,7 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Collider
                 if (string.IsNullOrEmpty(shape))
                     return;
 
-                DisplayProperGeometryConfig(shape);
+                UpdateGeometry(shape);
             }
         }
 
@@ -119,6 +121,7 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Collider
             }
 
             LoadCurrentGameObjProperties();
+            m_init = true;
         }
 
         #endregion
@@ -128,21 +131,26 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Collider
         protected override void LoadCurrentGameObjProperties()
         {
             if (GameObject == null && !GameObject.IsCollidable) return;
-
             var collider = GameObject.Collider;
-            var shape = collider.CollisionShape?.GetType().Name ?? string.Empty;
-            if (!string.IsNullOrEmpty(shape))
-            {
-                DisplayProperGeometryConfig(shape);
-            }
+            var shape = GameObject.Collider.CollisionShape;
+            if (shape == null) return;
+            string shapeType = shape.GetType().Name;
 
-            var transfrom = GameObject.Transform;
-            m_XMax = transfrom.ActualSize.Width;
-            m_YMax = transfrom.ActualSize.Height;
+            var transform = GameObject.Transform;
+            XMax = transform.ActualSize.Width;
+            YMax = transform.ActualSize.Width;
+
+            XRel = collider.Position.X * transform.ActualSize.Width;
+            YRel = collider.Position.Y * transform.ActualSize.Height;
+
+            LoadCurrentGeometry(shapeType, shape);
+            SelectedGeometry = new OptionsViewModel(shapeType, shapeType);
         }
 
-        private void DisplayProperGeometryConfig(string factoryName)
+        private void UpdateGeometry(string factoryName)
         {
+            if (!m_init) return;
+
             GeomConfig.Clear();
             GeometryConfigViewModelBase geomConfig = null;
             IShape2D shape = GameObject.Collider.CollisionShape;
@@ -164,6 +172,27 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Collider
                     throw new NotImplementedException();
             }
             GameObject.Collider.CollisionShape = shape;
+            GeomConfig.Add(geomConfig);
+        }
+
+        public void LoadCurrentGeometry(string factoryName, IShape2D shape)
+        {
+            GeomConfig.Clear();
+            GeometryConfigViewModelBase geomConfig = null;
+            switch (factoryName)
+            {
+                case nameof(Circle):
+                    geomConfig = new CircleConfigViewModel(shape);
+                    break;
+                case nameof(Rectangle):
+                    geomConfig = new RectangleConfigViewModel(shape);
+                    break;
+                case nameof(Triangle):
+                    geomConfig = new TriangleConfigViewModel(shape);
+                    break;
+                default:
+                    throw new NotImplementedException();
+            }
             GeomConfig.Add(geomConfig);
         }
 
