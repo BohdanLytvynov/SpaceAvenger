@@ -66,13 +66,23 @@
     <!--#endregion-->
 
     <!--#region Explosions -->
-    <ImageSource x:Key="Explosion1">pack://siteoforigin:,,,/Resources/Content/Explosions/Explosion1.png
+    <ImageSource x:Key="Explosion1">pack://siteoforigin:,,,/Resources/Content/Explosions/Explosion1_Atlas.png
     </ImageSource>
-    <ImageSource x:Key="Explosion2">pack://siteoforigin:,,,/Resources/Content/Explosions/Explosion2.png
+    <ImageSource x:Key="Explosion2">pack://siteoforigin:,,,/Resources/Content/Explosions/Explosion2_Atlas.png
     </ImageSource>
-    <ImageSource x:Key="Explosion3">pack://siteoforigin:,,,/Resources/Content/Explosions/Explosion3.png
+    <ImageSource x:Key="Explosion3">pack://siteoforigin:,,,/Resources/Content/Explosions/Explosion3_Atlas.png
     </ImageSource>
-    <ImageSource x:Key="Explosion4">pack://siteoforigin:,,,/Resources/Content/Explosions/Explosion4.png
+    <ImageSource x:Key="Explosion4">pack://siteoforigin:,,,/Resources/Content/Explosions/Explosion4_Atlas.png
+    </ImageSource>
+    <!--#endregion-->
+
+    <!--#region Asteriods -->
+    <ImageSource x:Key="l_a1_Atlas">pack://siteoforigin:,,,/Resources/Content/Asteroids/l_a1_Atlas.png
+    </ImageSource>
+    <!--#endregion-->
+
+    <!--#region Neutrals -->
+    <ImageSource x:Key="AstroBase">pack://siteoforigin:,,,/Resources/Content/SpaceShips/Neutrals/AstroBase.png
     </ImageSource>
     <!--#endregion-->
 

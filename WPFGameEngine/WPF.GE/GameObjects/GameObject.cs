@@ -752,7 +752,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects
                 (float)Texture.Height * transform.Scale.Height);
         }
 
-        public virtual void ProcessCollision(List<IGameObject> gameObjects)
+        public virtual void ProcessCollision(List<IGameObject>? gameObjects)
         {
         }
 

@@ -33,14 +33,12 @@
     <None Remove="Resources\Content\Chars\Commanders\CommandersF.png" />
     <None Remove="Resources\Content\Chars\Commanders\CommandersM.png" />
     <None Remove="Resources\Content\Empty.png" />
-    <None Remove="Resources\Content\Explosions\Explosion1.png" />
-    <None Remove="Resources\Content\Explosions\Explosion2.png" />
-    <None Remove="Resources\Content\Explosions\Explosion3.png" />
-    <None Remove="Resources\Content\Explosions\Explosion4.png" />
     <None Remove="Resources\Content\Jets\F10\F10_Jet_Normal_Atlas.png" />
     <None Remove="Resources\Content\Projectiles\F10Prj.png" />
     <None Remove="Resources\Content\SpaceShips\F10\Destroyer\destroyer256.png" />
+    <None Remove="Resources\Content\SpaceShips\Neutrals\AstroBase.png" />
     <None Remove="Resources\Content\Weapons\F10\RailGun.png" />
+    <None Remove="Resources\GameObjects\AstroBase.json" />
     <None Remove="Resources\GameObjects\Explosion1.json" />
     <None Remove="Resources\GameObjects\F10Destroyer.json" />
     <None Remove="Resources\GameObjects\F10RailGunProjectile.json" />
@@ -69,6 +67,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\Content\Animations\Test\TestAnim2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Content\Asteroids\l_a1_Atlas.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\Content\Backgrounds\ChooseProfilePage\SAChooseProfile.jpg">
@@ -116,16 +117,16 @@
     <Content Include="Resources\Content\Empty.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Content\Explosions\Explosion1.png">
+    <Content Include="Resources\Content\Explosions\Explosion1_Atlas.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Content\Explosions\Explosion2.png">
+    <Content Include="Resources\Content\Explosions\Explosion2_Atlas.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Content\Explosions\Explosion3.png">
+    <Content Include="Resources\Content\Explosions\Explosion3_Atlas.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Content\Explosions\Explosion4.png">
+    <Content Include="Resources\Content\Explosions\Explosion4_Atlas.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\Content\Jets\F10\F10_Jet_Normal_Atlas.png">
@@ -137,7 +138,13 @@
     <Content Include="Resources\Content\SpaceShips\F10\Destroyer\destroyer256.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resources\Content\SpaceShips\Neutrals\AstroBase.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\Content\Weapons\F10\RailGun.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\GameObjects\AstroBase.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\GameObjects\Explosion1.json">

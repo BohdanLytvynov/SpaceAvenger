@@ -10,7 +10,7 @@ namespace SpaceAvenger.Game.Core.Base
         private Vector2 m_dir;
         public float ProjectyleSpeed { get; protected set; }
         public bool Fired { get; protected set; }
-        
+        public float Damage { get; protected set; }
 
         protected ProjectileBase(string name) : base(name)
         {

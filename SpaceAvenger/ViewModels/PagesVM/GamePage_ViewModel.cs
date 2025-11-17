@@ -17,6 +17,7 @@ using Microsoft.Extensions.DependencyInjection;
 using SpaceAvenger.Services.WpfGameViewHost;
 using WPFGameEngine.ObjectPools.Base;
 using SpaceAvenger.Game.Core.Factions.F10.Destroyer;
+using WPFGameEngine.CollisionDetection.CollisionManager.Base;
 
 namespace SpaceAvenger.ViewModels.PagesVM
 {
@@ -37,6 +38,7 @@ namespace SpaceAvenger.ViewModels.PagesVM
         private IObjectPoolManager m_objPoolManager;
         private IServiceProvider m_serviceProvider;
         private IControllerComponent m_controllerComponent;
+        private ICollisionManager m_collisionManager;
         #endregion
 
         #region Properties
@@ -59,15 +61,18 @@ namespace SpaceAvenger.ViewModels.PagesVM
             IGameTimer gameTimer,
             IObjectBuilder objectBuilder,
             IObjectPoolManager objectPoolManager,
-            IServiceProvider serviceProvider) : this()
+            IServiceProvider serviceProvider,
+            ICollisionManager collisionManager) : this()
         {
+            m_collisionManager = collisionManager ?? throw new ArgumentNullException(nameof(collisionManager));
             m_objPoolManager = objectPoolManager ?? throw new ArgumentNullException(nameof(objectPoolManager));
             m_serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
             m_objectBuilder = objectBuilder ?? throw new ArgumentNullException(nameof(objectBuilder));
             m_MessageBus = messageBus ?? throw new ArgumentNullException(nameof(messageBus));
             m_PageManager = pageManager ?? throw new ArgumentNullException(nameof(pageManager));
             m_gameTimer = gameTimer ?? throw new ArgumentNullException(nameof(gameTimer));
-            m_GameView = new WpfMapableObjectViewHost(m_gameTimer, m_objectBuilder, m_objPoolManager);
+            m_GameView = new WpfMapableObjectViewHost(m_gameTimer, 
+                m_objectBuilder, m_objPoolManager, m_collisionManager);
             GameView.OnUpdate += Update;
             Subscriptions.Add(m_MessageBus.RegisterHandler<GameMessage, string>(OnMessageRecieved));
         }

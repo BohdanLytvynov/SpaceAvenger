@@ -32,6 +32,7 @@ using SpaceAvenger.Services.WPFInputControllers;
 using WPFGameEngine.WPF.GE.Component.Controllers;
 using WPFGameEngine.ObjectPools.Base;
 using WPFGameEngine.ObjectPools.PoolManagers;
+using WPFGameEngine.CollisionDetection.CollisionManager.Base;
 
 namespace SpaceAvenger
 {
@@ -49,7 +50,7 @@ namespace SpaceAvenger
         private static IServiceCollection InitializeServices()
         {
             var services = new ServiceCollection();
-
+            services.AddSingleton<ICollisionManager, CollisionManager>();
             services.AddSingleton<IObjectPoolManager, ObjectPoolManager>();
 
             services.AddSingleton<IControllerComponent>(c =>

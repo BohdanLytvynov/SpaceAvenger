@@ -132,17 +132,18 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Collider
         {
             if (GameObject == null && !GameObject.IsCollidable) return;
             var collider = GameObject.Collider;
-            var shape = GameObject.Collider.CollisionShape;
-            if (shape == null) return;
-            string shapeType = shape.GetType().Name;
 
             var transform = GameObject.Transform;
             XMax = transform.ActualSize.Width;
-            YMax = transform.ActualSize.Width;
+            YMax = transform.ActualSize.Height;
 
-            XRel = collider.Position.X * transform.ActualSize.Width;
-            YRel = collider.Position.Y * transform.ActualSize.Height;
+            m_XRel = collider.Position.X * transform.ActualSize.Width;
+            m_YRel = collider.Position.Y * transform.ActualSize.Height;
 
+            var shape = GameObject.Collider.CollisionShape;
+
+            if (shape == null) return;
+            string shapeType = shape.GetType().Name;
             LoadCurrentGeometry(shapeType, shape);
             SelectedGeometry = new OptionsViewModel(shapeType, shapeType);
         }

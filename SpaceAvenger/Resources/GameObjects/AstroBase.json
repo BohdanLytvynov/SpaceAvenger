@@ -1,15 +1,15 @@
 {
   "ZIndex": 0,
   "Enabled": true,
-  "ObjectName": "F10RailGunProjectile",
+  "ObjectName": "AstroBase",
   "UniqueName": "Base",
   "Children": [],
   "Components": [
     {
       "RecreateType": "TransformComponent",
       "Position": {
-        "X": 127.82337,
-        "Y": 198.12622
+        "X": 0,
+        "Y": 0
       },
       "CenterPosition": {
         "X": 0.5,
@@ -23,19 +23,19 @@
     },
     {
       "RecreateType": "Sprite",
-      "ResourceKey": "F10_RailGunPrj"
+      "ResourceKey": "AstroBase"
     },
     {
       "RecreateType": "ColliderComponent",
       "Position": {
-        "X": 0.46975088,
-        "Y": 0.062313892
+        "X": 0.55762947,
+        "Y": 0.50010896
       },
       "ColliderShape": {
         "RecreateType": "Rectangle",
         "Size": {
-          "Width": 19.265854,
-          "Height": 32.109756
+          "Width": 253.66708,
+          "Height": 208.71342
         }
       }
     }

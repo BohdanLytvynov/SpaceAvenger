@@ -10,8 +10,10 @@ namespace SpaceAvenger.Game.Core.Base
     public abstract class SpaceShipBase : MapableObject
     {
         protected WPFInputController m_controller;
-        
-        #region Fields
+
+        #region Properties
+        public float HP { get; protected set; }
+        public float Shield { get; protected set; }
         public float HorSpeed { get; protected set; }
         public float VertSpeed { get; protected set; }
         #endregion

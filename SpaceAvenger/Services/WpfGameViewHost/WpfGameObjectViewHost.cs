@@ -16,16 +16,16 @@ namespace SpaceAvenger.Services.WpfGameViewHost
     {
         #region Delegates
         public Action OnUpdate;
+
+        protected Func<int, List<IGameObject>> GetCollidedObjects;
         #endregion
          
         #region Fields
         private readonly VisualCollection m_visualCollection;
         private DrawingVisual m_drawingSurface;
         private List<IGameObject> m_world;
-
         private GameState m_gameState;
         private IGameTimer m_gameTimer;
-        public ICollisionManager CollisionManager { get; protected set; }
         #endregion
 
         #region Properties
@@ -36,10 +36,8 @@ namespace SpaceAvenger.Services.WpfGameViewHost
 
         #region Ctor
         public WpfGameObjectViewHost(
-            IGameTimer gameTimer, 
-            ICollisionManager collisionManager)
+            IGameTimer gameTimer)
         {
-            CollisionManager = collisionManager ?? throw new ArgumentNullException(nameof(collisionManager));
             m_gameTimer = gameTimer ?? throw new ArgumentNullException(nameof(gameTimer));
             m_world = new List<IGameObject>();
             m_drawingSurface = new DrawingVisual();
@@ -76,7 +74,7 @@ namespace SpaceAvenger.Services.WpfGameViewHost
                         {
                             int id = World[i].Id;
                             World[i].Update(this, m_gameTimer);
-                            World[i].ProcessCollision(CollisionManager.GetObjects(id));
+                            World[i].ProcessCollision(GetCollidedObjects?.Invoke(id));
                             World[i].Render(dc, Matrix3x3.Identity);
                         }
                     }
@@ -87,19 +85,16 @@ namespace SpaceAvenger.Services.WpfGameViewHost
             }
         }
 
-        public void AddObject(IGameObject gameObject)
+        public virtual void AddObject(IGameObject gameObject)
         {
             if (gameObject == null)
                 throw new ArgumentNullException(nameof(gameObject));
 
             gameObject.StartUp();
             m_world.Add(gameObject);
-
-            if (gameObject.IsCollidable)
-                CollisionManager.AddObject(gameObject);
         }
 
-        public void AddObjects(IEnumerable<IGameObject> gameObjects)
+        public virtual void AddObjects(IEnumerable<IGameObject> gameObjects)
         {
             if (gameObjects == null)
                 return;
@@ -108,53 +103,41 @@ namespace SpaceAvenger.Services.WpfGameViewHost
                 return;
 
             m_world.AddRange(gameObjects);
-
-            foreach (IGameObject gameObject in gameObjects)
-            {
-                if (gameObject.IsCollidable)
-                    CollisionManager.AddObject(gameObject);
-            }
         }
 
-        public void RemoveObject(IGameObject gameObject)
+        public virtual void RemoveObject(IGameObject gameObject)
         {
             if(gameObject == null)
                 return;
 
             GameObject.RemoveObject(p => p.ObjectName.Equals(gameObject.ObjectName), World, true);
-            CollisionManager.RemoveObject(gameObject);
         }
 
-        public void StartGame()
+        public virtual void StartGame()
         { 
             m_gameTimer.Start();
-            CollisionManager.Start();
             m_gameState = GameState.Running;
         }
 
-        public void Resume()
+        public virtual void Resume()
         {
-            CollisionManager.Resume();
             m_gameState = GameState.Running;
         }
 
-        public void Pause()
-        { 
-            CollisionManager.Pause();
+        public virtual void Pause()
+        {
             m_gameState = GameState.Paused;
         }
 
-        public void Stop()
-        { 
-            CollisionManager.Stop();
+        public virtual void Stop()
+        {
             m_gameState = GameState.Stopped;
             m_gameTimer.Stop();
         }
 
-        public void ClearWorld()
-        { 
+        public virtual void ClearWorld()
+        {
             m_world.Clear();
-            CollisionManager.Clear();
         }
 
         #endregion

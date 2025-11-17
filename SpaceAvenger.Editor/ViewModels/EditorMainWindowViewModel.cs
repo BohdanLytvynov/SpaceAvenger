@@ -594,9 +594,9 @@ namespace SpaceAvenger.Editor.ViewModels
 
         private void OnRemovePrefabButtonPressedExecute(object p)
         {
-            Prefabs.Remove(SelectedPrefab);
             GameObject.RemoveObject(obj => obj.ObjectName.Equals(SelectedPrefab.PrefabName), 
                 GameView.World, true);
+            Prefabs.Remove(SelectedPrefab);
             SelectedPrefab = new PrefabViewModel();
         }
         #endregion

@@ -6,7 +6,6 @@ namespace WPFGameEngine.GameViewControl
 {
     public interface IGameObjectViewHost
     {
-        ICollisionManager CollisionManager { get; }
         GameState GameState { get; }
         void AddObject(IGameObject gameObject);
         void AddObjects(IEnumerable<IGameObject> gameObjects);

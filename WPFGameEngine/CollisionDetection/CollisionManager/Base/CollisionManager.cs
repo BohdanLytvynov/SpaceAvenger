@@ -119,7 +119,17 @@ namespace WPFGameEngine.CollisionDetection.CollisionManager.Base
             while (!token.IsCancellationRequested)
             {
                 if (!m_running)
+                {
+                    try 
+                    { 
+                        await Task.Delay(100, token);
+                    }
+                    catch (TaskCanceledException) 
+                    { 
+                        break;
+                    }
                     continue;
+                }
 
                 List<IGameObject> currentObjects;
                 lock (m_lock)
