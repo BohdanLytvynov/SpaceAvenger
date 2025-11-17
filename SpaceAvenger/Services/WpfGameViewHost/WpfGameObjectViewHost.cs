@@ -74,7 +74,9 @@ namespace SpaceAvenger.Services.WpfGameViewHost
                     {
                         if(World[i] != null)
                         {
+                            int id = World[i].Id;
                             World[i].Update(this, m_gameTimer);
+                            World[i].ProcessCollision(CollisionManager.GetObjects(id));
                             World[i].Render(dc, Matrix3x3.Identity);
                         }
                     }
@@ -92,6 +94,9 @@ namespace SpaceAvenger.Services.WpfGameViewHost
 
             gameObject.StartUp();
             m_world.Add(gameObject);
+
+            if (gameObject.IsCollidable)
+                CollisionManager.AddObject(gameObject);
         }
 
         public void AddObjects(IEnumerable<IGameObject> gameObjects)
@@ -103,6 +108,12 @@ namespace SpaceAvenger.Services.WpfGameViewHost
                 return;
 
             m_world.AddRange(gameObjects);
+
+            foreach (IGameObject gameObject in gameObjects)
+            {
+                if (gameObject.IsCollidable)
+                    CollisionManager.AddObject(gameObject);
+            }
         }
 
         public void RemoveObject(IGameObject gameObject)
@@ -111,26 +122,31 @@ namespace SpaceAvenger.Services.WpfGameViewHost
                 return;
 
             GameObject.RemoveObject(p => p.ObjectName.Equals(gameObject.ObjectName), World, true);
+            CollisionManager.RemoveObject(gameObject);
         }
 
         public void StartGame()
         { 
             m_gameTimer.Start();
+            CollisionManager.Start();
             m_gameState = GameState.Running;
         }
 
         public void Resume()
         {
+            CollisionManager.Resume();
             m_gameState = GameState.Running;
         }
 
         public void Pause()
         { 
+            CollisionManager.Pause();
             m_gameState = GameState.Paused;
         }
 
         public void Stop()
         { 
+            CollisionManager.Stop();
             m_gameState = GameState.Stopped;
             m_gameTimer.Stop();
         }
@@ -138,6 +154,7 @@ namespace SpaceAvenger.Services.WpfGameViewHost
         public void ClearWorld()
         { 
             m_world.Clear();
+            CollisionManager.Clear();
         }
 
         #endregion

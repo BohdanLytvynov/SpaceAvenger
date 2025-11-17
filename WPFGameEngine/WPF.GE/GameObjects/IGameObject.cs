@@ -51,6 +51,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         void StartUp();
         void Render(DrawingContext dc, Matrix3x3 parent);
         void Update(IGameObjectViewHost gameViewHost, IGameTimer gameTimer);
+        void ProcessCollision(List<IGameObject> gameObjects);
         #endregion
 
         #region Components
