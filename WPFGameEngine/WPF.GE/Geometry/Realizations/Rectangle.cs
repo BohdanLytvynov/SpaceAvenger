@@ -23,6 +23,7 @@ namespace WPFGameEngine.WPF.GE.Geometry.Realizations
         public Vector2 LeftLowerCorner { get; private set; }// Left Lower Corner
         [JsonIgnore]
         public Vector2 RightLowerCorner { get; private set; }// Right Lower Corner
+
         public Size Size { get; set; }
 
         public Rectangle(Vector2 leftUpperCorner, Size scale, Basis2D basis)
@@ -74,7 +75,7 @@ namespace WPFGameEngine.WPF.GE.Geometry.Realizations
                 5, 5, GESettings.ColliderBorderPen);
         }
 
-        protected override void CalculatePoints()
+        public override void CalculatePoints()
         {
             //We have to use Center Position
             var Xl = Basis.X * (Size.Width / 2 * Scale.Width);
@@ -90,5 +91,8 @@ namespace WPFGameEngine.WPF.GE.Geometry.Realizations
         { 
             Basis.X, -Basis.X, Basis.Y, -Basis.Y
         };
+
+        public override List<Vector2> GetVertexes() => 
+            new List<Vector2>() { LeftUpperCorner, RightUpperCorner, LeftLowerCorner, RightLowerCorner };
     }
 }

@@ -29,6 +29,8 @@ namespace WPFGameEngine.WPF.GE.Geometry.Base
             
         }
 
+        public abstract List<Vector2> GetVertexes();
+
         public bool IntersectsWith(IShape2D other)
         { 
             return CollisionHelper.Intersects(this, other);
@@ -36,7 +38,6 @@ namespace WPFGameEngine.WPF.GE.Geometry.Base
         //To do -> need to be moved to Wpf
         public virtual void Render(DrawingContext drawingContext)
         {
-            CalculatePoints();
             var normals = GetNormals();
             foreach (var normal in normals)
             {
@@ -53,7 +54,7 @@ namespace WPFGameEngine.WPF.GE.Geometry.Base
         }
         public abstract Rectangle GetBounds();
         public abstract List<Vector2> GetNormals();
-        protected abstract void CalculatePoints();
+        public abstract void CalculatePoints();
         protected void DrawLine(DrawingContext drawingContext, Vector2 start, Vector2 end,
             Brush PointFillBrush, Pen PointBorderPen, double pointRadx, double pointRady, Pen linePen)
         {

@@ -4,7 +4,6 @@ using WPFGameEngine.Attributes.Editor;
 using WPFGameEngine.Attributes.Factories;
 using WPFGameEngine.Enums;
 using WPFGameEngine.WPF.GE.Geometry.Base;
-using WPFGameEngine.WPF.GE.Math.Basis;
 using WPFGameEngine.WPF.GE.Math.Sizes;
 using WPFGameEngine.WPF.GE.Settings;
 
@@ -25,6 +24,7 @@ namespace WPFGameEngine.WPF.GE.Geometry.Realizations
                 new Size(Radius * 2, Radius * 2),
                 Basis);
         }
+
         public Circle()
         {
             
@@ -40,9 +40,11 @@ namespace WPFGameEngine.WPF.GE.Geometry.Realizations
                     Radius * Scale.Width, Radius * Scale.Height);
         }
 
-        protected override void CalculatePoints()
+        public override void CalculatePoints()
         {
             //NoPoints to Calculate
         }
+
+        public override List<Vector2> GetVertexes() => new List<Vector2>() {};
     }
 }

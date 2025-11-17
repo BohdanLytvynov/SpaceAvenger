@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
+using WPFGameEngine.CollisionDetection.CollisionManager.Base;
 using WPFGameEngine.Enums;
 using WPFGameEngine.GameViewControl;
 using WPFGameEngine.Timers.Base;
@@ -21,8 +22,10 @@ namespace SpaceAvenger.Services.WpfGameViewHost
         private readonly VisualCollection m_visualCollection;
         private DrawingVisual m_drawingSurface;
         private List<IGameObject> m_world;
+
         private GameState m_gameState;
         private IGameTimer m_gameTimer;
+        public ICollisionManager CollisionManager { get; protected set; }
         #endregion
 
         #region Properties
@@ -33,8 +36,10 @@ namespace SpaceAvenger.Services.WpfGameViewHost
 
         #region Ctor
         public WpfGameObjectViewHost(
-            IGameTimer gameTimer)
-        {            
+            IGameTimer gameTimer, 
+            ICollisionManager collisionManager)
+        {
+            CollisionManager = collisionManager ?? throw new ArgumentNullException(nameof(collisionManager));
             m_gameTimer = gameTimer ?? throw new ArgumentNullException(nameof(gameTimer));
             m_world = new List<IGameObject>();
             m_drawingSurface = new DrawingVisual();

@@ -44,6 +44,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         public bool IsChild { get; }
         public List<IGameObject> Children { get; }
         public IGameObject Parent { get; set; }
+        public int Id { get; }
         #endregion
 
         #region Game Loop

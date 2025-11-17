@@ -109,6 +109,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         public string UniqueName { get; set; }
         public List<IGameObject> Children { get => m_children; }
         public IGameObject Parent { get; set; }
+        public int Id { get => m_id; }
 
         public bool IsChild
         {
@@ -179,6 +180,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects
                 Collider.CollisionShape.Basis = Collider.Basis;
                 Collider.CollisionShape.CenterPosition = leftUpperCorner +
                     Collider.ActualCenterPosition;
+                Collider.CollisionShape.CalculatePoints();
             }
 
             if (Animator != null)

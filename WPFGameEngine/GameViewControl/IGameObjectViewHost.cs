@@ -1,10 +1,12 @@
-﻿using WPFGameEngine.Enums;
+﻿using WPFGameEngine.CollisionDetection.CollisionManager.Base;
+using WPFGameEngine.Enums;
 using WPFGameEngine.WPF.GE.GameObjects;
 
 namespace WPFGameEngine.GameViewControl
 {
     public interface IGameObjectViewHost
     {
+        ICollisionManager CollisionManager { get; }
         GameState GameState { get; }
         void AddObject(IGameObject gameObject);
         void AddObjects(IEnumerable<IGameObject> gameObjects);

@@ -63,7 +63,7 @@ namespace SpaceAvenger.Editor
                 var exporter = c.GetRequiredService<IGameObjectExporter>();
                 var importer = c.GetRequiredService<IGameObjectImporter>();
                 return new EditorMainWindowViewModel(
-                    factoryWrapper, 
+                    factoryWrapper,
                     gameTimer, 
                     assemblyLoader, 
                     exporter,

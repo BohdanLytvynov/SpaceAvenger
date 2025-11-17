@@ -26,5 +26,7 @@ namespace WPFGameEngine.WPF.GE.Geometry.Base
         bool IntersectsWith(IShape2D other);
         Rectangle GetBounds();
         List<Vector2> GetNormals();
+        void CalculatePoints();
+        List<Vector2> GetVertexes();
     }
 }

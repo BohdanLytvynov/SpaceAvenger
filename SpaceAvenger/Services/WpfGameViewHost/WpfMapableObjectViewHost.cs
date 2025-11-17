@@ -1,4 +1,5 @@
 ﻿using System;
+using WPFGameEngine.CollisionDetection.CollisionManager.Base;
 using WPFGameEngine.GameViewControl;
 using WPFGameEngine.ObjectBuilders.Base;
 using WPFGameEngine.ObjectPools.Base;
@@ -9,8 +10,9 @@ namespace SpaceAvenger.Services.WpfGameViewHost
 {
     internal class WpfMapableObjectViewHost : WpfGameObjectViewHost, IMapableObjectViewHost
     {
-        public WpfMapableObjectViewHost(IGameTimer gameTimer, IObjectBuilder objectBuilder, IObjectPoolManager objectPoolManager) :
-            base(gameTimer)
+        public WpfMapableObjectViewHost(IGameTimer gameTimer, IObjectBuilder objectBuilder, IObjectPoolManager objectPoolManager,
+            ICollisionManager collisionManager) :
+            base(gameTimer, collisionManager)
         {
             ObjectBuilder = objectBuilder ?? throw new ArgumentNullException(nameof(objectBuilder));
             ObjectPoolManager = objectPoolManager ?? throw new ArgumentNullException(nameof(objectPoolManager));

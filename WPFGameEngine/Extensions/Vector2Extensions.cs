@@ -30,5 +30,10 @@ namespace WPFGameEngine.Extensions
             var v = Vector2.Dot(l, r) / (l.Length() * r.Length());
             return Math.Acos(Math.Clamp(v, -1, 1)) * 180/Math.PI;
         }
+
+        public static Vector2 GetPerpendicular(this Vector2 vector)
+        {
+            return new Vector2(-vector.Y, vector.X);
+        }
     }
 }

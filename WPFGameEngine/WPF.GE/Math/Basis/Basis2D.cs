@@ -1,7 +1,6 @@
 ﻿
 
 using System.Numerics;
-using System.Windows;
 
 namespace WPFGameEngine.WPF.GE.Math.Basis
 {
@@ -16,5 +15,8 @@ namespace WPFGameEngine.WPF.GE.Math.Basis
             X = x;
             Y = y;
         }
+
+        public bool IsIdentity() =>
+            X.X == 1 && X.Y == 0 && Y.X == 0 && Y.Y == 1;
     }
 }
