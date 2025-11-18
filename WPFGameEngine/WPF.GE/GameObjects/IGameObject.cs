@@ -1,6 +1,7 @@
 ﻿using System.Numerics;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using WPFGameEngine.CollisionDetection.CollisionManager.Base;
 using WPFGameEngine.Factories.Base;
 using WPFGameEngine.GameViewControl;
 using WPFGameEngine.Timers.Base;
@@ -48,10 +49,10 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         #endregion
 
         #region Game Loop
-        void StartUp();
+        void StartUp(IGameObjectViewHost viewHost, IGameTimer gameTimer);
         void Render(DrawingContext dc, Matrix3x3 parent);
-        void Update(IGameObjectViewHost gameViewHost, IGameTimer gameTimer);
-        void ProcessCollision(List<IGameObject>? gameObjects);
+        void Update();
+        void ProcessCollision(CollisionInfo? collisionInfo);
         #endregion
 
         #region Components
@@ -97,8 +98,9 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         #endregion
 
         #region Enable Disable
-        void Enable();
-        void Disable();
+        void Enable(bool recursive = false);
+        void Disable(bool recursive = false);
+        bool IsEnabledAll(IGameObject gameObject);
         #endregion
 
     }

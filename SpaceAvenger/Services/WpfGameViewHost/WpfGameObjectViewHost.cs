@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
-using WPFGameEngine.CollisionDetection.CollisionManager.Base;
 using WPFGameEngine.Enums;
 using WPFGameEngine.GameViewControl;
 using WPFGameEngine.Timers.Base;
@@ -16,21 +15,18 @@ namespace SpaceAvenger.Services.WpfGameViewHost
     {
         #region Delegates
         public Action OnUpdate;
-
-        protected Func<int, List<IGameObject>> GetCollidedObjects;
         #endregion
          
         #region Fields
-        private readonly VisualCollection m_visualCollection;
-        private DrawingVisual m_drawingSurface;
-        private List<IGameObject> m_world;
+        protected readonly VisualCollection m_visualCollection;
+        protected readonly DrawingVisual m_drawingSurface;
         private GameState m_gameState;
-        private IGameTimer m_gameTimer;
+        protected readonly IGameTimer m_gameTimer;
         #endregion
 
         #region Properties
-        public List<IGameObject> World { get => m_world; }
-        public GameState GameState { get; }
+        public List<IGameObject> World { get; protected set; }
+        public GameState GameState { get; protected set; }
         protected override int VisualChildrenCount => m_visualCollection.Count;
         #endregion
 
@@ -39,7 +35,7 @@ namespace SpaceAvenger.Services.WpfGameViewHost
             IGameTimer gameTimer)
         {
             m_gameTimer = gameTimer ?? throw new ArgumentNullException(nameof(gameTimer));
-            m_world = new List<IGameObject>();
+            World = new List<IGameObject>();
             m_drawingSurface = new DrawingVisual();
             m_visualCollection = new VisualCollection(this);
             CompositionTarget.Rendering += CompositionTarget_Rendering;
@@ -58,13 +54,13 @@ namespace SpaceAvenger.Services.WpfGameViewHost
             return m_visualCollection[index];
         }
 
-        private void CompositionTarget_Rendering(object? sender, EventArgs e)
+        protected virtual void CompositionTarget_Rendering(object? sender, EventArgs e)
         {
             m_gameTimer.UpdateTime();
             if (m_gameState == GameState.Running)
             {
                 m_visualCollection.Clear();
-                m_world.Sort(new GameObject.ZIndexGameObjectComparer());
+                World.Sort(new GameObject.ZIndexGameObjectComparer());
                 using (DrawingContext dc = m_drawingSurface.RenderOpen())
                 {
                     int count = World.Count;
@@ -73,8 +69,7 @@ namespace SpaceAvenger.Services.WpfGameViewHost
                         if(World[i] != null)
                         {
                             int id = World[i].Id;
-                            World[i].Update(this, m_gameTimer);
-                            World[i].ProcessCollision(GetCollidedObjects?.Invoke(id));
+                            World[i].Update();
                             World[i].Render(dc, Matrix3x3.Identity);
                         }
                     }
@@ -85,16 +80,16 @@ namespace SpaceAvenger.Services.WpfGameViewHost
             }
         }
 
-        public virtual void AddObject(IGameObject gameObject)
+        public void AddObject(IGameObject gameObject)
         {
             if (gameObject == null)
                 throw new ArgumentNullException(nameof(gameObject));
 
-            gameObject.StartUp();
-            m_world.Add(gameObject);
+            gameObject.StartUp(this, m_gameTimer);
+            World.Add(gameObject);
         }
 
-        public virtual void AddObjects(IEnumerable<IGameObject> gameObjects)
+        public void AddObjects(IEnumerable<IGameObject> gameObjects)
         {
             if (gameObjects == null)
                 return;
@@ -102,10 +97,14 @@ namespace SpaceAvenger.Services.WpfGameViewHost
             if (gameObjects.Count() == 0)
                 return;
 
-            m_world.AddRange(gameObjects);
+            foreach (var item in gameObjects)
+            {
+                item.StartUp(this, m_gameTimer);
+                World.Add(item);
+            }
         }
 
-        public virtual void RemoveObject(IGameObject gameObject)
+        public void RemoveObject(IGameObject gameObject)
         {
             if(gameObject == null)
                 return;
@@ -137,7 +136,7 @@ namespace SpaceAvenger.Services.WpfGameViewHost
 
         public virtual void ClearWorld()
         {
-            m_world.Clear();
+            World.Clear();
         }
 
         #endregion

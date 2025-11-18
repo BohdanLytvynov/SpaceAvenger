@@ -1,8 +1,6 @@
-﻿using SpaceAvenger.Services.WPFInputControllers;
+﻿using SpaceAvenger.Game.Core.Enums;
+using SpaceAvenger.Services.WPFInputControllers;
 using System.Windows.Input;
-using WPFGameEngine.Extensions;
-using WPFGameEngine.GameViewControl;
-using WPFGameEngine.Timers.Base;
 using WPFGameEngine.WPF.GE.GameObjects;
 
 namespace SpaceAvenger.Game.Core.Base
@@ -12,21 +10,23 @@ namespace SpaceAvenger.Game.Core.Base
         protected WPFInputController m_controller;
 
         #region Properties
-        public float HP { get; protected set; }
-        public float Shield { get; protected set; }
+        public float HP { get; set; }
+        public float Shield { get; set; }
         public float HorSpeed { get; protected set; }
         public float VertSpeed { get; protected set; }
+        public Faction Faction { get; private set; }
         #endregion
 
-        protected SpaceShipBase(string name) : base(name)
+        protected SpaceShipBase(Faction factionName, string name) : base(name)
         {
+            Faction = factionName;
         }
    
-        public override void Update(IGameObjectViewHost world, IGameTimer gameTimer)
+        public override void Update()
         {
             if (m_controller != null)
             {
-                var delta = gameTimer.deltaTime;
+                var delta = GameTimer.deltaTime;
                 var basis = Transform.GetLocalTransformMatrix().GetBasis();
                 var currPosition = Transform.Position;
                 var curr = Transform.Position;
@@ -51,7 +51,7 @@ namespace SpaceAvenger.Game.Core.Base
                 }
             }
 
-            base.Update(world, gameTimer);
+            base.Update();
         }
     }
 }

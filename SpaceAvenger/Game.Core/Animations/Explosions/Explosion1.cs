@@ -1,20 +1,28 @@
-﻿using WPFGameEngine.WPF.GE.Component.Animations;
-using WPFGameEngine.WPF.GE.GameObjects;
+﻿using SpaceAvenger.Game.Core.Base;
+using System.Numerics;
+using WPFGameEngine.GameViewControl;
+using WPFGameEngine.Timers.Base;
 
 namespace SpaceAvenger.Game.Core.Animations.Explosions
 {
-    internal class Explosion1 : MapableObject
+    internal class Explosion1 : ExplosionBase
     {
-        public IAnimation Animation { get; protected set; }
-
         public Explosion1() : base(nameof(Explosion1))
         {
+
         }
 
-        public override void StartUp()
+        public override bool IsInWindowBounds(Vector2 position)
         {
-            Animation = GetComponent<Animation>();
-            base.StartUp();
+            return true;
+        }
+
+        public override void StartUp(IGameObjectViewHost viewHost, IGameTimer gameTimer)
+        {
+            Disable();
+            Animation.Stop();
+            Animation.Reset(Animation.Reverse);
+            base.StartUp(viewHost, gameTimer);
         }
     }
 }

@@ -10,10 +10,10 @@ namespace WPFGameEngine.WPF.GE.Helpers
         public static bool Intersects(IShape2D a, IShape2D b)
         {
             // 1. AABB Check (Fast Reject)
-            if (!IntersectsAABB(a.GetBounds(), b.GetBounds()))
-            {
-                return false;
-            }
+            //if (!IntersectsAABB(a.GetBounds(), b.GetBounds()))
+            //{
+            //    return false;
+            //}
             //Do more precision check
             if (a is Circle circleA && b is Circle circleB)
                 return Intersects(circleA, circleB);

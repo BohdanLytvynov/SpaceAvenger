@@ -18,6 +18,7 @@ using SpaceAvenger.Services.WpfGameViewHost;
 using WPFGameEngine.ObjectPools.Base;
 using SpaceAvenger.Game.Core.Factions.F10.Destroyer;
 using WPFGameEngine.CollisionDetection.CollisionManager.Base;
+using SpaceAvenger.Game.Core.Factions.Neutrals;
 
 namespace SpaceAvenger.ViewModels.PagesVM
 {
@@ -80,8 +81,9 @@ namespace SpaceAvenger.ViewModels.PagesVM
         public GamePage_ViewModel()
         {
             #region InitFields
-            GESettings.DrawGizmo = true;
-            GESettings.DrawBorders = true;
+            GESettings.DrawGizmo = false;
+            GESettings.DrawBorders = false;
+            GESettings.DrawColliders = false;
             #endregion
 
             m_BackMoveSpeed = 2;
@@ -132,6 +134,8 @@ namespace SpaceAvenger.ViewModels.PagesVM
             m_controllerComponent = m_serviceProvider.GetRequiredService<IControllerComponent>();
             var obj = m_objectBuilder.Build<F10Destroyer>();
             obj.RegisterComponent(m_controllerComponent);
+            var enemy = m_objectBuilder.Build<AstroBase>();
+            RegisterNewObject(enemy);
             RegisterNewObject(obj);
         }
 

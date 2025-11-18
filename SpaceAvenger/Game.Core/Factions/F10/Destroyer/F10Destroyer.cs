@@ -1,4 +1,5 @@
 ﻿using SpaceAvenger.Game.Core.Base;
+using SpaceAvenger.Game.Core.Enums;
 using SpaceAvenger.Game.Core.Factions.F10.Weapons;
 using SpaceAvenger.Services.WPFInputControllers;
 using System.Numerics;
@@ -16,16 +17,16 @@ namespace SpaceAvenger.Game.Core.Factions.F10.Destroyer
     {
         private F10RailGun m_gun1;
         private Pen m_targetMarkerPen;
-        public F10Destroyer() : base(nameof(F10Destroyer))
+        public F10Destroyer() : base(Faction.F10, nameof(F10Destroyer))
         {
             HorSpeed = 40;
             VertSpeed = 40;
         }
 
         #region Methods
-        public override void StartUp()
+        public override void StartUp(IGameObjectViewHost objectViewHost, IGameTimer gameTimer)
         {
-            base.StartUp();
+            base.StartUp(objectViewHost, gameTimer);
             m_targetMarkerPen = new Pen();
             Transform.Position = new Vector2(100, 200);
             Scale(new Size(0.5f, 0.5f));
@@ -37,11 +38,11 @@ namespace SpaceAvenger.Game.Core.Factions.F10.Destroyer
             m_gun1 = (F10RailGun)FindChild(o => o.UniqueName.Equals("RailGun1"));
         }
 
-        public override void Update(IGameObjectViewHost world, IGameTimer gameTimer)
+        public override void Update()
         {
             if (m_controller != null)
             {
-                m_gun1.LookAt(m_controller.MousePosition, 2, gameTimer.deltaTime.TotalSeconds);
+                m_gun1.LookAt(m_controller.MousePosition, 2, GameTimer.deltaTime.TotalSeconds);
 
                 if (m_controller.IsKeyDown(System.Windows.Input.Key.R))
                 {
@@ -50,11 +51,11 @@ namespace SpaceAvenger.Game.Core.Factions.F10.Destroyer
 
                 if (m_controller.IsMouseButtonDown(System.Windows.Input.MouseButton.Left))
                 {
-                    m_gun1.Shoot(world as IMapableObjectViewHost, GetDirection(m_controller.MousePosition));
+                    m_gun1.Shoot(GetDirection(m_controller.MousePosition));
                 }
             }
 
-            base.Update(world, gameTimer);
+            base.Update();
         }
 
         public override void Render(DrawingContext dc, Matrix3x3 parent = default)

@@ -1,6 +1,7 @@
 ﻿using System.Numerics;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using WPFGameEngine.CollisionDetection.CollisionManager.Base;
 using WPFGameEngine.Extensions;
 using WPFGameEngine.GameViewControl;
 using WPFGameEngine.Timers.Base;
@@ -31,7 +32,6 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         #endregion
 
         #region Fields
-        protected bool m_init;
         private static int m_globId;
 
         private Dictionary<string, IGEComponent> m_components;
@@ -50,6 +50,9 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         #endregion
 
         #region Propeties
+
+        public IGameObjectViewHost GameView { get; private set; }
+        public IGameTimer GameTimer { get; private set; }
 
         #region Lazy Loading
         public ICollider Collider 
@@ -145,7 +148,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         #endregion
 
         #region Methods
-        public virtual void Update(IGameObjectViewHost world,  IGameTimer gameTimer)
+        public virtual void Update()
         {
             if (!Enabled) return;
 
@@ -185,16 +188,16 @@ namespace WPFGameEngine.WPF.GE.GameObjects
 
             if (Animator != null)
             {
-                Animator.Update(gameTimer);
+                Animator.Update(GameTimer);
             }
             else if (Animation != null)
             {
-                Animation.Update(gameTimer);
+                Animation.Update(GameTimer);
             }
 
             foreach (var child in m_children)
             {
-                child.Update(world, gameTimer);
+                child.Update();
             }
 
             //Here must be a custom logic that must be implemented in Derived classes
@@ -294,7 +297,6 @@ namespace WPFGameEngine.WPF.GE.GameObjects
             m_children = new List<IGameObject>();
             Enabled = true;
             ZIndex = 0;
-            m_init = false;
         }
 
         private void InitName(string name)
@@ -543,15 +545,16 @@ namespace WPFGameEngine.WPF.GE.GameObjects
                 m_components.Clear();
         }
 
-        public virtual void StartUp()
+        public virtual void StartUp(IGameObjectViewHost viewHost, IGameTimer gameTimer)
         {
-            if (m_init)
-                return;
+            GameView = viewHost;
+            GameTimer = gameTimer;
+
             Texture = GetTexture();
-            m_init = true;
+
             foreach (var item in m_children)
             {
-                item.StartUp();
+                item.StartUp(viewHost, gameTimer);
             }
         }
 
@@ -735,14 +738,24 @@ namespace WPFGameEngine.WPF.GE.GameObjects
             Rotate(newAngle);
         }
 
-        public void Enable()
+        public void Enable(bool recursive = false)
         {
             Enabled = true;
+            if (!recursive) return;
+            foreach (var item in m_children)
+            {
+                item.Enable(recursive);
+            }
         }
 
-        public void Disable()
+        public void Disable(bool recursive = false)
         {
             Enabled = false;
+            if (!recursive) return;
+            foreach (var item in m_children)
+            {
+                item.Disable(recursive);
+            }
         }
 
         public Size GetActualSize()
@@ -752,8 +765,60 @@ namespace WPFGameEngine.WPF.GE.GameObjects
                 (float)Texture.Height * transform.Scale.Height);
         }
 
-        public virtual void ProcessCollision(List<IGameObject>? gameObjects)
+        public virtual void ProcessCollision(CollisionInfo? collisionInfo)
         {
+            if(collisionInfo == null) return;
+            collisionInfo.Resolve();
+        }
+
+        public bool IsEnabledAll(IGameObject gameObject)
+        {
+            if (gameObject == null)
+            {
+                return false;
+            }
+
+            if (!gameObject.Enabled)
+            {
+                return false;
+            }
+
+            foreach (var child in gameObject.Children)
+            {
+                bool childEnabled = IsEnabledAll(child);
+
+                if (!childEnabled)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        public static bool IsEnabledAny(IGameObject gameObject)
+        {
+            if (gameObject == null)
+            {
+                return false;
+            }
+
+            if (gameObject.Enabled)
+            {
+                return true;
+            }
+
+            foreach (var child in gameObject.Children)
+            {
+                bool childEnabled = IsEnabledAny(child);
+
+                if (childEnabled)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         #endregion

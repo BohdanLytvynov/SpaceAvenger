@@ -4,14 +4,13 @@ namespace WPFGameEngine.CollisionDetection.CollisionManager.Base
 {
     public interface ICollisionManager
     {
-        void AddObject(IGameObject obj);
-        void RemoveObject(IGameObject obj);
+        List<IGameObject> World { get; set; }
         void Start();
         void Pause();
         void Resume();
         void Stop();
         void RemoveFromBuffer(int key);
         void Clear();
-        List<IGameObject> GetObjects(int key);
+        CollisionInfo? GetCollisionInfo(int key);
     }
 }

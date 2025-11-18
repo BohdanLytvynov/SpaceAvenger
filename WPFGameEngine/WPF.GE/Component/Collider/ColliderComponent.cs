@@ -33,8 +33,14 @@ namespace WPFGameEngine.WPF.GE.Component.Collider
 
         public Basis2D Basis { get; set; }
 
+        public bool CollisionEnabled { get; private set; }
+
+        public bool CollisionResolved { get; set; }
+
         public ColliderComponent() : base(nameof(ColliderComponent))
         {
+            CollisionEnabled = true;
+            CollisionResolved = true;
         }
 
         public override DtoBase ToDto()
@@ -44,6 +50,21 @@ namespace WPFGameEngine.WPF.GE.Component.Collider
                 ColliderShape = CollisionShape,
                 Position = Position,
             };
+        }
+
+        public void EnableCollision()
+        {
+            CollisionEnabled = true;
+        }
+
+        public void DisableCollision()
+        {
+            CollisionEnabled = false;
+        }
+
+        public void ResolveCollision()
+        {
+            CollisionResolved = true;
         }
     }
 }

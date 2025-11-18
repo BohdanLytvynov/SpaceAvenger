@@ -21,23 +21,23 @@ namespace SpaceAvenger.Game.Core.Base
             
         }
 
-        public override void StartUp()
+        public override void StartUp(IGameObjectViewHost viewHost, IGameTimer gameTimer)
         {
             TimeRemainig = 0;
-            base.StartUp();
+            base.StartUp(viewHost, gameTimer);
         }
 
-        public override void Update(IGameObjectViewHost world, IGameTimer gameTimer)
+        public override void Update()
         {
             if (TimeRemainig > 0)
             {
-                TimeRemainig -= ReloadSpeed * (float)gameTimer.deltaTime.TotalSeconds;
+                TimeRemainig -= ReloadSpeed * (float)GameTimer.deltaTime.TotalSeconds;
             }
 
             if (TimeRemainig < 0)
                 TimeRemainig = 0;
 
-            base.Update(world, gameTimer);
+            base.Update();
         }
 
         protected virtual void Reload()
@@ -45,13 +45,13 @@ namespace SpaceAvenger.Game.Core.Base
             TimeRemainig = ReloadTime;
         }
 
-        public virtual void Shoot(IMapableObjectViewHost world, Vector2 dir)
+        public virtual void Shoot(Vector2 dir)
         {
             if (!GunLoaded)
                 return;
 
             var position = GetWorldCenter();
-            var shell = world.Instantinate<TShell>();
+            var shell = (GameView as IMapableObjectViewHost).Instantinate<TShell>();
             shell.Scale(Transform.Scale * ShellScaleMultipl);
             Size shellSize = shell.GetActualSize();
             Vector2 centerPos = position - new Vector2(shellSize.Width / 2, shellSize.Height / 2);

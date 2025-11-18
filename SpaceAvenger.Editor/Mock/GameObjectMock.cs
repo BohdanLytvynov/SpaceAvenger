@@ -13,10 +13,5 @@ namespace SpaceAvenger.Editor.Mock
         {
             
         }
-
-        public override void StartUp()
-        {
-            
-        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using WPFGameEngine.WPF.GE.GameObjects;
+﻿using System.Diagnostics;
+using WPFGameEngine.WPF.GE.GameObjects;
 using WPFGameEngine.WPF.GE.Helpers;
 
 namespace WPFGameEngine.CollisionDetection.CollisionManager.Base
@@ -7,44 +8,28 @@ namespace WPFGameEngine.CollisionDetection.CollisionManager.Base
     {
         #region Fields
         private readonly object m_lock;
-        private readonly List<IGameObject> m_CollidableObjects;
+        
         private volatile bool m_running;
         private CancellationTokenSource m_cancellationTokenSource;
         private Task m_checkTask;
         private const int COLLISION_CHECK_DELAY_MS = 16;
 
-        private readonly Dictionary<int, List<IGameObject>> m_CollisionBuffer;
+        private readonly Dictionary<int, CollisionInfo> m_CollisionBuffer;
+
+        public List<IGameObject> World { get; set; }
         #endregion
 
         #region Ctor
         public CollisionManager()
         {
             m_lock = new object();
-            m_CollisionBuffer = new Dictionary<int, List<IGameObject>>();
-            m_CollidableObjects = new List<IGameObject>();
+            m_CollisionBuffer = new Dictionary<int, CollisionInfo>();
             m_running = false;
         }
 
         #endregion
 
         #region Methods
-        public void AddObject(IGameObject obj)
-        {
-            lock (m_lock)
-            {
-                m_CollidableObjects.Add(obj);
-            }
-        }
-
-        public void RemoveObject(IGameObject obj)
-        {
-            lock (m_lock)
-            {
-                m_CollidableObjects.Remove(obj);
-                m_CollisionBuffer.Remove(obj.Id);
-            }
-        }
-
         public void Start()
         {
             if (!m_running)
@@ -83,13 +68,15 @@ namespace WPFGameEngine.CollisionDetection.CollisionManager.Base
 
         private void AddToBuffer(int key, IGameObject gameObject)
         {
-            if (m_CollisionBuffer.TryGetValue(key, out var list))
+            if (m_CollisionBuffer.TryGetValue(key, out var info))
             {
-                list.Add(gameObject);
+                info.Add(gameObject);
             }
             else
             {
-                m_CollisionBuffer.Add(key, new List<IGameObject> { gameObject });
+                var colInfo = new CollisionInfo();
+                colInfo.Add(gameObject);
+                m_CollisionBuffer.Add(key, colInfo);
             }
         }
 
@@ -98,19 +85,20 @@ namespace WPFGameEngine.CollisionDetection.CollisionManager.Base
             lock (m_lock)
             {
                 if (!m_CollisionBuffer.ContainsKey(key)) return;
+                if (!m_CollisionBuffer[key].Resolved) return;
                 m_CollisionBuffer.Remove(key);
             }
         }
 
-        public List<IGameObject> GetObjects(int key)
+        public CollisionInfo? GetCollisionInfo(int key)
         {
             lock (m_lock)
             {
-                if (m_CollisionBuffer.TryGetValue(key, out var list))
+                if (m_CollisionBuffer.TryGetValue(key, out var info))
                 {
-                    return new List<IGameObject>(list);
+                    return info;
                 }
-                return new List<IGameObject>();
+                return null;
             }
         }
 
@@ -134,8 +122,10 @@ namespace WPFGameEngine.CollisionDetection.CollisionManager.Base
                 List<IGameObject> currentObjects;
                 lock (m_lock)
                 {
-                    m_CollisionBuffer.Clear();
-                    currentObjects = new List<IGameObject>(m_CollidableObjects);
+                    currentObjects = World.Where(x => x != null && x.Enabled &&
+                    x.IsCollidable && 
+                    x.Collider.CollisionEnabled &&
+                    x.Collider.CollisionResolved).ToList();
                 }
 
                 int len = currentObjects.Count;
@@ -146,8 +136,7 @@ namespace WPFGameEngine.CollisionDetection.CollisionManager.Base
                     {
                         var obj1 = currentObjects[i];
                         var obj2 = currentObjects[j];
-                        if (obj1 == null || obj2 == null)
-                            continue;
+                        
                         if (CollisionHelper.Intersects(
                             obj1.Collider.CollisionShape,
                             obj2.Collider.CollisionShape))
@@ -182,7 +171,6 @@ namespace WPFGameEngine.CollisionDetection.CollisionManager.Base
         {
             lock (m_lock)
             {
-                m_CollidableObjects.Clear();
                 m_CollisionBuffer.Clear();
             }
         }

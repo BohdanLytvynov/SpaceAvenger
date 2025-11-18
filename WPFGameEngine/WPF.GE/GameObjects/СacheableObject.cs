@@ -5,38 +5,46 @@ using WPFGameEngine.Timers.Base;
 namespace WPFGameEngine.WPF.GE.GameObjects
 {
     public abstract class СacheableObject : MapableObject
-    {  
+    {
+        public bool Cached { get; set; }
         public bool UseCaching { get; protected set; }
+
         public СacheableObject(string name) : base(name)
         {
             UseCaching = true;
+            Cached = false;
         }
 
-        public override void StartUp()
+        public override void StartUp(IGameObjectViewHost viewHost, IGameTimer gameTimer)
         {
-            Enable();
-            base.StartUp();
+            base.StartUp(viewHost, gameTimer);
         }
 
-        public override void Update(IGameObjectViewHost world, IGameTimer gameTimer)
+        public override void Update()
         {
             if(!IsInWindowBounds(Transform.Position))
-                Disable();
+                Disable(true);
 
-            if (!Enabled && UseCaching && world is IMapableObjectViewHost movh)
+            if (!Cached && !IsEnabledAny(this) && UseCaching && GameView is IMapableObjectViewHost movh)
             {
-                ResetState();
+                OnAddToPool();
                 movh.ObjectPoolManager.AddToPool(this);
             }
 
-            base.Update(world, gameTimer);
+            base.Update();
         }
 
         public abstract bool IsInWindowBounds(Vector2 position);
+        public virtual void OnAddToPool()
+        { 
+            Cached = false;
+        }
+        public abstract void OnGetFromPool();
 
-        public virtual void ResetState()
+        public void AddToPool(СacheableObject gameObject)
         {
-            m_init = false;//For using StartUp Again
+            gameObject.OnAddToPool();
+            (GameView as IMapableObjectViewHost).ObjectPoolManager.AddToPool(this);
         }
     }
 }

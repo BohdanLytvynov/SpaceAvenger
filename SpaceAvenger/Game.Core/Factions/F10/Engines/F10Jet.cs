@@ -9,9 +9,6 @@ namespace SpaceAvenger.Game.Core.Factions.F10.Engines
             
         }
 
-        public override void StartUp()
-        {
-            
-        }
+        
     }
 }

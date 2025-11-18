@@ -54,18 +54,6 @@
     {
       "RecreateType": "Sprite",
       "ResourceKey": "F10_Destr"
-    },
-    {
-      "RecreateType": "ColliderComponent",
-      "Position": {
-        "X": 0.40174705,
-        "Y": 0.50010896
-      },
-      "ColliderShape": {
-        "RecreateType": "Triangle",
-        "Height": 330.7305,
-        "Base": 261.69452
-      }
     }
   ]
 }
