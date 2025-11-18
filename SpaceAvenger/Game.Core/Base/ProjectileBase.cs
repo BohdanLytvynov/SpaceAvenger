@@ -30,7 +30,7 @@ namespace SpaceAvenger.Game.Core.Base
             base.StartUp(gameObjectViewHost, gameTimer);
         }
 
-        public override bool IsInWindowBounds(Vector2 position)
+        protected override bool IsInWindowBounds(Vector2 position)
         {
             var w = App.Current.MainWindow;
             
@@ -56,16 +56,12 @@ namespace SpaceAvenger.Game.Core.Base
             Enable();
         }
 
-        public override void OnAddToPool()
+        protected override void OnAddToPool()
         {
             m_dir = Vector2.Zero;
             Move = false;
             Disable(true);
             base.OnAddToPool();
-        }
-
-        public override void OnGetFromPool()
-        {
         }
 
         public override void ProcessCollision(CollisionInfo? info)
@@ -79,7 +75,7 @@ namespace SpaceAvenger.Game.Core.Base
                     Move = false;
                     s.HP -= Damage;
                     Disable();
-                    var expl = (GameView as IMapableObjectViewHost).Instantinate<Explosion1>();
+                    var expl = (GameView as IMapableObjectViewHost).Instantiate<Explosion1>();
                     expl.Explode(GetWorldCenter(), ExplosionScale);
                 }
             }

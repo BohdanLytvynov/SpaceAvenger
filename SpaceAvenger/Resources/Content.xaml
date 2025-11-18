@@ -86,4 +86,9 @@
     </ImageSource>
     <!--#endregion-->
 
+    <!--#region UI -->
+    <ImageSource x:Key="Slider1">pack://siteoforigin:,,,/Resources/Content/UI/Slider1.png
+    </ImageSource>
+    <!--#endregion-->
+
 </ResourceDictionary>

@@ -18,6 +18,9 @@ namespace WPFGameEngine.Editor.Controls.Validators
             if (length > 0 && str[length - 1].Equals('.'))
                 str += "0";
 
+            if(str.Contains("."))
+                str = str.Replace(".", ",");
+
             if (!double.TryParse(str, out v))
             {
                 return new ValidationResult(false, "Not a number!");

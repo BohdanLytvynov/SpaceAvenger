@@ -1,4 +1,5 @@
-﻿using WPFGameEngine.ObjectBuilders.Base;
+﻿using System.Windows.Media.TextFormatting;
+using WPFGameEngine.ObjectBuilders.Base;
 using WPFGameEngine.ObjectPools.Base;
 using WPFGameEngine.WPF.GE.GameObjects;
 
@@ -8,7 +9,8 @@ namespace WPFGameEngine.GameViewControl
     {
         IObjectPoolManager ObjectPoolManager { get; init; }
         IObjectBuilder ObjectBuilder { get; init; }
-        TObject Instantinate<TObject>(bool useCache = true)
+        TObject Instantiate<TObject>(bool useCache = true)
             where TObject : СacheableObject;
+        object Instantiate(string typeName, bool useCache = true);
     }
 }

@@ -14,8 +14,8 @@
         {
           "RecreateType": "RelativeTransformComponent",
           "Position": {
-            "X": 0.38027453,
-            "Y": 0.25085336
+            "X": 0.40291864,
+            "Y": 0.2568918
           },
           "CenterPosition": {
             "X": 0.22997312,
@@ -23,13 +23,216 @@
           },
           "Rotation": 0,
           "Scale": {
-            "Width": 0.95,
-            "Height": 0.95
+            "Width": 0.8,
+            "Height": 0.8
           }
         },
         {
           "RecreateType": "Sprite",
           "ResourceKey": "F10_RailGun"
+        }
+      ]
+    },
+    {
+      "ZIndex": 0,
+      "Enabled": true,
+      "ObjectName": "F10RailGun",
+      "UniqueName": "RailGun2",
+      "Children": [],
+      "Components": [
+        {
+          "RecreateType": "RelativeTransformComponent",
+          "Position": {
+            "X": 0.40306494,
+            "Y": 0.6174291
+          },
+          "CenterPosition": {
+            "X": 0.22978042,
+            "Y": 0.47282708
+          },
+          "Rotation": 0,
+          "Scale": {
+            "Width": 0.8,
+            "Height": 0.8
+          }
+        },
+        {
+          "RecreateType": "Sprite",
+          "ResourceKey": "F10_RailGun"
+        }
+      ]
+    },
+    {
+      "ZIndex": 0,
+      "Enabled": true,
+      "ObjectName": "F10RailGun",
+      "UniqueName": "RailGun3",
+      "Children": [],
+      "Components": [
+        {
+          "RecreateType": "RelativeTransformComponent",
+          "Position": {
+            "X": 0.2536139,
+            "Y": 0.23549862
+          },
+          "CenterPosition": {
+            "X": 0.23129003,
+            "Y": 0.4803751
+          },
+          "Rotation": 0,
+          "Scale": {
+            "Width": 0.8,
+            "Height": 0.8
+          }
+        },
+        {
+          "RecreateType": "Sprite",
+          "ResourceKey": "F10_RailGun"
+        }
+      ]
+    },
+    {
+      "ZIndex": 0,
+      "Enabled": true,
+      "ObjectName": "F10RailGun",
+      "UniqueName": "RailGun4",
+      "Children": [],
+      "Components": [
+        {
+          "RecreateType": "RelativeTransformComponent",
+          "Position": {
+            "X": 0.2536139,
+            "Y": 0.63705397
+          },
+          "CenterPosition": {
+            "X": 0.22978042,
+            "Y": 0.47131747
+          },
+          "Rotation": 0,
+          "Scale": {
+            "Width": 0.8,
+            "Height": 0.8
+          }
+        },
+        {
+          "RecreateType": "Sprite",
+          "ResourceKey": "F10_RailGun"
+        }
+      ]
+    },
+    {
+      "ZIndex": 0,
+      "Enabled": true,
+      "ObjectName": "F10RailGun",
+      "UniqueName": "RailGun5",
+      "Children": [],
+      "Components": [
+        {
+          "RecreateType": "RelativeTransformComponent",
+          "Position": {
+            "X": 0.44986278,
+            "Y": 0.375892
+          },
+          "CenterPosition": {
+            "X": 0.23129003,
+            "Y": 0.48188472
+          },
+          "Rotation": 0,
+          "Scale": {
+            "Width": 0.8,
+            "Height": 0.8
+          }
+        },
+        {
+          "RecreateType": "Sprite",
+          "ResourceKey": "F10_RailGun"
+        }
+      ]
+    },
+    {
+      "ZIndex": 0,
+      "Enabled": true,
+      "ObjectName": "F10RailGun",
+      "UniqueName": "RailGun6",
+      "Children": [],
+      "Components": [
+        {
+          "RecreateType": "RelativeTransformComponent",
+          "Position": {
+            "X": 0.44986278,
+            "Y": 0.49967977
+          },
+          "CenterPosition": {
+            "X": 0.23279963,
+            "Y": 0.48339432
+          },
+          "Rotation": 0,
+          "Scale": {
+            "Width": 0.8,
+            "Height": 0.8
+          }
+        },
+        {
+          "RecreateType": "Sprite",
+          "ResourceKey": "F10_RailGun"
+        }
+      ]
+    },
+    {
+      "ZIndex": 0,
+      "Enabled": true,
+      "ObjectName": "Slider1",
+      "UniqueName": "HP",
+      "Children": [],
+      "Components": [
+        {
+          "RecreateType": "RelativeTransformComponent",
+          "Position": {
+            "X": 0,
+            "Y": 0
+          },
+          "CenterPosition": {
+            "X": 0.5,
+            "Y": 0.5
+          },
+          "Rotation": 0,
+          "Scale": {
+            "Width": 0.29350412,
+            "Height": 0.15160109
+          }
+        },
+        {
+          "RecreateType": "Sprite",
+          "ResourceKey": "Slider1"
+        }
+      ]
+    },
+    {
+      "ZIndex": 0,
+      "Enabled": true,
+      "ObjectName": "Slider1",
+      "UniqueName": "Shield",
+      "Children": [],
+      "Components": [
+        {
+          "RecreateType": "RelativeTransformComponent",
+          "Position": {
+            "X": 0,
+            "Y": 0.052836232
+          },
+          "CenterPosition": {
+            "X": 0.5,
+            "Y": 0.5
+          },
+          "Rotation": 0,
+          "Scale": {
+            "Width": 0.29350412,
+            "Height": 0.15160109
+          }
+        },
+        {
+          "RecreateType": "Sprite",
+          "ResourceKey": "Slider1"
         }
       ]
     }
@@ -38,8 +241,8 @@
     {
       "RecreateType": "TransformComponent",
       "Position": {
-        "X": 0,
-        "Y": 0
+        "X": 117.74931,
+        "Y": 230.9698
       },
       "CenterPosition": {
         "X": 0.5,
@@ -54,6 +257,18 @@
     {
       "RecreateType": "Sprite",
       "ResourceKey": "F10_Destr"
+    },
+    {
+      "RecreateType": "ColliderComponent",
+      "Position": {
+        "X": 0.3743824,
+        "Y": 0.49817017
+      },
+      "ColliderShape": {
+        "RecreateType": "Triangle",
+        "Height": 342.20428,
+        "Base": 240.75433
+      }
     }
   ]
 }

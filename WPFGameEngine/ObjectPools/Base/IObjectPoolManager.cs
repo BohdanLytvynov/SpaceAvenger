@@ -7,5 +7,6 @@ namespace WPFGameEngine.ObjectPools.Base
         void AddToPool(СacheableObject mapableObject);
         TObject? GetFromPool<TObject>()
             where TObject : СacheableObject;
+        СacheableObject? GetFromPool(string typeName);
     }
 }

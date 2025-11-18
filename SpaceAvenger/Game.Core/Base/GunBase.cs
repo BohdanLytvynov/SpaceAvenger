@@ -51,7 +51,7 @@ namespace SpaceAvenger.Game.Core.Base
                 return;
 
             var position = GetWorldCenter();
-            var shell = (GameView as IMapableObjectViewHost).Instantinate<TShell>();
+            var shell = (GameView as IMapableObjectViewHost).Instantiate<TShell>();
             shell.Scale(Transform.Scale * ShellScaleMultipl);
             Size shellSize = shell.GetActualSize();
             Vector2 centerPos = position - new Vector2(shellSize.Width / 2, shellSize.Height / 2);

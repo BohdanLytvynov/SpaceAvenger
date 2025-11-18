@@ -21,6 +21,8 @@ namespace SpaceAvenger.Game.Core.Factions.F10.Destroyer
         {
             HorSpeed = 40;
             VertSpeed = 40;
+            HP = 4000;
+            Shield = 2000;
         }
 
         #region Methods

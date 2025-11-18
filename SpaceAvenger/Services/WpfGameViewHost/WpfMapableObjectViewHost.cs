@@ -34,7 +34,7 @@ namespace SpaceAvenger.Services.WpfGameViewHost
         public IObjectPoolManager ObjectPoolManager { get; init; }
         public IObjectBuilder ObjectBuilder { get; init; }
 
-        public TObject Instantinate<TObject>(bool useCache = true) 
+        public TObject Instantiate<TObject>(bool useCache = true) 
             where TObject : СacheableObject
         {
             TObject obj = null;
@@ -120,6 +120,34 @@ namespace SpaceAvenger.Services.WpfGameViewHost
         {
             CollisionManager.Clear();
             base.ClearWorld();
+        }
+
+        public СacheableObject Instantiate(string typeName, bool useCache = true)
+        {
+            СacheableObject? obj = null;
+            
+            if (!useCache)
+            {
+                obj = ObjectBuilder.Build(typeName) as СacheableObject;
+                AddObject(obj);
+            }
+            else
+            {
+                obj = ObjectPoolManager.GetFromPool(typeName);
+
+                if (obj == null)
+                {
+                    obj = ObjectBuilder.Build(typeName);
+                    Debug.WriteLine("Build:" + typeName);
+                    AddObject(obj);
+                }
+                else
+                {
+                    Debug.WriteLine("Use From Pool:" + typeName);
+                    obj.OnGetFromPool();
+                }
+            }
+            return obj;
         }
     }
 }

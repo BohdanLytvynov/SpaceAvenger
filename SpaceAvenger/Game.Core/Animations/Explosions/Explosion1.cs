@@ -11,12 +11,7 @@ namespace SpaceAvenger.Game.Core.Animations.Explosions
         {
 
         }
-
-        public override bool IsInWindowBounds(Vector2 position)
-        {
-            return true;
-        }
-
+        
         public override void StartUp(IGameObjectViewHost viewHost, IGameTimer gameTimer)
         {
             Disable();

@@ -34,16 +34,21 @@ namespace WPFGameEngine.WPF.GE.GameObjects
             base.Update();
         }
 
-        public abstract bool IsInWindowBounds(Vector2 position);
-        public virtual void OnAddToPool()
+        protected virtual bool IsInWindowBounds(Vector2 position) => true;
+
+        protected virtual void OnAddToPool()
         { 
+            
+        }
+        public virtual void OnGetFromPool()
+        {
             Cached = false;
         }
-        public abstract void OnGetFromPool();
 
-        public void AddToPool(СacheableObject gameObject)
+        protected void AddToPool(СacheableObject gameObject)
         {
             gameObject.OnAddToPool();
+            gameObject.Cached = true;
             (GameView as IMapableObjectViewHost).ObjectPoolManager.AddToPool(this);
         }
     }

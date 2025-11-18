@@ -1,11 +1,16 @@
 ﻿using SpaceAvenger.Game.Core.Enums;
+using SpaceAvenger.Game.Core.UI.Slider;
 using SpaceAvenger.Services.WPFInputControllers;
 using System.Windows.Input;
+using System.Windows.Media;
+using WPFGameEngine.GameViewControl;
+using WPFGameEngine.Timers.Base;
 using WPFGameEngine.WPF.GE.GameObjects;
+using WPFGameEngine.WPF.GE.Math.Matrixes;
 
 namespace SpaceAvenger.Game.Core.Base
 {
-    public abstract class SpaceShipBase : MapableObject
+    public abstract class SpaceShipBase : СacheableObject
     {
         protected WPFInputController m_controller;
 
@@ -15,13 +20,27 @@ namespace SpaceAvenger.Game.Core.Base
         public float HorSpeed { get; protected set; }
         public float VertSpeed { get; protected set; }
         public Faction Faction { get; private set; }
+
+        protected Slider1 HPSlider;
+        protected Slider1 ShieldSlider;
+
         #endregion
 
         protected SpaceShipBase(Faction factionName, string name) : base(name)
         {
             Faction = factionName;
         }
-   
+
+        public override void StartUp(IGameObjectViewHost viewHost, IGameTimer gameTimer)
+        {
+            Enable(true);
+
+            HPSlider = FindChild(x => x.UniqueName.Equals("HP")) as Slider1;
+            ShieldSlider = FindChild(x => x.UniqueName.Equals("Shield")) as Slider1;
+
+            base.StartUp(viewHost, gameTimer);
+        }
+
         public override void Update()
         {
             if (m_controller != null)
@@ -51,7 +70,23 @@ namespace SpaceAvenger.Game.Core.Base
                 }
             }
 
+            HPSlider.Update(HP);
+            ShieldSlider.Update(Shield);
+
+            if(HP <= 0)
+                Destroy();
+
             base.Update();
+        }
+
+        protected override void OnAddToPool()
+        {
+            base.OnAddToPool();
+        }
+
+        protected virtual void Destroy()
+        {
+            Disable(true);
         }
     }
 }

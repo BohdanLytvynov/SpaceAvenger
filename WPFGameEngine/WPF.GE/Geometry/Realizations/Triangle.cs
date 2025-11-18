@@ -78,7 +78,7 @@ namespace WPFGameEngine.WPF.GE.Geometry.Realizations
             var sideDir = Vector2.Normalize(B - C);
             result.Add(sideDir.GetPerpendicular());
             sideDir = Vector2.Normalize(B - LeftUpperCorner);
-            result.Add(sideDir.GetPerpendicular());
+            result.Add(sideDir.GetPerpendicular()*-1);
             return result;
         }
 

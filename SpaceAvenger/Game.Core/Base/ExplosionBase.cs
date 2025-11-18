@@ -37,7 +37,7 @@ namespace SpaceAvenger.Game.Core.Base
             }
         }
 
-        public override void OnAddToPool()
+        protected override void OnAddToPool()
         {
             Disable();
             base.OnAddToPool();

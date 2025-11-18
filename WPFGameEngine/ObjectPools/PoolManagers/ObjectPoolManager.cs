@@ -37,12 +37,16 @@ namespace WPFGameEngine.ObjectPools.PoolManagers
         public TObject? GetFromPool<TObject>()
             where TObject : СacheableObject
         {
-            IObjectPool pool = null;
-            string name = typeof(TObject).Name;
+            return GetFromPool(typeof(TObject).Name) as TObject;
+        }
 
-            if (m_PoolMap.TryGetValue(name, out pool) && pool != null)
+        public СacheableObject? GetFromPool(string typeName)
+        {
+            IObjectPool pool = null;
+          
+            if (m_PoolMap.TryGetValue(typeName, out pool) && pool != null)
             {
-                return pool.Get() as TObject;
+                return pool.Get();
             }
 
             return null;
