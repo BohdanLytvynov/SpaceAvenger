@@ -20,7 +20,7 @@ namespace SpaceAvenger.Game.Core.Base
 
         protected ProjectileBase(Faction faction, string name) : base(name)
         {
-            
+            Faction = faction;
         }
 
         public override void StartUp(IGameObjectViewHost gameObjectViewHost, IGameTimer gameTimer)
@@ -62,25 +62,6 @@ namespace SpaceAvenger.Game.Core.Base
             Move = false;
             Disable(true);
             base.OnAddToPool();
-        }
-
-        public override void ProcessCollision(CollisionInfo? info)
-        {
-            if(info == null) return;
-
-            foreach (var obj in info.ObjectsWithCollision)
-            {
-                if (obj is SpaceShipBase s && s.Faction != Faction)
-                {
-                    Move = false;
-                    s.HP -= Damage;
-                    Disable();
-                    var expl = (GameView as IMapableObjectViewHost).Instantiate<Explosion1>();
-                    expl.Explode(GetWorldCenter(), ExplosionScale);
-                }
-            }
-
-            base.ProcessCollision(info);
         }
     }
 }

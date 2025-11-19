@@ -132,11 +132,8 @@ namespace SpaceAvenger.ViewModels.PagesVM
         private void Initialize()
         {
             m_controllerComponent = m_serviceProvider.GetRequiredService<IControllerComponent>();
-            var obj = m_objectBuilder.Build<F10Destroyer>();
-            obj.RegisterComponent(m_controllerComponent);
-            var enemy = m_objectBuilder.Build<AstroBase>();
-            RegisterNewObject(enemy);
-            RegisterNewObject(obj);
+            GameView.Instantiate<F10Destroyer>(c => c.RegisterComponent(m_controllerComponent));            
+            GameView.Instantiate<AstroBase>();
         }
 
         private void RegisterNewObject(GameObject gameObject)

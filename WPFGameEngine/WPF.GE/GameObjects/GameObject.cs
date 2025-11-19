@@ -482,6 +482,57 @@ namespace WPFGameEngine.WPF.GE.GameObjects
             return result;
         }
 
+        private void GetAllChildrenOfTypeRec(
+            string typeName, IGameObject gameObject, List<IGameObject> result)
+        {
+            if (gameObject == null)
+                return;
+
+            foreach (var item in gameObject.Children)
+            {
+                if (item.ObjectName.Equals(typeName))
+                { 
+                    result.Add(item);
+                }
+
+                GetAllChildrenOfTypeRec(typeName, item, result);
+            }
+        }
+
+        public IEnumerable<TObject> GetAllChildrenOfType<TObject>(bool recursiveSearch = false)
+            where TObject : class
+        {
+            var r = GetAllChildrenOfType(typeof(TObject).Name, recursiveSearch);
+
+            foreach (var item in r)
+            {
+                yield return (TObject)item;
+            }
+
+        }
+
+        public IEnumerable<IGameObject> GetAllChildrenOfType(string typeName, bool recursiveSearch = false)
+        { 
+            List<IGameObject> result = new List<IGameObject>();
+
+            if (!recursiveSearch)
+            {
+                foreach (var item in m_children)
+                {
+                    if (item.ObjectName.Equals(typeName))
+                    {
+                        result.Add(item);
+                    }
+                }
+            }
+            else
+            {
+                GetAllChildrenOfTypeRec(typeName, this, result);
+            }
+
+            return result;
+        }
+
         public IGameObject UnregisterComponent<TComponent>() 
             where TComponent : IGEComponent
         {

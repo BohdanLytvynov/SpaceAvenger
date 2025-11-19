@@ -9,8 +9,8 @@ namespace WPFGameEngine.GameViewControl
     {
         IObjectPoolManager ObjectPoolManager { get; init; }
         IObjectBuilder ObjectBuilder { get; init; }
-        TObject Instantiate<TObject>(bool useCache = true)
+        TObject Instantiate<TObject>(Action<IGameObject>? config = null, bool useCache = true)
             where TObject : СacheableObject;
-        object Instantiate(string typeName, bool useCache = true);
+        СacheableObject Instantiate(string typeName, Action<IGameObject>? config = null, bool useCache = true);
     }
 }

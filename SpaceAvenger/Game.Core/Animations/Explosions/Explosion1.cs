@@ -1,11 +1,10 @@
 ﻿using SpaceAvenger.Game.Core.Base;
-using System.Numerics;
 using WPFGameEngine.GameViewControl;
 using WPFGameEngine.Timers.Base;
 
 namespace SpaceAvenger.Game.Core.Animations.Explosions
 {
-    internal class Explosion1 : ExplosionBase
+    public class Explosion1 : ExplosionBase
     {
         public Explosion1() : base(nameof(Explosion1))
         {

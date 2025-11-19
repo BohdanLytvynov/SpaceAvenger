@@ -2,11 +2,9 @@
 using SpaceAvenger.Game.Core.UI.Slider;
 using SpaceAvenger.Services.WPFInputControllers;
 using System.Windows.Input;
-using System.Windows.Media;
 using WPFGameEngine.GameViewControl;
 using WPFGameEngine.Timers.Base;
 using WPFGameEngine.WPF.GE.GameObjects;
-using WPFGameEngine.WPF.GE.Math.Matrixes;
 
 namespace SpaceAvenger.Game.Core.Base
 {
@@ -70,8 +68,8 @@ namespace SpaceAvenger.Game.Core.Base
                 }
             }
 
-            HPSlider.Update(HP);
-            ShieldSlider.Update(Shield);
+            HPSlider?.Update(HP);
+            ShieldSlider?.Update(Shield);
 
             if(HP <= 0)
                 Destroy();

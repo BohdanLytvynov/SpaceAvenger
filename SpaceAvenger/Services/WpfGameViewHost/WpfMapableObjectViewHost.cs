@@ -34,34 +34,10 @@ namespace SpaceAvenger.Services.WpfGameViewHost
         public IObjectPoolManager ObjectPoolManager { get; init; }
         public IObjectBuilder ObjectBuilder { get; init; }
 
-        public TObject Instantiate<TObject>(bool useCache = true) 
+        public TObject Instantiate<TObject>(Action<IGameObject>? config = null, bool useCache = true) 
             where TObject : СacheableObject
         {
-            TObject obj = null;
-            string name = typeof(TObject).Name;
-
-            if (!useCache)
-            {
-                obj = ObjectBuilder.Build<TObject>();
-                AddObject(obj);
-            }
-            else
-            {
-                obj = ObjectPoolManager.GetFromPool<TObject>();
-
-                if (obj == null)
-                {
-                    obj = ObjectBuilder.Build<TObject>();
-                    Debug.WriteLine("Build:" + typeof(TObject).Name);
-                    AddObject(obj);
-                }
-                else
-                {
-                    Debug.WriteLine("Use From Pool:" + typeof(TObject).Name);
-                    obj.OnGetFromPool();
-                }
-            }
-            return obj;
+            return (TObject)Instantiate(typeof(TObject).Name, config, useCache);
         }
 
         protected override void CompositionTarget_Rendering(object? sender, EventArgs e)
@@ -122,13 +98,14 @@ namespace SpaceAvenger.Services.WpfGameViewHost
             base.ClearWorld();
         }
 
-        public СacheableObject Instantiate(string typeName, bool useCache = true)
+        public СacheableObject Instantiate(string typeName, Action<IGameObject>? config = null, bool useCache = true)
         {
             СacheableObject? obj = null;
             
             if (!useCache)
             {
                 obj = ObjectBuilder.Build(typeName) as СacheableObject;
+                config?.Invoke(obj);
                 AddObject(obj);
             }
             else
@@ -137,7 +114,8 @@ namespace SpaceAvenger.Services.WpfGameViewHost
 
                 if (obj == null)
                 {
-                    obj = ObjectBuilder.Build(typeName);
+                    obj = ObjectBuilder.Build(typeName) as СacheableObject;
+                    config?.Invoke(obj);
                     Debug.WriteLine("Build:" + typeName);
                     AddObject(obj);
                 }

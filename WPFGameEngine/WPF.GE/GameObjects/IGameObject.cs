@@ -75,6 +75,9 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         void AddChild(IGameObject child);
         bool RemoveChild(Func<IGameObject, bool> predicate, bool recursive = false);
         IGameObject? FindChild(Func<IGameObject, bool> predicate, bool recursiveSearch = false);
+        IEnumerable<TObject> GetAllChildrenOfType<TObject>(bool recursiveSearch = false)
+            where TObject : class;
+        IEnumerable<IGameObject> GetAllChildrenOfType(string typeName, bool recursiveSearch = false);
         #endregion
 
         #region Transform

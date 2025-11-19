@@ -2,6 +2,8 @@
 using SpaceAvenger.Game.Core.Enums;
 using SpaceAvenger.Game.Core.Factions.F10.Weapons;
 using SpaceAvenger.Services.WPFInputControllers;
+using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using System.Windows.Media;
 using WPFGameEngine.Extensions;
@@ -15,7 +17,7 @@ namespace SpaceAvenger.Game.Core.Factions.F10.Destroyer
 {
     public class F10Destroyer : SpaceShipBase
     {
-        private F10RailGun m_gun1;
+        private IEnumerable<F10RailGun> m_battery;
         private Pen m_targetMarkerPen;
         public F10Destroyer() : base(Faction.F10, nameof(F10Destroyer))
         {
@@ -37,14 +39,17 @@ namespace SpaceAvenger.Game.Core.Factions.F10.Destroyer
             m_targetMarkerPen.Freeze();
             m_controller = (WPFInputController)GetComponent<ControllerComponent>(false);
 
-            m_gun1 = (F10RailGun)FindChild(o => o.UniqueName.Equals("RailGun1"));
+            m_battery = GetAllChildrenOfType<F10RailGun>();
         }
 
         public override void Update()
         {
             if (m_controller != null)
             {
-                m_gun1.LookAt(m_controller.MousePosition, 2, GameTimer.deltaTime.TotalSeconds);
+                foreach (var gun in m_battery)
+                {
+                    gun.LookAt(m_controller.MousePosition, 2, GameTimer.deltaTime.TotalSeconds);
+                }
 
                 if (m_controller.IsKeyDown(System.Windows.Input.Key.R))
                 {
@@ -53,7 +58,10 @@ namespace SpaceAvenger.Game.Core.Factions.F10.Destroyer
 
                 if (m_controller.IsMouseButtonDown(System.Windows.Input.MouseButton.Left))
                 {
-                    m_gun1.Shoot(GetDirection(m_controller.MousePosition));
+                    foreach (var gun in m_battery)
+                    {
+                        gun.Shoot(GetDirection(m_controller.MousePosition));
+                    }
                 }
             }
 
@@ -63,10 +71,13 @@ namespace SpaceAvenger.Game.Core.Factions.F10.Destroyer
         public override void Render(DrawingContext dc, Matrix3x3 parent = default)
         {
             base.Render(dc, parent);
-            
-            dc.DrawLine(m_targetMarkerPen, 
-                m_gun1.GetWorldCenter().ToPoint(), 
+
+            foreach (var gun in m_battery)
+            {
+                dc.DrawLine(m_targetMarkerPen,
+                gun.GetWorldCenter().ToPoint(),
                 m_controller.MousePosition.ToPoint());
+            }
 
         }
 
