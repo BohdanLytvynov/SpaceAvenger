@@ -1,5 +1,4 @@
 ﻿using SpaceAvenger.Editor.ViewModels.Components.Transform;
-using System.Drawing;
 using System.Numerics;
 using WPFGameEngine.WPF.GE.Component.RelativeTransforms;
 using WPFGameEngine.WPF.GE.Component.Transforms;
@@ -12,6 +11,9 @@ namespace SpaceAvenger.Editor.ViewModels.Components.RelativeTransforms
         #region Fields
         private double m_XMax;
         private double m_YMax;
+
+        private double m_XMin;
+        private double m_YMin;
         #endregion
 
         #region Properties
@@ -20,6 +22,12 @@ namespace SpaceAvenger.Editor.ViewModels.Components.RelativeTransforms
 
         public double YMax
         { get => m_YMax; set => Set(ref m_YMax, value); }
+
+        public double XMin 
+        { get => m_XMin; set => Set(ref m_XMin, value); }
+
+        public double YMin 
+        { get => m_YMin; set => Set(ref m_YMin, value); }
         #endregion
 
         public RelativeTransformViewModel(IGameObject gameObject) : base(nameof(RelativeTransformComponent), gameObject)
@@ -43,6 +51,12 @@ namespace SpaceAvenger.Editor.ViewModels.Components.RelativeTransforms
 
                 PositionX = t.Position.X*XMax;
                 PositionY = t.Position.Y*YMax;
+
+                if (PositionX < 0)
+                    m_XMin = XMax * -1;
+                if (PositionY < 0)
+                    m_YMin = YMax * -1;
+
                 Rot = t.Rotation;
                 ScaleX = t.Scale.Width;
                 ScaleY = t.Scale.Height;

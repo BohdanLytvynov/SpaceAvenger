@@ -1,12 +1,9 @@
-﻿using SpaceAvenger.Game.Core.Animations.Explosions;
-using SpaceAvenger.Game.Core.Enums;
-using System;
+﻿using SpaceAvenger.Game.Core.Enums;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WPFGameEngine.CollisionDetection.CollisionManager.Base;
 using WPFGameEngine.GameViewControl;
+using WPFGameEngine.WPF.GE.GameObjects;
 
 namespace SpaceAvenger.Game.Core.Base
 {
@@ -17,19 +14,22 @@ namespace SpaceAvenger.Game.Core.Base
         {
         }
 
-        public override void ProcessCollision(CollisionInfo? info)
+        public override void ProcessCollision(List<IGameObject>? info)
         {
             if (info == null) return;
 
-            foreach (var obj in info.ObjectsWithCollision)
+            var collect = info.Where(x => x is SpaceShipBase s && s.Faction != this.Faction).ToList().Distinct();
+
+            foreach (var obj in collect)
             {
                 if (obj is SpaceShipBase s && s.Faction != Faction)
                 {
-                    Move = false;
                     s.HP -= Damage;
-                    Disable();
+                    Collider.DisableCollision();
+                    Hide();
                     var expl = (GameView as IMapableObjectViewHost).Instantiate<TExplosion>();
                     expl.Explode(GetWorldCenter(), ExplosionScale);
+                    Debug.WriteLine($"{obj.GetType().Name} -> Damage -> CH: {s.HP}");
                 }
             }
 

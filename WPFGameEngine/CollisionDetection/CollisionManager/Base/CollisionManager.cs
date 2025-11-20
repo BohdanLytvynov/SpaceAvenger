@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using WPFGameEngine.WPF.GE.GameObjects;
+﻿using WPFGameEngine.WPF.GE.GameObjects;
 using WPFGameEngine.WPF.GE.Helpers;
 
 namespace WPFGameEngine.CollisionDetection.CollisionManager.Base
@@ -14,7 +13,7 @@ namespace WPFGameEngine.CollisionDetection.CollisionManager.Base
         private Task m_checkTask;
         private const int COLLISION_CHECK_DELAY_MS = 16;
 
-        private readonly Dictionary<int, CollisionInfo> m_CollisionBuffer;
+        private readonly Dictionary<int, List<IGameObject>> m_CollisionBuffer;
 
         public List<IGameObject> World { get; set; }
         #endregion
@@ -23,7 +22,7 @@ namespace WPFGameEngine.CollisionDetection.CollisionManager.Base
         public CollisionManager()
         {
             m_lock = new object();
-            m_CollisionBuffer = new Dictionary<int, CollisionInfo>();
+            m_CollisionBuffer = new Dictionary<int, List<IGameObject>>();
             m_running = false;
         }
 
@@ -74,7 +73,7 @@ namespace WPFGameEngine.CollisionDetection.CollisionManager.Base
             }
             else
             {
-                var colInfo = new CollisionInfo();
+                var colInfo = new List<IGameObject>();
                 colInfo.Add(gameObject);
                 m_CollisionBuffer.Add(key, colInfo);
             }
@@ -85,12 +84,12 @@ namespace WPFGameEngine.CollisionDetection.CollisionManager.Base
             lock (m_lock)
             {
                 if (!m_CollisionBuffer.ContainsKey(key)) return;
-                if (!m_CollisionBuffer[key].Resolved) return;
+
                 m_CollisionBuffer.Remove(key);
             }
         }
 
-        public CollisionInfo? GetCollisionInfo(int key)
+        public List<IGameObject>? GetCollisionInfo(int key)
         {
             lock (m_lock)
             {

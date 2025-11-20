@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Globalization;
 using System.Windows.Controls;
 
 namespace WPFGameEngine.Editor.Controls.Validators
@@ -18,11 +13,11 @@ namespace WPFGameEngine.Editor.Controls.Validators
             if (str.Contains("."))
                 str = str.Replace(".", ",");
 
-            int length = str.Length;
-            if (str[length - 1].Equals(','))
+            int length = str?.Length ?? 0;
+            if (length >0 && str[length - 1].Equals(','))
                 str += "0";
 
-            if (!double.TryParse(str, out v))
+            if (!double.TryParse(str, new CultureInfo("en-US"), out v))
             {
                 return new ValidationResult(false, "Not a number!");
             }

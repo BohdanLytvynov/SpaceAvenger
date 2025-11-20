@@ -3,13 +3,43 @@
   "Enabled": true,
   "ObjectName": "AstroBase",
   "UniqueName": "Base",
-  "Children": [],
+  "Children": [
+    {
+      "ZIndex": 0,
+      "Enabled": true,
+      "ObjectName": "Bar",
+      "UniqueName": "HP",
+      "Children": [],
+      "Components": [
+        {
+          "RecreateType": "RelativeTransformComponent",
+          "Position": {
+            "X": 0,
+            "Y": -0.11443291
+          },
+          "CenterPosition": {
+            "X": 0.5,
+            "Y": 0.5
+          },
+          "Rotation": 0,
+          "Scale": {
+            "Width": 0.8524869,
+            "Height": 1
+          }
+        },
+        {
+          "RecreateType": "Sprite",
+          "ResourceKey": "Slider1"
+        }
+      ]
+    }
+  ],
   "Components": [
     {
       "RecreateType": "TransformComponent",
       "Position": {
-        "X": 0,
-        "Y": 0
+        "X": 119.83441,
+        "Y": 153.38805
       },
       "CenterPosition": {
         "X": 0.5,

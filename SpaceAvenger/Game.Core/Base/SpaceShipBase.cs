@@ -19,8 +19,8 @@ namespace SpaceAvenger.Game.Core.Base
         public float VertSpeed { get; protected set; }
         public Faction Faction { get; private set; }
 
-        protected Slider1 HPSlider;
-        protected Slider1 ShieldSlider;
+        protected Bar HPSlider;
+        protected Bar ShieldSlider;
 
         #endregion
 
@@ -33,8 +33,8 @@ namespace SpaceAvenger.Game.Core.Base
         {
             Enable(true);
 
-            HPSlider = FindChild(x => x.UniqueName.Equals("HP")) as Slider1;
-            ShieldSlider = FindChild(x => x.UniqueName.Equals("Shield")) as Slider1;
+            HPSlider = FindChild(x => x.UniqueName.Equals("HP")) as Bar;
+            ShieldSlider = FindChild(x => x.UniqueName.Equals("Shield")) as Bar;
 
             base.StartUp(viewHost, gameTimer);
         }
@@ -77,7 +77,7 @@ namespace SpaceAvenger.Game.Core.Base
             base.Update();
         }
 
-        protected override void OnAddToPool()
+        public override void OnAddToPool()
         {
             base.OnAddToPool();
         }

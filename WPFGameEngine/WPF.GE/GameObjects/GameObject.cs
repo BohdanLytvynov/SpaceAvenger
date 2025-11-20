@@ -1,7 +1,6 @@
 ﻿using System.Numerics;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using WPFGameEngine.CollisionDetection.CollisionManager.Base;
 using WPFGameEngine.Extensions;
 using WPFGameEngine.GameViewControl;
 using WPFGameEngine.Timers.Base;
@@ -106,6 +105,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         #endregion
 
         public bool IsExported { get; set; }
+        public bool IsVisible { get; set; }
         public bool Enabled { get; set; }
         public double ZIndex { get; set; }
         public string ObjectName { get; set; }
@@ -209,6 +209,8 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         {
             if (!Enabled) return;
 
+            if (!IsVisible) return;
+
             if (Texture == null) return;
 
             var actualWidth = Transform.ActualSize.Width;
@@ -291,6 +293,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects
 
         private void Init()
         {
+            IsVisible = true;
             ObjectName = string.Empty;
             UniqueName = string.Empty;
             m_components = new Dictionary<string, IGEComponent>();
@@ -816,10 +819,9 @@ namespace WPFGameEngine.WPF.GE.GameObjects
                 (float)Texture.Height * transform.Scale.Height);
         }
 
-        public virtual void ProcessCollision(CollisionInfo? collisionInfo)
+        public virtual void ProcessCollision(List<IGameObject>? collisionInfo)
         {
-            if(collisionInfo == null) return;
-            collisionInfo.Resolve();
+            
         }
 
         public bool IsEnabledAll(IGameObject gameObject)
@@ -870,6 +872,16 @@ namespace WPFGameEngine.WPF.GE.GameObjects
             }
 
             return false;
+        }
+
+        public void Hide()
+        {
+            IsVisible = false;
+        }
+
+        public void Show()
+        {
+            IsVisible = true;
         }
 
         #endregion

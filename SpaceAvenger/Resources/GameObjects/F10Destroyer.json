@@ -1,11 +1,11 @@
 {
-  "ZIndex": 0,
+  "ZIndex": 1,
   "Enabled": true,
   "ObjectName": "F10Destroyer",
   "UniqueName": "Base",
   "Children": [
     {
-      "ZIndex": 0,
+      "ZIndex": 1,
       "Enabled": true,
       "ObjectName": "F10RailGun",
       "UniqueName": "RailGun1",
@@ -34,7 +34,7 @@
       ]
     },
     {
-      "ZIndex": 0,
+      "ZIndex": 1,
       "Enabled": true,
       "ObjectName": "F10RailGun",
       "UniqueName": "RailGun2",
@@ -63,7 +63,7 @@
       ]
     },
     {
-      "ZIndex": 0,
+      "ZIndex": 1,
       "Enabled": true,
       "ObjectName": "F10RailGun",
       "UniqueName": "RailGun3",
@@ -92,7 +92,7 @@
       ]
     },
     {
-      "ZIndex": 0,
+      "ZIndex": 1,
       "Enabled": true,
       "ObjectName": "F10RailGun",
       "UniqueName": "RailGun4",
@@ -121,7 +121,7 @@
       ]
     },
     {
-      "ZIndex": 0,
+      "ZIndex": 1,
       "Enabled": true,
       "ObjectName": "F10RailGun",
       "UniqueName": "RailGun5",
@@ -150,7 +150,7 @@
       ]
     },
     {
-      "ZIndex": 0,
+      "ZIndex": 1,
       "Enabled": true,
       "ObjectName": "F10RailGun",
       "UniqueName": "RailGun6",
@@ -179,9 +179,9 @@
       ]
     },
     {
-      "ZIndex": 0,
+      "ZIndex": 1,
       "Enabled": true,
-      "ObjectName": "Slider1",
+      "ObjectName": "Bar",
       "UniqueName": "HP",
       "Children": [],
       "Components": [
@@ -197,8 +197,8 @@
           },
           "Rotation": 0,
           "Scale": {
-            "Width": 0.29350412,
-            "Height": 0.15160109
+            "Width": 1,
+            "Height": 1
           }
         },
         {
@@ -208,9 +208,9 @@
       ]
     },
     {
-      "ZIndex": 0,
+      "ZIndex": 1,
       "Enabled": true,
-      "ObjectName": "Slider1",
+      "ObjectName": "Bar",
       "UniqueName": "Shield",
       "Children": [],
       "Components": [
@@ -218,7 +218,7 @@
           "RecreateType": "RelativeTransformComponent",
           "Position": {
             "X": 0,
-            "Y": 0.052836232
+            "Y": 0.062422983
           },
           "CenterPosition": {
             "X": 0.5,
@@ -226,8 +226,8 @@
           },
           "Rotation": 0,
           "Scale": {
-            "Width": 0.29350412,
-            "Height": 0.15160109
+            "Width": 1,
+            "Height": 1
           }
         },
         {

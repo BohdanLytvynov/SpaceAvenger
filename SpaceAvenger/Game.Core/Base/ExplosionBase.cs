@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Numerics;
+﻿using System.Numerics;
 using WPFGameEngine.GameViewControl;
 using WPFGameEngine.Timers.Base;
 using WPFGameEngine.WPF.GE.GameObjects;
@@ -15,7 +14,7 @@ namespace SpaceAvenger.Game.Core.Base
 
         public override void StartUp(IGameObjectViewHost viewHost, IGameTimer gameTimer)
         {
-            Enable();
+            Disable(true);
             base.StartUp(viewHost, gameTimer);
         }
 
@@ -30,16 +29,17 @@ namespace SpaceAvenger.Game.Core.Base
 
         public override void Update()
         {
-            base.Update();
-            if (!Animation.IsRunning)
+            if (!Animation.IsRunning && Animation.IsCompleted)
             {
+                Disable(true);
                 AddToPool(this);
             }
+
+            base.Update();
         }
 
-        protected override void OnAddToPool()
+        public override void OnAddToPool()
         {
-            Disable();
             base.OnAddToPool();
         }
 

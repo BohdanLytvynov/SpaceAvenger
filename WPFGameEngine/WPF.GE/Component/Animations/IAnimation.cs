@@ -11,7 +11,7 @@ namespace WPFGameEngine.WPF.GE.Component.Animations
         #region Properties
         public Dictionary<string, double> EaseConstants { get; }
 
-        public bool Completed { get; }
+        public bool IsCompleted { get; }
         
         public double TotalTime { get; set; }
 

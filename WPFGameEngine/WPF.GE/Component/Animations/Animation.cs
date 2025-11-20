@@ -114,7 +114,7 @@ namespace WPFGameEngine.WPF.GE.Component.Animations
         public string EaseFactoryName { get; set; }
         public double TotalTime { get; set; }
         
-        public bool Completed 
+        public bool IsCompleted 
         {
             get 
             {

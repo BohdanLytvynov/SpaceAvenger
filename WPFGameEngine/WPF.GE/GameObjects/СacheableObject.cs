@@ -22,6 +22,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects
 
         public override void Update()
         {
+            //We cache the objects that extends the Window Bounds
             if(!IsInWindowBounds(Transform.Position))
                 Disable(true);
 
@@ -36,20 +37,21 @@ namespace WPFGameEngine.WPF.GE.GameObjects
 
         protected virtual bool IsInWindowBounds(Vector2 position) => true;
 
-        protected virtual void OnAddToPool()
+        public virtual void OnAddToPool()
         { 
-            
+            Cached = true;
         }
+
         public virtual void OnGetFromPool()
         {
             Cached = false;
+            Show();
         }
 
         protected void AddToPool(СacheableObject gameObject)
         {
             gameObject.OnAddToPool();
-            gameObject.Cached = true;
-            (GameView as IMapableObjectViewHost).ObjectPoolManager.AddToPool(this);
+            (GameView as IMapableObjectViewHost).ObjectPoolManager.AddToPool(gameObject);
         }
     }
 }

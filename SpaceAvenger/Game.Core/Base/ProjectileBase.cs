@@ -1,7 +1,5 @@
-﻿using SpaceAvenger.Game.Core.Animations.Explosions;
-using SpaceAvenger.Game.Core.Enums;
+﻿using SpaceAvenger.Game.Core.Enums;
 using System.Numerics;
-using WPFGameEngine.CollisionDetection.CollisionManager.Base;
 using WPFGameEngine.GameViewControl;
 using WPFGameEngine.Timers.Base;
 using WPFGameEngine.WPF.GE.GameObjects;
@@ -25,7 +23,6 @@ namespace SpaceAvenger.Game.Core.Base
 
         public override void StartUp(IGameObjectViewHost gameObjectViewHost, IGameTimer gameTimer)
         {
-            Disable(true);
             Move = false;
             base.StartUp(gameObjectViewHost, gameTimer);
         }
@@ -33,7 +30,6 @@ namespace SpaceAvenger.Game.Core.Base
         protected override bool IsInWindowBounds(Vector2 position)
         {
             var w = App.Current.MainWindow;
-            
             double winWidth = w.Width;
             double winHeight = w.Height;
             float x = position.X;
@@ -56,12 +52,17 @@ namespace SpaceAvenger.Game.Core.Base
             Enable();
         }
 
-        protected override void OnAddToPool()
+        public override void OnAddToPool()
         {
             m_dir = Vector2.Zero;
             Move = false;
-            Disable(true);
             base.OnAddToPool();
+        }
+
+        public override void OnGetFromPool()
+        {
+            Collider.EnableCollision();
+            base.OnGetFromPool();
         }
     }
 }

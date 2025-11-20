@@ -1,7 +1,6 @@
 ﻿using System.Numerics;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using WPFGameEngine.CollisionDetection.CollisionManager.Base;
 using WPFGameEngine.Factories.Base;
 using WPFGameEngine.GameViewControl;
 using WPFGameEngine.Timers.Base;
@@ -36,6 +35,13 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         /// </summary>
         public bool IsExported { get; set; }
         public double ZIndex { get; set; }
+        /// <summary>
+        /// Controls Rendering of the Object, but Update calculations will still take place
+        /// </summary>
+        public bool IsVisible { get; set; }
+        /// <summary>
+        /// Enables Calculations for Update and Rendering
+        /// </summary>
         public bool Enabled { get; set; }
         //Name of the Object that is used for mapping during object Creation in runtime
         //must be equal to the name of the GameObject in a game
@@ -52,7 +58,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         void StartUp(IGameObjectViewHost viewHost, IGameTimer gameTimer);
         void Render(DrawingContext dc, Matrix3x3 parent);
         void Update();
-        void ProcessCollision(CollisionInfo? collisionInfo);
+        void ProcessCollision(List<IGameObject>? collisionInfo);
         #endregion
 
         #region Components
@@ -104,6 +110,9 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         void Enable(bool recursive = false);
         void Disable(bool recursive = false);
         bool IsEnabledAll(IGameObject gameObject);
+
+        void Hide();
+        void Show();
         #endregion
 
     }

@@ -332,7 +332,7 @@ namespace SpaceAvenger.Editor.ViewModels
         #region On Start Button Pressed
         private bool CanOnStartButtonPressedExecute(object p) =>
            m_animation.Validate() && !m_animation.IsRunning
-            && !m_animation.Completed;
+            && !m_animation.IsCompleted;
             
         private void OnStartButtonPressedExecute(object p)
         {
@@ -342,7 +342,7 @@ namespace SpaceAvenger.Editor.ViewModels
 
         #region On Pause Button Pressed
         private bool CanOnPauseButtonPressedExecute(object p) => 
-            m_animation.IsRunning && !m_animation.Completed;
+            m_animation.IsRunning && !m_animation.IsCompleted;
 
         private void OnPauseButtonPressedExecute(object p)
         {
@@ -356,7 +356,7 @@ namespace SpaceAvenger.Editor.ViewModels
             if (!IsLooping)
             {
                 return !m_animation.IsRunning
-                && m_animation.Validate() && m_animation.Completed;
+                && m_animation.Validate() && m_animation.IsCompleted;
             }
             return !m_animation.IsRunning && m_animation.Validate();
         }
