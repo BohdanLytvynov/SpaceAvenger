@@ -1,6 +1,8 @@
 ﻿using SpaceAvenger.Extensions.Math;
 using SpaceAvenger.Game.Core.UI.Base;
 using System;
+using System.ComponentModel.DataAnnotations;
+using System.Numerics;
 using System.Reflection.Metadata.Ecma335;
 using System.Windows.Media;
 using WPFGameEngine.WPF.GE.Math.Matrixes;
@@ -57,22 +59,23 @@ namespace SpaceAvenger.Game.Core.UI.Slider
 
         public override void Render(DrawingContext dc, Matrix3x3 parent)
         {
-            switch (BarGrowStart)
+            var localMatrix = Transform.GetLocalTransformMatrix();
+            localMatrix *= parent;
+            var locBasis = localMatrix.GetBasis();
+            var angle = Math.Atan2(locBasis.X.Y, locBasis.X.X) * 180/Math.PI;
+
+            if (angle > 0)
             {
-                case GrowStartPosition.Start:
-                    Transform.Rotation = 0;
-                    break;
-                case GrowStartPosition.End:
-                    Transform.Rotation = 90;
-                    break;
+                Transform.Rotation = 180;
+                localMatrix = Transform.GetLocalTransformMatrix();
+                localMatrix *= parent;
             }
 
-            var m = Transform.GetLocalTransformMatrix();
             float normValue = m_value / Max;
             Brush brush = GetBrush(normValue);
-            m *= parent;
+            
             var wm = Matrix.Identity;
-            wm.FromGEMatrix(m);
+            wm.BuildWindowMatrix(localMatrix);
 
             dc.PushTransform(new MatrixTransform(wm));
 
@@ -81,7 +84,7 @@ namespace SpaceAvenger.Game.Core.UI.Slider
                         Transform.ActualSize.Width * normValue, Transform.ActualSize.Height));
 
             dc.Pop();
-
+            
             base.Render(dc, parent);
         }
     }

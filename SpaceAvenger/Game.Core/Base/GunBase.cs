@@ -1,5 +1,7 @@
 ﻿using SpaceAvenger.Game.Core.Factions.F10.Projectiles;
+using System;
 using System.Numerics;
+using System.Windows.Media;
 using WPFGameEngine.GameViewControl;
 using WPFGameEngine.Timers.Base;
 using WPFGameEngine.WPF.GE.GameObjects;
@@ -10,6 +12,10 @@ namespace SpaceAvenger.Game.Core.Base
     public class GunBase<TShell> : MapableObject
         where TShell : ProjectileBase
     {
+        protected Brush GunReady;
+        protected Brush GunLoadedHalf;
+        protected Brush GunUnloaded;
+
         public float TimeRemainig { get; private set; }
         //Seconds
         public float ReloadSpeed { get; protected set; }
@@ -23,6 +29,10 @@ namespace SpaceAvenger.Game.Core.Base
 
         public override void StartUp(IGameObjectViewHost viewHost, IGameTimer gameTimer)
         {
+            GunReady = Brushes.Green;
+            GunLoadedHalf = Brushes.Orange;
+            GunUnloaded = Brushes.Red;
+
             TimeRemainig = 0;
             base.StartUp(viewHost, gameTimer);
         }
@@ -57,8 +67,19 @@ namespace SpaceAvenger.Game.Core.Base
             Vector2 centerPos = position - new Vector2(shellSize.Width / 2, shellSize.Height / 2);
             shell.Translate(centerPos);
             shell.Fire(dir);
-            shell.Rotate(Transform.Rotation);
+            var angle = Math.Atan2(dir.Y, dir.X) * 180/Math.PI;
+            shell.Rotate(Transform.Rotation);//Not so good logic
             Reload();
+        }
+
+        protected virtual Brush GetLoadIndicatorColor(float value)
+        {
+            if (value >= 0 && value < 0.25f)
+                return GunReady;
+            if (value >= 0.25f && value < 0.75f)
+                return GunLoadedHalf;
+            else
+                return GunUnloaded;
         }
     }
 }

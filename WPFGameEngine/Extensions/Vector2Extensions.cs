@@ -9,7 +9,7 @@ namespace WPFGameEngine.Extensions
         {
             return new Vector2(v.X * number, v.Y * number);
         }
-
+        
         public static Vector2 Multiply(this Vector2 v, double number)
         {
             return new Vector2(v.X * (float)number, v.Y * (float)number);

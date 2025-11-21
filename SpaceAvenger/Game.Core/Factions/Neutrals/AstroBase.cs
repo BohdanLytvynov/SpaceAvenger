@@ -15,7 +15,7 @@ namespace SpaceAvenger.Game.Core.Factions.Neutrals
 
         public override void StartUp(IGameObjectViewHost gameObjectViewHost, IGameTimer gameTimer)
         {
-            HP = 40000f;
+            HP = 4000f;
             Scale(new Size(0.5, 0.5));
             Translate(new Vector2(40, 40));
             Rotate(90);

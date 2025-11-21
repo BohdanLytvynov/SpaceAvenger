@@ -2,6 +2,7 @@
 using SpaceAvenger.Game.Core.UI.Slider;
 using SpaceAvenger.Services.WPFInputControllers;
 using System.Windows.Input;
+using System.Windows.Media;
 using WPFGameEngine.GameViewControl;
 using WPFGameEngine.Timers.Base;
 using WPFGameEngine.WPF.GE.GameObjects;
@@ -22,6 +23,10 @@ namespace SpaceAvenger.Game.Core.Base
         protected Bar HPSlider;
         protected Bar ShieldSlider;
 
+        protected Brush BarLow;
+        protected Brush BarHigh;
+        protected Brush BarMedium;
+
         #endregion
 
         protected SpaceShipBase(Faction factionName, string name) : base(name)
@@ -33,9 +38,16 @@ namespace SpaceAvenger.Game.Core.Base
         {
             Enable(true);
 
+            BarLow = Brushes.Red;
+            BarHigh = Brushes.Green;
+            BarMedium = Brushes.Orange;
+
             HPSlider = FindChild(x => x.UniqueName.Equals("HP")) as Bar;
             ShieldSlider = FindChild(x => x.UniqueName.Equals("Shield")) as Bar;
-
+            HPSlider.Max = HP;
+            HPSlider.Low = BarLow;
+            HPSlider.Medium = BarMedium;
+            HPSlider.Full = BarHigh;
             base.StartUp(viewHost, gameTimer);
         }
 

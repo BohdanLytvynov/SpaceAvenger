@@ -5,7 +5,7 @@ namespace SpaceAvenger.Extensions.Math
 {
     public static class WindowsMatrixExtensions
     {
-        public static void FromGEMatrix(this Matrix m, Matrix3x3 matrix)
+        public static void BuildWindowMatrix(this ref Matrix m, Matrix3x3 matrix)
         {
             m.M11 = matrix.M11;
             m.M12 = matrix.M12;

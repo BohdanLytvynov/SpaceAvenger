@@ -170,7 +170,6 @@
 
   <ItemGroup>
     <Folder Include="DataBase\" />
-    <Folder Include="Extensions\Math\" />
     <Folder Include="Game.Core\WPFGameObjects\" />
   </ItemGroup>
 
