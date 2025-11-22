@@ -2,13 +2,11 @@
 using SpaceAvenger.Editor.ViewModels.AnimatorOptions;
 using SpaceAvenger.Editor.ViewModels.Components.Base;
 using System.Collections.ObjectModel;
-using System.Resources;
 using System.Windows.Input;
 using ViewModelBaseLibDotNetCore.Commands;
 using WPFGameEngine.FactoryWrapper.Base;
 using WPFGameEngine.Services.Interfaces;
 using WPFGameEngine.WPF.GE.Component.Animators;
-using WPFGameEngine.WPF.GE.GameObjects;
 
 namespace SpaceAvenger.Editor.ViewModels.Components.Animators
 {
@@ -28,7 +26,18 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animators
         { get => m_animatorOptionsViewModel; set => m_animatorOptionsViewModel = value; }
 
         public AnimatorOptionViewModel SelectedOption 
-        { get => m_selectedOption; set => Set(ref m_selectedOption, value); }
+        { 
+            get => m_selectedOption;
+            set 
+            {
+                Set(ref m_selectedOption, value);
+                if (value == null)
+                { 
+                    m_selectedOption = new AnimatorOptionViewModel();
+                    return;
+                }                
+            }
+        }
         #endregion
 
         #region Commmands
@@ -79,7 +88,17 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animators
         {
             var option = new AnimatorOptionViewModel(AnimatorOptions.Count + 1, m_factoryWrapper, m_assemblyLoader, null);
             option.OnAnimatorChanged += Option_OnAnimatorChanged;
+            option.OnAnimationSelected += Option_OnAnimationSelected;
             AnimatorOptions.Add(option);
+        }
+
+        private void Option_OnAnimationSelected(string animation)
+        {
+            if (GameObject == null) return;
+            var animator = GameObject.GetComponent<Animator>();
+            if (animator == null) return;
+            if (!animator.Contains(animation)) return;
+            animator.SetAnimationForPlay(animation);
         }
 
         #endregion
@@ -90,6 +109,7 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animators
         private void OnDeleteButtonPressedExecute(object p)
         { 
             m_selectedOption.OnAnimatorChanged -= Option_OnAnimatorChanged;
+            m_selectedOption.OnAnimationSelected -= Option_OnAnimationSelected;
 
             var anim = GameObject.GetComponent<Animator>(false);
             if (anim != null)
@@ -135,7 +155,5 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animators
         }
 
         #endregion
-
-
     }
 }

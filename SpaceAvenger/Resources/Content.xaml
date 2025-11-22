@@ -45,11 +45,6 @@
     </ImageSource>
     <!--#endregion-->
 
-    <!--#region Jets -->
-    <ImageSource x:Key="F10_Jet_Normal_Atlas">pack://siteoforigin:,,,/Resources/Content/Jets/F10/F10_Jet_Normal_Atlas.png
-    </ImageSource>
-    <!--#endregion-->
-
     <!--#region Weapons -->
     <ImageSource x:Key="F10_RailGun">pack://siteoforigin:,,,/Resources/Content/Weapons/F10/RailGun.png
     </ImageSource>
@@ -62,6 +57,14 @@
 
     <!--#region Empty -->
     <ImageSource x:Key="Empty">pack://siteoforigin:,,,/Resources/Content/Empty.png
+    </ImageSource>
+    <!--#endregion-->
+
+    <!--#region Jets -->
+    <ImageSource x:Key="F10JetIdle_Atlas1">pack://siteoforigin:,,,/Resources/Content/Jets/F10/F10Jet_Idle_Atlas1.png
+    </ImageSource>
+
+    <ImageSource x:Key="F10JetIdle_Atlas2">pack://siteoforigin:,,,/Resources/Content/Jets/F10/F10Jet_Idle_Atlas2.png
     </ImageSource>
     <!--#endregion-->
 

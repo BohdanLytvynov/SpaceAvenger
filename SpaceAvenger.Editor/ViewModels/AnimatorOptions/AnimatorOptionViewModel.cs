@@ -14,6 +14,7 @@ namespace SpaceAvenger.Editor.ViewModels.AnimatorOptions
     {
         #region Events
         public event Action<string, IAnimation> OnAnimatorChanged;
+        public event Action<string> OnAnimationSelected;
         #endregion
 
         #region Fields
@@ -52,6 +53,8 @@ namespace SpaceAvenger.Editor.ViewModels.AnimatorOptions
 
         #region Commands
         public ICommand OnConfigureButtonPressed { get; }
+
+        public ICommand OnSelectAnimationButtonPressed { get; }
         #endregion
 
         #region IDataErrorInfo
@@ -119,14 +122,34 @@ namespace SpaceAvenger.Editor.ViewModels.AnimatorOptions
                     OnConfigureButtonPressedExecute,
                     CanOnConfigureButtonPressedExecute
                 );
+
+            OnSelectAnimationButtonPressed = new Command
+                (
+                    OnSelectAnimationButtonPressedExecute,
+                    CanOnSelectAnimationButtonPressedExecute
+                );
             #endregion
         }
         #endregion
 
         #region Methods
+
+        #region On Select Animation Button Pressed
+
+        private bool CanOnSelectAnimationButtonPressedExecute(object p)
+        {
+            return m_animation?.Validate() ?? false;
+        }
+
+        private void OnSelectAnimationButtonPressedExecute(object p)
+        {
+            OnAnimationSelected?.Invoke(AnimationName);
+        }
+
+        #endregion
+
         #region Can On Configure Button Pressed 
         private bool CanOnConfigureButtonPressedExecute(object p) => GetValidArrayValue(0);
-            
 
         private void OnConfigureButtonPressedExecute(object p)
         {

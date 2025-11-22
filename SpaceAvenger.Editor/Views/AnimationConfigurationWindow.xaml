@@ -7,9 +7,10 @@
         xmlns:vm="clr-namespace:SpaceAvenger.Editor.ViewModels"
         xmlns:controls="clr-namespace:WPFGameEngine.Editor.Controls;assembly=WPFGameEngine"
         xmlns:oxy="http://oxyplot.org/wpf"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance vm:AnimationConfigurationViewModel, IsDesignTimeCreatable=True}"
-        Title="{Binding Title}" Height="450" Width="800">
+        Title="{Binding Title}" Height="800" Width="800">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -32,7 +33,11 @@
                     <RowDefinition Height="70"/>
                 </Grid.RowDefinitions>
                 <Border Margin="5" Style="{StaticResource BorderRoundStyle}">
-                    <Label Content="{Binding GameView, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Border.Background>
+                        <SolidColorBrush Color="{Binding ElementName=picker, Path=SelectedColor, UpdateSourceTrigger=PropertyChanged}"/>
+                    </Border.Background>
+                    <Label Content="{Binding GameView, UpdateSourceTrigger=PropertyChanged}"
+                           />
                 </Border>
                 <Border Margin="5" Style="{StaticResource BorderRoundStyle}" Grid.Row="1">
                     <StackPanel Orientation="Vertical" Margin="4">
@@ -69,6 +74,9 @@
                                           DisplayMemberPath="DisplayName"
                                           IsEnabled="{Binding EaseEnabled, UpdateSourceTrigger=PropertyChanged}"
                                           />
+                                <TextBlock Text="Background: " Margin="5,0,0,0"
+                                           Style="{StaticResource FieldName}"/>
+                                <xctk:ColorPicker x:Name="picker"/>
                             </StackPanel>
                             <oxy:PlotView 
                                 Model="{Binding PlotModel, UpdateSourceTrigger=PropertyChanged}" 

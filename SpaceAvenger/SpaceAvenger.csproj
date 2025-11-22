@@ -33,7 +33,6 @@
     <None Remove="Resources\Content\Chars\Commanders\CommandersF.png" />
     <None Remove="Resources\Content\Chars\Commanders\CommandersM.png" />
     <None Remove="Resources\Content\Empty.png" />
-    <None Remove="Resources\Content\Jets\F10\F10_Jet_Normal_Atlas.png" />
     <None Remove="Resources\Content\Projectiles\F10Prj.png" />
     <None Remove="Resources\Content\SpaceShips\F10\Destroyer\destroyer256.png" />
     <None Remove="Resources\Content\SpaceShips\Neutrals\AstroBase.png" />
@@ -132,7 +131,10 @@
     <Content Include="Resources\Content\Explosions\Explosion4_Atlas.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Content\Jets\F10\F10_Jet_Normal_Atlas.png">
+    <Content Include="Resources\Content\Jets\F10\F10Jet_Idle_Atlas2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Content\Jets\F10\F10Jet_Idle_Atlas1.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\Content\Projectiles\F10\F10Prj.png">
