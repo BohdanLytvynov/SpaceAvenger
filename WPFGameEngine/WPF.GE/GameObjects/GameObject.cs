@@ -103,8 +103,6 @@ namespace WPFGameEngine.WPF.GE.GameObjects
             get; protected set;
         }
         #endregion
-
-        public bool IsExported { get; set; }
         public bool IsVisible { get; set; }
         public bool Enabled { get; set; }
         public double ZIndex { get; set; }
@@ -175,7 +173,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects
             if (IsCollidable && Collider.CollisionShape != null)
             {
                 Collider.ActualObjectSize = Transform.ActualSize;
-                var globMatrix = GetGlobalTransformMatrix();
+                var globMatrix = GetWorldTransformMatrix();
                 var leftUpperCorner = globMatrix.GetTranslate();
                 Collider.CollisionShape.Scale = Transform.Scale;
                 Collider.CollisionShape.Scale.CheckNegativeSize();
@@ -564,7 +562,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects
             if (root == null)
                 return null;
 
-            if (!root.IsExported)
+            if (!(root as IExportable)?.IsExported ?? false)
                 return null;
 
             GameObjectDto gameObjectDto = new GameObjectDto();
@@ -689,7 +687,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects
             Transform.Rotation = angle;
         }
 
-        public Matrix3x3 GetGlobalTransformMatrix()
+        public Matrix3x3 GetWorldTransformMatrix()
         {
             Matrix3x3 m = Matrix3x3.Identity;
             GetGlobalMatrixRec(this, ref m);
@@ -730,7 +728,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects
             }
         }
 
-        public static Matrix3x3 GetGlobalTransformMatrix(IGameObject obj)
+        public static Matrix3x3 GetWorldTransformMatrix(IGameObject obj)
         {
             Matrix3x3 m = new Matrix3x3();
             GetGlobalMatrixRec(obj, ref m);
@@ -739,32 +737,31 @@ namespace WPFGameEngine.WPF.GE.GameObjects
 
         #endregion
 
-        public Vector2 GetWorldCenter()
+        public Vector2 GetWorldCenter(Matrix3x3 worldMatrix)
         {
-            var m = this.GetGlobalTransformMatrix();
-            var b = m.GetBasis();
+            var b = worldMatrix.GetBasis();
             var center = Transform.ActualCenterPosition;
             var lx = b.X.Multiply(center.X);
             var ly = b.Y.Multiply(center.Y);
             var l = lx + ly;
-            return m.GetTranslate() + l;
+            return worldMatrix.GetTranslate() + l;
         }
 
-        public Vector2 GetDirection(Vector2 position)
+        public Vector2 GetDirection(Vector2 position, Matrix3x3 worldMatrix)
         {
-            var objW = GetWorldCenter();
+            var objW = GetWorldCenter(worldMatrix);
             return Vector2.Normalize(position - objW);
         }
 
         public Basis2D GetBasis()
         { 
-            return GetGlobalTransformMatrix().GetBasis();
+            return GetWorldTransformMatrix().GetBasis();
         }
 
-        public void LookAt(Vector2 position, double rotSpeed, double deltaTime)
+        public void LookAt(Vector2 position, double rotSpeed, double deltaTime, Matrix3x3 worldMatrix)
         {
             //Get Dir Vector to Target
-            var dir = GetDirection(position);
+            var dir = GetDirection(position, worldMatrix);
             //Check that we are not in bounds of target
             if (dir.LengthSquared() < 0.0001)
                 return;

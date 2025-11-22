@@ -15,15 +15,16 @@ namespace SpaceAvenger.Game.Core.Base
         public override void StartUp(IGameObjectViewHost viewHost, IGameTimer gameTimer)
         {
             Disable(true);
+            Animation.Stop();
+            Animation.Reset(Animation.Reverse);
             base.StartUp(viewHost, gameTimer);
         }
 
-        public void Explode(Vector2 position, Size ExplosionSize)
+        public void Explode(Vector2 position)
         {
             Enable();
-            Scale(ExplosionSize);
             var size = GetActualSize();
-            Translate(position - new Vector2(size.Width / 2, size.Height / 2));
+            Translate(position - new Vector2(size.Width / 2, size.Height / 2));//Move to the center origin of the texture
             Animation.Start();
         }
 

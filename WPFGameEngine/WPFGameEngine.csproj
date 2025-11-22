@@ -17,6 +17,7 @@
   <ItemGroup>
     <Folder Include="Serialization\" />
     <Folder Include="WPF.GE\Geometry\Base\Base\" />
+    <Folder Include="WPF.GE\Levels\" />
   </ItemGroup>
 
 </Project>

@@ -35,7 +35,8 @@ namespace SpaceAvenger.Editor.ViewModels.TreeItems
             set 
             {
                 Set(ref m_Exported, value); 
-                GameObject.IsExported = value;
+                if(GameObject is IExportable exp)
+                    exp.IsExported = value;
             }
         }
         //Indicates if we need to raise events

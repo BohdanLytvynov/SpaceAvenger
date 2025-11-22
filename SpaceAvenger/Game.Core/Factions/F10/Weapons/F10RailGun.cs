@@ -1,4 +1,5 @@
-﻿using SpaceAvenger.Game.Core.Base;
+﻿using SpaceAvenger.Game.Core.Animations.Explosions;
+using SpaceAvenger.Game.Core.Base;
 using SpaceAvenger.Game.Core.Factions.F10.Projectiles;
 using System.Windows.Media;
 using WPFGameEngine.Extensions;
@@ -8,7 +9,7 @@ using WPFGameEngine.WPF.GE.Math.Matrixes;
 
 namespace SpaceAvenger.Game.Core.Factions.F10.Weapons
 {
-    public class F10RailGun : GunBase<F10RailGunProjectile>
+    public class F10RailGun : GunBase<F10RailGunProjectile, GunBlast>
     {
         public F10RailGun() : base(nameof(F10RailGun))
         {
@@ -20,6 +21,7 @@ namespace SpaceAvenger.Game.Core.Factions.F10.Weapons
             ReloadTime = 2.5f;
             ReloadSpeed = 1;
             ShellScaleMultipl = 2.0f / 4.0f;
+            GunBlastScaleMultipl = 1f/2f;
             base.StartUp(viewHost, gameTimer);
         }
 
@@ -27,7 +29,7 @@ namespace SpaceAvenger.Game.Core.Factions.F10.Weapons
         {
             base.Render(dc, parent);
 
-            var Gun_center = GetWorldCenter();
+            var Gun_center = GetWorldCenter(GetWorldTransformMatrix());
 
             var brush = GetLoadIndicatorColor(TimeRemainig / ReloadTime);
 

@@ -79,6 +79,8 @@ namespace SpaceAvenger.Editor.ViewModels
                 m_animation.TotalTime = value;
                 EnableEaseCombobox();
                 EnableResourceCombobox();
+                if (m_SelectedEaseFunction != null)
+                    DrawSelectedFunction(m_SelectedEaseFunction);
             }
         }
         public int TotalFrameCount 
@@ -472,7 +474,6 @@ namespace SpaceAvenger.Editor.ViewModels
                 && m_SelectedEaseFunction != null 
                 && m_animation.AnimationFrames.Count > 0;
         }
-
         #endregion
     }
 }

@@ -1,6 +1,8 @@
-﻿namespace SpaceAvenger.Editor.Mock
+﻿using WPFGameEngine.WPF.GE.GameObjects;
+
+namespace SpaceAvenger.Editor.Mock
 {
-    internal interface IGameObjectMock
+    internal interface IGameObjectMock : IExportable
     {
         public int Id { get; }
     }

@@ -19,9 +19,10 @@ namespace SpaceAvenger.Game.Core.Base
         public float HorSpeed { get; protected set; }
         public float VertSpeed { get; protected set; }
         public Faction Faction { get; private set; }
+        public bool IsAlive { get; private set; }
 
-        protected Bar HPSlider;
-        protected Bar ShieldSlider;
+        protected Bar HPBar;
+        protected Bar ShieldBar;
 
         protected Brush BarLow;
         protected Brush BarHigh;
@@ -37,17 +38,26 @@ namespace SpaceAvenger.Game.Core.Base
         public override void StartUp(IGameObjectViewHost viewHost, IGameTimer gameTimer)
         {
             Enable(true);
-
+            IsAlive = true;
             BarLow = Brushes.Red;
             BarHigh = Brushes.Green;
             BarMedium = Brushes.Orange;
 
-            HPSlider = FindChild(x => x.UniqueName.Equals("HP")) as Bar;
-            ShieldSlider = FindChild(x => x.UniqueName.Equals("Shield")) as Bar;
-            HPSlider.Max = HP;
-            HPSlider.Low = BarLow;
-            HPSlider.Medium = BarMedium;
-            HPSlider.Full = BarHigh;
+            HPBar = FindChild(x => x.UniqueName.Equals("HP")) as Bar;
+            HPBar.Max = HP;
+            HPBar.Low = BarLow;
+            HPBar.Medium = BarMedium;
+            HPBar.Full = BarHigh;
+
+            ShieldBar = FindChild(x => x.UniqueName.Equals("Shield")) as Bar;
+            if (ShieldBar != null)
+            {
+                ShieldBar.Max = Shield;
+                ShieldBar.Low = BarLow;
+                ShieldBar.Medium = BarMedium;
+                ShieldBar.Full = BarHigh;
+            }
+
             base.StartUp(viewHost, gameTimer);
         }
 
@@ -80,23 +90,31 @@ namespace SpaceAvenger.Game.Core.Base
                 }
             }
 
-            HPSlider?.Update(HP);
-            ShieldSlider?.Update(Shield);
+            HPBar.Update(HP);
+            ShieldBar?.Update(Shield);
 
-            if(HP <= 0)
+            if (HP <= 0 && IsAlive)
+            {
+                IsAlive = false;
                 Destroy();
+            }
+            
+
+
 
             base.Update();
         }
-
-        public override void OnAddToPool()
-        {
-            base.OnAddToPool();
-        }
-
+ 
         protected virtual void Destroy()
         {
             Disable(true);
+            AddToPool(this);
+        }
+
+        public override void OnGetFromPool()
+        {
+            IsAlive = true;
+            base.OnGetFromPool();
         }
     }
 }

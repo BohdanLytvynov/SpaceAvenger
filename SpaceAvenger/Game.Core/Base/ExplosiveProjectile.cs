@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using WPFGameEngine.GameViewControl;
 using WPFGameEngine.WPF.GE.GameObjects;
+using WPFGameEngine.WPF.GE.Math.Matrixes;
 
 namespace SpaceAvenger.Game.Core.Base
 {
@@ -28,8 +29,8 @@ namespace SpaceAvenger.Game.Core.Base
                     Collider.DisableCollision();
                     Hide();
                     var expl = (GameView as IMapableObjectViewHost).Instantiate<TExplosion>();
-                    expl.Explode(GetWorldCenter(), ExplosionScale);
-                    Debug.WriteLine($"{obj.GetType().Name} -> Damage -> CH: {s.HP}");
+                    expl.Scale(ExplosionScale);
+                    expl.Explode(GetWorldCenter(GetWorldTransformMatrix()));
                 }
             }
 

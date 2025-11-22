@@ -72,6 +72,10 @@ namespace SpaceAvenger.Game.Core.UI.Slider
             }
 
             float normValue = m_value / Max;
+
+            if(normValue <= 0)
+                normValue = 0;
+
             Brush brush = GetBrush(normValue);
             
             var wm = Matrix.Identity;

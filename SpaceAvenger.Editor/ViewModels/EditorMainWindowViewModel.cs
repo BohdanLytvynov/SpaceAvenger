@@ -35,8 +35,8 @@ using WPFGameEngine.WPF.GE.Dto.GameObjects;
 using SpaceAvenger.Services.WpfGameViewHost;
 using WPFGameEngine.WPF.GE.Component.Collider;
 using SpaceAvenger.Editor.ViewModels.Components.Collider;
-using WPFGameEngine.WPF.GE.Math.Sizes;
 using System.Windows;
+using System.IO;
 
 namespace SpaceAvenger.Editor.ViewModels
 {
@@ -511,7 +511,7 @@ namespace SpaceAvenger.Editor.ViewModels
             Exception ex = null;
             foreach (var item in GameView.World)
             {
-                if (item.IsExported)
+                if ((item as IExportable)?.IsExported ?? false)
                 {
                     m_gameObjectExporter.Export(item, PathToExport, ex);
                     count++;
@@ -596,8 +596,9 @@ namespace SpaceAvenger.Editor.ViewModels
         {
             GameObject.RemoveObject(obj => obj.ObjectName.Equals(SelectedPrefab.PrefabName), 
                 GameView.World, true);
+            File.Delete(PathToExport + Path.DirectorySeparatorChar + SelectedPrefab.PrefabName + ".json");
             Prefabs.Remove(SelectedPrefab);
-            SelectedPrefab = new PrefabViewModel();
+            m_SelectedPrefab = new PrefabViewModel();
         }
         #endregion
 

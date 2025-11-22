@@ -100,10 +100,10 @@
                             StringFormat='Total Frame Count:{0}'}"
                                    />
                     </StackPanel>
-                    <controls:Slider Margin="5" LabelText="Total Animation Time:(ms)" Minimum="0" Maximum="10000000000"
+                    <controls:Slider Margin="5" LabelText="Total Animation Time:(ms)" Minimum="1000" Maximum="10000"
                                      Value="{Binding TotalTime, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                      />
-                    <controls:Slider LabelText="Animation Speed:" Margin="5" Minimum="1" Maximum="1000"
+                    <controls:Slider LabelText="Animation Speed:" Margin="5" Minimum="0" Maximum="100"
                                      Value="{Binding AnimationSpeed, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                     <StackPanel Orientation="Horizontal" Margin="5">
                         <CheckBox Content="Is Looping" FontSize="16" VerticalContentAlignment="Center"

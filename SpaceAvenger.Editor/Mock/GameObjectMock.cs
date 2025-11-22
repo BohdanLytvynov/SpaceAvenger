@@ -7,8 +7,8 @@ namespace SpaceAvenger.Editor.Mock
 {
     public class GameObjectMock : GameObject, IGameObjectMock
     {
-        public int Id => m_id;
-        
+        public bool IsExported { get; set; }
+
         public GameObjectMock() : base()
         {
             

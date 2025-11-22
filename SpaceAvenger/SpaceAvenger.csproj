@@ -40,8 +40,11 @@
     <None Remove="Resources\Content\Weapons\F10\RailGun.png" />
     <None Remove="Resources\GameObjects\AstroBase.json" />
     <None Remove="Resources\GameObjects\Explosion1.json" />
+    <None Remove="Resources\GameObjects\Explosion3.json" />
+    <None Remove="Resources\GameObjects\Explosion4.json" />
     <None Remove="Resources\GameObjects\F10Destroyer.json" />
     <None Remove="Resources\GameObjects\F10RailGunProjectile.json" />
+    <None Remove="Resources\GameObjects\GunBlast.json" />
   </ItemGroup>
 
   <ItemGroup>
@@ -153,10 +156,19 @@
     <Content Include="Resources\GameObjects\Explosion1.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resources\GameObjects\Explosion3.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\GameObjects\Explosion4.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\GameObjects\F10Destroyer.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\GameObjects\F10RailGunProjectile.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\GameObjects\GunBlast.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

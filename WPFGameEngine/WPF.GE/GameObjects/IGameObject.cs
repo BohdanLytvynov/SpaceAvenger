@@ -1,9 +1,5 @@
-﻿using System.Numerics;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
+﻿using System.Windows.Media.Imaging;
 using WPFGameEngine.Factories.Base;
-using WPFGameEngine.GameViewControl;
-using WPFGameEngine.Timers.Base;
 using WPFGameEngine.WPF.GE.Component.Animations;
 using WPFGameEngine.WPF.GE.Component.Animators;
 using WPFGameEngine.WPF.GE.Component.Base;
@@ -12,15 +8,17 @@ using WPFGameEngine.WPF.GE.Component.Sprites;
 using WPFGameEngine.WPF.GE.Component.Transforms;
 using WPFGameEngine.WPF.GE.Dto.Base;
 using WPFGameEngine.WPF.GE.Dto.GameObjects;
-using WPFGameEngine.WPF.GE.Math.Matrixes;
-using WPFGameEngine.WPF.GE.Math.Sizes;
 
 namespace WPFGameEngine.WPF.GE.GameObjects
 {
-    public interface IGameObject : IGameEngineEntity, IConvertToDto<GameObjectDto>
+    public interface IGameObject :
+        IRenderable,
+        ICollidable,
+        ITransformable,
+        IUpdatable,
+        IConvertToDto<GameObjectDto>
     {
         #region Lazy Loading
-        ITransform Transform { get; }
         IAnimation Animation { get; }
         IAnimator Animator { get; }
         ISprite Sprite { get; }
@@ -29,16 +27,8 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         #endregion
 
         #region Main Game Object Properties
-        public bool IsCollidable { get; }
-        /// <summary>
-        /// Use for editor only not for games
-        /// </summary>
-        public bool IsExported { get; set; }
         public double ZIndex { get; set; }
-        /// <summary>
-        /// Controls Rendering of the Object, but Update calculations will still take place
-        /// </summary>
-        public bool IsVisible { get; set; }
+        
         /// <summary>
         /// Enables Calculations for Update and Rendering
         /// </summary>
@@ -52,13 +42,6 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         public List<IGameObject> Children { get; }
         public IGameObject Parent { get; set; }
         public int Id { get; }
-        #endregion
-
-        #region Game Loop
-        void StartUp(IGameObjectViewHost viewHost, IGameTimer gameTimer);
-        void Render(DrawingContext dc, Matrix3x3 parent);
-        void Update();
-        void ProcessCollision(List<IGameObject>? collisionInfo);
         #endregion
 
         #region Components
@@ -85,34 +68,11 @@ namespace WPFGameEngine.WPF.GE.GameObjects
             where TObject : class;
         IEnumerable<IGameObject> GetAllChildrenOfType(string typeName, bool recursiveSearch = false);
         #endregion
-
-        #region Transform
-        void Translate(Vector2 position);
-        void Translate(Vector2 dir, float speed, double deltaTime);
-        /// <summary>
-        /// Rotates an object
-        /// </summary>
-        /// <param name="angle">In Degrees</param>
-        void Rotate(double angle);
-        void Scale(Size newScale);
-        Matrix3x3 GetGlobalTransformMatrix();
-        /// <summary>
-        /// Returns Center of the object in world Coordinates
-        /// </summary>
-        /// <returns></returns>
-        Vector2 GetWorldCenter();
-        void LookAt(Vector2 position, double rotSpeed, double deltaTime);
-        Vector2 GetDirection(Vector2 position);
-        Size GetActualSize();
-        #endregion
-
+       
         #region Enable Disable
         void Enable(bool recursive = false);
         void Disable(bool recursive = false);
         bool IsEnabledAll(IGameObject gameObject);
-
-        void Hide();
-        void Show();
         #endregion
 
     }

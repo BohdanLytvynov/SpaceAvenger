@@ -1,4 +1,5 @@
-﻿using SpaceAvenger.Game.Core.Base;
+﻿using SpaceAvenger.Game.Core.Animations.Explosions;
+using SpaceAvenger.Game.Core.Base;
 using SpaceAvenger.Game.Core.Enums;
 using SpaceAvenger.Game.Core.Factions.F10.Weapons;
 using SpaceAvenger.Services.WPFInputControllers;
@@ -10,12 +11,13 @@ using WPFGameEngine.Extensions;
 using WPFGameEngine.GameViewControl;
 using WPFGameEngine.Timers.Base;
 using WPFGameEngine.WPF.GE.Component.Controllers;
+using WPFGameEngine.WPF.GE.GameObjects;
 using WPFGameEngine.WPF.GE.Math.Matrixes;
 using WPFGameEngine.WPF.GE.Math.Sizes;
 
 namespace SpaceAvenger.Game.Core.Factions.F10.Destroyer
 {
-    public class F10Destroyer : SpaceShipBase
+    public class F10Destroyer : ExplosiveSpaceShipBase<Explosion1>
     {
         private IEnumerable<F10RailGun> m_battery;
         private Pen m_targetMarkerPen;
@@ -25,6 +27,7 @@ namespace SpaceAvenger.Game.Core.Factions.F10.Destroyer
             VertSpeed = 40;
             HP = 4000;
             Shield = 2000;
+            ShipExplosionScale = 5;
         }
 
         #region Methods
@@ -48,7 +51,7 @@ namespace SpaceAvenger.Game.Core.Factions.F10.Destroyer
             {
                 foreach (var gun in m_battery)
                 {
-                    gun.LookAt(m_controller.MousePosition, 2, GameTimer.deltaTime.TotalSeconds);
+                    gun.LookAt(m_controller.MousePosition, 2, GameTimer.deltaTime.TotalSeconds, gun.GetWorldTransformMatrix());
                 }
 
                 if (m_controller.IsKeyDown(System.Windows.Input.Key.R))
@@ -60,7 +63,7 @@ namespace SpaceAvenger.Game.Core.Factions.F10.Destroyer
                 {
                     foreach (var gun in m_battery)
                     {
-                        gun.Shoot(GetDirection(m_controller.MousePosition));
+                        gun.Shoot(GetDirection(m_controller.MousePosition, GetWorldTransformMatrix()));
                     }
                 }
             }
@@ -75,7 +78,7 @@ namespace SpaceAvenger.Game.Core.Factions.F10.Destroyer
             foreach (var gun in m_battery)
             {
                 dc.DrawLine(m_targetMarkerPen,
-                gun.GetWorldCenter().ToPoint(),
+                gun.GetWorldCenter(gun.GetWorldTransformMatrix()).ToPoint(),
                 m_controller.MousePosition.ToPoint());
             }
 
