@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Numerics;
 using System.Windows.Media;
 using WPFGameEngine.GameViewControl;
@@ -13,13 +14,10 @@ namespace SpaceAvenger.Game.Core.Base
         where TShell : ProjectileBase
         where TGunBlast : ExplosionBase
     {
-        private ExplosionBase m_Blast;
-        private Vector2 m_gunCenterPosition;
-        private bool m_fired;
-        protected IMapableObjectViewHost MapableViewHost;
+        private ExplosionBase? m_Blast;        
+        private bool m_fired;        
         protected Vector2 m_ShootDirection;
-        private IAnimation m_blastAnimation;
-        private Vector2 m_blastPosition;
+        private IAnimation? m_blastAnimation;
 
         protected Brush GunReady;
         protected Brush GunLoadedHalf;
@@ -39,8 +37,7 @@ namespace SpaceAvenger.Game.Core.Base
             GunLoadedHalf = Brushes.Orange;
             GunUnloaded = Brushes.Red;
             m_fired = false;
-            TimeRemainig = 0;
-            MapableViewHost = (viewHost as IMapableObjectViewHost);
+            TimeRemainig = 0;            
             base.StartUp(viewHost, gameTimer);
         }
 
@@ -54,19 +51,27 @@ namespace SpaceAvenger.Game.Core.Base
             if (TimeRemainig < 0)
                 TimeRemainig = 0;
 
-            if (m_fired && m_blastAnimation != null && m_blastAnimation.CurrentFrameIndex 
-                == m_blastAnimation.AnimationFrames.Count/4)
+            if (m_fired && m_blastAnimation != null && m_blastAnimation.CurrentFrameIndex
+                == m_blastAnimation.AnimationFrames.Count / 4)
             {
                 var shell = MapableViewHost.Instantiate<TShell>();
                 shell.Scale(Transform.Scale * ShellScaleMultipl);
                 Size shellSize = shell.GetActualSize();
-                Vector2 centerPos = m_blastPosition - new Vector2(shellSize.Width / 2, shellSize.Height / 2);
-                shell.Translate(centerPos);
+                var blastPos = GetBlastPosition();
+                Vector2 shellCenterPos = blastPos - new Vector2(shellSize.Width / 2, shellSize.Height / 2);
+                m_Blast.UpdatePosition(blastPos);
+                shell.Translate(shellCenterPos);
                 var angle = Math.Atan2(m_ShootDirection.Y, m_ShootDirection.X) * 180 / Math.PI;
                 shell.Rotate(angle + 90);//Init sprite rotation to -90 deg, so we need to fix it by rotating to 90 deg
                 shell.Fire(m_ShootDirection);
                 m_fired = false;
                 Reload();
+            }
+
+            if (m_Blast != null && m_blastAnimation.CurrentFrameIndex <= 
+                m_blastAnimation.AnimationFrames.Count * 1/3)
+            {
+                m_Blast.UpdatePosition(GetBlastPosition());
             }
 
             base.Update();
@@ -79,21 +84,24 @@ namespace SpaceAvenger.Game.Core.Base
 
         public virtual void Shoot(Vector2 dir)
         {
-            if (!GunLoaded)
+            if (!GunLoaded || m_fired)
                 return;
             m_ShootDirection = dir;
-            var worldMatrix = GetWorldTransformMatrix();
-            m_gunCenterPosition = GetWorldCenter(worldMatrix);
-
-            m_Blast = (GameView as IMapableObjectViewHost).Instantiate<TGunBlast>();
+            m_Blast = MapableViewHost.Instantiate<TGunBlast>();
             m_blastAnimation = m_Blast.GetComponent<Animation>();
-            m_blastPosition = m_gunCenterPosition +
-                worldMatrix.GetBasis().X * ((1 - Transform.CenterPosition.X) * Transform.ActualSize.Width);
             var angle = Math.Atan2(dir.Y, dir.X) * 180 / Math.PI;
             m_Blast.Scale(Transform.Scale * GunBlastScaleMultipl);
             m_Blast.Rotate(angle);
-            m_Blast.Explode(m_blastPosition);
+            m_Blast.Explode(GetBlastPosition());
             m_fired = true;
+            Debug.WriteLine("Shooting");
+        }
+
+        private Vector2 GetBlastPosition()
+        {
+            var worldMatrix = GetWorldTransformMatrix();
+            return GetWorldCenter(worldMatrix)
+                + worldMatrix.GetBasis().X * ((1 - Transform.CenterPosition.X) * Transform.ActualSize.Width);
         }
 
         protected virtual Brush GetLoadIndicatorColor(float value)

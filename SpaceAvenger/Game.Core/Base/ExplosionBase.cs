@@ -8,6 +8,8 @@ namespace SpaceAvenger.Game.Core.Base
 {
     public abstract class ExplosionBase : СacheableObject
     {
+        private Size m_ExplosionSize;
+
         public override void StartUp(IGameObjectViewHost viewHost, IGameTimer gameTimer)
         {
             Disable(true);
@@ -19,9 +21,14 @@ namespace SpaceAvenger.Game.Core.Base
         public void Explode(Vector2 position)
         {
             Enable();
-            var size = GetActualSize();
-            Translate(position - new Vector2(size.Width / 2, size.Height / 2));//Move to the center origin of the texture
+            m_ExplosionSize = GetActualSize();
+            Translate(position - new Vector2(m_ExplosionSize.Width / 2, m_ExplosionSize.Height / 2));//Move to the center origin of the texture
             Animation.Start();
+        }
+
+        public void UpdatePosition(Vector2 position)
+        {
+            Translate(position - new Vector2(m_ExplosionSize.Width / 2, m_ExplosionSize.Height / 2));//Move to the center origin of the texture
         }
 
         public override void Update()
