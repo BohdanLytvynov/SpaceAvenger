@@ -1,8 +1,8 @@
-﻿using SpaceAvenger.Game.Core.Animations.Explosions;
+﻿using SpaceAvenger.Extensions.Math;
+using SpaceAvenger.Game.Core.Animations.Explosions;
 using SpaceAvenger.Game.Core.Base;
 using SpaceAvenger.Game.Core.Factions.F10.Projectiles;
 using System.Windows.Media;
-using WPFGameEngine.Extensions;
 using WPFGameEngine.GameViewControl;
 using WPFGameEngine.Timers.Base;
 using WPFGameEngine.WPF.GE.Math.Matrixes;
@@ -11,11 +11,6 @@ namespace SpaceAvenger.Game.Core.Factions.F10.Weapons
 {
     public class F10RailGun : GunBase<F10RailGunProjectile, GunBlast>
     {
-        public F10RailGun() : base(nameof(F10RailGun))
-        {
-            
-        }
-
         public override void StartUp(IGameObjectViewHost viewHost, IGameTimer gameTimer)
         {
             ReloadTime = 2.5f;

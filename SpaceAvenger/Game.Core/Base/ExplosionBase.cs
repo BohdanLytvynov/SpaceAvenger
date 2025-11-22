@@ -8,10 +8,6 @@ namespace SpaceAvenger.Game.Core.Base
 {
     public abstract class ExplosionBase : СacheableObject
     {
-        public ExplosionBase(string name) : base(name)
-        {
-        }
-
         public override void StartUp(IGameObjectViewHost viewHost, IGameTimer gameTimer)
         {
             Disable(true);

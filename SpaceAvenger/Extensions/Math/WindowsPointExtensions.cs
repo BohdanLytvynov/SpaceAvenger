@@ -9,5 +9,10 @@ namespace SpaceAvenger.Extensions.Math
         { 
             return new Point(vector.X, vector.Y);
         }
+
+        public static Point ToPoint(this Vector2 v)
+        {
+            return new Point(v.X, v.Y);
+        }
     }
 }

@@ -1,4 +1,4 @@
-﻿using WPFGameEngine.WPF.GE.GameObjects;
+﻿using WPFGameEngine.WPF.GE.GameObjects.Updatable;
 
 namespace WPFGameEngine.WPF.GE.LevelManagers.Base
 {

@@ -1,4 +1,5 @@
 ﻿using WPFGameEngine.WPF.GE.GameObjects;
+using WPFGameEngine.WPF.GE.GameObjects.Collidable;
 using WPFGameEngine.WPF.GE.Helpers;
 
 namespace WPFGameEngine.CollisionDetection.CollisionManager.Base
@@ -118,13 +119,16 @@ namespace WPFGameEngine.CollisionDetection.CollisionManager.Base
                     continue;
                 }
 
-                List<IGameObject> currentObjects;
+                List<ICollidable?> currentObjects;
                 lock (m_lock)
                 {
                     currentObjects = World.Where(x => x != null && x.Enabled &&
-                    x.IsCollidable && 
-                    x.Collider.CollisionEnabled &&
-                    x.Collider.CollisionResolved).ToList();
+                    (x is ICollidable collidable) &&
+                    collidable.IsCollidable &&
+                    collidable.Collider.CollisionEnabled &&
+                    collidable.Collider.CollisionResolved)
+                        .Select(x => x as ICollidable)
+                        .ToList();
                 }
 
                 int len = currentObjects.Count;
@@ -136,6 +140,9 @@ namespace WPFGameEngine.CollisionDetection.CollisionManager.Base
                         var obj1 = currentObjects[i];
                         var obj2 = currentObjects[j];
                         
+                        if(obj1 == null || obj2 == null)
+                            continue;
+
                         if (CollisionHelper.Intersects(
                             obj1.Collider.CollisionShape,
                             obj2.Collider.CollisionShape))

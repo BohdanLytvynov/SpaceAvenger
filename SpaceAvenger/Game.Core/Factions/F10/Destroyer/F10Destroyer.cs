@@ -1,17 +1,15 @@
-﻿using SpaceAvenger.Game.Core.Animations.Explosions;
+﻿using SpaceAvenger.Extensions.Math;
+using SpaceAvenger.Game.Core.Animations.Explosions;
 using SpaceAvenger.Game.Core.Base;
 using SpaceAvenger.Game.Core.Enums;
 using SpaceAvenger.Game.Core.Factions.F10.Weapons;
 using SpaceAvenger.Services.WPFInputControllers;
 using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
 using System.Windows.Media;
-using WPFGameEngine.Extensions;
 using WPFGameEngine.GameViewControl;
 using WPFGameEngine.Timers.Base;
 using WPFGameEngine.WPF.GE.Component.Controllers;
-using WPFGameEngine.WPF.GE.GameObjects;
 using WPFGameEngine.WPF.GE.Math.Matrixes;
 using WPFGameEngine.WPF.GE.Math.Sizes;
 
@@ -21,7 +19,7 @@ namespace SpaceAvenger.Game.Core.Factions.F10.Destroyer
     {
         private IEnumerable<F10RailGun> m_battery;
         private Pen m_targetMarkerPen;
-        public F10Destroyer() : base(Faction.F10, nameof(F10Destroyer))
+        public F10Destroyer() : base(Faction.F10)
         {
             HorSpeed = 40;
             VertSpeed = 40;

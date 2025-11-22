@@ -1,4 +1,5 @@
-﻿using SpaceAvenger.Editor.ViewModels.Components.Base;
+﻿using SpaceAvenger.Editor.Mock;
+using SpaceAvenger.Editor.ViewModels.Components.Base;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -51,7 +52,7 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Sprites
         #endregion
 
         #region Ctor
-        public SpriteComponentViewModel(IGameObject gameObject, IResourceLoader resourceLoader) : base(nameof(Sprite), gameObject)
+        public SpriteComponentViewModel(IGameObjectMock gameObject, IResourceLoader resourceLoader) : base(nameof(Sprite), gameObject)
         {
             #region Init Fields
 

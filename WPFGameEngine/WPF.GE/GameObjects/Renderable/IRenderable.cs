@@ -1,9 +1,10 @@
 ﻿using System.Windows.Media;
+using WPFGameEngine.WPF.GE.GameObjects.Updatable;
 using WPFGameEngine.WPF.GE.Math.Matrixes;
 
-namespace WPFGameEngine.WPF.GE.GameObjects
+namespace WPFGameEngine.WPF.GE.GameObjects.Renderable
 {
-    public interface IRenderable
+    public interface IRenderable : IUpdatable
     {
         /// <summary>
         /// Controls Rendering of the Object, but Update calculations will still take place

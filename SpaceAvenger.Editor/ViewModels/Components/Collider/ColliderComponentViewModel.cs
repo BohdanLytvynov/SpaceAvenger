@@ -1,4 +1,5 @@
-﻿using SpaceAvenger.Editor.ViewModels.Components.Base;
+﻿using SpaceAvenger.Editor.Mock;
+using SpaceAvenger.Editor.ViewModels.Components.Base;
 using SpaceAvenger.Editor.ViewModels.GeometryConfigViewModel;
 using SpaceAvenger.Editor.ViewModels.GeometryConfigViewModel.GeometryConfigBase;
 using SpaceAvenger.Editor.ViewModels.Options;
@@ -95,7 +96,7 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Collider
         #region Ctor
 
         public ColliderComponentViewModel(
-            IGameObject gameObject,
+            IGameObjectMock gameObject,
             IAssemblyLoader assemblyLoader,
             IFactoryWrapper factoryWrapper)
             : base(nameof(ColliderComponent), gameObject)

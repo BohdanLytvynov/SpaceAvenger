@@ -9,14 +9,10 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         public bool Cached { get; set; }
         public bool UseCaching { get; protected set; }
 
-        public СacheableObject(string name) : base(name)
+        public override void StartUp(IGameObjectViewHost viewHost, IGameTimer gameTimer)
         {
             UseCaching = true;
             Cached = false;
-        }
-
-        public override void StartUp(IGameObjectViewHost viewHost, IGameTimer gameTimer)
-        {
             base.StartUp(viewHost, gameTimer);
         }
 

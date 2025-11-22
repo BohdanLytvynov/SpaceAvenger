@@ -1,29 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WPFGameEngine.GameViewControl;
+﻿using WPFGameEngine.GameViewControl;
 using WPFGameEngine.Timers.Base;
+using WPFGameEngine.WPF.GE.GameObjects;
 
 namespace WPFGameEngine.WPF.GE.LevelManagers.Base
 {
-    public class LevelManager : ILevelManager
+    public class LevelManager : UpdatableBase, ILevelManager
     {
-        public IGameObjectViewHost GameView { get; private set; }
-
-        public IGameTimer GameTimer { get; private set; }
-        public double ZIndex { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
-        public int Id => throw new NotImplementedException();
-
-        public void StartUp(IGameObjectViewHost viewHost, IGameTimer gameTimer)
+        public override void StartUp(IGameObjectViewHost viewHost, IGameTimer gameTimer)
         {
-            GameTimer = gameTimer;
-            GameView = viewHost;
+            base.StartUp(viewHost, gameTimer);
         }
 
-        public void Update()
+        public override void Update()
         {
             throw new NotImplementedException();
         }

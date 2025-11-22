@@ -327,7 +327,7 @@ namespace SpaceAvenger.Editor.ViewModels
             m_SelectedPrefab = new PrefabViewModel();
         }
 
-        private TreeItemViewModel LoadObjectToTree(IGameObject gameObject, int count = 1)
+        private TreeItemViewModel LoadObjectToTree(IGameObjectMock gameObject, int count = 1)
         {
             if (gameObject == null)
                 return null;
@@ -336,7 +336,7 @@ namespace SpaceAvenger.Editor.ViewModels
             treeItem.ItemSelected += ItemViewModel_ItemSelected;
             foreach (var item in gameObject.Children)
             {
-                var ch = LoadObjectToTree(item, count);
+                var ch = LoadObjectToTree((IGameObjectMock)item, count);
                 treeItem.Children.Add(ch);
                 count++;
             }
@@ -344,12 +344,12 @@ namespace SpaceAvenger.Editor.ViewModels
             return treeItem;
         }
 
-        private IGameObject LoadPrefabGameObjectRec(GameObjectDto dto)
+        private IGameObjectMock LoadPrefabGameObjectRec(GameObjectDto dto)
         {
             if (dto == null)
                 return null;
 
-            IGameObject prefab = new GameObjectMock();
+            IGameObjectMock prefab = new GameObjectMock();
             prefab.Enabled = dto.Enabled;
             prefab.ZIndex = dto.ZIndex;
             prefab.ObjectName = dto.ObjectName;
@@ -375,7 +375,7 @@ namespace SpaceAvenger.Editor.ViewModels
 
         private void OnAddGameObjectButtonPressedExecute(object p)
         {
-            IGameObject obj = new GameObjectMock();
+            IGameObjectMock obj = new GameObjectMock();
 
             if (m_SelectedItem == null)
             {
@@ -574,7 +574,7 @@ namespace SpaceAvenger.Editor.ViewModels
 
                 if (dto != null)
                 {
-                    IGameObject obj = LoadPrefabGameObjectRec(dto);
+                    IGameObjectMock obj = LoadPrefabGameObjectRec(dto);
                     GameView.AddObject(obj);
                     var treeItem = LoadObjectToTree(obj);
                     Items.Add(treeItem);
@@ -651,7 +651,7 @@ namespace SpaceAvenger.Editor.ViewModels
             }
         }
 
-        private void RemoveFromWorld(IGameObject item)
+        private void RemoveFromWorld(IGameObjectMock item)
         {
             m_gameViewHost.RemoveObject(item);
         }

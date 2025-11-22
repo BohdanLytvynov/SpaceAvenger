@@ -1,46 +1,37 @@
 ﻿using System.Windows.Media.Imaging;
-using WPFGameEngine.Factories.Base;
 using WPFGameEngine.WPF.GE.Component.Animations;
 using WPFGameEngine.WPF.GE.Component.Animators;
 using WPFGameEngine.WPF.GE.Component.Base;
-using WPFGameEngine.WPF.GE.Component.Collider;
 using WPFGameEngine.WPF.GE.Component.Sprites;
-using WPFGameEngine.WPF.GE.Component.Transforms;
 using WPFGameEngine.WPF.GE.Dto.Base;
 using WPFGameEngine.WPF.GE.Dto.GameObjects;
 
 namespace WPFGameEngine.WPF.GE.GameObjects
 {
     public interface IGameObject :
-        IRenderable,
-        ICollidable,
-        ITransformable,
-        IUpdatable,
         IConvertToDto<GameObjectDto>
     {
         #region Lazy Loading
-        IAnimation Animation { get; }
-        IAnimator Animator { get; }
-        ISprite Sprite { get; }
-        ICollider Collider { get; }
-        public BitmapSource Texture { get; }
+        IAnimation? Animation { get; }
+        IAnimator? Animator { get; }
+        ISprite? Sprite { get; }
+        BitmapSource? Texture { get; }
         #endregion
 
         #region Main Game Object Properties
         public double ZIndex { get; set; }
-        
         /// <summary>
         /// Enables Calculations for Update and Rendering
         /// </summary>
         public bool Enabled { get; set; }
         //Name of the Object that is used for mapping during object Creation in runtime
         //must be equal to the name of the GameObject in a game
-        public string ObjectName { get; set; }
+        public string? ObjectName { get; set; }
         //Name or Id that can be used during game for searching objects
-        public string UniqueName { get; set; }
+        public string? UniqueName { get; set; }
         public bool IsChild { get; }
-        public List<IGameObject> Children { get; }
-        public IGameObject Parent { get; set; }
+        public List<IGameObject>? Children { get; }
+        public IGameObject? Parent { get; set; }
         public int Id { get; }
         #endregion
 
@@ -69,7 +60,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         IEnumerable<IGameObject> GetAllChildrenOfType(string typeName, bool recursiveSearch = false);
         #endregion
        
-        #region Enable Disable
+        #region Enable Disable Calculations
         void Enable(bool recursive = false);
         void Disable(bool recursive = false);
         bool IsEnabledAll(IGameObject gameObject);

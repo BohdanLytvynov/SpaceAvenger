@@ -9,6 +9,9 @@ using WPFGameEngine.ObjectBuilders.Base;
 using WPFGameEngine.ObjectPools.Base;
 using WPFGameEngine.Timers.Base;
 using WPFGameEngine.WPF.GE.GameObjects;
+using WPFGameEngine.WPF.GE.GameObjects.Collidable;
+using WPFGameEngine.WPF.GE.GameObjects.Renderable;
+using WPFGameEngine.WPF.GE.GameObjects.Updatable;
 using WPFGameEngine.WPF.GE.Math.Matrixes;
 
 namespace SpaceAvenger.Services.WpfGameViewHost
@@ -55,10 +58,13 @@ namespace SpaceAvenger.Services.WpfGameViewHost
                         if (world[i] != null)
                         {
                             int id = World[i].Id;
-                            world[i].Update();
-                            world[i].ProcessCollision(CollisionManager.GetCollisionInfo(id));
-                            CollisionManager.RemoveFromBuffer(id);
-                            world[i].Render(dc, Matrix3x3.Identity);
+                            if (world[i] is IUpdatable updatable)
+                                updatable.Update();
+                            if (world[i] is ICollidable collidable)
+                                collidable.ProcessCollision(CollisionManager.GetCollisionInfo(id));
+                                CollisionManager.RemoveFromBuffer(id);
+                            if (world[i] is IRenderable renderable)
+                                renderable.Render(dc, Matrix3x3.Identity);
                         }
                     }
                 }

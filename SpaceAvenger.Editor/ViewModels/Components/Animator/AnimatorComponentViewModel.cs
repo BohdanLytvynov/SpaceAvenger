@@ -1,4 +1,5 @@
-﻿using SpaceAvenger.Editor.ViewModels.AnimatorOptions;
+﻿using SpaceAvenger.Editor.Mock;
+using SpaceAvenger.Editor.ViewModels.AnimatorOptions;
 using SpaceAvenger.Editor.ViewModels.Components.Base;
 using System.Collections.ObjectModel;
 using System.Resources;
@@ -39,7 +40,7 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animators
         #endregion
 
         #region Ctor
-        public AnimatorComponentViewModel(IGameObject gameObject,
+        public AnimatorComponentViewModel(IGameObjectMock gameObject,
              IAssemblyLoader assemblyLoader, IFactoryWrapper factoryWrapper)
             : base(nameof(Animator), gameObject) 
         {

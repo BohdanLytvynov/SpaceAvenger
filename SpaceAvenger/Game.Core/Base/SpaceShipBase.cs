@@ -30,7 +30,7 @@ namespace SpaceAvenger.Game.Core.Base
 
         #endregion
 
-        protected SpaceShipBase(Faction factionName, string name) : base(name)
+        protected SpaceShipBase(Faction factionName)
         {
             Faction = factionName;
         }

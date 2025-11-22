@@ -11,7 +11,7 @@ namespace SpaceAvenger.Game.Core.Base
     public abstract class ExplosiveProjectile<TExplosion> : ProjectileBase
         where TExplosion : ExplosionBase
     {
-        protected ExplosiveProjectile(Faction faction, string name) : base(faction, name)
+        protected ExplosiveProjectile(Faction faction) : base(faction)
         {
         }
 

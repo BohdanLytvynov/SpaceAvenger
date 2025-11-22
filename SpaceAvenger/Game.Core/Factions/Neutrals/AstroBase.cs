@@ -10,7 +10,7 @@ namespace SpaceAvenger.Game.Core.Factions.Neutrals
 {
     internal class AstroBase : ExplosiveSpaceShipBase<Explosion3>
     {
-        public AstroBase() : base(Faction.Neutrals, nameof(AstroBase))
+        public AstroBase() : base(Faction.Neutrals)
         {
         }
 

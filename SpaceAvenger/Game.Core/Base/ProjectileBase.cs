@@ -16,7 +16,7 @@ namespace SpaceAvenger.Game.Core.Base
         public Faction Faction { get; private set; }
         public Size ExplosionScale { get; protected set; }
 
-        protected ProjectileBase(Faction faction, string name) : base(name)
+        protected ProjectileBase(Faction faction)
         {
             Faction = faction;
         }

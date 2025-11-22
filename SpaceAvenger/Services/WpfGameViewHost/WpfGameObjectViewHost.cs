@@ -7,6 +7,8 @@ using WPFGameEngine.Enums;
 using WPFGameEngine.GameViewControl;
 using WPFGameEngine.Timers.Base;
 using WPFGameEngine.WPF.GE.GameObjects;
+using WPFGameEngine.WPF.GE.GameObjects.Renderable;
+using WPFGameEngine.WPF.GE.GameObjects.Updatable;
 using WPFGameEngine.WPF.GE.Math.Matrixes;
 
 namespace SpaceAvenger.Services.WpfGameViewHost
@@ -68,9 +70,10 @@ namespace SpaceAvenger.Services.WpfGameViewHost
                     {
                         if(World[i] != null)
                         {
-                            int id = World[i].Id;
-                            World[i].Update();
-                            World[i].Render(dc, Matrix3x3.Identity);
+                            if (World[i] is IUpdatable updatable)
+                                updatable.Update();
+                            if (World[i] is IRenderable renderable)
+                                renderable.Render(dc, Matrix3x3.Identity);
                         }
                     }
                 }
@@ -85,7 +88,9 @@ namespace SpaceAvenger.Services.WpfGameViewHost
             if (gameObject == null)
                 throw new ArgumentNullException(nameof(gameObject));
 
-            gameObject.StartUp(this, m_gameTimer);
+            if(gameObject is IUpdatable updatable)
+                updatable.StartUp(this, m_gameTimer);
+
             World.Add(gameObject);
         }
 
@@ -99,7 +104,8 @@ namespace SpaceAvenger.Services.WpfGameViewHost
 
             foreach (var item in gameObjects)
             {
-                item.StartUp(this, m_gameTimer);
+                if(item is IUpdatable updatable)
+                    updatable.StartUp(this, m_gameTimer);
                 World.Add(item);
             }
         }

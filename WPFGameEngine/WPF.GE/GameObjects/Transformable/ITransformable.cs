@@ -3,9 +3,9 @@ using WPFGameEngine.WPF.GE.Component.Transforms;
 using WPFGameEngine.WPF.GE.Math.Matrixes;
 using WPFGameEngine.WPF.GE.Math.Sizes;
 
-namespace WPFGameEngine.WPF.GE.GameObjects
+namespace WPFGameEngine.WPF.GE.GameObjects.Transformable
 {
-    public interface ITransformable
+    public interface ITransformable : IGameObject
     {
         ITransform Transform { get; }
 

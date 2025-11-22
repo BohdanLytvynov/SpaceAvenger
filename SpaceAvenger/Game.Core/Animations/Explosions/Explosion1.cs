@@ -4,9 +4,6 @@ namespace SpaceAvenger.Game.Core.Animations.Explosions
 {
     public class Explosion1 : ExplosionBase
     {
-        public Explosion1() : base(nameof(Explosion1))
-        {
-
-        }
+        
     }
 }

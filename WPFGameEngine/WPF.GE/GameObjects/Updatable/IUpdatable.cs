@@ -1,9 +1,10 @@
 ﻿using WPFGameEngine.GameViewControl;
 using WPFGameEngine.Timers.Base;
+using WPFGameEngine.WPF.GE.GameObjects.Transformable;
 
-namespace WPFGameEngine.WPF.GE.GameObjects
+namespace WPFGameEngine.WPF.GE.GameObjects.Updatable
 {
-    public interface IUpdatable
+    public interface IUpdatable : ITransformable
     {
         public IGameObjectViewHost GameView { get; }
 

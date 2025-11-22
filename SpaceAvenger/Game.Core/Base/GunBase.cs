@@ -1,14 +1,10 @@
-﻿using SpaceAvenger.Game.Core.Factions.F10.Projectiles;
-using System;
+﻿using System;
 using System.Numerics;
-using System.Windows.Documents;
 using System.Windows.Media;
-using WPFGameEngine.Extensions;
 using WPFGameEngine.GameViewControl;
 using WPFGameEngine.Timers.Base;
 using WPFGameEngine.WPF.GE.Component.Animations;
 using WPFGameEngine.WPF.GE.GameObjects;
-using WPFGameEngine.WPF.GE.Math.Matrixes;
 using WPFGameEngine.WPF.GE.Math.Sizes;
 
 namespace SpaceAvenger.Game.Core.Base
@@ -17,6 +13,7 @@ namespace SpaceAvenger.Game.Core.Base
         where TShell : ProjectileBase
         where TGunBlast : ExplosionBase
     {
+        private ExplosionBase m_Blast;
         private Vector2 m_gunCenterPosition;
         private bool m_fired;
         protected IMapableObjectViewHost MapableViewHost;
@@ -35,10 +32,6 @@ namespace SpaceAvenger.Game.Core.Base
         public bool GunLoaded { get => TimeRemainig <= 0; }
         public float ShellScaleMultipl { get; protected set; }
         public float GunBlastScaleMultipl { get; protected set; }
-        public GunBase(string name) : base(name)
-        {
-
-        }
 
         public override void StartUp(IGameObjectViewHost viewHost, IGameTimer gameTimer)
         {
@@ -92,14 +85,14 @@ namespace SpaceAvenger.Game.Core.Base
             var worldMatrix = GetWorldTransformMatrix();
             m_gunCenterPosition = GetWorldCenter(worldMatrix);
 
-            var blast = (GameView as IMapableObjectViewHost).Instantiate<TGunBlast>();
-            m_blastAnimation = blast.GetComponent<Animation>();
+            m_Blast = (GameView as IMapableObjectViewHost).Instantiate<TGunBlast>();
+            m_blastAnimation = m_Blast.GetComponent<Animation>();
             m_blastPosition = m_gunCenterPosition +
                 worldMatrix.GetBasis().X * ((1 - Transform.CenterPosition.X) * Transform.ActualSize.Width);
             var angle = Math.Atan2(dir.Y, dir.X) * 180 / Math.PI;
-            blast.Scale(Transform.Scale * GunBlastScaleMultipl);
-            blast.Rotate(angle);
-            blast.Explode(m_blastPosition);
+            m_Blast.Scale(Transform.Scale * GunBlastScaleMultipl);
+            m_Blast.Rotate(angle);
+            m_Blast.Explode(m_blastPosition);
             m_fired = true;
         }
 

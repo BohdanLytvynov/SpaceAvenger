@@ -1,17 +1,9 @@
-﻿using System.Drawing;
-using System.Numerics;
-using WPFGameEngine.WPF.GE.Component.Sprites;
-using WPFGameEngine.WPF.GE.GameObjects;
+﻿using WPFGameEngine.WPF.GE.GameObjects.Collidable;
 
 namespace SpaceAvenger.Editor.Mock
 {
-    public class GameObjectMock : GameObject, IGameObjectMock
+    public class GameObjectMock : CollidableBase, IGameObjectMock
     {
         public bool IsExported { get; set; }
-
-        public GameObjectMock() : base()
-        {
-            
-        }
     }
 }

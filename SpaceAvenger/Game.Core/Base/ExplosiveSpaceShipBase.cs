@@ -17,7 +17,7 @@ namespace SpaceAvenger.Game.Core.Base
             base.StartUp(viewHost, gameTimer);
         }
 
-        public ExplosiveSpaceShipBase(Faction factionName, string name) : base(factionName, name)
+        public ExplosiveSpaceShipBase(Faction factionName) : base(factionName)
         {
         }
 

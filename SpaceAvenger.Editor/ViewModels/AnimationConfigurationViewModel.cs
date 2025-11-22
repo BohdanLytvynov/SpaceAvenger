@@ -35,7 +35,7 @@ namespace SpaceAvenger.Editor.ViewModels
         #region Fields
         private string m_title;
         private WpfGameObjectViewHost m_gameView;
-        private IGameObject m_gameObject;
+        private IGameObjectMock m_gameObject;
         private IAnimation m_animation;
         private ObservableCollection<string> m_resourceNames;
         private ObservableCollection<OptionsViewModel> m_EasingTypes;

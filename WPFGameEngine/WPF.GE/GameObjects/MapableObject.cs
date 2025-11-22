@@ -1,10 +1,9 @@
-﻿namespace WPFGameEngine.WPF.GE.GameObjects
-{
-    public abstract class MapableObject : GameObject
-    {
-        public MapableObject(string name) : base(name)
-        {
+﻿using WPFGameEngine.WPF.GE.GameObjects.Collidable;
 
-        }
+namespace WPFGameEngine.WPF.GE.GameObjects
+{
+    public abstract class MapableObject : CollidableBase
+    {
+
     }
 }

@@ -33,10 +33,6 @@ namespace SpaceAvenger.Game.Core.UI.Slider
         public Brush Medium { get; set; }
         public Brush Full { get; set; }
 
-        public Bar() : base(nameof(UIElementBase))
-        {
-        }
-
         public virtual void Update(float value)
         {
             m_value = value;

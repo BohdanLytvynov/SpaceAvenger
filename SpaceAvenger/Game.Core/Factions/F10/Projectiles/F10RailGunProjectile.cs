@@ -7,7 +7,7 @@ namespace SpaceAvenger.Game.Core.Factions.F10.Projectiles
 {
     public class F10RailGunProjectile : ExplosiveProjectile<Explosion1>
     {
-        public F10RailGunProjectile() : base(Faction.F10, nameof(F10RailGunProjectile))
+        public F10RailGunProjectile() : base(Faction.F10)
         {
             ProjectileSpeed = 800f;
             Damage = 100f;

@@ -1,8 +1,9 @@
-﻿using SpaceAvenger.Editor.ViewModels.Components.Transform;
+﻿using SpaceAvenger.Editor.Mock;
+using SpaceAvenger.Editor.ViewModels.Components.Transform;
 using System.Numerics;
 using WPFGameEngine.WPF.GE.Component.RelativeTransforms;
 using WPFGameEngine.WPF.GE.Component.Transforms;
-using WPFGameEngine.WPF.GE.GameObjects;
+using WPFGameEngine.WPF.GE.GameObjects.Transformable;
 
 namespace SpaceAvenger.Editor.ViewModels.Components.RelativeTransforms
 {
@@ -30,7 +31,7 @@ namespace SpaceAvenger.Editor.ViewModels.Components.RelativeTransforms
         { get => m_YMin; set => Set(ref m_YMin, value); }
         #endregion
 
-        public RelativeTransformViewModel(IGameObject gameObject) : base(nameof(RelativeTransformComponent), gameObject)
+        public RelativeTransformViewModel(IGameObjectMock gameObject) : base(nameof(RelativeTransformComponent), gameObject)
         {
             LoadCurrentGameObjProperties();
             m_init = true;
@@ -41,7 +42,7 @@ namespace SpaceAvenger.Editor.ViewModels.Components.RelativeTransforms
             if (GameObject != null)
             {
                 var t = GameObject.Transform;
-                var pt = GameObject.Parent?.Transform;
+                var pt = (GameObject.Parent as ITransformable)?.Transform;
                 var texture = GameObject.Parent.Texture;
                 if (texture != null && pt != null)
                 { 
@@ -70,15 +71,15 @@ namespace SpaceAvenger.Editor.ViewModels.Components.RelativeTransforms
             if (GameObject == null && !m_init)
                 return;
 
-            var currentTransform = GameObject.Transform;
+            var currentTransform = GameObject?.Transform;
             if (currentTransform == null)
                 return;
 
-            var parentTexture = GameObject.Parent?.Texture;
+            var parentTexture = GameObject?.Parent?.Texture;
             if (parentTexture == null)
                 return;
 
-            ITransform parentTransform = GameObject.Parent.Transform;
+            ITransform? parentTransform = (GameObject?.Parent as ITransformable)?.Transform;
 
             if (parentTransform == null)
                 return;
@@ -98,15 +99,15 @@ namespace SpaceAvenger.Editor.ViewModels.Components.RelativeTransforms
             if (GameObject == null && !m_init)
                 return;
 
-            var currentTransform = GameObject.Transform;
+            var currentTransform = GameObject?.Transform;
             if (currentTransform == null)
                 return;
 
-            var parentTexture = GameObject.Parent?.Texture;
+            var parentTexture = GameObject?.Parent?.Texture;
             if (parentTexture == null)
                 return;
 
-            ITransform parentTransform = GameObject.Parent.Transform;
+            ITransform? parentTransform = (GameObject?.Parent as ITransformable)?.Transform;
 
             if (parentTransform == null)
                 return;

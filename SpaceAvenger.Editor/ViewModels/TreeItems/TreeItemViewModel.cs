@@ -63,7 +63,7 @@ namespace SpaceAvenger.Editor.ViewModels.TreeItems
             }
         }
 
-        public IGameObject? GameObject { get; set; }
+        public IGameObjectMock? GameObject { get; set; }
 
         public ObservableCollection<TreeItemViewModel> Children
         {
@@ -126,11 +126,11 @@ namespace SpaceAvenger.Editor.ViewModels.TreeItems
         #endregion
 
         #region Ctor
-        public TreeItemViewModel(int showNumber, IGameObject gameObject)
+        public TreeItemViewModel(int showNumber, IGameObjectMock gameObject)
         {
             GameObject = gameObject;
             m_ShowNumber = showNumber;
-            m_Id = (gameObject as IGameObjectMock).Id;
+            m_Id = gameObject.Id;
             m_ObjectName = gameObject.ObjectName;
             m_UniqueName = gameObject.UniqueName;
             m_children = new ObservableCollection<TreeItemViewModel>();

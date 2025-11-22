@@ -4,8 +4,5 @@ namespace SpaceAvenger.Game.Core.Base
 {
     public abstract class AsteroidBase : MapableObject
     {
-        public AsteroidBase(string name) : base(name)
-        {
-        }
     }
 }
