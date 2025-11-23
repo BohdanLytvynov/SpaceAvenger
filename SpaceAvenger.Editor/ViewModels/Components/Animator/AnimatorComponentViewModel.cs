@@ -13,9 +13,9 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animators
     internal class AnimatorComponentViewModel : ComponentViewModel
     {
         #region Fields
-        private IResourceLoader m_resourceLodaer;
-        private IAssemblyLoader m_assemblyLoader;
-        private IFactoryWrapper m_factoryWrapper;
+        private readonly IResourceLoader m_resourceLodaer;
+        private readonly IAssemblyLoader m_assemblyLoader;
+        private readonly IFactoryWrapper m_factoryWrapper;
 
         private ObservableCollection<AnimatorOptionViewModel> m_animatorOptionsViewModel;
         private AnimatorOptionViewModel m_selectedOption;
@@ -35,7 +35,7 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animators
                 { 
                     m_selectedOption = new AnimatorOptionViewModel();
                     return;
-                }                
+                }
             }
         }
         #endregion
@@ -43,8 +43,10 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animators
         #region Commmands
 
         public ICommand OnAddButtonPressed { get; }
-
         public ICommand OnRemoveButtonPressed { get; }
+        public ICommand OnStartButtonPressed { get; }
+        public ICommand OnPauseButtonPressed { get; }
+        public ICommand OnResetButtonPressed { get; }
 
         #endregion
 
@@ -75,6 +77,24 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animators
                     OnDeleteButtonPressedExecute,
                     CanOnDeleteButtonPressedExecute
                 );
+
+            OnStartButtonPressed = new Command
+                (
+                    OnStartButtonPressedExecute,
+                    CanOnStartButtonPressedExecute
+                );
+
+            OnPauseButtonPressed = new Command
+                (
+                    OnPauseButtonPressedExecute,
+                    CanOnPauseButtonPressedExecute
+                );
+
+            OnResetButtonPressed = new Command
+                (
+                    OnResetButtonPressedExecute,
+                    CanOnResetButtonPressedExecute
+                );
             #endregion
         }
         #endregion
@@ -86,7 +106,8 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animators
 
         private void OnAddButtonPressedExecute(object p)
         {
-            var option = new AnimatorOptionViewModel(AnimatorOptions.Count + 1, m_factoryWrapper, m_assemblyLoader, null);
+            var option = new AnimatorOptionViewModel(AnimatorOptions.Count + 1, 
+                m_factoryWrapper, m_assemblyLoader, null, string.Empty);
             option.OnAnimatorChanged += Option_OnAnimatorChanged;
             option.OnAnimationSelected += Option_OnAnimationSelected;
             AnimatorOptions.Add(option);
@@ -114,10 +135,72 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animators
             var anim = GameObject.GetComponent<Animator>(false);
             if (anim != null)
             {
+                anim.Stop();
                 anim.RemoveAnimation(m_selectedOption.AnimationName);
             }
             AnimatorOptions.Remove(m_selectedOption);
             m_selectedOption = new AnimatorOptionViewModel();
+        }
+        #endregion
+
+        #region On Start Button Pressed
+        private bool CanOnStartButtonPressedExecute(object p)
+        {
+            if (GameObject == null) return false;
+            var anim = GameObject.GetComponent<Animator>().Current;
+            if (anim == null) return false;
+            if (anim.IsRunning) return false;
+            if (!anim.Validate()) return false;
+            return true;
+        }
+
+        private void OnStartButtonPressedExecute(object p)
+        {
+            if (GameObject == null) return;
+            var anim = GameObject.GetComponent<Animator>();
+            if (anim == null) return;
+            anim.Start();
+        }
+        #endregion
+
+        #region On Pause Button Pressed
+        private bool CanOnPauseButtonPressedExecute(object p)
+        {
+            if (GameObject == null) return false;
+            var anim = GameObject.GetComponent<Animator>().Current;
+            if (anim == null) return false;
+            if (!anim.IsRunning) return false;
+            if (!anim.Validate()) return false;
+            return true;
+        }
+
+        private void OnPauseButtonPressedExecute(object p)
+        {
+            if (GameObject == null) return;
+            var anim = GameObject.GetComponent<Animator>();
+            if (anim == null) return;
+            anim.Stop();
+        }
+        #endregion
+
+        #region On Reset Button Pressed
+        private bool CanOnResetButtonPressedExecute(object p)
+        {
+            if (GameObject == null) return false;
+            var anim = GameObject.GetComponent<Animator>().Current;
+            if (anim == null) return false;
+            if (!anim.IsCompleted) return false;
+            if (anim.IsRunning) return false;
+            if (!anim.Validate()) return false;
+            return true;
+        }
+
+        private void OnResetButtonPressedExecute(object p)
+        {
+            if (GameObject == null) return;
+            var anim = GameObject.GetComponent<Animator>();
+            if (anim == null) return;
+            anim.Reset();
         }
         #endregion
 
@@ -150,7 +233,10 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animators
             foreach (var item in anim.GetAllKeys())
             {
                 var option = new AnimatorOptionViewModel(AnimatorOptions.Count + 1,
-                    m_factoryWrapper, m_assemblyLoader, anim[item]);
+                    m_factoryWrapper, m_assemblyLoader, anim[item], item);
+                option.OnAnimatorChanged += Option_OnAnimatorChanged;
+                option.OnAnimationSelected += Option_OnAnimationSelected;
+                AnimatorOptions.Add(option);
             }
         }
 

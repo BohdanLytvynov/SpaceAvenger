@@ -30,6 +30,7 @@ namespace SpaceAvenger.Editor.ViewModels.AnimatorOptions
         private IFactoryWrapper m_factoryWrapper;
         private AnimationConfigurationWindow m_animConfigurationWindow;
         private IAnimation m_animation;
+        private bool m_selected;
         #endregion
 
         #region Properties
@@ -49,6 +50,9 @@ namespace SpaceAvenger.Editor.ViewModels.AnimatorOptions
         { get => m_easeFunction; set => Set(ref m_easeFunction, value); }
         public string ResourceName 
         { get=> m_resourceKeyName; set => Set(ref m_resourceKeyName, value); }
+
+        public bool Selected
+        { get=> m_selected; set => Set(ref m_selected, value); }
         #endregion
 
         #region Commands
@@ -87,7 +91,8 @@ namespace SpaceAvenger.Editor.ViewModels.AnimatorOptions
         public AnimatorOptionViewModel(int showNumber, 
             IFactoryWrapper factoryWrapper,
             IAssemblyLoader assemblyLoader,
-            IAnimation animation)
+            IAnimation animation,
+            string animationName)
         {
             #region Fields
             InitValidArray(1);
@@ -105,7 +110,7 @@ namespace SpaceAvenger.Editor.ViewModels.AnimatorOptions
             }
             else
             {
-                m_AnimationName = string.Empty;
+                m_AnimationName = animationName;
                 m_rows = m_animation.Rows;
                 m_columns = m_animation.Columns;
                 m_duration = m_animation.TotalTime;
@@ -143,6 +148,7 @@ namespace SpaceAvenger.Editor.ViewModels.AnimatorOptions
 
         private void OnSelectAnimationButtonPressedExecute(object p)
         {
+            Selected = !Selected;
             OnAnimationSelected?.Invoke(AnimationName);
         }
 

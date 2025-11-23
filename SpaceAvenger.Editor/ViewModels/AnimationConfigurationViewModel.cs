@@ -220,7 +220,7 @@ namespace SpaceAvenger.Editor.ViewModels
         {
             #region Init Fields
             GESettings.DrawGizmo = false;
-
+            m_TotalTime = 1000f;
             m_plotModel = new PlotModel();
             m_factoryWrapper = factoryWrapper ?? throw new ArgumentNullException(nameof(factoryWrapper));
             m_assemblyLoader = assemblyLoader ?? throw new ArgumentNullException(nameof(assemblyLoader));

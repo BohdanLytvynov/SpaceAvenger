@@ -89,8 +89,8 @@ namespace WPFGameEngine.WPF.GE.GameObjects.Renderable
             }
 
             dc.Pop();
-
-            foreach (var item in Children)
+            var children = Children.OrderBy(x => x.ZIndex);
+            foreach (var item in children)
             {
                 if (item is ITransformable transformable)
                 {

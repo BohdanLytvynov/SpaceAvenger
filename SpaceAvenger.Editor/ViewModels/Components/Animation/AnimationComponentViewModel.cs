@@ -41,6 +41,9 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animations
 
         #region Commands
         public ICommand OnConfigureButtonPressed { get; }
+        public ICommand OnStartButtonPressed { get; }
+        public ICommand OnPauseButtonPressed { get; }
+        public ICommand OnResetButtonPressed { get; }
         #endregion
 
         #region Ctor
@@ -66,6 +69,18 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animations
                 CanOnConfigureButtonPressedExecute
                 );
 
+            OnStartButtonPressed = new Command(
+                OnStartButtonPressedExecute,
+                CanOnStartButtonPressedExecute);
+
+            OnPauseButtonPressed = new Command(
+                OnPauseButtonPressedExecute,
+                CanOnPauseButtonPressedExecute);
+
+            OnResetButtonPressed = new Command(
+                OnResetButtonPressedExecute,
+                CanOnResetButtonPressedExecute);
+
             #endregion
         }
         #endregion
@@ -80,6 +95,64 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animations
             ShowConfig();
         }
 
+        #endregion
+
+        #region On Start Button Pressed
+        private bool CanOnStartButtonPressedExecute(object p)
+        {
+            if (GameObject == null) return false;
+            var anim = GameObject.GetComponent<Animation>();
+            if (anim == null) return false;
+            if (anim.IsRunning) return false;
+            return true;
+        }
+
+        private void OnStartButtonPressedExecute(object p)
+        {
+            if (GameObject == null) return;
+            var anim = GameObject.GetComponent<Animation>();
+            if (anim == null) return;
+            anim.Start();
+        }
+        #endregion
+
+        #region On Pause Button Pressed
+        private bool CanOnPauseButtonPressedExecute(object p)
+        {
+            if (GameObject == null) return false;
+            var anim = GameObject.GetComponent<Animation>();
+            if (anim == null) return false;
+            if (!anim.IsRunning) return false;
+            return true;
+        }
+
+        private void OnPauseButtonPressedExecute(object p)
+        {
+            if (GameObject == null) return;
+            var anim = GameObject.GetComponent<Animation>();
+            if (anim == null) return;
+            anim.Stop();
+        }
+        #endregion
+
+        #region On Reset Button Pressed
+        private bool CanOnResetButtonPressedExecute(object p)
+        {
+            if (GameObject == null) return false;
+            var anim = GameObject.GetComponent<Animation>();
+            if (anim == null) return false;
+            if (!anim.IsCompleted) return false;
+            if (anim.IsRunning) return false;
+            return true;
+        }
+
+        private void OnResetButtonPressedExecute(object p)
+        {
+            if (GameObject == null) return;
+            var anim = GameObject.GetComponent<Animation>();
+            if (anim == null) return;
+            anim.Reset(anim.Reverse);
+        }
         #endregion
 
         private void ShowConfig()

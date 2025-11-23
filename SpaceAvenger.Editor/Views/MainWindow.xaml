@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:SpaceAvenger.Editor"
         xmlns:gameView ="clr-namespace:WPFGameEngine.GameViewControl;assembly=WPFGameEngine"
         xmlns:vm="clr-namespace:SpaceAvenger.Editor.ViewModels"
-        xmlns:controls="clr-namespace:WPFGameEngine.Editor.Controls;assembly=WPFGameEngine"        
+        xmlns:controls="clr-namespace:WPFGameEngine.Editor.Controls;assembly=WPFGameEngine"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
         Height="450" Width="800" WindowState="Maximized" x:Name="Root"
         Title="{Binding Title}"
@@ -26,7 +27,12 @@
                                   HorizontalAlignment="Stretch" 
                                   Background="Black"/>
                     <Label Grid.Column="2" x:Name="GameView" 
-                           Content="{Binding GameView, UpdateSourceTrigger=PropertyChanged}"/>
+                           Content="{Binding GameView, UpdateSourceTrigger=PropertyChanged}">
+                        <Label.Background>
+                            <SolidColorBrush Color="{Binding ElementName=picker, Path=SelectedColor, 
+                                UpdateSourceTrigger=PropertyChanged}"/>
+                        </Label.Background>
+                    </Label>
                     <GridSplitter Grid.Column="3" Width="5" VerticalAlignment="Stretch" 
                                   HorizontalAlignment="Stretch" 
                                   Background="Black"/>
@@ -92,6 +98,10 @@
                                     <CheckBox Content="Show Gizmo" Margin="10" IsChecked="{Binding ShowGizmos, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                                     <CheckBox Content="Show Borders" Margin="10" IsChecked="{Binding ShowBorders, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                                     <CheckBox Content="Show Colliders" Margin="10" IsChecked="{Binding ShowColliders, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                                    <StackPanel Margin="10" Orientation="Horizontal">
+                                        <TextBlock Text="Background: "/>
+                                        <xctk:ColorPicker x:Name="picker"/>
+                                    </StackPanel>
                                 </StackPanel>
 
                                 <Rectangle Style="{StaticResource BorderRectStyle}"/>
@@ -113,7 +123,7 @@
                                 <Rectangle Style="{StaticResource BorderRectStyle}"/>
                                 <TextBlock Text="GameObject Components:" Style="{StaticResource DescLabel}"/>
                                 <Rectangle Style="{StaticResource BorderRectStyle}"/>
-                                
+
                                 <ListView x:Name="ComponentPresenter" ItemsSource="{Binding Components, 
                                 UpdateSourceTrigger=PropertyChanged}"  VirtualizingPanel.IsVirtualizing="False" 
                                       VirtualizingPanel.VirtualizationMode="Standard"
@@ -135,54 +145,6 @@
                                 </StackPanel>
                             </StackPanel>
                         </ScrollViewer>
-                        <!--<ScrollViewer VerticalScrollBarVisibility="Visible">
-                            <StackPanel Orientation="Vertical" Height="1200">
-                                
-                                <Rectangle Style="{StaticResource BorderRectStyle}"/>
-                                <TextBlock Text="Space Ship" Style="{StaticResource DescLabel}"/>
-                                <Rectangle Style="{StaticResource BorderRectStyle}"/>
-                                <StackPanel Orientation="Horizontal" Margin="10,0,0,0">
-                                    <TextBlock Text="Enter Root Object Name:" 
-                                               Style="{StaticResource DescLabel}"
-                                               Margin="0,0,10,0"
-                                               VerticalAlignment="Center"/>
-                                    <TextBox Style="{StaticResource TxtBoxInputStyle}">
-                                        <TextBox.Text>
-                                            <Binding Path="RootName" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
-                                                <Binding.ValidationRules>
-                                                    <DataErrorValidationRule/>
-                                                </Binding.ValidationRules>
-                                            </Binding>
-                                        </TextBox.Text>
-                                    </TextBox>
-                                </StackPanel>
-                                <StackPanel Orientation="Horizontal" Margin="10,10,0,10">
-                                    <TextBlock Text="Select Root Image:" 
-                                               VerticalAlignment="Center"
-                                               Style="{StaticResource DescLabel}"/>
-                                    <ComboBox MinWidth="200" IsEditable="True" Margin="10,0,0,0" 
-                                              IsEnabled="{Binding ChooseRootImageEnabled, UpdateSourceTrigger=PropertyChanged}"
-                                              ItemsSource="{Binding ResourceNames, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                              SelectedItem="{Binding SelectedRoot, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                                    <ToggleButton Content="Select Root" Margin="10,0,0,0"
-                                                  IsEnabled="{Binding SelectRootEnabled, 
-                                        UpdateSourceTrigger=PropertyChanged}"
-                                                  IsChecked="{Binding RootSelected, 
-                                        UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                                </StackPanel>
-                                <Rectangle Style="{StaticResource BorderRectStyle}"/>
-                                <TextBlock Text="Children Configuration" Style="{StaticResource DescLabel}"/>
-                                <Rectangle Style="{StaticResource BorderRectStyle}"/>
-                                <StackPanel Orientation="Horizontal">
-                                    <Button Content="Add Child" Height="20" Width="100" Margin="20,0,0,0"
-                                            Command="{Binding OnAddModuleButtonPressed}"/>
-                                </StackPanel>
-                                <ListView ItemsSource="{Binding Children, UpdateSourceTrigger=PropertyChanged}"
-                                          SelectedIndex="{Binding SelectedChildIndex, 
-                                    UpdateSourceTrigger=PropertyChanged, 
-                                    Mode=TwoWay}"/>
-                            </StackPanel>
-                        </ScrollViewer>-->
                     </Grid>
                 </Grid>
             </TabItem>

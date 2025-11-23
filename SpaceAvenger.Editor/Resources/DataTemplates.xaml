@@ -221,6 +221,16 @@ Margin="10" LabelText="Center Position X: " Minimum="0" Maximum="1.0"/>
                         StringFormat='Easing: {0}'}" Style="{StaticResource FieldName}"/>
                     <Button Content="Configure Animation" Margin="0,10,0,0"
                         Command="{Binding OnConfigureButtonPressed}"/>
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"
+                                Margin="0,10,0,10">
+                        <Button Content="Start" Margin="0,0,10,0"
+                                Command="{Binding OnStartButtonPressed}"/>
+                        <Button Content="Pause" Margin="0,0,10,0"
+                                Command="{Binding OnPauseButtonPressed}"/>
+                        <Button Content="Reset"
+                                Command="{Binding OnResetButtonPressed}"/>
+                    </StackPanel>
                 </StackPanel>
             </StackPanel>
         </StackPanel>
@@ -229,6 +239,9 @@ Margin="10" LabelText="Center Position X: " Minimum="0" Maximum="1.0"/>
     <DataTemplate DataType="{x:Type animOptions:AnimatorOptionViewModel}">
         <Border Style="{StaticResource BorderRoundStyle}" Width="{Binding Path=ActualWidth,
                     RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}}">
+            <Border.Background>
+                <SolidColorBrush x:Name="brdBack"/>
+            </Border.Background>
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="{Binding ShowNumber, UpdateSourceTrigger=PropertyChanged, StringFormat=№{0})}"
                            Style="{StaticResource FieldName}" Margin="10,15,10,0"/>
@@ -264,6 +277,37 @@ Margin="10" LabelText="Center Position X: " Minimum="0" Maximum="1.0"/>
                 </StackPanel>
             </StackPanel>
         </Border>
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding Selected, UpdateSourceTrigger=PropertyChanged}"
+                         Value="True">
+                <DataTrigger.EnterActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ColorAnimation
+                                Storyboard.TargetName="brdBack"
+                                Storyboard.TargetProperty="Color"
+                                To="LightGreen"
+                                From="White"
+                                Duration="0:0:0.03"
+                                />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </DataTrigger.EnterActions>
+                <DataTrigger.ExitActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ColorAnimation
+                                Storyboard.TargetName="brdBack"
+                                Storyboard.TargetProperty="Color"
+                                To="White"
+                                From="LightGreen"
+                                Duration="0:0:0.03"
+                                />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </DataTrigger.ExitActions>
+            </DataTrigger>
+        </DataTemplate.Triggers>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type animcvm:AnimatorComponentViewModel}">
@@ -274,9 +318,20 @@ Margin="10" LabelText="Center Position X: " Minimum="0" Maximum="1.0"/>
             <Rectangle Style="{StaticResource BorderRectStyle}"/>
             <ListView MinHeight="400" ItemsSource="{Binding AnimatorOptions, UpdateSourceTrigger=PropertyChanged}"
                       SelectedItem="{Binding SelectedOption, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-            <StackPanel Orientation="Horizontal" Margin="5">
+            <StackPanel Orientation="Horizontal" Margin="10">
                 <Button Content="Add" Margin="10,0,10,0" Command="{Binding OnAddButtonPressed}"/>
                 <Button Content="Remove" Command="{Binding OnRemoveButtonPressed}"/>
+                <Border Style="{StaticResource BorderRoundStyle}" Margin="80,0,80,0">
+                    <StackPanel Orientation="Horizontal" 
+                            HorizontalAlignment="Center">
+                        <Button Content="Start" Margin="10,0,20,0"
+                                Command="{Binding OnStartButtonPressed}"/>
+                        <Button Content="Pause" Margin="0,0,20,0"
+                                Command="{Binding OnPauseButtonPressed}"/>
+                        <Button Content="Stop" Margin="0,0,10,0"
+                                Command="{Binding OnResetButtonPressed}"/>
+                    </StackPanel>
+                </Border>
             </StackPanel>
         </StackPanel>
     </DataTemplate>

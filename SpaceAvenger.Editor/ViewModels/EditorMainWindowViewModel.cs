@@ -225,6 +225,7 @@ namespace SpaceAvenger.Editor.ViewModels
             m_assemblyLoader = assemblyLoader ?? throw new ArgumentNullException(nameof(assemblyLoader));
             m_gameObjectExporter = gameObjectExporter ?? throw new ArgumentNullException(nameof(gameObjectExporter));
             m_gameObjectImporter = gameObjectImporter ?? throw new ArgumentNullException(nameof(gameObjectImporter));
+            m_SelectedComponent = new OptionsViewModel();
 
             m_Dtos = new List<GameObjectDto>();
 
@@ -397,6 +398,7 @@ namespace SpaceAvenger.Editor.ViewModels
                 t.Scale = new WPFGameEngine.WPF.GE.Math.Sizes.Size(1f, 1f);
                 t.CenterPosition = new Vector2(0.5f, 0.5f);
                 obj.RegisterComponent(t);
+                obj.StartUp(m_gameViewHost, m_gameTimer);
                 m_SelectedItem.GameObject.AddChild(obj);
             }
 
