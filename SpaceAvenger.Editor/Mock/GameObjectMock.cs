@@ -15,5 +15,42 @@ namespace SpaceAvenger.Editor.Mock
         {
             return $"Type: {ObjectName} UniqueName: {UniqueName}";
         }
+
+        private IGameObjectMock CloneRec(IGameObjectMock src)
+        { 
+            if(src == null)
+                return this;
+
+            IGameObjectMock gameObject = new GameObjectMock()
+            { 
+                m_id = src.Id,
+                Enabled = src.Enabled,
+                ZIndex = src.ZIndex,
+                ObjectName = src.ObjectName,
+                UniqueName = src.UniqueName,
+                IsVisible = src.IsVisible,
+                IsExported = src.IsExported,
+            };
+
+            var components = src.GetComponents();
+
+            foreach (var component in components)
+            {
+                gameObject.RegisterComponent(component);
+            }
+
+            foreach (var child in src.Children)
+            {
+                gameObject.AddChild((IGameObjectMock)(child as IGameObjectMock).Clone());
+            }
+
+            return gameObject;
+
+        }
+
+        public object Clone()
+        {
+            return CloneRec(this);
+        }
     }
 }

@@ -25,16 +25,12 @@
 
     <ImageSource x:Key="ChooseProfileBack">pack://siteoforigin:,,,/Resources/Content/Backgrounds/ChooseProfilePage/SAChooseProfile.jpg
     </ImageSource>
-
     <ImageSource x:Key="LevelsPageBack">pack://siteoforigin:,,,/Resources/Content/Backgrounds/LevelsPage/SALevels1.jpg
     </ImageSource>
-
     <ImageSource x:Key="MainPageBack">pack://siteoforigin:,,,/Resources/Content/Backgrounds/MainPage/SAMainBack.jpg
     </ImageSource>
-
     <ImageSource x:Key="HumanCF">pack://siteoforigin:,,,/Resources/Content/Chars/Commanders/CommandersF.png
     </ImageSource>
-
     <ImageSource x:Key="HumanCM">pack://siteoforigin:,,,/Resources/Content/Chars/Commanders/CommandersM.png
     </ImageSource>
 
@@ -63,10 +59,8 @@
     <!--#region Jets -->
     <ImageSource x:Key="F10JetIdle_Atlas1">pack://siteoforigin:,,,/Resources/Content/Jets/F10/F10Jet_Idle_Atlas1.png
     </ImageSource>
-
     <ImageSource x:Key="F10JetIdle_Atlas2">pack://siteoforigin:,,,/Resources/Content/Jets/F10/F10Jet_Idle_Atlas2.png
     </ImageSource>
-
     <ImageSource x:Key="F10JetMove_Atlas2">pack://siteoforigin:,,,/Resources/Content/Jets/F10/F10Jet_Move_Atlas.png
     </ImageSource>
     <!--#endregion-->

@@ -1,4 +1,5 @@
 ﻿using System.Windows.Media.Imaging;
+using WPFGameEngine.Factories.Base;
 using WPFGameEngine.WPF.GE.Component.Animations;
 using WPFGameEngine.WPF.GE.Component.Animators;
 using WPFGameEngine.WPF.GE.Component.Base;
@@ -9,7 +10,8 @@ using WPFGameEngine.WPF.GE.Dto.GameObjects;
 namespace WPFGameEngine.WPF.GE.GameObjects
 {
     public interface IGameObject :
-        IConvertToDto<GameObjectDto>
+        IConvertToDto<GameObjectDto>, 
+        IGameEngineEntity
     {
         #region Lazy Loading
         IAnimation? Animation { get; }

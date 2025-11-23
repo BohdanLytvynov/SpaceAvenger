@@ -6,7 +6,7 @@ using WPFGameEngine.WPF.GE.GameObjects;
 
 namespace SpaceAvenger.Editor.ViewModels.TreeItems
 {
-    internal class TreeItemViewModel : ValidationViewModel
+    internal class TreeItemViewModel : ValidationViewModel, ICloneable
     {
         #region Events
         public event Action<TreeItemViewModel> ItemSelected;
@@ -135,6 +135,26 @@ namespace SpaceAvenger.Editor.ViewModels.TreeItems
             m_UniqueName = gameObject.UniqueName;
             m_children = new ObservableCollection<TreeItemViewModel>();
             RaiseEvent = true;
+        }
+
+        private TreeItemViewModel CloneRec(TreeItemViewModel item)
+        {
+            if (item == null)
+                return null;
+
+            TreeItemViewModel treeItemViewModel = new TreeItemViewModel(item.ShowNumber, (IGameObjectMock)GameObject.Clone());
+
+            foreach (var ch in item.Children)
+            {
+                treeItemViewModel.Children.Add((TreeItemViewModel)ch.Clone());
+            }
+
+            return treeItemViewModel;
+        }
+
+        public object Clone()
+        {
+            return CloneRec(this);
         }
         #endregion
     }

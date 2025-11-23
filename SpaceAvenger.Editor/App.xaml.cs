@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using SpaceAvenger.Editor.ViewModels;
+using SpaceAvenger.Editor.Views;
 using SpaceAvenger.Services;
 using SpaceAvenger.Services.ResourceLoader;
 using System.IO;
@@ -30,6 +31,9 @@ namespace SpaceAvenger.Editor
         private static IServiceCollection InitializeServices()
         {
             var services = new ServiceCollection();
+            services.AddSingleton<IMessageBus, MessageBusService>();
+            services.AddSingleton<BufferWindowViewModel>();
+            services.AddScoped<BufferWindowView>();
             services.AddSingleton<IGameObjectImporter, GameObjectImporter>();
             services.AddSingleton<IGameObjectExporter, GameObjectExporter>();
             services.AddSingleton<IAssemblyLoader>(c =>

@@ -189,8 +189,14 @@ namespace SpaceAvenger.Editor.ViewModels
         public ICommand OnOpenDialogButtonPressed { get; }
 
         public ICommand OnRefreshPrefabsButtonPressed { get; }
+
         public ICommand OnLoadPrefabButtonPressed { get; }
+
         public ICommand OnRemovePrefabButtonPressed { get; }
+
+        public ICommand OnCopyButtonPressed { get; }
+
+        public ICommand OnPasteButtonPressed { get; }
         #endregion
 
         #region IData Error Info
@@ -314,6 +320,8 @@ namespace SpaceAvenger.Editor.ViewModels
 
         #endregion 
 
+        #region Methods
+
         private void RefreshPrefabs()
         {
             Prefabs.Clear();
@@ -332,7 +340,7 @@ namespace SpaceAvenger.Editor.ViewModels
         {
             if (gameObject == null)
                 return null;
-            
+
             TreeItemViewModel treeItem = new TreeItemViewModel(count, gameObject);
             treeItem.ItemSelected += ItemViewModel_ItemSelected;
             foreach (var item in gameObject.Children)
@@ -370,7 +378,6 @@ namespace SpaceAvenger.Editor.ViewModels
             return prefab;
         }
 
-        #region Methods
         #region On Add Object Button Pressed
         private bool CanOnAddGameObjectButtonPressedExecute(object p) => true;
 
