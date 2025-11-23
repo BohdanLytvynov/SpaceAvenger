@@ -316,7 +316,7 @@ Margin="10" LabelText="Center Position X: " Minimum="0" Maximum="1.0"/>
             <Rectangle Style="{StaticResource BorderRectStyle}"/>
             <TextBlock Text="{Binding ComponentName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DescLabel}"/>
             <Rectangle Style="{StaticResource BorderRectStyle}"/>
-            <ListView MinHeight="400" ItemsSource="{Binding AnimatorOptions, UpdateSourceTrigger=PropertyChanged}"
+            <ListView Height="500" ItemsSource="{Binding AnimatorOptions, UpdateSourceTrigger=PropertyChanged}"
                       SelectedItem="{Binding SelectedOption, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
             <StackPanel Orientation="Horizontal" Margin="10">
                 <Button Content="Add" Margin="10,0,10,0" Command="{Binding OnAddButtonPressed}"/>
@@ -328,7 +328,7 @@ Margin="10" LabelText="Center Position X: " Minimum="0" Maximum="1.0"/>
                                 Command="{Binding OnStartButtonPressed}"/>
                         <Button Content="Pause" Margin="0,0,20,0"
                                 Command="{Binding OnPauseButtonPressed}"/>
-                        <Button Content="Stop" Margin="0,0,10,0"
+                        <Button Content="Reset" Margin="0,0,10,0"
                                 Command="{Binding OnResetButtonPressed}"/>
                     </StackPanel>
                 </Border>

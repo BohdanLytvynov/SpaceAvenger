@@ -131,6 +131,9 @@
     <Content Include="Resources\Content\Explosions\Explosion4_Atlas.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resources\Content\Jets\F10\F10Jet_Move_Atlas.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\Content\Jets\F10\F10Jet_Idle_Atlas2.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

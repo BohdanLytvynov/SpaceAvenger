@@ -66,6 +66,9 @@
 
     <ImageSource x:Key="F10JetIdle_Atlas2">pack://siteoforigin:,,,/Resources/Content/Jets/F10/F10Jet_Idle_Atlas2.png
     </ImageSource>
+
+    <ImageSource x:Key="F10JetMove_Atlas2">pack://siteoforigin:,,,/Resources/Content/Jets/F10/F10Jet_Move_Atlas.png
+    </ImageSource>
     <!--#endregion-->
 
     <!--#region Explosions -->
