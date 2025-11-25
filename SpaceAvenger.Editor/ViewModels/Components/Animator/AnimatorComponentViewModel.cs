@@ -7,6 +7,7 @@ using ViewModelBaseLibDotNetCore.Commands;
 using WPFGameEngine.FactoryWrapper.Base;
 using WPFGameEngine.Services.Interfaces;
 using WPFGameEngine.WPF.GE.Component.Animators;
+using WPFGameEngine.WPF.GE.Component.Base;
 
 namespace SpaceAvenger.Editor.ViewModels.Components.Animators
 {
@@ -51,9 +52,9 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animators
         #endregion
 
         #region Ctor
-        public AnimatorComponentViewModel(IGameObjectMock gameObject,
+        public AnimatorComponentViewModel(IGameObjectMock gameObject, IGEComponent component,
              IAssemblyLoader assemblyLoader, IFactoryWrapper factoryWrapper)
-            : base(nameof(Animator), gameObject) 
+            : base(nameof(Animator), gameObject, component) 
         {
             #region Init Fields
             m_factoryWrapper = factoryWrapper ?? throw new ArgumentNullException(nameof(factoryWrapper));

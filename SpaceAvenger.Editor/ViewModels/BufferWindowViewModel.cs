@@ -7,15 +7,10 @@ using System.Windows.Input;
 using ViewModelBaseLibDotNetCore.Commands;
 using ViewModelBaseLibDotNetCore.MessageBus.Base;
 using ViewModelBaseLibDotNetCore.VM;
+using WPFGameEngine.WPF.GE.Component.Base;
 
 namespace SpaceAvenger.Editor.ViewModels
 {
-    internal enum SelectedTab
-    { 
-        GameObjects = 0, 
-        Components = 1,
-    }
-
     internal class BufferWindowViewModel : SubscriptableViewModel
     {
         #region Events
@@ -29,11 +24,13 @@ namespace SpaceAvenger.Editor.ViewModels
         private ObservableCollection<ComponentViewModel> m_ComponentsBuffer;
         private IMessageBus m_messageBus;
         private int m_selectedComponentIndex;
-        private SelectedTab m_SelectedTab;
+        private int m_SelectedTabIndex;
         private TreeItemViewModel m_selectedItem;
         #endregion
 
         #region Properties
+        public int SelectedTabIndex
+        { get => m_SelectedTabIndex; set => Set(ref m_SelectedTabIndex, value); }
 
         public string Title 
         { get => m_title; set => Set(ref m_title, value); }
@@ -50,9 +47,7 @@ namespace SpaceAvenger.Editor.ViewModels
 
         #region Commands
 
-        public ICommand OnGameObjectsTabPressed { get; }
-        public ICommand OnComponentsTabPressed { get; }
-        public ICommand OnSelectButtonPressed { get; }
+        public ICommand OnPasteButtonPressed { get; }
         public ICommand OnRemoveButtonPressed { get; }
         public ICommand OnClearButtonPressed { get; }
         public ICommand OnCancelButtonPressed { get; }
@@ -66,8 +61,12 @@ namespace SpaceAvenger.Editor.ViewModels
 
             #region Subscribe
 
-            Subscriptions.Add(m_messageBus.RegisterHandler<CopyToGameObjectBufferMessage, TreeItemViewModel>(OnCopyToGameObjectBuffer));
-            Subscriptions.Add(m_messageBus.RegisterHandler<CopyToComponentsBufferMessage, ComponentViewModel>(OnCopyToComponentsBuffer));
+            Subscriptions.Add(
+                m_messageBus.RegisterHandler<CopyToGameObjectBufferMessage, TreeItemViewModel>
+                (OnCopyToGameObjectBuffer));
+            Subscriptions.Add(
+                m_messageBus.RegisterHandler<CopyToComponentsBufferMessage, ComponentViewModel>
+                (OnCopyToComponentsBuffer));
             #endregion
         }
 
@@ -83,22 +82,10 @@ namespace SpaceAvenger.Editor.ViewModels
 
             #region Init Commands
 
-            OnGameObjectsTabPressed = new Command
+            OnPasteButtonPressed = new Command
                 (
-                    OnGameObjectTabButtonPressedExecute,
-                    CanOnGameObjectTabButtonPressedExecute
-                );
-
-            OnComponentsTabPressed = new Command
-                (
-                    OnComponentsTabButtonPressedExecute,
-                    CanOnComponentsTabButtonPressedExecute
-                );
-
-            OnSelectButtonPressed = new Command
-                (
-                    OnSelectButtonPressedExecute,
-                    CanOnSelectButtonPressedExecute
+                    OnPasteButtonPressedExecute,
+                    CanOnPasteButtonPressedExecute
                 );
 
             OnRemoveButtonPressed = new Command
@@ -186,7 +173,21 @@ namespace SpaceAvenger.Editor.ViewModels
 
         private void TreeItemViewModel_ItemSelected(int id)
         {
-            TreeItemViewModel.FindInCollection(id, GameObjectBuffer, ref m_selectedItem);
+            m_selectedItem = null;
+
+            if (id >= 0)
+            {
+                TreeItemViewModel.FindInCollection(id, GameObjectBuffer, ref m_selectedItem);
+
+                TreeItemViewModel.UnselectAll(GameObjectBuffer);
+                m_selectedItem.RaiseEvent = false;
+                m_selectedItem.Selected = true;
+                m_selectedItem.RaiseEvent = true;
+            }
+            else
+            {
+                TreeItemViewModel.UnselectAll(GameObjectBuffer);
+            }
         }
 
         private void Unsubscribe(TreeItemViewModel treeItemViewModel)
@@ -202,58 +203,36 @@ namespace SpaceAvenger.Editor.ViewModels
             }
         }
 
-        #region On GameObjects Tab Button Pressed
-
-        private bool CanOnGameObjectTabButtonPressedExecute(object p) => true;
-
-        private void OnGameObjectTabButtonPressedExecute(object p)
-        { 
-            m_SelectedTab = SelectedTab.GameObjects;
-        }
-
-        #endregion
-
-        #region On Components Tab Pressed
-
-        private bool CanOnComponentsTabButtonPressedExecute(object p) => true;
-
-        private void OnComponentsTabButtonPressedExecute(object p)
-        {
-            m_SelectedTab = SelectedTab.Components;
-        }
-
-        #endregion
-
         #region On Select Button Pressed
 
-        private bool CanOnSelectButtonPressedExecute(object p)
+        private bool CanOnPasteButtonPressedExecute(object p)
         {
-            switch (m_SelectedTab)
+            switch (m_SelectedTabIndex)
             {
-                case SelectedTab.GameObjects:
+                case 0:
                     return m_selectedItem != null && m_selectedItem.ShowNumber >= 0;
-                case SelectedTab.Components:
+                case 1:
                     return m_selectedComponentIndex >= 0;
             }
 
             return false;
         }
 
-        private void OnSelectButtonPressedExecute(object p)
+        private void OnPasteButtonPressedExecute(object p)
         {
-            switch (m_SelectedTab)
+            switch (m_SelectedTabIndex)
             {
-                case SelectedTab.GameObjects:
+                case 0:
 
                     m_messageBus.Send<PasteFromGameObjectBufferMessage, IGameObjectMock>(
                         new PasteFromGameObjectBufferMessage((IGameObjectMock)m_selectedItem.GameObject.Clone()));
 
                     break;
 
-                case SelectedTab.Components:
+                case 1:
 
-                    m_messageBus.Send<PasteFromComponentsBufferMessage, ComponentViewModel>
-                        (new PasteFromComponentsBufferMessage(ComponentBuffer[SelectedComponentIndex]));
+                    m_messageBus.Send<PasteFromComponentsBufferMessage, IGEComponent>
+                        (new PasteFromComponentsBufferMessage(ComponentBuffer[SelectedComponentIndex].Component));
 
                     break;
             }

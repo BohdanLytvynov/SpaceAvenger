@@ -37,6 +37,8 @@ namespace WPFGameEngine.WPF.GE.Component.Sprites
 
         #endregion
 
+        #endregion
+
         #region IClonable
 
         public override object Clone()
@@ -47,8 +49,6 @@ namespace WPFGameEngine.WPF.GE.Component.Sprites
                 Texture = Texture,
             };
         }
-
-        #endregion
 
         #endregion
 

@@ -1,8 +1,8 @@
 ﻿using SpaceAvenger.Editor.Mock;
 using SpaceAvenger.Editor.ViewModels.Components.Base;
 using System.Numerics;
+using WPFGameEngine.WPF.GE.Component.Base;
 using WPFGameEngine.WPF.GE.Component.Transforms;
-using WPFGameEngine.WPF.GE.GameObjects;
 using WPFGameEngine.WPF.GE.Math.Sizes;
 
 namespace SpaceAvenger.Editor.ViewModels.Components.Transform
@@ -94,14 +94,17 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Transform
 
         #region Ctor
 
-        public TransformComponentViewModel(string componentName, IGameObjectMock gameObject)
-            : base(componentName, gameObject)
+        public TransformComponentViewModel(string componentName, 
+            IGameObjectMock gameObject,
+            IGEComponent component)
+            : base(componentName, gameObject, component)
         {
             
         }
 
-        public TransformComponentViewModel(IGameObjectMock gameObject) 
-            : base(nameof(TransformComponent), gameObject)
+        public TransformComponentViewModel(IGameObjectMock gameObject,
+            IGEComponent component) 
+            : base(nameof(TransformComponent), gameObject, component)
         {
             LoadCurrentGameObjProperties();
             m_init = true;

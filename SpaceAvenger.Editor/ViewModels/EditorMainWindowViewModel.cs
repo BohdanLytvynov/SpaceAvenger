@@ -274,7 +274,13 @@ namespace SpaceAvenger.Editor.ViewModels
             m_gameViewHost = new WpfGameObjectViewHost(m_gameTimer);
             m_gameViewHost.StartGame();
 
-            Subscriptions.Add(m_MessageBus.RegisterHandler<PasteFromGameObjectBufferMessage, TreeItemViewModel>(OnPasteGameObjectFromBuffer));
+            Subscriptions.Add(m_MessageBus.
+                RegisterHandler<PasteFromGameObjectBufferMessage, IGameObjectMock>
+                (OnPasteGameObjectFromBuffer));
+
+            Subscriptions.Add(m_MessageBus
+                .RegisterHandler<PasteFromComponentsBufferMessage, IGEComponent>
+                (OnPasteComponentFromBuffer));
         }
 
         public EditorMainWindowViewModel()
@@ -343,6 +349,12 @@ namespace SpaceAvenger.Editor.ViewModels
                     OnCopyObjectButtonPressedExecute, 
                     CanOnCopyObjectButtonPressedExecute);
 
+            OnCopyComponentButtonPressed = new Command
+                (
+                    OnCopyComponentButtonPressedExecute,
+                    CanOnCopyComponentButtonPressedExecute
+                );
+
             OnOpenBufferButtonPressed = new Command(
                 OnOpenBufferButtonPressedExecute,
                 CanOnOpenBufferButtonPressedExecute);
@@ -352,12 +364,57 @@ namespace SpaceAvenger.Editor.ViewModels
 
         #region Methods
 
+        private void OnPasteComponentFromBuffer(PasteFromComponentsBufferMessage msg)
+        {
+            if (msg == null) return;
+            var content = msg.Content;
+            if(content == null) return;
+            if (m_SelectedItem == null)
+            {
+                MessageBox.Show("No Game Object was selected!",
+                    m_title, MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                return;
+            }
+
+            var newComponent = (IGEComponent)content.Clone();
+
+            try
+            {
+                m_SelectedItem.GameObject.RegisterComponent(newComponent);
+                Components.Add(CreateComponentViewModel(newComponent));
+            }
+            catch (ComponentAlreadyRegisteredException ex)
+            {
+                MessageBox.Show(ex.Message, m_title, MessageBoxButton.OK, MessageBoxImage.Exclamation);
+            }
+            catch(Exception ex)
+            {
+                throw;
+            }
+        }
+
         private void OnPasteGameObjectFromBuffer(PasteFromGameObjectBufferMessage msg)
         {
-            if (m_SelectedItem == null) return;
             var content = msg.Content;
             if (content == null) return;
-            
+
+            if (content.GameTimer == null && content.GameView == null)
+                content.StartUp(GameView, m_gameTimer);
+
+            if (m_SelectedItem == null)
+            {
+                TreeItemViewModel itemViewModel = new(Items.Count + 1, content);
+                itemViewModel.ItemSelected += ItemViewModel_ItemSelected;
+                Items.Add(itemViewModel);
+                m_gameViewHost.AddObject(content);
+            }
+            else
+            {
+                TreeItemViewModel itemViewModel = new(m_SelectedItem.Children.Count + 1, content);
+                itemViewModel.ItemSelected += ItemViewModel_ItemSelected;
+                m_SelectedItem.Children.Add(itemViewModel);
+                m_SelectedItem.GameObject.AddChild(content);
+            }
         }
 
         private void RefreshPrefabs()
@@ -420,40 +477,21 @@ namespace SpaceAvenger.Editor.ViewModels
         {
             m_SelectedItem = null;
 
-            TreeItemViewModel.FindInCollection(id, Items, ref m_SelectedItem);
+            if (id >= 0)
+            {
+                TreeItemViewModel.FindInCollection(id, Items, ref m_SelectedItem);
 
-            if (m_SelectedItem == null)
+                TreeItemViewModel.UnselectAll(Items);
+                m_SelectedItem.RaiseEvent = false;
+                m_SelectedItem.Selected = true;
+                m_SelectedItem.RaiseEvent = true;
+                UpdateGameObjectProperties();
+                UpdateComponents();
+            }
+            else
             {
                 Components.Clear();
-                return;
-            }
-            UnselectAll();
-            m_SelectedItem.RaiseEvent = false;
-            m_SelectedItem.Selected = true;
-            m_SelectedItem.RaiseEvent = true;
-            UpdateGameObjectProperties();
-            UpdateComponents();
-        }
-
-        private void Unselect(TreeItemViewModel src)
-        {
-            src.RaiseEvent = false;
-            src.Selected = false;
-            src.RaiseEvent = true;
-
-            foreach (TreeItemViewModel item in src.Children)
-            {
-                item.RaiseEvent = false;
-                item.Selected = false;
-                item.RaiseEvent = true;
-            }
-        }
-
-        private void UnselectAll()
-        {
-            foreach (var item in Items)
-            {
-                Unselect(item);
+                TreeItemViewModel.UnselectAll(Items);
             }
         }
 
@@ -522,7 +560,7 @@ namespace SpaceAvenger.Editor.ViewModels
 
         #region On Copy Component Button Pressed
 
-        private bool CanOnCopyComponentButtonPressedExecute(object p) => SelectedComponent != null;
+        private bool CanOnCopyComponentButtonPressedExecute(object p) => SelectedComponentIndex >= 0;
 
         private void OnCopyComponentButtonPressedExecute(object p)
         {
@@ -767,25 +805,26 @@ namespace SpaceAvenger.Editor.ViewModels
             switch (component.ComponentName)
             {
                 case nameof(TransformComponent):
-                    c = new TransformComponentViewModel(m_SelectedItem.GameObject);
+                    c = new TransformComponentViewModel(m_SelectedItem.GameObject, component);
                     break;
                 case nameof(Animation):
-                    c = new AnimationComponentViewModel(m_SelectedItem.GameObject,
+                    c = new AnimationComponentViewModel(m_SelectedItem.GameObject, component,
                         m_factoryWrapper,
                         m_assemblyLoader);
                     break;
                 case nameof(Animator):
-                    c = new AnimatorComponentViewModel(m_SelectedItem.GameObject,
+                    c = new AnimatorComponentViewModel(m_SelectedItem.GameObject, component,
                         m_assemblyLoader, m_factoryWrapper);
                     break;
                 case nameof(Sprite):
-                    c = new SpriteComponentViewModel(m_SelectedItem.GameObject, m_factoryWrapper.ResourceLoader);
+                    c = new SpriteComponentViewModel(m_SelectedItem.GameObject, component,
+                        m_factoryWrapper.ResourceLoader);
                     break;
                 case nameof(RelativeTransformComponent):
-                    c = new RelativeTransformViewModel(m_SelectedItem.GameObject);
+                    c = new RelativeTransformViewModel(m_SelectedItem.GameObject, component);
                     break;
                 case nameof(ColliderComponent):
-                    c = new ColliderComponentViewModel(m_SelectedItem.GameObject, 
+                    c = new ColliderComponentViewModel(m_SelectedItem.GameObject, component,
                         m_assemblyLoader,
                         m_factoryWrapper);
                     break;

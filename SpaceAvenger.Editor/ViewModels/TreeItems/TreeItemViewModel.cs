@@ -4,6 +4,7 @@ using System.Net.Http.Headers;
 using ViewModelBaseLibDotNetCore.Helpers;
 using ViewModelBaseLibDotNetCore.VM;
 using WPFGameEngine.WPF.GE.GameObjects;
+using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 namespace SpaceAvenger.Editor.ViewModels.TreeItems
 {
@@ -60,7 +61,7 @@ namespace SpaceAvenger.Editor.ViewModels.TreeItems
                 }
                 else
                 {
-                    ItemSelected?.Invoke(GameObject.Id);
+                    ItemSelected?.Invoke(-1);
                 }
             }
         }
@@ -140,6 +141,8 @@ namespace SpaceAvenger.Editor.ViewModels.TreeItems
             RaiseEvent = true;
         }
 
+        #endregion
+
         private TreeItemViewModel CloneRec(TreeItemViewModel item)
         {
             if (item == null)
@@ -189,6 +192,26 @@ namespace SpaceAvenger.Editor.ViewModels.TreeItems
             }
         }
 
-        #endregion
+        public static void Unselect(TreeItemViewModel src)
+        {
+            src.RaiseEvent = false;
+            src.Selected = false;
+            src.RaiseEvent = true;
+
+            foreach (TreeItemViewModel item in src.Children)
+            {
+                item.RaiseEvent = false;
+                item.Selected = false;
+                item.RaiseEvent = true;
+            }
+        }
+
+        public static void UnselectAll(ObservableCollection<TreeItemViewModel> items)
+        {
+            foreach (var item in items)
+            {
+                Unselect(item);
+            }
+        }
     }
 }

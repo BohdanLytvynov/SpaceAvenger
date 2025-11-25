@@ -1,6 +1,7 @@
 ﻿using SpaceAvenger.Editor.Mock;
 using SpaceAvenger.Editor.ViewModels.Components.Transform;
 using System.Numerics;
+using WPFGameEngine.WPF.GE.Component.Base;
 using WPFGameEngine.WPF.GE.Component.RelativeTransforms;
 using WPFGameEngine.WPF.GE.Component.Transforms;
 using WPFGameEngine.WPF.GE.GameObjects.Transformable;
@@ -31,7 +32,9 @@ namespace SpaceAvenger.Editor.ViewModels.Components.RelativeTransforms
         { get => m_YMin; set => Set(ref m_YMin, value); }
         #endregion
 
-        public RelativeTransformViewModel(IGameObjectMock gameObject) : base(nameof(RelativeTransformComponent), gameObject)
+        public RelativeTransformViewModel(IGameObjectMock gameObject,
+            IGEComponent component) : 
+            base(nameof(RelativeTransformComponent), gameObject, component)
         {
             LoadCurrentGameObjProperties();
             m_init = true;

@@ -5,8 +5,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using ViewModelBaseLibDotNetCore.Commands;
 using WPFGameEngine.Services.Interfaces;
+using WPFGameEngine.WPF.GE.Component.Base;
 using WPFGameEngine.WPF.GE.Component.Sprites;
-using WPFGameEngine.WPF.GE.GameObjects;
 
 namespace SpaceAvenger.Editor.ViewModels.Components.Sprites
 {
@@ -52,7 +52,10 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Sprites
         #endregion
 
         #region Ctor
-        public SpriteComponentViewModel(IGameObjectMock gameObject, IResourceLoader resourceLoader) : base(nameof(Sprite), gameObject)
+        public SpriteComponentViewModel(IGameObjectMock gameObject,
+            IGEComponent component,
+            IResourceLoader resourceLoader) : 
+            base(nameof(Sprite), gameObject, component)
         {
             #region Init Fields
 
@@ -106,6 +109,7 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Sprites
         }
 
         #endregion
+
         #endregion
     }
 }

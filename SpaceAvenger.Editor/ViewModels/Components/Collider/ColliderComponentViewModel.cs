@@ -4,15 +4,13 @@ using SpaceAvenger.Editor.ViewModels.GeometryConfigViewModel;
 using SpaceAvenger.Editor.ViewModels.GeometryConfigViewModel.GeometryConfigBase;
 using SpaceAvenger.Editor.ViewModels.Options;
 using System.Collections.ObjectModel;
-using System.Windows;
 using WPFGameEngine.Attributes.Editor;
 using WPFGameEngine.Enums;
 using WPFGameEngine.Extensions;
-using WPFGameEngine.Factories.Base;
 using WPFGameEngine.FactoryWrapper.Base;
 using WPFGameEngine.Services.Interfaces;
+using WPFGameEngine.WPF.GE.Component.Base;
 using WPFGameEngine.WPF.GE.Component.Collider;
-using WPFGameEngine.WPF.GE.GameObjects;
 using WPFGameEngine.WPF.GE.Geometry.Base;
 using WPFGameEngine.WPF.GE.Geometry.Realizations;
 
@@ -97,9 +95,10 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Collider
 
         public ColliderComponentViewModel(
             IGameObjectMock gameObject,
+            IGEComponent component,
             IAssemblyLoader assemblyLoader,
             IFactoryWrapper factoryWrapper)
-            : base(nameof(ColliderComponent), gameObject)
+            : base(nameof(ColliderComponent), gameObject, component)
         {
             m_assemblyLoader = assemblyLoader ?? throw new ArgumentNullException(nameof(assemblyLoader));
             m_factoryWrapper = factoryWrapper ?? throw new ArgumentNullException(nameof(factoryWrapper));

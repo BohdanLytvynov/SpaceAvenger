@@ -3,7 +3,7 @@ using WPFGameEngine.WPF.GE.Dto.Base;
 
 namespace WPFGameEngine.WPF.GE.Component.Base
 {
-    public abstract class ComponentBase : IGEComponent, ICloneable
+    public abstract class ComponentBase : IGEComponent
     {
         public string ComponentName { get; init; }
 

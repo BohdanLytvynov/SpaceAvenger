@@ -7,6 +7,7 @@ using ViewModelBaseLibDotNetCore.Commands;
 using WPFGameEngine.FactoryWrapper.Base;
 using WPFGameEngine.Services.Interfaces;
 using WPFGameEngine.WPF.GE.Component.Animations;
+using WPFGameEngine.WPF.GE.Component.Base;
 
 namespace SpaceAvenger.Editor.ViewModels.Components.Animations
 {
@@ -47,9 +48,9 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animations
         #endregion
 
         #region Ctor
-        public AnimationComponentViewModel(IGameObjectMock gameObject, 
+        public AnimationComponentViewModel(IGameObjectMock gameObject, IGEComponent component,
             IFactoryWrapper factoryWrapper, IAssemblyLoader assemblyLoader
-            ) : base(nameof(Animation), gameObject) 
+            ) : base(nameof(Animation), gameObject, component) 
         {
             #region Init Fields
             m_factoryWrapper = factoryWrapper ?? throw new ArgumentNullException(nameof(factoryWrapper));
@@ -217,7 +218,6 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animations
             EaseFunction = a.EaseType;
             ImageSource = a.Texture;
         }
-
         #endregion
     }
 }

@@ -88,20 +88,20 @@ namespace WPFGameEngine.WPF.GE.Component.Transforms
 
         #endregion
 
+        #endregion
+
         #region IClonable
 
         public override object Clone()
         {
             return new RelativeTransformComponent()
-            { 
+            {
                 Position = Position,
                 CenterPosition = CenterPosition,
                 Rotation = Rotation,
                 Scale = Scale,
             };
         }
-
-        #endregion
 
         #endregion
     }

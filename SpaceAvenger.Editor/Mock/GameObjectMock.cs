@@ -22,7 +22,7 @@ namespace SpaceAvenger.Editor.Mock
                 return this;
 
             IGameObjectMock gameObject = new GameObjectMock()
-            { 
+            {
                 m_id = src.Id,
                 Enabled = src.Enabled,
                 ZIndex = src.ZIndex,
