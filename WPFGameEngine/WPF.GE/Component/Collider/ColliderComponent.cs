@@ -66,5 +66,18 @@ namespace WPFGameEngine.WPF.GE.Component.Collider
         {
             CollisionResolved = true;
         }
+
+        #region IClonable
+
+        public override object Clone()
+        {
+            return new ColliderComponent()
+            { 
+                CollisionShape = CollisionShape,
+                Position = Position,
+            };
+        }
+
+        #endregion
     }
 }

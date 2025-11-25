@@ -44,8 +44,8 @@
                             <StackPanel Orientation="Horizontal">
                                 <Button Content="Add" Margin="10,0,10,0" Command="{Binding OnAddGameObjectButtonPressed}"/>
                                 <Button Content="Remove" Command="{Binding OnDeleteGameObjectButtonPressed}"/>
-                                <Button Content="Copy" Margin="10,0,10,0"/>
-                                <Button Content="Paste"/>
+                                <Button Content="Copy" Margin="10,0,10,0" Command="{Binding OnCopyGameObjectButtonPressed}"/>
+                                <Button Content="Open Buffer" Command="{Binding OnOpenBufferButtonPressed}"/>
                             </StackPanel>
                             <TreeView Grid.Column="1" Margin="5,10" ItemsSource="{Binding Items, 
                                 UpdateSourceTrigger=PropertyChanged}"
@@ -116,6 +116,9 @@
                                     <TextBlock Text="{Binding ObjName, UpdateSourceTrigger=PropertyChanged, StringFormat='Object name:{0}'}"
                                            Style="{StaticResource FieldName}"
                                            Margin="15,0,0,0"/>
+                                    <TextBlock Text="{Binding UniqueName, UpdateSourceTrigger=PropertyChanged, StringFormat='Unique name:{0}'}"
+                                            Style="{StaticResource FieldName}"
+                                            Margin="15,0,0,0"/>
                                 </StackPanel>
                                 <controls:Slider Value="{Binding ZIndex, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                 Margin="10" LabelText="ZIndex: "
@@ -130,7 +133,8 @@
                                 UpdateSourceTrigger=PropertyChanged}"  VirtualizingPanel.IsVirtualizing="False" 
                                       VirtualizingPanel.VirtualizationMode="Standard"
                                           SelectedIndex="{Binding SelectedComponentIndex, UpdateSourceTrigger=PropertyChanged,
-                                    Mode=TwoWay}"/>
+                                    Mode=TwoWay}"
+                                          />
                                 <StackPanel Orientation="Vertical" Margin="5">
                                     <ComboBox Style="{StaticResource ConboboxStyle}" MinWidth="100"
               ItemsSource="{Binding ComponentsToAdd, UpdateSourceTrigger=PropertyChanged}"

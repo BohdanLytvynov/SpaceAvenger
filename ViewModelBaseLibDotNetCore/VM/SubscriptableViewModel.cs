@@ -2,7 +2,7 @@
 
 namespace ViewModelBaseLibDotNetCore.VM
 {
-    public class SubscriptableViewModel : ViewModelBase, IDisposable
+    public class SubscriptableViewModel : ValidationViewModel, IDisposable
     {
         #region Fields
 

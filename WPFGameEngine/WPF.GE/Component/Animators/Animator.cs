@@ -135,5 +135,23 @@ namespace WPFGameEngine.WPF.GE.Component.Animators
                     m_animations[key] = value; 
             }
         }
+
+        #region IClonable
+
+        public override object Clone()
+        {
+            Animator animator = new Animator();
+
+            foreach (var item in m_animations)
+            {
+                animator.AddAnimation(item.Key, item.Value);
+            }
+
+            animator.SetAnimationForPlay(m_current_animation_name);
+
+            return animator;
+        }
+
+        #endregion
     }
 }

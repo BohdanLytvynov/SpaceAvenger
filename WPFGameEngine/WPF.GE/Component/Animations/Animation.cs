@@ -369,5 +369,29 @@ namespace WPFGameEngine.WPF.GE.Component.Animations
         }
 
         #endregion
+
+        #region IClonable
+
+        public override object Clone()
+        {
+            var anim =  new Animation(ResourceLoader)
+            { 
+                Rows = Rows, Columns = Columns,
+                Reverse = Reverse, AnimationSpeed = AnimationSpeed,
+                TotalTime = TotalTime, IsLooping = IsLooping,
+                Freeze = Freeze, ResourceKey = ResourceKey,
+                EaseFactoryName = EaseFactoryName,
+                EaseType = EaseType,
+            };
+
+            foreach (var frame in AnimationFrames)
+            {
+                anim.AnimationFrames.Add(frame);
+            }
+
+            return anim;
+        }
+
+        #endregion
     }
 }

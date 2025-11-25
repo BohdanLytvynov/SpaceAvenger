@@ -6,7 +6,7 @@ namespace SpaceAvenger.Editor.Mock
     {
         public bool IsExported { get; set; }
 
-        public GameObjectMock()
+        public GameObjectMock() : base()
         {
             IsVisible = true;
         }

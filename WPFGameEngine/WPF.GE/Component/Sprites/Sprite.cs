@@ -37,6 +37,19 @@ namespace WPFGameEngine.WPF.GE.Component.Sprites
 
         #endregion
 
+        #region IClonable
+
+        public override object Clone()
+        {
+            return new Sprite(ResourceLoader)
+            {
+                ResourceKey = ResourceKey,
+                Texture = Texture,
+            };
+        }
+
+        #endregion
+
         #endregion
 
     }

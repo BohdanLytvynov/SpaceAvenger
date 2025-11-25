@@ -1,15 +1,17 @@
 ﻿using SpaceAvenger.Editor.Mock;
 using System.Collections.ObjectModel;
+using System.Net.Http.Headers;
 using ViewModelBaseLibDotNetCore.Helpers;
 using ViewModelBaseLibDotNetCore.VM;
 using WPFGameEngine.WPF.GE.GameObjects;
 
 namespace SpaceAvenger.Editor.ViewModels.TreeItems
 {
-    internal class TreeItemViewModel : ValidationViewModel, ICloneable
+    internal class TreeItemViewModel : ValidationViewModel, 
+        ICloneable
     {
         #region Events
-        public event Action<TreeItemViewModel> ItemSelected;
+        public event Action<int> ItemSelected;
         #endregion
 
         #region Fields
@@ -54,11 +56,11 @@ namespace SpaceAvenger.Editor.ViewModels.TreeItems
 
                 if (Selected)
                 {
-                    ItemSelected?.Invoke(this);
+                    ItemSelected?.Invoke(GameObject.Id);
                 }
                 else
                 {
-                    ItemSelected?.Invoke(null);
+                    ItemSelected?.Invoke(GameObject.Id);
                 }
             }
         }
@@ -130,10 +132,11 @@ namespace SpaceAvenger.Editor.ViewModels.TreeItems
         {
             GameObject = gameObject;
             m_ShowNumber = showNumber;
+            if (gameObject == null) return;
             m_Id = gameObject.Id;
             m_ObjectName = gameObject.ObjectName;
             m_UniqueName = gameObject.UniqueName;
-            m_children = new ObservableCollection<TreeItemViewModel>();
+            m_children = new ObservableCollection<TreeItemViewModel>();            
             RaiseEvent = true;
         }
 
@@ -142,7 +145,7 @@ namespace SpaceAvenger.Editor.ViewModels.TreeItems
             if (item == null)
                 return null;
 
-            TreeItemViewModel treeItemViewModel = new TreeItemViewModel(item.ShowNumber, (IGameObjectMock)GameObject.Clone());
+            TreeItemViewModel treeItemViewModel = new TreeItemViewModel(item.ShowNumber, item.GameObject);
 
             foreach (var ch in item.Children)
             {
@@ -156,6 +159,36 @@ namespace SpaceAvenger.Editor.ViewModels.TreeItems
         {
             return CloneRec(this);
         }
+
+        public static void Find(int GameObjectId, TreeItemViewModel vm, ref TreeItemViewModel res)
+        {
+            if (vm == null)
+                return;
+            if (res != null)
+                return;
+
+            if(vm.GameObject.Id == GameObjectId)
+                res = vm;
+
+            foreach (var item in vm.Children)
+            {
+                Find(GameObjectId, item, ref res);
+            }
+        }
+
+        public static void FindInCollection(int GameObjectId,
+            ObservableCollection<TreeItemViewModel> col,
+            ref TreeItemViewModel res)
+        {
+            foreach (var item in col)
+            {
+                Find(GameObjectId, item, ref res);
+
+                if (res != null)
+                    return;
+            }
+        }
+
         #endregion
     }
 }

@@ -142,6 +142,11 @@ namespace SpaceAvenger.Services.WPFInputControllers
         {
             return m_MouseButtons.ContainsKey(mouseButton) && m_MouseButtons[mouseButton];
         }
+
+        public override object Clone()
+        {
+            return new WPFInputController(m_window);
+        }
         #endregion
     }
 }

@@ -85,7 +85,22 @@ namespace WPFGameEngine.WPF.GE.Component.Transforms
                 Scale = Scale,
                 CenterPosition = CenterPosition,
             };
-        
+
+        #endregion
+
+        #region IClonable
+
+        public override object Clone()
+        {
+            return new RelativeTransformComponent()
+            { 
+                Position = Position,
+                CenterPosition = CenterPosition,
+                Rotation = Rotation,
+                Scale = Scale,
+            };
+        }
+
         #endregion
 
         #endregion

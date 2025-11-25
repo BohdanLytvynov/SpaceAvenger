@@ -28,6 +28,11 @@ namespace WPFGameEngine.WPF.GE.GameObjects.Collidable
         
         }
 
+        protected CollidableBase() : base()
+        {
+            
+        }
+
         public override void Update()
         {
             base.Update();

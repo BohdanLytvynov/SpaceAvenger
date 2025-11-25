@@ -13,6 +13,11 @@ namespace WPFGameEngine.WPF.GE.GameObjects.Renderable
     {
         public bool IsVisible { get; set; }
 
+        protected RenderableBase() : base()
+        {
+            
+        }
+
         public override void StartUp(IGameObjectViewHost viewHost, IGameTimer gameTimer)
         {
             IsVisible = true;

@@ -119,6 +119,8 @@ namespace SpaceAvenger.ViewModels.MainWindowVM
             m_pageManager.OnSwitchScreenMethodInvoked += PageManager_OnSwitchScreenMethodInvoked;
 
             Subscriptions.Add(m_messageBus.RegisterHandler<ChooseProfileMessage_User, User>(OnMessageRecieved));
+
+            #endregion
         }
 
         private void OnMessageRecieved(ChooseProfileMessage_User message)
@@ -141,7 +143,6 @@ namespace SpaceAvenger.ViewModels.MainWindowVM
             }
             
         }
-        #endregion
 
         #region Methods
         

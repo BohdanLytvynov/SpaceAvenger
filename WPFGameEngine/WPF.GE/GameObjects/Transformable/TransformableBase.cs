@@ -22,6 +22,11 @@ namespace WPFGameEngine.WPF.GE.GameObjects.Transformable
             }
         }
 
+        protected TransformableBase() : base()
+        {
+            
+        }
+
         private void ScaleRecursive(IGameObject obj, Size newScale)
         {
             if (obj == null)

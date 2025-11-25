@@ -1,4 +1,5 @@
 ﻿using SpaceAvenger.Editor.MessageBus;
+using SpaceAvenger.Editor.Mock;
 using SpaceAvenger.Editor.ViewModels.Components.Base;
 using SpaceAvenger.Editor.ViewModels.TreeItems;
 using System.Collections.ObjectModel;
@@ -6,7 +7,6 @@ using System.Windows.Input;
 using ViewModelBaseLibDotNetCore.Commands;
 using ViewModelBaseLibDotNetCore.MessageBus.Base;
 using ViewModelBaseLibDotNetCore.VM;
-using WPFGameEngine.Factories.Base;
 
 namespace SpaceAvenger.Editor.ViewModels
 {
@@ -28,9 +28,9 @@ namespace SpaceAvenger.Editor.ViewModels
         private ObservableCollection<TreeItemViewModel> m_gameObjectBuffer;
         private ObservableCollection<ComponentViewModel> m_ComponentsBuffer;
         private IMessageBus m_messageBus;
-        private int m_selectedGameObjectIndex;
         private int m_selectedComponentIndex;
         private SelectedTab m_SelectedTab;
+        private TreeItemViewModel m_selectedItem;
         #endregion
 
         #region Properties
@@ -43,9 +43,6 @@ namespace SpaceAvenger.Editor.ViewModels
 
         public ObservableCollection<ComponentViewModel> ComponentBuffer 
         { get => m_ComponentsBuffer; set => m_ComponentsBuffer = value; }
-
-        public int SelectedGameObjectIndex 
-        { get => m_selectedGameObjectIndex; set => Set(ref m_selectedGameObjectIndex, value); }
 
         public int SelectedComponentIndex 
         { get => m_selectedComponentIndex; set => Set(ref m_selectedComponentIndex, value); }
@@ -69,8 +66,8 @@ namespace SpaceAvenger.Editor.ViewModels
 
             #region Subscribe
 
-            Subscriptions.Add(m_messageBus.RegisterHandler<CopyToBufferMessage, IGameEngineEntity>(OnCopyToBuffer));
-
+            Subscriptions.Add(m_messageBus.RegisterHandler<CopyToGameObjectBufferMessage, TreeItemViewModel>(OnCopyToGameObjectBuffer));
+            Subscriptions.Add(m_messageBus.RegisterHandler<CopyToComponentsBufferMessage, ComponentViewModel>(OnCopyToComponentsBuffer));
             #endregion
         }
 
@@ -80,8 +77,8 @@ namespace SpaceAvenger.Editor.ViewModels
             m_title = "Editor Buffer";
             m_gameObjectBuffer = new ObservableCollection<TreeItemViewModel>();
             m_ComponentsBuffer = new ObservableCollection<ComponentViewModel>();
-            m_selectedGameObjectIndex = -1;
             m_selectedComponentIndex = -1;
+            m_selectedItem = new TreeItemViewModel(-1, null);
             #endregion
 
             #region Init Commands
@@ -128,16 +125,82 @@ namespace SpaceAvenger.Editor.ViewModels
 
         #region Methods
 
+        private void RemoveObjectFromTreeRec(TreeItemViewModel item, ObservableCollection<TreeItemViewModel> src, bool removed)
+        {
+            if (removed)
+                return;
+
+            foreach (TreeItemViewModel itemViewModel in src)
+            {
+                if (removed)
+                    break;
+
+                if (itemViewModel.Id == item.Id)
+                {
+                    Unsubscribe(itemViewModel);
+                    src.Remove(itemViewModel);
+                    removed = true;
+                    break;
+                }
+
+                RemoveObjectFromTreeRec(item, itemViewModel.Children, removed);
+            }
+        }
+
         #region Subscriptions
 
-        private void OnCopyToBuffer(CopyToBufferMessage copyToBufferMessage)
+        private void OnCopyToGameObjectBuffer(CopyToGameObjectBufferMessage copyToBufferMessage)
         { 
             if(copyToBufferMessage == null) return;
-            if(copyToBufferMessage.Content == null) return;
-            
+            var content = copyToBufferMessage.Content;
+            if (content == null) return;
+
+            Subscribe(content);
+
+            GameObjectBuffer.Add(content);
+        }
+
+        private void OnCopyToComponentsBuffer(CopyToComponentsBufferMessage msg)
+        {
+            if (msg == null) return;
+            var content = msg.Content;
+            if (content == null) return;
+
+            ComponentBuffer.Add(content);
         }
 
         #endregion
+
+        private void Subscribe(TreeItemViewModel treeItemViewModel)
+        {
+            if (treeItemViewModel == null)
+                return;
+
+            treeItemViewModel.ItemSelected += TreeItemViewModel_ItemSelected;
+
+            foreach (var item in treeItemViewModel.Children)
+            {
+                Subscribe(item);
+            }
+        }
+
+        private void TreeItemViewModel_ItemSelected(int id)
+        {
+            TreeItemViewModel.FindInCollection(id, GameObjectBuffer, ref m_selectedItem);
+        }
+
+        private void Unsubscribe(TreeItemViewModel treeItemViewModel)
+        {
+            if (treeItemViewModel == null)
+                return;
+
+            treeItemViewModel.ItemSelected -= TreeItemViewModel_ItemSelected;
+
+            foreach (var item in treeItemViewModel.Children)
+            {
+                Unsubscribe(item);
+            }
+        }
 
         #region On GameObjects Tab Button Pressed
 
@@ -168,7 +231,7 @@ namespace SpaceAvenger.Editor.ViewModels
             switch (m_SelectedTab)
             {
                 case SelectedTab.GameObjects:
-                    return m_selectedGameObjectIndex >= 0;
+                    return m_selectedItem != null && m_selectedItem.ShowNumber >= 0;
                 case SelectedTab.Components:
                     return m_selectedComponentIndex >= 0;
             }
@@ -181,10 +244,16 @@ namespace SpaceAvenger.Editor.ViewModels
             switch (m_SelectedTab)
             {
                 case SelectedTab.GameObjects:
-                    
+
+                    m_messageBus.Send<PasteFromGameObjectBufferMessage, IGameObjectMock>(
+                        new PasteFromGameObjectBufferMessage((IGameObjectMock)m_selectedItem.GameObject.Clone()));
+
                     break;
 
                 case SelectedTab.Components:
+
+                    m_messageBus.Send<PasteFromComponentsBufferMessage, ComponentViewModel>
+                        (new PasteFromComponentsBufferMessage(ComponentBuffer[SelectedComponentIndex]));
 
                     break;
             }
@@ -194,11 +263,11 @@ namespace SpaceAvenger.Editor.ViewModels
 
         #region On Remove Button Pressed
 
-        private bool CanOnRemoveButtonPressedExecute(object p) => m_selectedGameObjectIndex >= 0;
+        private bool CanOnRemoveButtonPressedExecute(object p) => m_selectedItem != null && m_selectedItem.ShowNumber >= 0;
 
         private void OnRemoveButtonPressedExecute(object p)
         {
-            GameObjectBuffer.RemoveAt(SelectedGameObjectIndex);
+            RemoveObjectFromTreeRec(m_selectedItem, GameObjectBuffer, false);
         }
 
         #endregion
@@ -208,6 +277,7 @@ namespace SpaceAvenger.Editor.ViewModels
 
         private void OnCancelButtonPressedExecute(object p)
         {
+            Clear();
             OnCancelWindow?.Invoke();
         }
         #endregion
@@ -227,8 +297,14 @@ namespace SpaceAvenger.Editor.ViewModels
         #region External
 
         public void Clear()
-        { 
+        {
+            foreach (var item in m_gameObjectBuffer)
+            {
+                Unsubscribe(item);
+            }
+
             m_gameObjectBuffer.Clear();
+            m_ComponentsBuffer.Clear();
         }
 
         #endregion

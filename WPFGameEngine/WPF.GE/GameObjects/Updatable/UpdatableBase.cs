@@ -12,6 +12,11 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         public IGameObjectViewHost GameView { get; private set; }
         public IGameTimer GameTimer { get; private set; }
 
+        protected UpdatableBase() : base()
+        {
+
+        }
+
         public virtual void StartUp(IGameObjectViewHost viewHost, IGameTimer gameTimer)
         { 
             GameView = viewHost ?? throw new ArgumentNullException(nameof(viewHost));

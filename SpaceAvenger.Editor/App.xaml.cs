@@ -9,8 +9,6 @@ using ViewModelBaseLibDotNetCore.MessageBus;
 using ViewModelBaseLibDotNetCore.MessageBus.Base;
 using WPFGameEngine.FactoryWrapper;
 using WPFGameEngine.FactoryWrapper.Base;
-using WPFGameEngine.ObjectPools.Base;
-using WPFGameEngine.ObjectPools.PoolManagers;
 using WPFGameEngine.Services.Interfaces;
 using WPFGameEngine.Services.Realizations;
 using WPFGameEngine.Timers;
@@ -33,7 +31,20 @@ namespace SpaceAvenger.Editor
             var services = new ServiceCollection();
             services.AddSingleton<IMessageBus, MessageBusService>();
             services.AddSingleton<BufferWindowViewModel>();
-            services.AddScoped<BufferWindowView>();
+            services.AddTransient<BufferWindowView>(c =>
+                {
+                    BufferWindowView bufferWindowView = new BufferWindowView();
+                    var vm = c.GetRequiredService<BufferWindowViewModel>();
+                    vm.OnCancelWindow += () =>
+                    {
+                        vm.Clear();
+                        bufferWindowView.Close();
+                    };
+                    bufferWindowView.DataContext = vm;
+                    vm.Dispatcher = bufferWindowView.Dispatcher;
+
+                        return bufferWindowView;
+                });
             services.AddSingleton<IGameObjectImporter, GameObjectImporter>();
             services.AddSingleton<IGameObjectExporter, GameObjectExporter>();
             services.AddSingleton<IAssemblyLoader>(c =>
@@ -66,12 +77,15 @@ namespace SpaceAvenger.Editor
                 var assemblyLoader = c.GetRequiredService<IAssemblyLoader>();
                 var exporter = c.GetRequiredService<IGameObjectExporter>();
                 var importer = c.GetRequiredService<IGameObjectImporter>();
+                var mb = c.GetRequiredService<IMessageBus>();
                 return new EditorMainWindowViewModel(
                     factoryWrapper,
                     gameTimer, 
                     assemblyLoader, 
                     exporter,
-                    importer);
+                    importer,
+                    mb,
+                    Services);
             });
             services.AddSingleton<MainWindow>(c =>
             { 
@@ -90,6 +104,17 @@ namespace SpaceAvenger.Editor
             Services.GetRequiredService<MainWindow>().Show();
 
             base.OnStartup(e);
+        }
+
+        protected override void OnExit(ExitEventArgs e)
+        {
+            var main = Services.GetRequiredService<EditorMainWindowViewModel>();
+            var buffVM = Services.GetRequiredService<BufferWindowViewModel>();
+            buffVM.Clear();
+            main.Dispose();
+            buffVM.Dispose();
+
+            base.OnExit(e);
         }
     }
 
