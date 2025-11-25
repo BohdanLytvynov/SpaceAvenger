@@ -147,8 +147,6 @@ namespace WPFGameEngine.WPF.GE.Component.Animators
                 animator.AddAnimation(item.Key, item.Value);
             }
 
-            animator.SetAnimationForPlay(m_current_animation_name);
-
             return animator;
         }
 

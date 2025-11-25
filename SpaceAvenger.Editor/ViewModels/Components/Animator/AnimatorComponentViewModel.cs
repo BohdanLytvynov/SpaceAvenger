@@ -33,9 +33,17 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animators
             {
                 Set(ref m_selectedOption, value);
                 if (value == null)
-                { 
+                {
                     m_selectedOption = new AnimatorOptionViewModel();
                     return;
+                }
+                else
+                {
+                    if (GameObject == null) return;
+                    var animator = GameObject.GetComponent<Animator>(false);
+                    if (animator == null) return;
+                    if (string.IsNullOrEmpty(m_selectedOption.AnimationName)) return;
+                    animator.SetAnimationForPlay(m_selectedOption.AnimationName);
                 }
             }
         }
@@ -110,7 +118,6 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animators
             var option = new AnimatorOptionViewModel(AnimatorOptions.Count + 1, 
                 m_factoryWrapper, m_assemblyLoader, null, string.Empty);
             option.OnAnimatorChanged += Option_OnAnimatorChanged;
-            option.OnAnimationSelected += Option_OnAnimationSelected;
             AnimatorOptions.Add(option);
         }
 
@@ -131,8 +138,6 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animators
         private void OnDeleteButtonPressedExecute(object p)
         { 
             m_selectedOption.OnAnimatorChanged -= Option_OnAnimatorChanged;
-            m_selectedOption.OnAnimationSelected -= Option_OnAnimationSelected;
-
             var anim = GameObject.GetComponent<Animator>(false);
             if (anim != null)
             {
@@ -148,7 +153,7 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animators
         private bool CanOnStartButtonPressedExecute(object p)
         {
             if (GameObject == null) return false;
-            var anim = GameObject.GetComponent<Animator>().Current;
+            var anim = GameObject.GetComponent<Animator>(false)?.Current;
             if (anim == null) return false;
             if (anim.IsRunning) return false;
             if (!anim.Validate()) return false;
@@ -158,7 +163,7 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animators
         private void OnStartButtonPressedExecute(object p)
         {
             if (GameObject == null) return;
-            var anim = GameObject.GetComponent<Animator>();
+            var anim = GameObject.GetComponent<Animator>(false);
             if (anim == null) return;
             anim.Start();
         }
@@ -168,7 +173,7 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animators
         private bool CanOnPauseButtonPressedExecute(object p)
         {
             if (GameObject == null) return false;
-            var anim = GameObject.GetComponent<Animator>().Current;
+            var anim = GameObject.GetComponent<Animator>(false)?.Current;
             if (anim == null) return false;
             if (!anim.IsRunning) return false;
             if (!anim.Validate()) return false;
@@ -178,7 +183,7 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animators
         private void OnPauseButtonPressedExecute(object p)
         {
             if (GameObject == null) return;
-            var anim = GameObject.GetComponent<Animator>();
+            var anim = GameObject.GetComponent<Animator>(false);
             if (anim == null) return;
             anim.Stop();
         }
@@ -188,7 +193,7 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animators
         private bool CanOnResetButtonPressedExecute(object p)
         {
             if (GameObject == null) return false;
-            var anim = GameObject.GetComponent<Animator>().Current;
+            var anim = GameObject.GetComponent<Animator>(false)?.Current;
             if (anim == null) return false;
             if (!anim.IsCompleted) return false;
             if (anim.IsRunning) return false;
@@ -199,7 +204,7 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animators
         private void OnResetButtonPressedExecute(object p)
         {
             if (GameObject == null) return;
-            var anim = GameObject.GetComponent<Animator>();
+            var anim = GameObject.GetComponent<Animator>(false);
             if (anim == null) return;
             anim.Reset();
         }
@@ -226,7 +231,7 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animators
             if (GameObject == null)
                 return;
 
-            var anim = GameObject.GetComponent<Animator>();
+            var anim = GameObject.GetComponent<Animator>(false);
 
             if (anim == null)
                 return;
@@ -236,7 +241,6 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animators
                 var option = new AnimatorOptionViewModel(AnimatorOptions.Count + 1,
                     m_factoryWrapper, m_assemblyLoader, anim[item], item);
                 option.OnAnimatorChanged += Option_OnAnimatorChanged;
-                option.OnAnimationSelected += Option_OnAnimationSelected;
                 AnimatorOptions.Add(option);
             }
         }

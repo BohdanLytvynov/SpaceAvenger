@@ -14,7 +14,6 @@ namespace SpaceAvenger.Editor.ViewModels.AnimatorOptions
     {
         #region Events
         public event Action<string, IAnimation> OnAnimatorChanged;
-        public event Action<string> OnAnimationSelected;
         #endregion
 
         #region Fields
@@ -30,7 +29,6 @@ namespace SpaceAvenger.Editor.ViewModels.AnimatorOptions
         private IFactoryWrapper m_factoryWrapper;
         private AnimationConfigurationWindow m_animConfigurationWindow;
         private IAnimation m_animation;
-        private bool m_selected;
         #endregion
 
         #region Properties
@@ -51,14 +49,10 @@ namespace SpaceAvenger.Editor.ViewModels.AnimatorOptions
         public string ResourceName 
         { get=> m_resourceKeyName; set => Set(ref m_resourceKeyName, value); }
 
-        public bool Selected
-        { get=> m_selected; set => Set(ref m_selected, value); }
         #endregion
 
         #region Commands
         public ICommand OnConfigureButtonPressed { get; }
-
-        public ICommand OnSelectAnimationButtonPressed { get; }
         #endregion
 
         #region IDataErrorInfo
@@ -122,37 +116,18 @@ namespace SpaceAvenger.Editor.ViewModels.AnimatorOptions
             #endregion
 
             #region Init Commands
+
             OnConfigureButtonPressed = new Command
                 (
                     OnConfigureButtonPressedExecute,
                     CanOnConfigureButtonPressedExecute
                 );
 
-            OnSelectAnimationButtonPressed = new Command
-                (
-                    OnSelectAnimationButtonPressedExecute,
-                    CanOnSelectAnimationButtonPressedExecute
-                );
             #endregion
         }
         #endregion
 
         #region Methods
-
-        #region On Select Animation Button Pressed
-
-        private bool CanOnSelectAnimationButtonPressedExecute(object p)
-        {
-            return m_animation?.Validate() ?? false;
-        }
-
-        private void OnSelectAnimationButtonPressedExecute(object p)
-        {
-            Selected = !Selected;
-            OnAnimationSelected?.Invoke(AnimationName);
-        }
-
-        #endregion
 
         #region Can On Configure Button Pressed 
         private bool CanOnConfigureButtonPressedExecute(object p) => GetValidArrayValue(0);

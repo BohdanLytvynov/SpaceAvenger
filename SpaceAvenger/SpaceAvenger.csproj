@@ -33,6 +33,9 @@
     <None Remove="Resources\Content\Chars\Commanders\CommandersF.png" />
     <None Remove="Resources\Content\Chars\Commanders\CommandersM.png" />
     <None Remove="Resources\Content\Empty.png" />
+    <None Remove="Resources\Content\Jets\F10\F10Jet_Idle_50_Atlas.png" />
+    <None Remove="Resources\Content\Jets\F10\F10Jet_Moving_50_Atlas.png" />
+    <None Remove="Resources\Content\Jets\F10\F10Jet_Start_50_Atlas.png" />
     <None Remove="Resources\Content\Projectiles\F10Prj.png" />
     <None Remove="Resources\Content\SpaceShips\F10\Destroyer\destroyer256.png" />
     <None Remove="Resources\Content\SpaceShips\Neutrals\AstroBase.png" />
@@ -131,13 +134,22 @@
     <Content Include="Resources\Content\Explosions\Explosion4_Atlas.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Content\Jets\F10\F10Jet_Move_Atlas.png">
+    <Content Include="Resources\Content\Jets\F10\F10Jet_Idle_50_Atlas.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Content\Jets\F10\F10Jet_Idle_Atlas2.png">
+    <Content Include="Resources\Content\Jets\F10\F10Jet_Start_100_Atlas.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Content\Jets\F10\F10Jet_Idle_Atlas1.png">
+    <Content Include="Resources\Content\Jets\F10\F10Jet_Idle_100_Atlas.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Content\Jets\F10\F10Jet_Moving_50_Atlas.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Content\Jets\F10\F10Jet_Moving_100_Atlas.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Content\Jets\F10\F10Jet_Start_50_Atlas.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\Content\Projectiles\F10\F10Prj.png">

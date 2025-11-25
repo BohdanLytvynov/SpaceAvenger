@@ -115,7 +115,7 @@ namespace SpaceAvenger.Services.WpfGameViewHost
             if(gameObject == null)
                 return;
 
-            GameObject.RemoveObject(p => p.ObjectName.Equals(gameObject.ObjectName), World, true);
+            GameObject.RemoveObject(p => p.Id.Equals(gameObject.Id), World, true);
         }
 
         public virtual void StartGame()

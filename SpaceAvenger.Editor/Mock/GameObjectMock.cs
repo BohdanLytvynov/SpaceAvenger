@@ -1,4 +1,5 @@
-﻿using WPFGameEngine.WPF.GE.GameObjects.Collidable;
+﻿using WPFGameEngine.WPF.GE.Component.Base;
+using WPFGameEngine.WPF.GE.GameObjects.Collidable;
 
 namespace SpaceAvenger.Editor.Mock
 {
@@ -23,7 +24,6 @@ namespace SpaceAvenger.Editor.Mock
 
             IGameObjectMock gameObject = new GameObjectMock()
             {
-                m_id = src.Id,
                 Enabled = src.Enabled,
                 ZIndex = src.ZIndex,
                 ObjectName = src.ObjectName,
@@ -36,7 +36,7 @@ namespace SpaceAvenger.Editor.Mock
 
             foreach (var component in components)
             {
-                gameObject.RegisterComponent(component);
+                gameObject.RegisterComponent((IGEComponent)component.Clone());
             }
 
             foreach (var child in src.Children)

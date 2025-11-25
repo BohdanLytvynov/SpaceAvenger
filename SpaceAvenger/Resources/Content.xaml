@@ -57,11 +57,17 @@
     <!--#endregion-->
 
     <!--#region Jets -->
-    <ImageSource x:Key="F10JetIdle_Atlas1">pack://siteoforigin:,,,/Resources/Content/Jets/F10/F10Jet_Idle_Atlas1.png
+    <ImageSource x:Key="F10JetIdle_100_Atlas">pack://siteoforigin:,,,/Resources/Content/Jets/F10/F10Jet_Idle_100_Atlas.png
     </ImageSource>
-    <ImageSource x:Key="F10JetIdle_Atlas2">pack://siteoforigin:,,,/Resources/Content/Jets/F10/F10Jet_Idle_Atlas2.png
+    <ImageSource x:Key="F10JetStart_100_Atlas">pack://siteoforigin:,,,/Resources/Content/Jets/F10/F10Jet_Start_100_Atlas.png
     </ImageSource>
-    <ImageSource x:Key="F10JetMove_Atlas2">pack://siteoforigin:,,,/Resources/Content/Jets/F10/F10Jet_Move_Atlas.png
+    <ImageSource x:Key="F10JetMoving_100_Atlas">pack://siteoforigin:,,,/Resources/Content/Jets/F10/F10Jet_Moving_100_Atlas.png
+    </ImageSource>
+    <ImageSource x:Key="F10JetIdle_50_Atlas">pack://siteoforigin:,,,/Resources/Content/Jets/F10/F10Jet_Idle_50_Atlas.png
+    </ImageSource>
+    <ImageSource x:Key="F10JetMoving_50_Atlas">pack://siteoforigin:,,,/Resources/Content/Jets/F10/F10Jet_Moving_50_Atlas.png
+    </ImageSource>
+    <ImageSource x:Key="F10JetStart_50_Atlas">pack://siteoforigin:,,,/Resources/Content/Jets/F10/F10Jet_Start_50_Atlas.png
     </ImageSource>
     <!--#endregion-->
 

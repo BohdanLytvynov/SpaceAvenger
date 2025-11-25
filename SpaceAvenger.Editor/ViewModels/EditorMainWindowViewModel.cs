@@ -578,7 +578,15 @@ namespace SpaceAvenger.Editor.ViewModels
         {
             if (m_SelectedItem != null)
             {
+                var components = m_SelectedItem.GameObject.GetComponents();
+
+                foreach (var c in components)
+                {
+                    m_SelectedItem.GameObject.UnregisterComponent(c);
+                }
+
                 RemoveFromWorld(m_SelectedItem.GameObject);
+
                 m_SelectedItem.ItemSelected -= ItemViewModel_ItemSelected;
                 RemoveObjectFromTreeRec(m_SelectedItem, Items, false);
                 Components.Clear();

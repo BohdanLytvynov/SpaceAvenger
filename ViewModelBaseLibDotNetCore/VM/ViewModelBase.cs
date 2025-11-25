@@ -25,7 +25,7 @@ namespace ViewModelBaseLibDotNetCore.VM
         }
 
         protected bool SetIfNull<T>(ref T field, T value, [CallerMemberName] string PropName = null)
-        {            
+        {
             if (field is not null && field.Equals(value))
             {
                 return false;

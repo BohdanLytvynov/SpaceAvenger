@@ -1,6 +1,5 @@
 ﻿using System.Numerics;
 using WPFGameEngine.Attributes.Editor;
-using WPFGameEngine.Extensions;
 using WPFGameEngine.WPF.GE.Component.Base;
 using WPFGameEngine.WPF.GE.Component.RelativeTransforms;
 using WPFGameEngine.WPF.GE.Dto.Components;
