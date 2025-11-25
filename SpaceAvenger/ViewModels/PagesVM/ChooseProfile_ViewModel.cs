@@ -1,5 +1,6 @@
 ﻿using Data.DataBase;
 using Data.Repositories.Realizations.UserRep;
+using Domain.Utilities;
 using Models.DAL.Entities.User;
 using SpaceAvenger.Attributes.PageManager;
 using SpaceAvenger.Enums.FrameTypes;
@@ -71,11 +72,19 @@ namespace SpaceAvenger.ViewModels.PagesVM
 
             m_SelectedUserIndex = -1;
 
+            string pathToDBfolder = Environment.CurrentDirectory +
+                Path.DirectorySeparatorChar +
+                "Database";
+
+            IOUtility.CreateDirectoryIfNotExists(pathToDBfolder);
+
+            string pathToFile = pathToDBfolder + Path.DirectorySeparatorChar + "Local.db";
+
+            IOUtility.CreateFileIfNotExists(pathToFile);
+
             m_userRepository = new UserRepository(
-                new SpaceAvengerDbContext(Environment.CurrentDirectory + 
-                Path.DirectorySeparatorChar + 
-                "DataBase" + Path.DirectorySeparatorChar + "Local.db"));
-                        
+                new SpaceAvengerDbContext(pathToFile));
+
             m_profileList = new ObservableCollection<UserProfileVM>();
 
             var users = m_userRepository.GetAllAsync().Result;

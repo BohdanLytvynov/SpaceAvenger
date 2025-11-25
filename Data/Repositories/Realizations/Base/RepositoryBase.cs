@@ -2,11 +2,6 @@
 using Data.Entities.Interfaces;
 using Data.Repositories.Interfaces;
 using LiteDB;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Data.Repositories.Realizations.Base
 {
@@ -17,7 +12,7 @@ namespace Data.Repositories.Realizations.Base
 
         public RepositoryBase(IDatabase<LiteDatabase> db)
         {
-            m_db = db;            
+            m_db = db;
         }
 
         public async Task<BsonValue?> AddAsync(TEntity entity)
