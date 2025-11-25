@@ -93,7 +93,7 @@ namespace WPFGameEngine.WPF.GE.Component.Transforms
 
         public override object Clone()
         {
-            return new RelativeTransformComponent()
+            return new TransformComponent()
             {
                 Position = Position,
                 CenterPosition = CenterPosition,
