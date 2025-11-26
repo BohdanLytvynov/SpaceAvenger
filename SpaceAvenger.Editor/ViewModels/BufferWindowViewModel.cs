@@ -143,7 +143,6 @@ namespace SpaceAvenger.Editor.ViewModels
             if (content == null) return;
 
             Subscribe(content);
-
             GameObjectBuffer.Add(content);
         }
 
@@ -178,7 +177,7 @@ namespace SpaceAvenger.Editor.ViewModels
             if (id >= 0)
             {
                 TreeItemViewModel.FindInCollection(id, GameObjectBuffer, ref m_selectedItem);
-
+                if(m_selectedItem == null) return;
                 TreeItemViewModel.UnselectAll(GameObjectBuffer);
                 m_selectedItem.RaiseEvent = false;
                 m_selectedItem.Selected = true;
@@ -230,9 +229,10 @@ namespace SpaceAvenger.Editor.ViewModels
                     break;
 
                 case 1:
-
+                    var component = (IGEComponent)ComponentBuffer[SelectedComponentIndex].GetComponent();
+                    if(component == null) return;
                     m_messageBus.Send<PasteFromComponentsBufferMessage, IGEComponent>
-                        (new PasteFromComponentsBufferMessage(ComponentBuffer[SelectedComponentIndex].Component));
+                        (new PasteFromComponentsBufferMessage((IGEComponent)component.Clone()));
 
                     break;
             }
@@ -242,11 +242,31 @@ namespace SpaceAvenger.Editor.ViewModels
 
         #region On Remove Button Pressed
 
-        private bool CanOnRemoveButtonPressedExecute(object p) => m_selectedItem != null && m_selectedItem.ShowNumber >= 0;
+        private bool CanOnRemoveButtonPressedExecute(object p)
+        {
+            switch (m_SelectedTabIndex)
+            {
+                case 0:
+                    return m_selectedItem != null && m_selectedItem.ShowNumber >= 0;
+                case 1:
+                    return m_selectedComponentIndex >= 0;
+            }
+
+            return false;
+        }
 
         private void OnRemoveButtonPressedExecute(object p)
         {
-            RemoveObjectFromTreeRec(m_selectedItem, GameObjectBuffer, false);
+            switch (m_SelectedTabIndex)
+            {
+                case 0:
+                    RemoveObjectFromTreeRec(m_selectedItem, GameObjectBuffer, false);
+                    break;
+                case 1:
+                    ComponentBuffer.RemoveAt(SelectedComponentIndex);
+                    break;
+            }
+            
         }
 
         #endregion

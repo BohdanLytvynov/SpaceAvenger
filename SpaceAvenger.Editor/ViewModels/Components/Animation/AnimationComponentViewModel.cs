@@ -38,6 +38,8 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animations
         { get=> m_resourceName; set=> Set(ref m_resourceName, value); }
         public ImageSource ImageSource 
         { get=> m_imgSource; set => Set(ref m_imgSource, value); }
+
+        
         #endregion
 
         #region Commands
@@ -48,9 +50,9 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animations
         #endregion
 
         #region Ctor
-        public AnimationComponentViewModel(IGameObjectMock gameObject, IGEComponent component,
+        public AnimationComponentViewModel(IGameObjectMock gameObject,
             IFactoryWrapper factoryWrapper, IAssemblyLoader assemblyLoader
-            ) : base(nameof(Animation), gameObject, component) 
+            ) : base(nameof(Animation), gameObject) 
         {
             #region Init Fields
             m_factoryWrapper = factoryWrapper ?? throw new ArgumentNullException(nameof(factoryWrapper));
@@ -102,7 +104,7 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animations
         private bool CanOnStartButtonPressedExecute(object p)
         {
             if (GameObject == null) return false;
-            var anim = GameObject.GetComponent<Animation>();
+            var anim = GameObject.GetComponent<Animation>(false);
             if (anim == null) return false;
             if (anim.IsRunning) return false;
             return true;
@@ -111,7 +113,7 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animations
         private void OnStartButtonPressedExecute(object p)
         {
             if (GameObject == null) return;
-            var anim = GameObject.GetComponent<Animation>();
+            var anim = GameObject.GetComponent<Animation>(false);
             if (anim == null) return;
             anim.Start();
         }
@@ -121,7 +123,7 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animations
         private bool CanOnPauseButtonPressedExecute(object p)
         {
             if (GameObject == null) return false;
-            var anim = GameObject.GetComponent<Animation>();
+            var anim = GameObject.GetComponent<Animation>(false);
             if (anim == null) return false;
             if (!anim.IsRunning) return false;
             return true;
@@ -130,7 +132,7 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animations
         private void OnPauseButtonPressedExecute(object p)
         {
             if (GameObject == null) return;
-            var anim = GameObject.GetComponent<Animation>();
+            var anim = GameObject.GetComponent<Animation>(false);
             if (anim == null) return;
             anim.Stop();
         }
@@ -140,7 +142,7 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animations
         private bool CanOnResetButtonPressedExecute(object p)
         {
             if (GameObject == null) return false;
-            var anim = GameObject.GetComponent<Animation>();
+            var anim = GameObject.GetComponent<Animation>(false);
             if (anim == null) return false;
             if (!anim.IsCompleted) return false;
             if (anim.IsRunning) return false;
@@ -150,7 +152,7 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animations
         private void OnResetButtonPressedExecute(object p)
         {
             if (GameObject == null) return;
-            var anim = GameObject.GetComponent<Animation>();
+            var anim = GameObject.GetComponent<Animation>(false);
             if (anim == null) return;
             anim.Reset(anim.Reverse);
         }
@@ -218,6 +220,13 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animations
             EaseFunction = a.EaseType;
             ImageSource = a.Texture;
         }
+
+        public override IGEComponent? GetComponent()
+        {
+            return GameObject?.GetComponent<Animation>(false);
+        }
+
         #endregion
+
     }
 }

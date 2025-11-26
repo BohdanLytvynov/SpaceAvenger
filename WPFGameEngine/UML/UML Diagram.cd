@@ -1,48 +1,4 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
-  <Class Name="WPFGameEngine.WPF.GE.GameObjects.GameObject" Collapsed="true">
-    <Position X="1" Y="3.75" Width="1.5" />
-    <NestedTypes>
-      <Class Name="WPFGameEngine.WPF.GE.GameObjects.GameObject.ZIndexGameObjectComparer" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>WPF.GE\GameObjects\GameObject.cs</NewMemberFileName>
-        </TypeIdentifier>
-        <Lollipop Position="0.2" />
-      </Class>
-    </NestedTypes>
-    <TypeIdentifier>
-      <HashCode>QAACIaACAAgAMIAAhEAEbAIgAAKECgYRJAIiAAQAgAg=</HashCode>
-      <FileName>WPF.GE\GameObjects\GameObject.cs</FileName>
-    </TypeIdentifier>
-    <Lollipop Position="0.2" />
-  </Class>
-  <Class Name="WPFGameEngine.WPF.GE.GameObjects.MapableObject" Collapsed="true">
-    <Position X="1" Y="5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>WPF.GE\GameObjects\MapableObject.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="WPFGameEngine.WPF.GE.GameObjects.СacheableObject" Collapsed="true">
-    <Position X="1" Y="6.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>ACQAAAAgAAAAAAAAAAAAAAAAABAAJAQAAAAAAAAAABA=</HashCode>
-      <FileName>WPF.GE\GameObjects\СacheableObject.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Interface Name="WPFGameEngine.WPF.GE.GameObjects.IGameObject" Collapsed="true">
-    <Position X="0.75" Y="1.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAACICAAAAAAEIAAgAAEbAAgAAIAAgARIAIgAAQAAAg=</HashCode>
-      <FileName>WPF.GE\GameObjects\IGameObject.cs</FileName>
-    </TypeIdentifier>
-  </Interface>
-  <Interface Name="WPFGameEngine.WPF.GE.Dto.Base.IConvertToDto&lt;TDto&gt;" Collapsed="true">
-    <Position X="3.5" Y="0.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAA=</HashCode>
-      <FileName>WPF.GE\Dto\Base\IConvertToDto.cs</FileName>
-    </TypeIdentifier>
-  </Interface>
   <Font Name="Segoe UI" Size="9" />
 </ClassDiagram>

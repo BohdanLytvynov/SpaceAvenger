@@ -382,11 +382,12 @@ namespace WPFGameEngine.WPF.GE.Component.Animations
                 Freeze = Freeze, ResourceKey = ResourceKey,
                 EaseFactoryName = EaseFactoryName,
                 EaseType = EaseType,
+                Texture = Texture
             };
 
             foreach (var frame in AnimationFrames)
             {
-                anim.AnimationFrames.Add(frame);
+                anim.AnimationFrames.Add(new AnimationFrame(frame.Lifespan));
             }
 
             return anim;

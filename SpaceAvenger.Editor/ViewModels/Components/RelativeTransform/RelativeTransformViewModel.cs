@@ -32,9 +32,8 @@ namespace SpaceAvenger.Editor.ViewModels.Components.RelativeTransforms
         { get => m_YMin; set => Set(ref m_YMin, value); }
         #endregion
 
-        public RelativeTransformViewModel(IGameObjectMock gameObject,
-            IGEComponent component) : 
-            base(nameof(RelativeTransformComponent), gameObject, component)
+        public RelativeTransformViewModel(IGameObjectMock gameObject) : 
+            base(nameof(RelativeTransformComponent), gameObject)
         {
             LoadCurrentGameObjProperties();
             m_init = true;
@@ -123,6 +122,11 @@ namespace SpaceAvenger.Editor.ViewModels.Components.RelativeTransforms
             float normalizedY = y / parentActualHeight;
             float oldX = currentTransform.Position.X;
             currentTransform.Position = new Vector2(oldX, normalizedY);
+        }
+
+        public override IGEComponent? GetComponent()
+        {
+            return GameObject?.GetComponent<RelativeTransformComponent>(false);
         }
     }
 }

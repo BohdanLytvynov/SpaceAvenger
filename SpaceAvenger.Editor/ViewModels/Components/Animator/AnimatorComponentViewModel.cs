@@ -14,7 +14,7 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animators
     internal class AnimatorComponentViewModel : ComponentViewModel
     {
         #region Fields
-        private readonly IResourceLoader m_resourceLodaer;
+        private readonly IResourceLoader m_resourceLoader;
         private readonly IAssemblyLoader m_assemblyLoader;
         private readonly IFactoryWrapper m_factoryWrapper;
 
@@ -26,10 +26,10 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animators
         public ObservableCollection<AnimatorOptionViewModel> AnimatorOptions
         { get => m_animatorOptionsViewModel; set => m_animatorOptionsViewModel = value; }
 
-        public AnimatorOptionViewModel SelectedOption 
-        { 
+        public AnimatorOptionViewModel SelectedOption
+        {
             get => m_selectedOption;
-            set 
+            set
             {
                 Set(ref m_selectedOption, value);
                 if (value == null)
@@ -60,13 +60,13 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animators
         #endregion
 
         #region Ctor
-        public AnimatorComponentViewModel(IGameObjectMock gameObject, IGEComponent component,
+        public AnimatorComponentViewModel(IGameObjectMock gameObject,
              IAssemblyLoader assemblyLoader, IFactoryWrapper factoryWrapper)
-            : base(nameof(Animator), gameObject, component) 
+            : base(nameof(Animator), gameObject)
         {
             #region Init Fields
             m_factoryWrapper = factoryWrapper ?? throw new ArgumentNullException(nameof(factoryWrapper));
-            m_resourceLodaer = m_factoryWrapper.ResourceLoader ?? throw new ArgumentNullException("ResourceLoader");
+            m_resourceLoader = m_factoryWrapper.ResourceLoader ?? throw new ArgumentNullException("ResourceLoader");
             m_assemblyLoader = assemblyLoader ?? throw new ArgumentNullException(nameof(assemblyLoader));
             m_animatorOptionsViewModel = new ObservableCollection<AnimatorOptionViewModel>();
             m_selectedOption = new AnimatorOptionViewModel();
@@ -115,7 +115,7 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animators
 
         private void OnAddButtonPressedExecute(object p)
         {
-            var option = new AnimatorOptionViewModel(AnimatorOptions.Count + 1, 
+            var option = new AnimatorOptionViewModel(AnimatorOptions.Count + 1,
                 m_factoryWrapper, m_assemblyLoader, null, string.Empty);
             option.OnAnimatorChanged += Option_OnAnimatorChanged;
             AnimatorOptions.Add(option);
@@ -136,7 +136,7 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animators
         private bool CanOnDeleteButtonPressedExecute(object p) => m_selectedOption != null && m_selectedOption.ShowNumber > 0;
 
         private void OnDeleteButtonPressedExecute(object p)
-        { 
+        {
             m_selectedOption.OnAnimatorChanged -= Option_OnAnimatorChanged;
             var anim = GameObject.GetComponent<Animator>(false);
             if (anim != null)
@@ -245,6 +245,10 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animators
             }
         }
 
+        public override IGEComponent? GetComponent()
+        {
+            return GameObject?.GetComponent<Animator>(false);
+        }
         #endregion
     }
 }

@@ -413,6 +413,15 @@ namespace SpaceAvenger.Editor.ViewModels
                 TreeItemViewModel itemViewModel = new(m_SelectedItem.Children.Count + 1, content);
                 itemViewModel.ItemSelected += ItemViewModel_ItemSelected;
                 m_SelectedItem.Children.Add(itemViewModel);
+                var transform = content.GetComponent<TransformComponent>(false);
+                if (transform != null)
+                { 
+                    var relTransform = m_factoryWrapper.CreateObject<RelativeTransformComponent>();
+                    relTransform.Scale = transform.Scale;
+                    relTransform.CenterPosition = transform.CenterPosition;
+                    content.UnregisterComponent(transform);
+                    content.RegisterComponent(relTransform);
+                }
                 m_SelectedItem.GameObject.AddChild(content);
             }
         }
@@ -813,26 +822,26 @@ namespace SpaceAvenger.Editor.ViewModels
             switch (component.ComponentName)
             {
                 case nameof(TransformComponent):
-                    c = new TransformComponentViewModel(m_SelectedItem.GameObject, component);
+                    c = new TransformComponentViewModel(m_SelectedItem.GameObject);
                     break;
                 case nameof(Animation):
-                    c = new AnimationComponentViewModel(m_SelectedItem.GameObject, component,
+                    c = new AnimationComponentViewModel(m_SelectedItem.GameObject,
                         m_factoryWrapper,
                         m_assemblyLoader);
                     break;
                 case nameof(Animator):
-                    c = new AnimatorComponentViewModel(m_SelectedItem.GameObject, component,
+                    c = new AnimatorComponentViewModel(m_SelectedItem.GameObject,
                         m_assemblyLoader, m_factoryWrapper);
                     break;
                 case nameof(Sprite):
-                    c = new SpriteComponentViewModel(m_SelectedItem.GameObject, component,
+                    c = new SpriteComponentViewModel(m_SelectedItem.GameObject,
                         m_factoryWrapper.ResourceLoader);
                     break;
                 case nameof(RelativeTransformComponent):
-                    c = new RelativeTransformViewModel(m_SelectedItem.GameObject, component);
+                    c = new RelativeTransformViewModel(m_SelectedItem.GameObject);
                     break;
                 case nameof(ColliderComponent):
-                    c = new ColliderComponentViewModel(m_SelectedItem.GameObject, component,
+                    c = new ColliderComponentViewModel(m_SelectedItem.GameObject,
                         m_assemblyLoader,
                         m_factoryWrapper);
                     break;

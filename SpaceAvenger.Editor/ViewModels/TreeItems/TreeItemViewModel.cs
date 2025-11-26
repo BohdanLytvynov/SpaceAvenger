@@ -1,10 +1,8 @@
 ﻿using SpaceAvenger.Editor.Mock;
 using System.Collections.ObjectModel;
-using System.Net.Http.Headers;
 using ViewModelBaseLibDotNetCore.Helpers;
 using ViewModelBaseLibDotNetCore.VM;
 using WPFGameEngine.WPF.GE.GameObjects;
-using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 namespace SpaceAvenger.Editor.ViewModels.TreeItems
 {
@@ -22,6 +20,7 @@ namespace SpaceAvenger.Editor.ViewModels.TreeItems
         private string m_UniqueName;
         private bool m_Selected;
         private bool m_Exported;
+        private static int m_globId;
         ObservableCollection<TreeItemViewModel> m_children;
         #endregion
 
@@ -57,7 +56,7 @@ namespace SpaceAvenger.Editor.ViewModels.TreeItems
 
                 if (Selected)
                 {
-                    ItemSelected?.Invoke(GameObject.Id);
+                    ItemSelected?.Invoke(Id);
                 }
                 else
                 {
@@ -129,12 +128,18 @@ namespace SpaceAvenger.Editor.ViewModels.TreeItems
         #endregion
 
         #region Ctor
+
+        static TreeItemViewModel()
+        {
+            m_globId = 0;
+        }
+
         public TreeItemViewModel(int showNumber, IGameObjectMock gameObject)
         {
             GameObject = gameObject;
             m_ShowNumber = showNumber;
             if (gameObject == null) return;
-            m_Id = gameObject.Id;
+            m_Id = m_globId++;
             m_ObjectName = gameObject.ObjectName;
             m_UniqueName = gameObject.UniqueName;
             m_children = new ObservableCollection<TreeItemViewModel>();            
@@ -163,29 +168,29 @@ namespace SpaceAvenger.Editor.ViewModels.TreeItems
             return CloneRec(this);
         }
 
-        public static void Find(int GameObjectId, TreeItemViewModel vm, ref TreeItemViewModel res)
+        public static void Find(int TreeItemId, TreeItemViewModel vm, ref TreeItemViewModel res)
         {
             if (vm == null)
                 return;
             if (res != null)
                 return;
 
-            if(vm.GameObject.Id == GameObjectId)
+            if(vm.Id == TreeItemId)
                 res = vm;
 
             foreach (var item in vm.Children)
             {
-                Find(GameObjectId, item, ref res);
+                Find(TreeItemId, item, ref res);
             }
         }
 
-        public static void FindInCollection(int GameObjectId,
+        public static void FindInCollection(int TreeItemId,
             ObservableCollection<TreeItemViewModel> col,
             ref TreeItemViewModel res)
         {
             foreach (var item in col)
             {
-                Find(GameObjectId, item, ref res);
+                Find(TreeItemId, item, ref res);
 
                 if (res != null)
                     return;

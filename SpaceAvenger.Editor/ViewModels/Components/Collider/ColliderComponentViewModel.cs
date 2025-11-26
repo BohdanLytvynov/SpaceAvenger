@@ -95,10 +95,9 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Collider
 
         public ColliderComponentViewModel(
             IGameObjectMock gameObject,
-            IGEComponent component,
             IAssemblyLoader assemblyLoader,
             IFactoryWrapper factoryWrapper)
-            : base(nameof(ColliderComponent), gameObject, component)
+            : base(nameof(ColliderComponent), gameObject)
         {
             m_assemblyLoader = assemblyLoader ?? throw new ArgumentNullException(nameof(assemblyLoader));
             m_factoryWrapper = factoryWrapper ?? throw new ArgumentNullException(nameof(factoryWrapper));
@@ -217,6 +216,10 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Collider
             collider.Position = new System.Numerics.Vector2(oldX, y);
         }
 
+        public override IGEComponent? GetComponent()
+        {
+            return GameObject?.GetComponent<ColliderComponent>(false);
+        }
         #endregion
     }
 }

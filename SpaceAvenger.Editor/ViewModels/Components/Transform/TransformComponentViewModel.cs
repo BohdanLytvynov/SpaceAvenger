@@ -94,17 +94,14 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Transform
 
         #region Ctor
 
-        public TransformComponentViewModel(string componentName, 
-            IGameObjectMock gameObject,
-            IGEComponent component)
-            : base(componentName, gameObject, component)
+        public TransformComponentViewModel(string componentName, IGameObjectMock gameObject)
+            : base(componentName, gameObject)
         {
             
         }
 
-        public TransformComponentViewModel(IGameObjectMock gameObject,
-            IGEComponent component) 
-            : base(nameof(TransformComponent), gameObject, component)
+        public TransformComponentViewModel(IGameObjectMock gameObject) 
+            : base(nameof(TransformComponent), gameObject)
         {
             LoadCurrentGameObjProperties();
             m_init = true;
@@ -197,6 +194,11 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Transform
                 float x = t.CenterPosition.X;
                 t.CenterPosition = new Vector2(x, y);
             }
+        }
+
+        public override IGEComponent? GetComponent()
+        {
+            return GameObject?.GetComponent<TransformComponent>(false);
         }
         #endregion
     }

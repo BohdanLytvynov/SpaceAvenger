@@ -53,9 +53,8 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Sprites
 
         #region Ctor
         public SpriteComponentViewModel(IGameObjectMock gameObject,
-            IGEComponent component,
             IResourceLoader resourceLoader) : 
-            base(nameof(Sprite), gameObject, component)
+            base(nameof(Sprite), gameObject)
         {
             #region Init Fields
 
@@ -109,6 +108,11 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Sprites
         }
 
         #endregion
+
+        public override IGEComponent? GetComponent()
+        {
+            return GameObject?.GetComponent<Sprite>(false);
+        }
 
         #endregion
     }
