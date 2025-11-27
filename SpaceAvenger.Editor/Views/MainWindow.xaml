@@ -51,7 +51,7 @@
                             </StackPanel>
                             <TreeView Grid.Column="1" Margin="5,10" ItemsSource="{Binding Items, 
                                 UpdateSourceTrigger=PropertyChanged}"
-                                      Height="250"/>
+                                      Height="350"/>
                             <StackPanel Orientation="Horizontal" Margin="10,3">
                                 <TextBox MinWidth="200" Style="{StaticResource TxtBoxInputStyle}" FontSize="14">
                                     <TextBox.Text>
@@ -84,7 +84,7 @@
             Command="{Binding OnRemovePrefabButtonPressed}"/>
                             </StackPanel>
 
-                            <ListView Height="250" Margin="5,5"
+                            <ListView Height="350" Margin="5,5"
                                       ItemsSource="{Binding Prefabs, 
                                 UpdateSourceTrigger=PropertyChanged}"
                                       SelectedItem="{Binding SelectedPrefab,

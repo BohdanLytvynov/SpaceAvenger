@@ -1,6 +1,7 @@
 ﻿using SpaceAvenger.Game.Core.Enums;
 using SpaceAvenger.Game.Core.UI.Slider;
 using SpaceAvenger.Services.WPFInputControllers;
+using System.Collections.Generic;
 using System.Windows.Input;
 using System.Windows.Media;
 using WPFGameEngine.GameViewControl;
@@ -27,6 +28,8 @@ namespace SpaceAvenger.Game.Core.Base
         protected Brush BarLow;
         protected Brush BarHigh;
         protected Brush BarMedium;
+
+        protected IEnumerable<JetBase> m_Engines;
 
         #endregion
 
@@ -58,6 +61,8 @@ namespace SpaceAvenger.Game.Core.Base
                 ShieldBar.Full = BarHigh;
             }
 
+            m_Engines = GetAllChildrenOfType<JetBase>();
+
             base.StartUp(viewHost, gameTimer);
         }
 
@@ -75,19 +80,31 @@ namespace SpaceAvenger.Game.Core.Base
                 if (m_controller.IsKeyDown(Key.A) && curr.X >= 0)
                 {
                     Translate(curr - basis.Y * (float)delta.TotalSeconds * HorSpeed);
+                    MoveLeft();
                 }
                 if (m_controller.IsKeyDown(Key.D) && curr.X < maxWidth - ActualSize.Width)
                 {
                     Translate(curr + basis.Y * (float)delta.TotalSeconds * HorSpeed);
+                    MoveRight();
                 }
                 if (m_controller.IsKeyDown(Key.W) && curr.Y >= 0)
                 {
                     Translate(Transform.Position = curr + basis.X * (float)delta.TotalSeconds * VertSpeed);
+                    MoveForward();
                 }
                 if (m_controller.IsKeyDown(Key.S) && curr.Y < maxHeight - ActualSize.Height)
                 {
                     Translate(curr - basis.X * (float)delta.TotalSeconds * VertSpeed);
+                    MoveBackward();
                 }
+                else
+                {
+                    StopAllEngines();
+                }
+            }
+            else
+            {
+                //Base Enemy AI
             }
 
             HPBar.Update(HP);
@@ -98,13 +115,10 @@ namespace SpaceAvenger.Game.Core.Base
                 IsAlive = false;
                 Destroy();
             }
-            
-
-
 
             base.Update();
         }
- 
+
         protected virtual void Destroy()
         {
             Disable(true);
@@ -115,6 +129,19 @@ namespace SpaceAvenger.Game.Core.Base
         {
             IsAlive = true;
             base.OnGetFromPool();
+        }
+
+        protected abstract void MoveForward();
+        protected abstract void MoveBackward();
+        protected abstract void MoveLeft();
+        protected abstract void MoveRight();
+        protected abstract void StopEngines();
+        protected virtual void StopAllEngines()
+        {
+            foreach (var item in m_Engines)
+            {
+                item.Stop();
+            }
         }
     }
 }

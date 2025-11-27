@@ -19,6 +19,7 @@ namespace SpaceAvenger.Game.Core.Factions.F10.Destroyer
     {
         private IEnumerable<F10RailGun> m_battery;
         private Pen m_targetMarkerPen;
+
         public F10Destroyer() : base(Faction.F10)
         {
             HorSpeed = 40;
@@ -80,6 +81,31 @@ namespace SpaceAvenger.Game.Core.Factions.F10.Destroyer
                 m_controller.MousePosition.ToPoint());
             }
 
+        }
+
+        protected override void MoveForward()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        protected override void MoveBackward()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        protected override void MoveLeft()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        protected override void MoveRight()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        protected override void StopEngines()
+        {
+            throw new System.NotImplementedException();
         }
 
         #endregion

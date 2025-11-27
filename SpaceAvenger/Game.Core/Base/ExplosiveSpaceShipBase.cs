@@ -5,7 +5,7 @@ using WPFGameEngine.WPF.GE.Component.Animations;
 
 namespace SpaceAvenger.Game.Core.Base
 {
-    public class ExplosiveSpaceShipBase<TExplosion> : SpaceShipBase
+    public abstract class ExplosiveSpaceShipBase<TExplosion> : SpaceShipBase
         where TExplosion : ExplosionBase
     {
         public float ShipExplosionScale { get; set; }
