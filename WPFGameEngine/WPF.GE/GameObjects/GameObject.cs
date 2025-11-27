@@ -109,7 +109,14 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         #region Methods
 
         #region Components
-
+        /// <summary>
+        /// Register a new Component
+        /// </summary>
+        /// <param name="component"></param>
+        /// <returns>Game Object with a new registered component</returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ComponentAlreadyRegisteredException"></exception>
+        /// <exception cref="IncompatibleComponentException"></exception>
         public IGameObject RegisterComponent(IGEComponent component)
         {
             if (component == null)
@@ -161,6 +168,13 @@ namespace WPFGameEngine.WPF.GE.GameObjects
             return (TComponent)GetComponent(componentName, throwException);
         }
 
+        /// <summary>
+        /// Gets the component of the Game Object
+        /// </summary>
+        /// <param name="componentName"></param>
+        /// <param name="throwException"></param>
+        /// <returns>Components</returns>
+        /// <exception cref="ComponentNotFoundException"></exception>
         public IGEComponent? GetComponent(string componentName, bool throwException = true)
         {
             if (throwException && !m_components.ContainsKey(componentName))

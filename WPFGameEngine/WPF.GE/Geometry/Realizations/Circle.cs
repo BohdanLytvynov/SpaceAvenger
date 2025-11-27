@@ -46,5 +46,10 @@ namespace WPFGameEngine.WPF.GE.Geometry.Realizations
         }
 
         public override List<Vector2> GetVertexes() => new List<Vector2>() {};
+
+        public override object Clone()
+        {
+            return new Circle() { Radius = Radius, CenterPosition = CenterPosition };
+        }
     }
 }

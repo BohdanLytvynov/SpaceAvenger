@@ -9,12 +9,6 @@ using WPFGameEngine.WPF.GE.Component.Transforms;
 using WPFGameEngine.WPF.GE.GameObjects;
 using WPFGameEngine.WPF.GE.Settings;
 using SpaceAvenger.Editor.ViewModels.Components.Base;
-using SpaceAvenger.Editor.ViewModels.Components.Transform;
-using WPFGameEngine.WPF.GE.Component.Animators;
-using SpaceAvenger.Editor.ViewModels.Components.Animations;
-using SpaceAvenger.Editor.ViewModels.Components.Animators;
-using SpaceAvenger.Editor.ViewModels.Components.Sprites;
-using WPFGameEngine.WPF.GE.Component.Animations;
 using WPFGameEngine.Attributes.Editor;
 using WPFGameEngine.WPF.GE.Component.Base;
 using WPFGameEngine.WPF.GE.Exceptions;
@@ -28,19 +22,17 @@ using Microsoft.Win32;
 using ViewModelBaseLibDotNetCore.Helpers;
 using WPFGameEngine.WPF.GE.Serialization.GameObjects;
 using WPFGameEngine.WPF.GE.Component.RelativeTransforms;
-using SpaceAvenger.Editor.ViewModels.Components.RelativeTransforms;
 using System.Numerics;
 using SpaceAvenger.Editor.ViewModels.Prefabs;
 using WPFGameEngine.WPF.GE.Dto.GameObjects;
 using SpaceAvenger.Services.WpfGameViewHost;
-using WPFGameEngine.WPF.GE.Component.Collider;
-using SpaceAvenger.Editor.ViewModels.Components.Collider;
 using System.Windows;
 using System.IO;
 using ViewModelBaseLibDotNetCore.MessageBus.Base;
 using SpaceAvenger.Editor.MessageBus;
 using Microsoft.Extensions.DependencyInjection;
 using SpaceAvenger.Editor.Views;
+using SpaceAvenger.Editor.ViewModels.Helpers;
 
 namespace SpaceAvenger.Editor.ViewModels
 {
@@ -376,18 +368,24 @@ namespace SpaceAvenger.Editor.ViewModels
                 return;
             }
 
-            var newComponent = (IGEComponent)content.Clone();
-
             try
             {
-                m_SelectedItem.GameObject.RegisterComponent(newComponent);
-                Components.Add(CreateComponentViewModel(newComponent));
+                m_SelectedItem.GameObject.RegisterComponent(content);
+
+                Components.Add(ComponentViewModelHelper.CreateComponentViewModel(
+                    content,
+                    m_SelectedItem.GameObject,
+                    m_factoryWrapper, m_assemblyLoader));
+            }
+            catch (IncompatibleComponentException ex)
+            {
+                MessageBox.Show(ex.Message, m_title, MessageBoxButton.OK, MessageBoxImage.Exclamation);
             }
             catch (ComponentAlreadyRegisteredException ex)
             {
                 MessageBox.Show(ex.Message, m_title, MessageBoxButton.OK, MessageBoxImage.Exclamation);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw;
             }
@@ -617,7 +615,14 @@ namespace SpaceAvenger.Editor.ViewModels
             {
                 var component = (IGEComponent)m_factoryWrapper.CreateObject(SelectedComponent.FactoryName);
                 m_SelectedItem.GameObject.RegisterComponent(component);
-                Components.Add(CreateComponentViewModel(component));
+
+                Components.Add(ComponentViewModelHelper.CreateComponentViewModel(component,
+                    m_SelectedItem.GameObject,
+                    m_factoryWrapper, m_assemblyLoader));
+            }
+            catch (IncompatibleComponentException ex)
+            {
+                MessageBox.Show(ex.Message, m_title, MessageBoxButton.OK, MessageBoxImage.Exclamation);
             }
             catch (ComponentAlreadyRegisteredException ex)
             {
@@ -791,7 +796,9 @@ namespace SpaceAvenger.Editor.ViewModels
 
             foreach (var component in currentComponents)
             {
-                Components.Add(CreateComponentViewModel(component));
+                Components.Add(ComponentViewModelHelper.CreateComponentViewModel(component, 
+                    m_SelectedItem.GameObject,
+                    m_factoryWrapper, m_assemblyLoader));
             }
         }
 
@@ -815,42 +822,6 @@ namespace SpaceAvenger.Editor.ViewModels
                 m_SelectedItem.GameObject.ZIndex = value;
             }
         }
-
-        private ComponentViewModel CreateComponentViewModel(IGEComponent component)
-        {
-            ComponentViewModel c = null;
-            switch (component.ComponentName)
-            {
-                case nameof(TransformComponent):
-                    c = new TransformComponentViewModel(m_SelectedItem.GameObject);
-                    break;
-                case nameof(Animation):
-                    c = new AnimationComponentViewModel(m_SelectedItem.GameObject,
-                        m_factoryWrapper,
-                        m_assemblyLoader);
-                    break;
-                case nameof(Animator):
-                    c = new AnimatorComponentViewModel(m_SelectedItem.GameObject,
-                        m_assemblyLoader, m_factoryWrapper);
-                    break;
-                case nameof(Sprite):
-                    c = new SpriteComponentViewModel(m_SelectedItem.GameObject,
-                        m_factoryWrapper.ResourceLoader);
-                    break;
-                case nameof(RelativeTransformComponent):
-                    c = new RelativeTransformViewModel(m_SelectedItem.GameObject);
-                    break;
-                case nameof(ColliderComponent):
-                    c = new ColliderComponentViewModel(m_SelectedItem.GameObject,
-                        m_assemblyLoader,
-                        m_factoryWrapper);
-                    break;
-                default:
-                    throw new Exception($"Unsupported component Type! Component: {component.ComponentName}");
-            }
-            return c;
-        }
-
         #endregion
     }
 }

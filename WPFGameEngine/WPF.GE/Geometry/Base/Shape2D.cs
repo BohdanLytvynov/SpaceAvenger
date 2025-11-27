@@ -70,5 +70,7 @@ namespace WPFGameEngine.WPF.GE.Geometry.Base
                 end.X,
                 end.Y));
         }
+
+        public abstract object Clone();
     }
 }

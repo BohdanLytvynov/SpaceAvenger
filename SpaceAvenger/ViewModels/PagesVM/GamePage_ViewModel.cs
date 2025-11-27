@@ -137,11 +137,6 @@ namespace SpaceAvenger.ViewModels.PagesVM
             GameView.Instantiate<AstroBase>();
         }
 
-        private void RegisterNewObject(GameObject gameObject)
-        {
-            m_GameView.AddObject(gameObject);
-        }
-
         protected override void Unsubscribe()
         {
             m_controllerComponent.Dispose();

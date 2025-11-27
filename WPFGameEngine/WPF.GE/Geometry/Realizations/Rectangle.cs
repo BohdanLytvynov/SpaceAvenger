@@ -94,5 +94,10 @@ namespace WPFGameEngine.WPF.GE.Geometry.Realizations
 
         public override List<Vector2> GetVertexes() => 
             new List<Vector2>() { LeftUpperCorner, RightUpperCorner, LeftLowerCorner, RightLowerCorner };
+
+        public override object Clone()
+        {
+            return new Rectangle() { CenterPosition = CenterPosition, Size = Size };
+        }
     }
 }

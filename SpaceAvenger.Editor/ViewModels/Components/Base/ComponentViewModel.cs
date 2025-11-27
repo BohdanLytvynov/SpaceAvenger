@@ -1,5 +1,4 @@
 ﻿using SpaceAvenger.Editor.Mock;
-using System.Windows;
 using ViewModelBaseLibDotNetCore.VM;
 using WPFGameEngine.WPF.GE.Component.Base;
 
@@ -10,13 +9,13 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Base
         #region Fields
         private string m_componentName;
 
-        private Visibility m_mangeControlsVisible;
+        private bool m_mangeComponentEnabled;
         #endregion
 
         #region Properties
 
-        public Visibility ManageControlsVisible 
-        { get => m_mangeControlsVisible; set => Set(ref m_mangeControlsVisible, value); }
+        public bool ManageComponentEnabled
+        { get => m_mangeComponentEnabled; set => Set(ref m_mangeComponentEnabled, value); }
 
         public string ComponentName 
         {
@@ -33,7 +32,7 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Base
         {
             m_componentName = name;
             GameObject = gameObject ?? throw new ArgumentNullException(nameof(gameObject));
-            m_mangeControlsVisible = Visibility.Visible;
+            m_mangeComponentEnabled = true;
         }
 
         #endregion
@@ -43,14 +42,14 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Base
 
         public abstract IGEComponent? GetComponent();
 
-        public void ShowManageControls()
+        public void EnableManageControls()
         {
-            ManageControlsVisible = Visibility.Visible;
+            ManageComponentEnabled = true;
         }
 
-        public void HideManageControls()
+        public void DisableManageControls()
         {
-            ManageControlsVisible = Visibility.Hidden;
+            ManageComponentEnabled = false;
         }
         #endregion
     }

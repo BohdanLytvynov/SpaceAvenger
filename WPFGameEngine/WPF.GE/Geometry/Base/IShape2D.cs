@@ -12,7 +12,7 @@ namespace WPFGameEngine.WPF.GE.Geometry.Base
     [JsonDerivedType(typeof(Circle), nameof(Circle))]
     [JsonDerivedType(typeof(Rectangle), nameof(Rectangle))]
     [JsonDerivedType(typeof(Triangle), nameof(Triangle))]
-    public interface IShape2D : IGameEngineEntity
+    public interface IShape2D : IGameEngineEntity, ICloneable
     {
         [JsonIgnore]
         public Size Scale { get; set; }

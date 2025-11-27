@@ -1,5 +1,6 @@
 ﻿using System.Numerics;
 using System.Text.Json.Serialization;
+using System.Windows.Controls;
 using System.Windows.Media;
 using WPFGameEngine.Attributes.Editor;
 using WPFGameEngine.Attributes.Factories;
@@ -93,5 +94,10 @@ namespace WPFGameEngine.WPF.GE.Geometry.Realizations
 
         public override List<Vector2> GetVertexes() =>
             new List<Vector2>() { B, LeftUpperCorner, C };
+
+        public override object Clone()
+        {
+            return new Triangle() { CenterPosition = CenterPosition, Base = Base, Height = Height };
+        }
     }
 }

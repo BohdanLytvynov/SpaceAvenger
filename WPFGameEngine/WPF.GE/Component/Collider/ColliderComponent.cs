@@ -73,7 +73,7 @@ namespace WPFGameEngine.WPF.GE.Component.Collider
         {
             return new ColliderComponent()
             { 
-                CollisionShape = CollisionShape,
+                CollisionShape = (IShape2D)CollisionShape.Clone(),
                 Position = Position,
             };
         }

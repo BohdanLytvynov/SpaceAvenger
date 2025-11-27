@@ -144,7 +144,7 @@ namespace WPFGameEngine.WPF.GE.Component.Animators
 
             foreach (var item in m_animations)
             {
-                animator.AddAnimation(item.Key, item.Value);
+                animator.AddAnimation(item.Key, (IAnimation)item.Value.Clone());
             }
 
             return animator;

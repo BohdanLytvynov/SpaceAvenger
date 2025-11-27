@@ -1,12 +1,15 @@
 ﻿using SpaceAvenger.Editor.MessageBus;
 using SpaceAvenger.Editor.Mock;
 using SpaceAvenger.Editor.ViewModels.Components.Base;
+using SpaceAvenger.Editor.ViewModels.Helpers;
 using SpaceAvenger.Editor.ViewModels.TreeItems;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using ViewModelBaseLibDotNetCore.Commands;
 using ViewModelBaseLibDotNetCore.MessageBus.Base;
 using ViewModelBaseLibDotNetCore.VM;
+using WPFGameEngine.FactoryWrapper.Base;
+using WPFGameEngine.Services.Interfaces;
 using WPFGameEngine.WPF.GE.Component.Base;
 
 namespace SpaceAvenger.Editor.ViewModels
@@ -26,6 +29,8 @@ namespace SpaceAvenger.Editor.ViewModels
         private int m_selectedComponentIndex;
         private int m_SelectedTabIndex;
         private TreeItemViewModel m_selectedItem;
+        private IFactoryWrapper m_factoryWrapper;
+        private IAssemblyLoader m_assemblyLoader;
         #endregion
 
         #region Properties
@@ -55,10 +60,12 @@ namespace SpaceAvenger.Editor.ViewModels
         #endregion
 
         #region Ctor
-        public BufferWindowViewModel(IMessageBus messageBus) : this()
+        public BufferWindowViewModel(IMessageBus messageBus, IFactoryWrapper factoryWrapper,
+            IAssemblyLoader assemblyLoader) : this()
         {
             m_messageBus = messageBus ?? throw new ArgumentNullException(nameof(messageBus));
-
+            m_factoryWrapper = factoryWrapper ?? throw new ArgumentNullException(nameof(factoryWrapper));
+            m_assemblyLoader = assemblyLoader ?? throw new ArgumentNullException(nameof(assemblyLoader));
             #region Subscribe
 
             Subscriptions.Add(
@@ -151,8 +158,12 @@ namespace SpaceAvenger.Editor.ViewModels
             if (msg == null) return;
             var content = msg.Content;
             if (content == null) return;
+            //Performing copy
+            var buffComponent = ComponentViewModelHelper.CreateComponentViewModel(
+                content.GetComponent(), content.GameObject, m_factoryWrapper, m_assemblyLoader);
+            buffComponent.DisableManageControls();
 
-            ComponentBuffer.Add(content);
+            ComponentBuffer.Add(buffComponent);
         }
 
         #endregion
@@ -229,7 +240,7 @@ namespace SpaceAvenger.Editor.ViewModels
                     break;
 
                 case 1:
-                    var component = (IGEComponent)ComponentBuffer[SelectedComponentIndex].GetComponent();
+                    var component = ComponentBuffer[SelectedComponentIndex].GetComponent();
                     if(component == null) return;
                     m_messageBus.Send<PasteFromComponentsBufferMessage, IGEComponent>
                         (new PasteFromComponentsBufferMessage((IGEComponent)component.Clone()));
@@ -265,8 +276,7 @@ namespace SpaceAvenger.Editor.ViewModels
                 case 1:
                     ComponentBuffer.RemoveAt(SelectedComponentIndex);
                     break;
-            }
-            
+            } 
         }
 
         #endregion

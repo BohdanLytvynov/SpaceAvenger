@@ -102,7 +102,9 @@
     <!--#region Components -->
     <DataTemplate DataType="{x:Type tcvm:TransformComponentViewModel}">
         <StackPanel Orientation="Vertical" Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, 
-            AncestorType=ListView}, Path=ActualWidth}">
+            AncestorType=ListView}, Path=ActualWidth}" IsEnabled="{Binding ManageComponentEnabled, 
+            UpdateSourceTrigger=PropertyChanged}">
+            
             <Rectangle Style="{StaticResource BorderRectStyle}"/>
             <TextBlock Text="{Binding ComponentName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DescLabel}"/>
             <Rectangle Style="{StaticResource BorderRectStyle}"/>
@@ -138,7 +140,9 @@ Margin="10" LabelText="Center Position X: " Minimum="0" Maximum="1.0"/>
 
     <DataTemplate DataType="{x:Type relTransVM:RelativeTransformViewModel}">
         <StackPanel Orientation="Vertical" Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, 
-            AncestorType=ListView}, Path=ActualWidth}">
+            AncestorType=ListView}, Path=ActualWidth}" IsEnabled="{Binding ManageComponentEnabled, 
+            UpdateSourceTrigger=PropertyChanged}">
+            
             <Rectangle Style="{StaticResource BorderRectStyle}"/>
             <TextBlock Text="{Binding ComponentName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DescLabel}"/>
             <Rectangle Style="{StaticResource BorderRectStyle}"/>
@@ -175,7 +179,10 @@ Margin="10" LabelText="Center Position X: " Minimum="0" Maximum="1.0"/>
 
     <DataTemplate DataType="{x:Type scvm:SpriteComponentViewModel}">
         <StackPanel Orientation="Vertical" 
-                    Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}, Path=ActualWidth}">
+                    Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}, Path=ActualWidth}"
+                    IsEnabled="{Binding ManageComponentEnabled, 
+            UpdateSourceTrigger=PropertyChanged}">
+            
             <Rectangle Style="{StaticResource BorderRectStyle}"/>
             <TextBlock Text="{Binding ComponentName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DescLabel}"/>
             <Rectangle Style="{StaticResource BorderRectStyle}"/>
@@ -199,7 +206,10 @@ Margin="10" LabelText="Center Position X: " Minimum="0" Maximum="1.0"/>
     <DataTemplate DataType="{x:Type acvm:AnimationComponentViewModel}">
         <StackPanel Orientation="Vertical"
                     Width="{Binding Path=ActualWidth,
-            RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}}">
+            RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}}"
+                    IsEnabled="{Binding ManageComponentEnabled, 
+            UpdateSourceTrigger=PropertyChanged}">
+            
             <Rectangle Style="{StaticResource BorderRectStyle}"/>
             <TextBlock Text="{Binding ComponentName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DescLabel}"/>
             <Rectangle Style="{StaticResource BorderRectStyle}"/>
@@ -242,7 +252,10 @@ Margin="10" LabelText="Center Position X: " Minimum="0" Maximum="1.0"/>
             <Border.Background>
                 <SolidColorBrush x:Name="brdBack"/>
             </Border.Background>
-            <StackPanel Orientation="Horizontal">
+            <StackPanel Orientation="Horizontal"
+                        IsEnabled="{Binding ManageComponentEnabled, 
+            UpdateSourceTrigger=PropertyChanged}">
+                
                 <TextBlock Text="{Binding ShowNumber, UpdateSourceTrigger=PropertyChanged, StringFormat=№{0})}"
                            Style="{StaticResource FieldName}" Margin="10,15,10,0"/>
                 <Border Style="{StaticResource BorderRoundStyle}" Margin="0,15">
@@ -310,7 +323,10 @@ Margin="10" LabelText="Center Position X: " Minimum="0" Maximum="1.0"/>
 
     <DataTemplate DataType="{x:Type animcvm:AnimatorComponentViewModel}">
         <StackPanel Orientation="Vertical" Width="{Binding Path=ActualWidth,
-                RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}}">
+                RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}}"
+                    IsEnabled="{Binding ManageComponentEnabled, 
+            UpdateSourceTrigger=PropertyChanged}">
+            
             <Rectangle Style="{StaticResource BorderRectStyle}"/>
             <TextBlock Text="{Binding ComponentName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DescLabel}"/>
             <Rectangle Style="{StaticResource BorderRectStyle}"/>
@@ -365,6 +381,7 @@ Margin="10" LabelText="Center Position X: " Minimum="0" Maximum="1.0"/>
     <DataTemplate DataType="{x:Type geomConfVM:TriangleConfigViewModel}">
         <Border Style="{StaticResource BorderRoundStyle}" Width="{Binding Path=ActualWidth,
            RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}}">
+            
             <StackPanel Orientation="Vertical">
                 <controls:Slider Value="{Binding Height, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
            Margin="10" LabelText="Height: "
@@ -380,7 +397,10 @@ Margin="10" LabelText="Center Position X: " Minimum="0" Maximum="1.0"/>
 
     <DataTemplate DataType="{x:Type colliderVM:ColliderComponentViewModel}">
         <StackPanel Orientation="Vertical" Width="{Binding Path=ActualWidth,
-                RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}}">
+                RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}}"
+                    IsEnabled="{Binding ManageComponentEnabled, 
+            UpdateSourceTrigger=PropertyChanged}">
+            
             <Rectangle Style="{StaticResource BorderRectStyle}"/>
             <TextBlock Text="{Binding ComponentName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DescLabel}"/>
             <Rectangle Style="{StaticResource BorderRectStyle}"/>
