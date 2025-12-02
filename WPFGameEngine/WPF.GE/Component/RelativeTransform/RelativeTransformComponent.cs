@@ -21,6 +21,8 @@ namespace WPFGameEngine.WPF.GE.Component.RelativeTransforms
             new List<string> { nameof(TransformComponent) };
  
         public Size ActualParentSize { get; set; }
+        public bool EnableXAxisCompensation { get; set; }
+        public bool EnableYAxisCompensation { get; set; }
 
         public override Matrix3x3 GetLocalTransformMatrix()
         {
@@ -48,6 +50,8 @@ namespace WPFGameEngine.WPF.GE.Component.RelativeTransforms
                 CenterPosition = CenterPosition,
                 Scale = Scale,
                 Rotation = Rotation,
+                EnableXAxisCompensation = EnableXAxisCompensation,
+                EnableYAxisCompensation = EnableYAxisCompensation
             };
         }
 
@@ -62,6 +66,20 @@ namespace WPFGameEngine.WPF.GE.Component.RelativeTransforms
                 Rotation = Rotation,
                 Scale = Scale,
             };
+        }
+
+        public void XScaleCompensate(float value)
+        {
+            float actPos = Position.X - (value / ActualParentSize.Width);
+            var oldy = Position.Y;
+            Position = new Vector2(actPos, oldy);
+        }
+
+        public void YScaleCompensate(float value)
+        {
+            float actPos = Position.Y - (value / ActualParentSize.Height);
+            var oldX = Position.X;
+            Position = new Vector2(oldX, actPos);
         }
 
         #endregion

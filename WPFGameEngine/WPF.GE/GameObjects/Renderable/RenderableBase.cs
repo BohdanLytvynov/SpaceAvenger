@@ -12,14 +12,16 @@ namespace WPFGameEngine.WPF.GE.GameObjects.Renderable
     public abstract class RenderableBase : UpdatableBase, IRenderable
     {
         public bool IsVisible { get; set; }
+        public bool IsSelected { get; set; }
 
         protected RenderableBase() : base()
         {
-            
+
         }
 
         public override void StartUp(IGameObjectViewHost viewHost, IGameTimer gameTimer)
         {
+            IsSelected = false;
             IsVisible = true;
             base.StartUp(viewHost, gameTimer);
         }
@@ -83,14 +85,28 @@ namespace WPFGameEngine.WPF.GE.GameObjects.Renderable
 
             if (GESettings.DrawBorders)
             {
-                dc.DrawRectangle(
-                    GESettings.BorderRectangleBrush,
-                    GESettings.BorderRectanglePen,
-                    new System.Windows.Rect(
-                        0, 0,
-                        actualWidth,
-                        actualHeight)
-                    );
+                if (!IsSelected)
+                {
+                    dc.DrawRectangle(
+                        GESettings.BorderRectangleBrush,
+                        GESettings.BorderRectanglePen,
+                        new System.Windows.Rect(
+                            0, 0,
+                            actualWidth,
+                            actualHeight)
+                        );
+                }
+                else
+                {
+                    dc.DrawRectangle(
+                        GESettings.SelectedBorderRectangleBrush,
+                        GESettings.SelectedBorderRectanglePen,
+                        new System.Windows.Rect(
+                            0,0,
+                            actualWidth,
+                            actualHeight)
+                        );
+                }
             }
 
             dc.Pop();

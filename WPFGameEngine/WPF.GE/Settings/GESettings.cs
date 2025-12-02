@@ -9,6 +9,8 @@ namespace WPFGameEngine.WPF.GE.Settings
         public static bool DrawColliders { get; set; }
         public static Brush BorderRectangleBrush { get; set; } = Brushes.Transparent;
         public static Pen BorderRectanglePen { get; set; } = new Pen(Brushes.DarkOrange, 2);
+        public static Brush SelectedBorderRectangleBrush { get; set; } = Brushes.Transparent;
+        public static Pen SelectedBorderRectanglePen { get; set; } = new Pen(Brushes.YellowGreen, 2);
         public static Brush ColliderPointFillBrush { get; set; } = Brushes.LightGreen;
         public static Pen ColliderPointPen { get; set; } = new Pen(Brushes.Black, 2);
         public static Brush ColliderFillBrush { get; set; } = Brushes.Transparent;

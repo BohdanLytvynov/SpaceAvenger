@@ -13,6 +13,8 @@
       "Components": [
         {
           "RecreateType": "RelativeTransformComponent",
+          "EnableXAxisCompensation": false,
+          "EnableYAxisCompensation": false,
           "Position": {
             "X": 0.40291864,
             "Y": 0.2568918
@@ -42,6 +44,8 @@
       "Components": [
         {
           "RecreateType": "RelativeTransformComponent",
+          "EnableXAxisCompensation": false,
+          "EnableYAxisCompensation": false,
           "Position": {
             "X": 0.40306494,
             "Y": 0.6174291
@@ -71,6 +75,8 @@
       "Components": [
         {
           "RecreateType": "RelativeTransformComponent",
+          "EnableXAxisCompensation": false,
+          "EnableYAxisCompensation": false,
           "Position": {
             "X": 0.2536139,
             "Y": 0.23549862
@@ -100,6 +106,8 @@
       "Components": [
         {
           "RecreateType": "RelativeTransformComponent",
+          "EnableXAxisCompensation": false,
+          "EnableYAxisCompensation": false,
           "Position": {
             "X": 0.2536139,
             "Y": 0.63705397
@@ -129,6 +137,8 @@
       "Components": [
         {
           "RecreateType": "RelativeTransformComponent",
+          "EnableXAxisCompensation": false,
+          "EnableYAxisCompensation": false,
           "Position": {
             "X": 0.44986278,
             "Y": 0.375892
@@ -158,6 +168,8 @@
       "Components": [
         {
           "RecreateType": "RelativeTransformComponent",
+          "EnableXAxisCompensation": false,
+          "EnableYAxisCompensation": false,
           "Position": {
             "X": 0.44986278,
             "Y": 0.49967977
@@ -187,6 +199,8 @@
       "Components": [
         {
           "RecreateType": "RelativeTransformComponent",
+          "EnableXAxisCompensation": false,
+          "EnableYAxisCompensation": false,
           "Position": {
             "X": 0,
             "Y": 0
@@ -216,6 +230,8 @@
       "Components": [
         {
           "RecreateType": "RelativeTransformComponent",
+          "EnableXAxisCompensation": false,
+          "EnableYAxisCompensation": false,
           "Position": {
             "X": 0,
             "Y": 0.062422983
@@ -245,17 +261,19 @@
       "Components": [
         {
           "RecreateType": "RelativeTransformComponent",
+          "EnableXAxisCompensation": false,
+          "EnableYAxisCompensation": true,
           "Position": {
-            "X": -0.27211422,
-            "Y": 0.21995182
+            "X": -0.15738411,
+            "Y": 0.22366285
           },
           "CenterPosition": {
-            "X": 1,
+            "X": 0.5,
             "Y": 0.5
           },
           "Rotation": 0,
           "Scale": {
-            "Width": 1.5,
+            "Width": 1,
             "Height": 0.7
           }
         },
@@ -1359,17 +1377,19 @@
       "Components": [
         {
           "RecreateType": "RelativeTransformComponent",
+          "EnableXAxisCompensation": false,
+          "EnableYAxisCompensation": false,
           "Position": {
-            "X": 0.3921127,
-            "Y": 0.6064111
+            "X": 0.53854454,
+            "Y": 0.6909491
           },
           "CenterPosition": {
-            "X": 1,
+            "X": 0.5,
             "Y": 0.5
           },
           "Rotation": -90,
           "Scale": {
-            "Width": 1.5,
+            "Width": 1,
             "Height": 0.7
           }
         },
@@ -2473,17 +2493,19 @@
       "Components": [
         {
           "RecreateType": "RelativeTransformComponent",
+          "EnableXAxisCompensation": false,
+          "EnableYAxisCompensation": false,
           "Position": {
-            "X": 0.0705665,
-            "Y": 0.70755476
+            "X": 0.21095991,
+            "Y": 0.7951119
           },
           "CenterPosition": {
-            "X": 1,
+            "X": 0.5,
             "Y": 0.5
           },
           "Rotation": -90,
           "Scale": {
-            "Width": 1.5,
+            "Width": 1,
             "Height": 0.7
           }
         },
@@ -3587,17 +3609,19 @@
       "Components": [
         {
           "RecreateType": "RelativeTransformComponent",
+          "EnableXAxisCompensation": false,
+          "EnableYAxisCompensation": false,
           "Position": {
-            "X": 0.40117034,
-            "Y": 0.29543215
+            "X": 0.53854454,
+            "Y": 0.20938456
           },
           "CenterPosition": {
-            "X": 1,
+            "X": 0.5,
             "Y": 0.5
           },
           "Rotation": 90,
           "Scale": {
-            "Width": 1.5,
+            "Width": 1,
             "Height": 0.7
           }
         },
@@ -4701,17 +4725,19 @@
       "Components": [
         {
           "RecreateType": "RelativeTransformComponent",
+          "EnableXAxisCompensation": false,
+          "EnableYAxisCompensation": false,
           "Position": {
-            "X": 0.081133746,
-            "Y": 0.18674046
+            "X": 0.22454637,
+            "Y": 0.10220249
           },
           "CenterPosition": {
-            "X": 1,
+            "X": 0.5,
             "Y": 0.5
           },
           "Rotation": 90,
           "Scale": {
-            "Width": 1.5,
+            "Width": 1,
             "Height": 0.7
           }
         },
@@ -5815,17 +5841,19 @@
       "Components": [
         {
           "RecreateType": "RelativeTransformComponent",
+          "EnableXAxisCompensation": false,
+          "EnableYAxisCompensation": true,
           "Position": {
-            "X": -0.27211422,
-            "Y": 0.5686709
+            "X": -0.15738414,
+            "Y": 0.584459
           },
           "CenterPosition": {
-            "X": 1,
+            "X": 0.5,
             "Y": 0.5
           },
           "Rotation": 0,
           "Scale": {
-            "Width": 1.5,
+            "Width": 1,
             "Height": 0.7
           }
         },
@@ -6945,7 +6973,7 @@
     {
       "RecreateType": "ColliderComponent",
       "Position": {
-        "X": 0.3743824,
+        "X": 0.37438247,
         "Y": 0.49817017
       },
       "ColliderShape": {
