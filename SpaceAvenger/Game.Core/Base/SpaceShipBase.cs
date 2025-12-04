@@ -1,7 +1,10 @@
 ﻿using SpaceAvenger.Game.Core.Enums;
 using SpaceAvenger.Game.Core.UI.Slider;
 using SpaceAvenger.Services.WPFInputControllers;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Numerics;
 using System.Windows.Input;
 using System.Windows.Media;
 using WPFGameEngine.GameViewControl;
@@ -12,6 +15,16 @@ namespace SpaceAvenger.Game.Core.Base
 {
     public abstract class SpaceShipBase : СacheableObject
     {
+        #region Fields
+        private bool m_moveForward;
+
+        private float MinX;
+        private float MinY;
+
+        private float MaxX;
+        private float MaxY;
+        #endregion
+
         protected WPFInputController m_controller;
 
         #region Properties
@@ -61,9 +74,15 @@ namespace SpaceAvenger.Game.Core.Base
                 ShieldBar.Full = BarHigh;
             }
 
-            m_Engines = GetAllChildrenOfType<JetBase>();
-
             base.StartUp(viewHost, gameTimer);
+
+            var w = App.Current.MainWindow;
+
+            MinX = 0f;
+            MaxX = (float)w.Width - this.Transform.ActualSize.Width;
+
+            MinY = 1f/4f * (float)w.Height;
+            MaxY = (float)w.Height - (this.Transform.ActualSize.Height + 50f);
         }
 
         public override void Update()
@@ -72,35 +91,66 @@ namespace SpaceAvenger.Game.Core.Base
             {
                 var delta = GameTimer.deltaTime;
                 var basis = Transform.GetLocalTransformMatrix().GetBasis();
-                var currPosition = Transform.Position;
                 var curr = Transform.Position;
-                var maxWidth = System.Windows.Application.Current.MainWindow.Width;
-                var maxHeight = System.Windows.Application.Current.MainWindow.Height;
-                var ActualSize = Transform.ActualSize;
-                if (m_controller.IsKeyDown(Key.A) && curr.X >= 0)
+
+                Vector2 translateVector = Vector2.Zero;
+                float timeDelta = (float)delta.TotalSeconds;
+
+                // --- 1. Обработка Ввода (W, A, D) ---
+                bool isMoving = false;
+
+                // Движение ВЛЕВО (A)
+                if (m_controller.IsKeyDown(Key.A))
                 {
-                    Translate(curr - basis.Y * (float)delta.TotalSeconds * HorSpeed);
+                    // Предполагая, что Y - это горизонтальная ось (влево/вправо)
+                    translateVector -= basis.Y * timeDelta * HorSpeed;
                     MoveLeft();
                 }
-                if (m_controller.IsKeyDown(Key.D) && curr.X < maxWidth - ActualSize.Width)
+
+                // Движение ВПРАВО (D)
+                if (m_controller.IsKeyDown(Key.D))
                 {
-                    Translate(curr + basis.Y * (float)delta.TotalSeconds * HorSpeed);
+                    translateVector += basis.Y * timeDelta * HorSpeed;
                     MoveRight();
                 }
-                if (m_controller.IsKeyDown(Key.W) && curr.Y >= 0)
+
+                // Движение ВПЕРЕД (W)
+                if (m_controller.IsKeyDown(Key.W))
                 {
-                    Translate(Transform.Position = curr + basis.X * (float)delta.TotalSeconds * VertSpeed);
+                    // Предполагая, что X - это вертикальная ось (вперед/назад)
+                    translateVector += basis.X * timeDelta * VertSpeed;
+                    isMoving = true;
                     MoveForward();
                 }
-                if (m_controller.IsKeyDown(Key.S) && curr.Y < maxHeight - ActualSize.Height)
+
+                // --- 2. Автоматическое Опускание при Отпускании Клавиши ---
+
+                // Если "Вперед" не нажата
+                if (!isMoving)
                 {
-                    Translate(curr - basis.X * (float)delta.TotalSeconds * VertSpeed);
-                    MoveBackward();
-                }
-                else
-                {
+                    // Корабль опускается (двигается вниз по оси X)
+                    // Использование VertSpeed для опускания, но возможно, нужна отдельная скорость AutoDownSpeed
+                    translateVector -= basis.X * timeDelta * VertSpeed;
                     StopAllEngines();
                 }
+
+                // --- 3. Вычисление Новой Позиции ---
+
+                Vector2 newPos = curr + translateVector;
+
+                // --- 4. Принудительное Ограничение Позиции ---
+
+                // Предполагая, что у вас есть две константы: MinX и MaxX для вертикальных границ
+                // и MinY и MaxY для горизонтальных границ окна
+
+                float clampedX = Math.Clamp(newPos.X, MinX, MaxX);
+                float clampedY = Math.Clamp(newPos.Y, MinY, MaxY);
+
+                Vector2 finalPos = new Vector2(clampedX, clampedY);
+
+                // --- 5. Применение Позиции ---
+
+                Translate(finalPos);
             }
             else
             {
@@ -135,7 +185,6 @@ namespace SpaceAvenger.Game.Core.Base
         protected abstract void MoveBackward();
         protected abstract void MoveLeft();
         protected abstract void MoveRight();
-        protected abstract void StopEngines();
         protected virtual void StopAllEngines()
         {
             foreach (var item in m_Engines)

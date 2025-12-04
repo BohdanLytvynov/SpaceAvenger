@@ -260,10 +260,7 @@ Margin="10" LabelText="Center Position X: " Minimum="0" Maximum="1.0"/>
             <Border.Background>
                 <SolidColorBrush x:Name="brdBack"/>
             </Border.Background>
-            <StackPanel Orientation="Horizontal"
-                        IsEnabled="{Binding ManageComponentEnabled, 
-            UpdateSourceTrigger=PropertyChanged}">
-                
+            <StackPanel Orientation="Horizontal">
                 <TextBlock Text="{Binding ShowNumber, UpdateSourceTrigger=PropertyChanged, StringFormat=№{0})}"
                            Style="{StaticResource FieldName}" Margin="10,15,10,0"/>
                 <Border Style="{StaticResource BorderRoundStyle}" Margin="0,15">
@@ -296,37 +293,6 @@ Margin="10" LabelText="Center Position X: " Minimum="0" Maximum="1.0"/>
                 </StackPanel>
             </StackPanel>
         </Border>
-        <DataTemplate.Triggers>
-            <DataTrigger Binding="{Binding Selected, UpdateSourceTrigger=PropertyChanged}"
-                         Value="True">
-                <DataTrigger.EnterActions>
-                    <BeginStoryboard>
-                        <Storyboard>
-                            <ColorAnimation
-                                Storyboard.TargetName="brdBack"
-                                Storyboard.TargetProperty="Color"
-                                To="LightGreen"
-                                From="White"
-                                Duration="0:0:0.03"
-                                />
-                        </Storyboard>
-                    </BeginStoryboard>
-                </DataTrigger.EnterActions>
-                <DataTrigger.ExitActions>
-                    <BeginStoryboard>
-                        <Storyboard>
-                            <ColorAnimation
-                                Storyboard.TargetName="brdBack"
-                                Storyboard.TargetProperty="Color"
-                                To="White"
-                                From="LightGreen"
-                                Duration="0:0:0.03"
-                                />
-                        </Storyboard>
-                    </BeginStoryboard>
-                </DataTrigger.ExitActions>
-            </DataTrigger>
-        </DataTemplate.Triggers>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type animcvm:AnimatorComponentViewModel}">

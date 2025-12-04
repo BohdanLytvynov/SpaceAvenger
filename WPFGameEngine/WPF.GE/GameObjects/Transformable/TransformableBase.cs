@@ -56,14 +56,14 @@ namespace WPFGameEngine.WPF.GE.GameObjects.Transformable
                     if (rt.EnableXAxisCompensation)
                     {
                         float dx = oldSize.Width * diff.Width;
-                        rt.XScaleCompensate(dx / 2f);
+                        rt.XScaleCompensate(dx/2f);
                     }
 
                     //Need Y Axis Compensation
                     if (rt.EnableYAxisCompensation)
                     {
                         float dy = oldSize.Height * diff.Height;
-                        rt.YScaleCompensate(dy / 2f);
+                        rt.YScaleCompensate(dy/2f);
                     }
                 }
             }

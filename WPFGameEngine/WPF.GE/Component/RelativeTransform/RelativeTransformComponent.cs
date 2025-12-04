@@ -70,6 +70,7 @@ namespace WPFGameEngine.WPF.GE.Component.RelativeTransforms
 
         public void XScaleCompensate(float value)
         {
+            if (value == 0 || ActualParentSize.Width == 0) return;
             float actPos = Position.X - (value / ActualParentSize.Width);
             var oldy = Position.Y;
             Position = new Vector2(actPos, oldy);
@@ -77,6 +78,7 @@ namespace WPFGameEngine.WPF.GE.Component.RelativeTransforms
 
         public void YScaleCompensate(float value)
         {
+            if (value == 0 || ActualParentSize.Height == 0) return;
             float actPos = Position.Y - (value / ActualParentSize.Height);
             var oldX = Position.X;
             Position = new Vector2(oldX, actPos);

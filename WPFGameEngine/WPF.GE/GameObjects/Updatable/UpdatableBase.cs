@@ -1,6 +1,7 @@
 ﻿using System.Numerics;
 using WPFGameEngine.GameViewControl;
 using WPFGameEngine.Timers.Base;
+using WPFGameEngine.WPF.GE.Component.RelativeTransforms;
 using WPFGameEngine.WPF.GE.GameObjects.Transformable;
 using WPFGameEngine.WPF.GE.GameObjects.Updatable;
 using WPFGameEngine.WPF.GE.Math.Sizes;
@@ -24,9 +25,30 @@ namespace WPFGameEngine.WPF.GE.GameObjects
 
             Texture = GetTexture();
 
-            foreach (var item in Children)
+            if (Texture == null) return;
+
+            //Calculate actual size of the Image
+            float actualWidth = (float)Texture.Width * Transform.Scale.Width;
+            float actualHeight = (float)Texture.Height * Transform.Scale.Height;
+
+            //Negative Value Protection
+            actualWidth = actualWidth < 0 ? 0 : actualWidth;
+            actualHeight = actualHeight < 0 ? 0 : actualHeight;
+
+            Transform.ActualSize = new Size(actualWidth, actualHeight);
+
+            foreach (var child in Children)
             {
-                if(item is IUpdatable updatable)
+                if (child is ITransformable transformable)
+                {
+                    var childTransform = transformable.Transform as IRelativeTransform;
+                    if (childTransform != null)
+                    {
+                        childTransform.ActualParentSize = new Size(actualWidth, actualHeight);
+                    }
+                }
+
+                if (child is IUpdatable updatable)
                     updatable.StartUp(viewHost, gameTimer);
             }
         }
@@ -66,7 +88,16 @@ namespace WPFGameEngine.WPF.GE.GameObjects
 
             foreach (var child in Children)
             {
-                if(child is IUpdatable updatable)
+                if (child is ITransformable transformable)
+                {
+                    var childTransform = transformable.Transform as IRelativeTransform;
+                    if (childTransform != null)
+                    {
+                        childTransform.ActualParentSize = new Size(actualWidth, actualHeight);
+                    }
+                }
+
+                if (child is IUpdatable updatable)
                     updatable.Update();
             }
         }

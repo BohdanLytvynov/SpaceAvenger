@@ -113,15 +113,6 @@ namespace WPFGameEngine.WPF.GE.GameObjects.Renderable
             var children = Children.OrderBy(x => x.ZIndex);
             foreach (var item in children)
             {
-                if (item is ITransformable transformable)
-                {
-                    var childTransform = transformable.Transform as IRelativeTransform;
-                    if (childTransform != null)
-                    {
-                        childTransform.ActualParentSize = new Size(actualWidth, actualHeight);
-                    }
-                }
-
                 if(item is IRenderable renderable)
                     renderable.Render(dc, globalMatrix);
             }

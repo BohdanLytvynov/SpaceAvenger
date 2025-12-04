@@ -122,12 +122,12 @@ namespace SpaceAvenger.Services.WpfGameViewHost
                 {
                     obj = ObjectBuilder.Build(typeName) as СacheableObject;
                     config?.Invoke(obj);
-                    Debug.WriteLine("Build:" + typeName);
+                    //Debug.WriteLine("Build:" + typeName);
                     AddObject(obj);
                 }
                 else
                 {
-                    Debug.WriteLine("Use From Pool:" + typeName);
+                    //Debug.WriteLine("Use From Pool:" + typeName);
                     obj.OnGetFromPool();
                 }
             }

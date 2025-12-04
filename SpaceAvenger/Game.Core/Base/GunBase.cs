@@ -37,7 +37,7 @@ namespace SpaceAvenger.Game.Core.Base
             GunLoadedHalf = Brushes.Orange;
             GunUnloaded = Brushes.Red;
             m_fired = false;
-            TimeRemainig = 0;            
+            TimeRemainig = 0;
             base.StartUp(viewHost, gameTimer);
         }
 
@@ -94,7 +94,7 @@ namespace SpaceAvenger.Game.Core.Base
             m_Blast.Rotate(angle);
             m_Blast.Explode(GetBlastPosition());
             m_fired = true;
-            Debug.WriteLine("Shooting");
+            //Debug.WriteLine("Shooting");
         }
 
         private Vector2 GetBlastPosition()
