@@ -7,13 +7,11 @@ using SpaceAvenger.Game.Core.Factions.F10.Weapons;
 using SpaceAvenger.Services.WPFInputControllers;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 using System.Windows.Media;
 using WPFGameEngine.GameViewControl;
 using WPFGameEngine.Timers.Base;
 using WPFGameEngine.WPF.GE.Component.Controllers;
 using WPFGameEngine.WPF.GE.Math.Matrixes;
-using WPFGameEngine.WPF.GE.Math.Sizes;
 
 namespace SpaceAvenger.Game.Core.Factions.F10.Destroyer
 {
@@ -68,10 +66,10 @@ namespace SpaceAvenger.Game.Core.Factions.F10.Destroyer
                     gun.LookAt(m_controller.MousePosition, 2, GameTimer.deltaTime.TotalSeconds, gun.GetWorldTransformMatrix());
                 }
 
-                if (m_controller.IsKeyDown(System.Windows.Input.Key.R))
-                {
-                    Rotate(Transform.Rotation + 5);
-                }
+                //if (m_controller.IsKeyDown(System.Windows.Input.Key.R))
+                //{
+                //    Rotate(Transform.Rotation + 5);
+                //}
 
                 if (m_controller.IsMouseButtonDown(System.Windows.Input.MouseButton.Left))
                 {

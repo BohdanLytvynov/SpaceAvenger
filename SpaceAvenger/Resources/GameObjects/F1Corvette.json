@@ -1,0 +1,304 @@
+{
+  "ZIndex": 0,
+  "Enabled": true,
+  "ObjectName": "F1Corvette",
+  "UniqueName": "Base",
+  "Children": [
+    {
+      "ZIndex": 0,
+      "Enabled": true,
+      "ObjectName": "F1LiteTurret",
+      "UniqueName": "LiteTurret1",
+      "Children": [],
+      "Components": [
+        {
+          "RecreateType": "RelativeTransformComponent",
+          "EnableXAxisCompensation": false,
+          "EnableYAxisCompensation": false,
+          "Position": {
+            "X": 0.33966148,
+            "Y": 0.42118022
+          },
+          "CenterPosition": {
+            "X": 0.5,
+            "Y": 0.5
+          },
+          "Rotation": -180,
+          "Scale": {
+            "Width": 1,
+            "Height": 1
+          }
+        },
+        {
+          "RecreateType": "Sprite",
+          "ResourceKey": "F1_Lite_Turret"
+        }
+      ]
+    },
+    {
+      "ZIndex": 0,
+      "Enabled": true,
+      "ObjectName": "F1Jet",
+      "UniqueName": "Main_Jet",
+      "Children": [],
+      "Components": [
+        {
+          "RecreateType": "RelativeTransformComponent",
+          "EnableXAxisCompensation": false,
+          "EnableYAxisCompensation": false,
+          "Position": {
+            "X": 0.2505947,
+            "Y": 0.863495
+          },
+          "CenterPosition": {
+            "X": 0.5,
+            "Y": 0.5
+          },
+          "Rotation": 0,
+          "Scale": {
+            "Width": 1,
+            "Height": 1
+          }
+        },
+        {
+          "RecreateType": "Animator",
+          "NameAnimationMap": {
+            "Jet_Idle": {
+              "AnimationFrames": [
+                {
+                  "RecreateType": "AnimationFrame",
+                  "Lifespan": 20.408162847161293
+                },
+                {
+                  "RecreateType": "AnimationFrame",
+                  "Lifespan": 20.408162847161293
+                },
+                {
+                  "RecreateType": "AnimationFrame",
+                  "Lifespan": 20.408164709806442
+                },
+                {
+                  "RecreateType": "AnimationFrame",
+                  "Lifespan": 20.408160984516144
+                },
+                {
+                  "RecreateType": "AnimationFrame",
+                  "Lifespan": 20.40816843509674
+                },
+                {
+                  "RecreateType": "AnimationFrame",
+                  "Lifespan": 20.408160984516144
+                },
+                {
+                  "RecreateType": "AnimationFrame",
+                  "Lifespan": 20.40816843509674
+                },
+                {
+                  "RecreateType": "AnimationFrame",
+                  "Lifespan": 20.408153533935547
+                },
+                {
+                  "RecreateType": "AnimationFrame",
+                  "Lifespan": 20.40816843509674
+                },
+                {
+                  "RecreateType": "AnimationFrame",
+                  "Lifespan": 20.40816843509674
+                },
+                {
+                  "RecreateType": "AnimationFrame",
+                  "Lifespan": 20.408153533935547
+                },
+                {
+                  "RecreateType": "AnimationFrame",
+                  "Lifespan": 20.40816843509674
+                },
+                {
+                  "RecreateType": "AnimationFrame",
+                  "Lifespan": 20.408153533935547
+                },
+                {
+                  "RecreateType": "AnimationFrame",
+                  "Lifespan": 20.408183336257935
+                },
+                {
+                  "RecreateType": "AnimationFrame",
+                  "Lifespan": 20.408153533935547
+                },
+                {
+                  "RecreateType": "AnimationFrame",
+                  "Lifespan": 20.408153533935547
+                },
+                {
+                  "RecreateType": "AnimationFrame",
+                  "Lifespan": 20.408183336257935
+                },
+                {
+                  "RecreateType": "AnimationFrame",
+                  "Lifespan": 20.408153533935547
+                },
+                {
+                  "RecreateType": "AnimationFrame",
+                  "Lifespan": 20.408153533935547
+                },
+                {
+                  "RecreateType": "AnimationFrame",
+                  "Lifespan": 20.408183336257935
+                },
+                {
+                  "RecreateType": "AnimationFrame",
+                  "Lifespan": 20.408153533935547
+                },
+                {
+                  "RecreateType": "AnimationFrame",
+                  "Lifespan": 20.408153533935547
+                },
+                {
+                  "RecreateType": "AnimationFrame",
+                  "Lifespan": 20.408183336257935
+                },
+                {
+                  "RecreateType": "AnimationFrame",
+                  "Lifespan": 20.408153533935547
+                },
+                {
+                  "RecreateType": "AnimationFrame",
+                  "Lifespan": 20.408153533935547
+                },
+                {
+                  "RecreateType": "AnimationFrame",
+                  "Lifespan": 20.408153533935547
+                },
+                {
+                  "RecreateType": "AnimationFrame",
+                  "Lifespan": 20.408153533935547
+                },
+                {
+                  "RecreateType": "AnimationFrame",
+                  "Lifespan": 20.408213138580322
+                },
+                {
+                  "RecreateType": "AnimationFrame",
+                  "Lifespan": 20.408153533935547
+                },
+                {
+                  "RecreateType": "AnimationFrame",
+                  "Lifespan": 20.408153533935547
+                },
+                {
+                  "RecreateType": "AnimationFrame",
+                  "Lifespan": 20.408153533935547
+                },
+                {
+                  "RecreateType": "AnimationFrame",
+                  "Lifespan": 20.408153533935547
+                },
+                {
+                  "RecreateType": "AnimationFrame",
+                  "Lifespan": 20.408153533935547
+                },
+                {
+                  "RecreateType": "AnimationFrame",
+                  "Lifespan": 20.408213138580322
+                },
+                {
+                  "RecreateType": "AnimationFrame",
+                  "Lifespan": 20.408153533935547
+                },
+                {
+                  "RecreateType": "AnimationFrame",
+                  "Lifespan": 20.408153533935547
+                },
+                {
+                  "RecreateType": "AnimationFrame",
+                  "Lifespan": 20.408153533935547
+                },
+                {
+                  "RecreateType": "AnimationFrame",
+                  "Lifespan": 20.408153533935547
+                },
+                {
+                  "RecreateType": "AnimationFrame",
+                  "Lifespan": 20.408153533935547
+                },
+                {
+                  "RecreateType": "AnimationFrame",
+                  "Lifespan": 20.408213138580322
+                },
+                {
+                  "RecreateType": "AnimationFrame",
+                  "Lifespan": 20.408153533935547
+                },
+                {
+                  "RecreateType": "AnimationFrame",
+                  "Lifespan": 20.408153533935547
+                },
+                {
+                  "RecreateType": "AnimationFrame",
+                  "Lifespan": 20.408153533935547
+                },
+                {
+                  "RecreateType": "AnimationFrame",
+                  "Lifespan": 20.408153533935547
+                },
+                {
+                  "RecreateType": "AnimationFrame",
+                  "Lifespan": 20.408153533935547
+                },
+                {
+                  "RecreateType": "AnimationFrame",
+                  "Lifespan": 20.408213138580322
+                },
+                {
+                  "RecreateType": "AnimationFrame",
+                  "Lifespan": 20.408153533935547
+                },
+                {
+                  "RecreateType": "AnimationFrame",
+                  "Lifespan": 20.408153533935547
+                },
+                {
+                  "RecreateType": "AnimationFrame",
+                  "Lifespan": 20.408153533935547
+                }
+              ],
+              "Duration": 1000,
+              "Rows": 7,
+              "Columns": 7,
+              "EaseType": "Linear Ease f(t)=t",
+              "EaseFactoryName": "LinearEase",
+              "AnimationSpeed": 1,
+              "IsLooping": true,
+              "Reverse": false,
+              "Freeze": true,
+              "EaseConstants": {},
+              "ResourceKey": "F1JetIdle_50_Atlas"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "Components": [
+    {
+      "RecreateType": "TransformComponent",
+      "Position": {
+        "X": 163.0375,
+        "Y": 265.69077
+      },
+      "CenterPosition": {
+        "X": 0.5,
+        "Y": 0.5
+      },
+      "Rotation": 0,
+      "Scale": {
+        "Width": 1,
+        "Height": 1
+      }
+    },
+    {
+      "RecreateType": "Sprite",
+      "ResourceKey": "F1_Corvette"
+    }
+  ]
+}

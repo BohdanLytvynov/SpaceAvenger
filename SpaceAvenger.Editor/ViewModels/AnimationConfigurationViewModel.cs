@@ -266,6 +266,8 @@ namespace SpaceAvenger.Editor.ViewModels
                 TotalTime = old.TotalTime;
                 SelectedEase = new OptionsViewModel(old.EaseType, old.EaseFactoryName);
                 SelectedResourceName = old.ResourceKey;
+                IsLooping = old.IsLooping;
+                IsReversed = old.Reverse;
                 EnableEaseCombobox();
                 EnableResourceCombobox();
             }

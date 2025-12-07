@@ -39,10 +39,16 @@
     <!--#region SpaceShips -->
     <ImageSource x:Key="F10_Destr">pack://siteoforigin:,,,/Resources/Content/SpaceShips/F10/Destroyer/destroyer256.png
     </ImageSource>
+
+    <ImageSource x:Key="F1_Corvette">pack://siteoforigin:,,,/Resources/Content/SpaceShips/F1/Corvette/F1Corvette.png
+    </ImageSource>
     <!--#endregion-->
 
     <!--#region Weapons -->
     <ImageSource x:Key="F10_RailGun">pack://siteoforigin:,,,/Resources/Content/Weapons/F10/RailGun.png
+    </ImageSource>
+
+    <ImageSource x:Key="F1_Lite_Turret">pack://siteoforigin:,,,/Resources/Content/Weapons/F1/F1LiteTurret.png
     </ImageSource>
     <!--#endregion-->
 
@@ -68,6 +74,13 @@
     <ImageSource x:Key="F10JetMoving_50_Atlas">pack://siteoforigin:,,,/Resources/Content/Jets/F10/F10Jet_Moving_50_Atlas.png
     </ImageSource>
     <ImageSource x:Key="F10JetStart_50_Atlas">pack://siteoforigin:,,,/Resources/Content/Jets/F10/F10Jet_Start_50_Atlas.png
+    </ImageSource>
+
+    <ImageSource x:Key="F1JetIdle_50_Atlas">pack://siteoforigin:,,,/Resources/Content/Jets/F1/F1_JetIdle_50_Atlas.png
+    </ImageSource>
+    <ImageSource x:Key="F1JetStart_50_Atlas">pack://siteoforigin:,,,/Resources/Content/Jets/F1/F1_JetStart_50_Atlas.png
+    </ImageSource>
+    <ImageSource x:Key="F1JetMove_50_Atlas">pack://siteoforigin:,,,/Resources/Content/Jets/F1/F1_JetMove_50_Atlas.png
     </ImageSource>
     <!--#endregion-->
 

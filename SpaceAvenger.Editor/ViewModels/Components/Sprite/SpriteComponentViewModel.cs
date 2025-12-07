@@ -26,12 +26,12 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Sprites
             set=> m_resourceNames = value;
         }
 
-        public string SelectedResource 
+        public string SelectedResource
         { 
             get=> m_selectedResource;
             set 
             {
-                Set(ref m_selectedResource, value);
+                SetDefaultIfNull(ref m_selectedResource, value, string.Empty);
 
                 if (string.IsNullOrEmpty(value) || m_ResourceLoader == null)
                     return;

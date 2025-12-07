@@ -13,5 +13,7 @@ namespace WPFGameEngine.WPF.GE.Component.Base.ImageComponents
         public TImage Texture { get; }
 
         void Load(string resourceKey);
+
+        void TryLoad(string resourceName);
     }
 }
