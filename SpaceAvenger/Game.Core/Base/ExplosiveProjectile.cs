@@ -1,10 +1,8 @@
 ﻿using SpaceAvenger.Game.Core.Enums;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using WPFGameEngine.GameViewControl;
 using WPFGameEngine.WPF.GE.GameObjects;
-using WPFGameEngine.WPF.GE.Math.Matrixes;
 
 namespace SpaceAvenger.Game.Core.Base
 {

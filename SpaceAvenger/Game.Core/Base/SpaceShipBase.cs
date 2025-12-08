@@ -16,13 +16,15 @@ namespace SpaceAvenger.Game.Core.Base
     public abstract class SpaceShipBase : СacheableObject
     {
         #region Fields
-        private bool m_moveForward;
+        //private bool m_moveForward;
 
-        private float MinX;
-        private float MinY;
+        private float PlayerMinX;
+        private float PlayerMinY;
 
-        private float MaxX;
-        private float MaxY;
+        private float PlayerMaxX;
+        private float PlayerMaxY;
+
+
         #endregion
 
         protected WPFInputController m_controller;
@@ -75,14 +77,14 @@ namespace SpaceAvenger.Game.Core.Base
             }
 
             base.StartUp(viewHost, gameTimer);
-
+            //Set Window Bounds
             var w = App.Current.MainWindow;
 
-            MinX = 0f;
-            MaxX = (float)w.Width - this.Transform.ActualSize.Width;
+            PlayerMinX = 0f;
+            PlayerMaxX = (float)w.Width - this.Transform.ActualSize.Width;
 
-            MinY = 1f/4f * (float)w.Height;
-            MaxY = (float)w.Height - (this.Transform.ActualSize.Height + 50f);
+            PlayerMinY = 1f/4f * (float)w.Height;
+            PlayerMaxY = (float)w.Height - (this.Transform.ActualSize.Height + 50f);
         }
 
         public override void Update()
@@ -96,65 +98,52 @@ namespace SpaceAvenger.Game.Core.Base
                 Vector2 translateVector = Vector2.Zero;
                 float timeDelta = (float)delta.TotalSeconds;
 
-                // --- 1. Обработка Ввода (W, A, D) ---
                 bool isMoving = false;
 
-                // Движение ВЛЕВО (A)
                 if (m_controller.IsKeyDown(Key.A))
                 {
-                    // Предполагая, что Y - это горизонтальная ось (влево/вправо)
                     translateVector -= basis.Y * timeDelta * HorSpeed;
                     MoveLeft();
                 }
 
-                // Движение ВПРАВО (D)
                 if (m_controller.IsKeyDown(Key.D))
                 {
                     translateVector += basis.Y * timeDelta * HorSpeed;
                     MoveRight();
                 }
 
-                // Движение ВПЕРЕД (W)
                 if (m_controller.IsKeyDown(Key.W))
                 {
-                    // Предполагая, что X - это вертикальная ось (вперед/назад)
                     translateVector += basis.X * timeDelta * VertSpeed;
                     isMoving = true;
                     MoveForward();
                 }
 
-                // --- 2. Автоматическое Опускание при Отпускании Клавиши ---
-
-                // Если "Вперед" не нажата
                 if (!isMoving)
                 {
-                    // Корабль опускается (двигается вниз по оси X)
-                    // Использование VertSpeed для опускания, но возможно, нужна отдельная скорость AutoDownSpeed
                     translateVector -= basis.X * timeDelta * VertSpeed;
                     StopAllEngines();
                 }
 
-                // --- 3. Вычисление Новой Позиции ---
-
                 Vector2 newPos = curr + translateVector;
 
-                // --- 4. Принудительное Ограничение Позиции ---
-
-                // Предполагая, что у вас есть две константы: MinX и MaxX для вертикальных границ
-                // и MinY и MaxY для горизонтальных границ окна
-
-                float clampedX = Math.Clamp(newPos.X, MinX, MaxX);
-                float clampedY = Math.Clamp(newPos.Y, MinY, MaxY);
+                float clampedX = Math.Clamp(newPos.X, PlayerMinX, PlayerMaxX);
+                float clampedY = Math.Clamp(newPos.Y, PlayerMinY, PlayerMaxY);
 
                 Vector2 finalPos = new Vector2(clampedX, clampedY);
-
-                // --- 5. Применение Позиции ---
 
                 Translate(finalPos);
             }
             else
             {
                 //Base Enemy AI
+                float minY;
+                float maxY;
+
+                float minX;
+                float maxX;
+
+
             }
 
             HPBar.Update(HP);

@@ -1,0 +1,43 @@
+{
+  "ZIndex": 0,
+  "Enabled": true,
+  "ObjectName": "F1LightGunPrj",
+  "UniqueName": "Base",
+  "Children": [],
+  "Components": [
+    {
+      "RecreateType": "TransformComponent",
+      "Position": {
+        "X": 105.67246,
+        "Y": 369.8536
+      },
+      "CenterPosition": {
+        "X": 0.5,
+        "Y": 0.5
+      },
+      "Rotation": 0,
+      "Scale": {
+        "Width": 1,
+        "Height": 1
+      }
+    },
+    {
+      "RecreateType": "Sprite",
+      "ResourceKey": "F1_LightGunPrj"
+    },
+    {
+      "RecreateType": "ColliderComponent",
+      "Position": {
+        "X": 0.4966606,
+        "Y": 0.48156452
+      },
+      "ColliderShape": {
+        "RecreateType": "Rectangle",
+        "Size": {
+          "Width": 65.109665,
+          "Height": 45.425346
+        }
+      }
+    }
+  ]
+}

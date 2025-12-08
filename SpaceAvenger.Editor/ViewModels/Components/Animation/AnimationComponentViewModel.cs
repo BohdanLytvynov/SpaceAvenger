@@ -35,7 +35,7 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Animations
         public string EaseFunction 
         { get=> m_easeFunction; set=> Set(ref m_easeFunction, value); }
         public string ResourceName 
-        { get=> m_resourceName; set=> Set(ref m_resourceName, value); }
+        { get=> m_resourceName; set=> SetDefaultIfNull(ref m_resourceName, value, string.Empty); }
         public ImageSource ImageSource 
         { get=> m_imgSource; set => Set(ref m_imgSource, value); }
 

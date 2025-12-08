@@ -66,11 +66,6 @@ namespace SpaceAvenger.Game.Core.Factions.F10.Destroyer
                     gun.LookAt(m_controller.MousePosition, 2, GameTimer.deltaTime.TotalSeconds, gun.GetWorldTransformMatrix());
                 }
 
-                //if (m_controller.IsKeyDown(System.Windows.Input.Key.R))
-                //{
-                //    Rotate(Transform.Rotation + 5);
-                //}
-
                 if (m_controller.IsMouseButtonDown(System.Windows.Input.MouseButton.Left))
                 {
                     foreach (var gun in m_battery)
@@ -86,14 +81,15 @@ namespace SpaceAvenger.Game.Core.Factions.F10.Destroyer
         public override void Render(DrawingContext dc, Matrix3x3 parent = default)
         {
             base.Render(dc, parent);
-
-            foreach (var gun in m_battery)
+            if (m_controller != null)
             {
-                dc.DrawLine(m_targetMarkerPen,
-                gun.GetWorldCenter(gun.GetWorldTransformMatrix()).ToPoint(),
-                m_controller.MousePosition.ToPoint());
+                foreach (var gun in m_battery)
+                {
+                    dc.DrawLine(m_targetMarkerPen,
+                    gun.GetWorldCenter(gun.GetWorldTransformMatrix()).ToPoint(),
+                    m_controller.MousePosition.ToPoint());
+                }
             }
-
         }
 
         protected override void MoveForward()

@@ -33,6 +33,8 @@
     <None Remove="Resources\Content\Chars\Commanders\CommandersF.png" />
     <None Remove="Resources\Content\Chars\Commanders\CommandersM.png" />
     <None Remove="Resources\Content\Empty.png" />
+    <None Remove="Resources\Content\Explosions\F1GunBlastLight_50_Atlas.png" />
+    <None Remove="Resources\Content\Explosions\F1LightPrjExplosion_50_Atlas.png" />
     <None Remove="Resources\Content\Jets\F10\F10Jet_Idle_50_Atlas.png" />
     <None Remove="Resources\Content\Jets\F10\F10Jet_Moving_50_Atlas.png" />
     <None Remove="Resources\Content\Jets\F10\F10Jet_Start_50_Atlas.png" />
@@ -40,6 +42,7 @@
     <None Remove="Resources\Content\Jets\F1\F1_JetMoving_50_Atlas.png" />
     <None Remove="Resources\Content\Jets\F1\F1_JetStart_50_Atlas.png" />
     <None Remove="Resources\Content\Projectiles\F10Prj.png" />
+    <None Remove="Resources\Content\Projectiles\F1\F1LightPrj.png" />
     <None Remove="Resources\Content\SpaceShips\F10\Destroyer\destroyer256.png" />
     <None Remove="Resources\Content\SpaceShips\F1\Corvette\F1Corvette.png" />
     <None Remove="Resources\Content\SpaceShips\Neutrals\AstroBase.png" />
@@ -139,6 +142,12 @@
     <Content Include="Resources\Content\Explosions\Explosion4_Atlas.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resources\Content\Explosions\F1GunBlastLight_50_Atlas.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Content\Explosions\F1LightPrjExplosion_50_Atlas.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\Content\Jets\F10\F10Jet_Idle_50_Atlas.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -167,6 +176,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\Content\Projectiles\F10\F10Prj.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Content\Projectiles\F1\F1LightPrj.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\Content\SpaceShips\F10\Destroyer\destroyer256.png">
