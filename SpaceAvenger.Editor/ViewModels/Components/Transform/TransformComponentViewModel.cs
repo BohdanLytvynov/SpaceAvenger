@@ -17,7 +17,7 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Transform
         private double m_ScaleY;
         private double m_CenterPositionX;
         private double m_CenterPositionY;
-        protected bool m_init = false;
+        protected bool m_init;
         #endregion
 
         #region Properties
@@ -103,6 +103,7 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Transform
         public TransformComponentViewModel(IGameObjectMock gameObject) 
             : base(nameof(TransformComponent), gameObject)
         {
+            m_init = false;
             LoadCurrentGameObjProperties();
             m_init = true;
         }

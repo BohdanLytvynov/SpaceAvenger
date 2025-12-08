@@ -27,25 +27,50 @@ namespace WPFGameEngine.WPF.GE.GameObjects.Transformable
             
         }
 
-        private void ScaleRecursive(IGameObject obj, Size newScale)
+        private void ScaleRecursive(IGameObject obj, Size diff)
         {
             if (obj == null)
                 return;
+
+            if (obj.UniqueName == "Jet_Main_L")
+            { 
+            
+            }
 
             if(!(obj is ITransformable transformable))
                 return;
 
             var t = transformable.Transform;
 
-            if (t != null && t.Scale != newScale)
+            if (t != null && t.Scale != diff)
             {
-                t.Scale = new Size(newScale.Width + t.Scale.Width,
-                    newScale.Height + t.Scale.Height);
+                //Cache old scale
+                Size oldSize = t.ActualSize;
+                //New Scale
+                t.Scale = new Size(diff.Width + t.Scale.Width,
+                    diff.Height + t.Scale.Height);
+
+                if (t is IRelativeTransform rt)
+                {
+                    //Need X Axis Compensation
+                    if (rt.EnableXAxisCompensation)
+                    {
+                        float dx = oldSize.Width * diff.Width;
+                        rt.XScaleCompensate(dx/2f);
+                    }
+
+                    //Need Y Axis Compensation
+                    if (rt.EnableYAxisCompensation)
+                    {
+                        float dy = oldSize.Height * diff.Height;
+                        rt.YScaleCompensate(dy/2f);
+                    }
+                }
             }
 
             foreach (var item in obj.Children)
             {
-                ScaleRecursive(item, newScale);
+                ScaleRecursive(item, diff);
             }
         }
 

@@ -158,7 +158,7 @@ namespace SpaceAvenger.Editor.ViewModels
             get => m_SelectedEase;
             set
             {
-                Set(ref m_SelectedEase, value);
+                SetDefaultIfNull(ref m_SelectedEase, value, new OptionsViewModel());
                 if (value != null)
                 {
                     m_SelectedEaseFunction = (IEase)m_factoryWrapper.CreateObject(value.FactoryName);
@@ -191,7 +191,7 @@ namespace SpaceAvenger.Editor.ViewModels
             get => m_SelectedResourceName;
             set 
             {
-                Set(ref m_SelectedResourceName, value);
+                SetDefaultIfNull(ref m_SelectedResourceName, value, string.Empty);
 
                 if (string.IsNullOrEmpty(SelectedResourceName))
                     return;
@@ -266,6 +266,8 @@ namespace SpaceAvenger.Editor.ViewModels
                 TotalTime = old.TotalTime;
                 SelectedEase = new OptionsViewModel(old.EaseType, old.EaseFactoryName);
                 SelectedResourceName = old.ResourceKey;
+                IsLooping = old.IsLooping;
+                IsReversed = old.Reverse;
                 EnableEaseCombobox();
                 EnableResourceCombobox();
             }

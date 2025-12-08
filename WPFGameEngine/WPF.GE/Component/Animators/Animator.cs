@@ -55,6 +55,9 @@ namespace WPFGameEngine.WPF.GE.Component.Animators
 
         public void SetAnimationForPlay(string animationName)
         {
+            if (!m_animations.ContainsKey(animationName))
+                return;
+
             m_current = m_animations[animationName];
             m_current_animation_name = animationName;
         }

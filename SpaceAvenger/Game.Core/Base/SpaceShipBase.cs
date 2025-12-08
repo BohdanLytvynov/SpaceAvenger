@@ -1,7 +1,10 @@
 ﻿using SpaceAvenger.Game.Core.Enums;
 using SpaceAvenger.Game.Core.UI.Slider;
 using SpaceAvenger.Services.WPFInputControllers;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Numerics;
 using System.Windows.Input;
 using System.Windows.Media;
 using WPFGameEngine.GameViewControl;
@@ -12,6 +15,18 @@ namespace SpaceAvenger.Game.Core.Base
 {
     public abstract class SpaceShipBase : СacheableObject
     {
+        #region Fields
+        //private bool m_moveForward;
+
+        private float PlayerMinX;
+        private float PlayerMinY;
+
+        private float PlayerMaxX;
+        private float PlayerMaxY;
+
+
+        #endregion
+
         protected WPFInputController m_controller;
 
         #region Properties
@@ -61,9 +76,15 @@ namespace SpaceAvenger.Game.Core.Base
                 ShieldBar.Full = BarHigh;
             }
 
-            m_Engines = GetAllChildrenOfType<JetBase>();
-
             base.StartUp(viewHost, gameTimer);
+            //Set Window Bounds
+            var w = App.Current.MainWindow;
+
+            PlayerMinX = 0f;
+            PlayerMaxX = (float)w.Width - this.Transform.ActualSize.Width;
+
+            PlayerMinY = 1f/4f * (float)w.Height;
+            PlayerMaxY = (float)w.Height - (this.Transform.ActualSize.Height + 50f);
         }
 
         public override void Update()
@@ -72,39 +93,57 @@ namespace SpaceAvenger.Game.Core.Base
             {
                 var delta = GameTimer.deltaTime;
                 var basis = Transform.GetLocalTransformMatrix().GetBasis();
-                var currPosition = Transform.Position;
                 var curr = Transform.Position;
-                var maxWidth = System.Windows.Application.Current.MainWindow.Width;
-                var maxHeight = System.Windows.Application.Current.MainWindow.Height;
-                var ActualSize = Transform.ActualSize;
-                if (m_controller.IsKeyDown(Key.A) && curr.X >= 0)
+
+                Vector2 translateVector = Vector2.Zero;
+                float timeDelta = (float)delta.TotalSeconds;
+
+                bool isMoving = false;
+
+                if (m_controller.IsKeyDown(Key.A))
                 {
-                    Translate(curr - basis.Y * (float)delta.TotalSeconds * HorSpeed);
+                    translateVector -= basis.Y * timeDelta * HorSpeed;
                     MoveLeft();
                 }
-                if (m_controller.IsKeyDown(Key.D) && curr.X < maxWidth - ActualSize.Width)
+
+                if (m_controller.IsKeyDown(Key.D))
                 {
-                    Translate(curr + basis.Y * (float)delta.TotalSeconds * HorSpeed);
+                    translateVector += basis.Y * timeDelta * HorSpeed;
                     MoveRight();
                 }
-                if (m_controller.IsKeyDown(Key.W) && curr.Y >= 0)
+
+                if (m_controller.IsKeyDown(Key.W))
                 {
-                    Translate(Transform.Position = curr + basis.X * (float)delta.TotalSeconds * VertSpeed);
+                    translateVector += basis.X * timeDelta * VertSpeed;
+                    isMoving = true;
                     MoveForward();
                 }
-                if (m_controller.IsKeyDown(Key.S) && curr.Y < maxHeight - ActualSize.Height)
+
+                if (!isMoving)
                 {
-                    Translate(curr - basis.X * (float)delta.TotalSeconds * VertSpeed);
-                    MoveBackward();
-                }
-                else
-                {
+                    translateVector -= basis.X * timeDelta * VertSpeed;
                     StopAllEngines();
                 }
+
+                Vector2 newPos = curr + translateVector;
+
+                float clampedX = Math.Clamp(newPos.X, PlayerMinX, PlayerMaxX);
+                float clampedY = Math.Clamp(newPos.Y, PlayerMinY, PlayerMaxY);
+
+                Vector2 finalPos = new Vector2(clampedX, clampedY);
+
+                Translate(finalPos);
             }
             else
             {
                 //Base Enemy AI
+                float minY;
+                float maxY;
+
+                float minX;
+                float maxX;
+
+
             }
 
             HPBar.Update(HP);
@@ -135,7 +174,6 @@ namespace SpaceAvenger.Game.Core.Base
         protected abstract void MoveBackward();
         protected abstract void MoveLeft();
         protected abstract void MoveRight();
-        protected abstract void StopEngines();
         protected virtual void StopAllEngines()
         {
             foreach (var item in m_Engines)

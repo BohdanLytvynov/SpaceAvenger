@@ -1,0 +1,105 @@
+{
+  "ZIndex": 0,
+  "Enabled": true,
+  "ObjectName": "F1LightPrjExplosion",
+  "UniqueName": "Base",
+  "Children": [],
+  "Components": [
+    {
+      "RecreateType": "TransformComponent",
+      "Position": {
+        "X": 0,
+        "Y": 0
+      },
+      "CenterPosition": {
+        "X": 0.5,
+        "Y": 0.5
+      },
+      "Rotation": 0,
+      "Scale": {
+        "Width": 1,
+        "Height": 1
+      }
+    },
+    {
+      "RecreateType": "Animation",
+      "AnimationFrames": [
+        {
+          "RecreateType": "AnimationFrame",
+          "Lifespan": 0.000476837158203125
+        },
+        {
+          "RecreateType": "AnimationFrame",
+          "Lifespan": 0.014781951904296875
+        },
+        {
+          "RecreateType": "AnimationFrame",
+          "Lifespan": 0.10061264038085938
+        },
+        {
+          "RecreateType": "AnimationFrame",
+          "Lifespan": 0.3724098205566406
+        },
+        {
+          "RecreateType": "AnimationFrame",
+          "Lifespan": 1.0018348693847656
+        },
+        {
+          "RecreateType": "AnimationFrame",
+          "Lifespan": 2.2177696228027344
+        },
+        {
+          "RecreateType": "AnimationFrame",
+          "Lifespan": 4.306316375732422
+        },
+        {
+          "RecreateType": "AnimationFrame",
+          "Lifespan": 7.610797882080078
+        },
+        {
+          "RecreateType": "AnimationFrame",
+          "Lifespan": 12.531757354736328
+        },
+        {
+          "RecreateType": "AnimationFrame",
+          "Lifespan": 19.526958465576172
+        },
+        {
+          "RecreateType": "AnimationFrame",
+          "Lifespan": 29.111385345458984
+        },
+        {
+          "RecreateType": "AnimationFrame",
+          "Lifespan": 41.857242584228516
+        },
+        {
+          "RecreateType": "AnimationFrame",
+          "Lifespan": 58.39395523071289
+        },
+        {
+          "RecreateType": "AnimationFrame",
+          "Lifespan": 79.40816879272461
+        },
+        {
+          "RecreateType": "AnimationFrame",
+          "Lifespan": 105.64374923706055
+        },
+        {
+          "RecreateType": "AnimationFrame",
+          "Lifespan": 137.90178298950195
+        }
+      ],
+      "Duration": 500,
+      "Rows": 4,
+      "Columns": 4,
+      "EaseType": "Ease In Quint f(t)=t^5",
+      "EaseFactoryName": "EaseInQuint",
+      "AnimationSpeed": 1,
+      "IsLooping": false,
+      "Reverse": false,
+      "Freeze": true,
+      "EaseConstants": {},
+      "ResourceKey": "F1LightPrjExplosion"
+    }
+  ]
+}

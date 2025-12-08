@@ -1,0 +1,105 @@
+{
+  "ZIndex": 0,
+  "Enabled": true,
+  "ObjectName": "F1LightGunBlast",
+  "UniqueName": "Base",
+  "Children": [],
+  "Components": [
+    {
+      "RecreateType": "TransformComponent",
+      "Position": {
+        "X": 0,
+        "Y": 0
+      },
+      "CenterPosition": {
+        "X": 0.5,
+        "Y": 0.5
+      },
+      "Rotation": 0,
+      "Scale": {
+        "Width": 1,
+        "Height": 1
+      }
+    },
+    {
+      "RecreateType": "Animation",
+      "AnimationFrames": [
+        {
+          "RecreateType": "AnimationFrame",
+          "Lifespan": 0.048828125
+        },
+        {
+          "RecreateType": "AnimationFrame",
+          "Lifespan": 0.341796875
+        },
+        {
+          "RecreateType": "AnimationFrame",
+          "Lifespan": 0.927734375
+        },
+        {
+          "RecreateType": "AnimationFrame",
+          "Lifespan": 1.806640625
+        },
+        {
+          "RecreateType": "AnimationFrame",
+          "Lifespan": 2.978515625
+        },
+        {
+          "RecreateType": "AnimationFrame",
+          "Lifespan": 4.443359375
+        },
+        {
+          "RecreateType": "AnimationFrame",
+          "Lifespan": 6.201171875
+        },
+        {
+          "RecreateType": "AnimationFrame",
+          "Lifespan": 8.251953125
+        },
+        {
+          "RecreateType": "AnimationFrame",
+          "Lifespan": 10.595703125
+        },
+        {
+          "RecreateType": "AnimationFrame",
+          "Lifespan": 13.232421875
+        },
+        {
+          "RecreateType": "AnimationFrame",
+          "Lifespan": 16.162109375
+        },
+        {
+          "RecreateType": "AnimationFrame",
+          "Lifespan": 19.384765625
+        },
+        {
+          "RecreateType": "AnimationFrame",
+          "Lifespan": 22.900390625
+        },
+        {
+          "RecreateType": "AnimationFrame",
+          "Lifespan": 26.708984375
+        },
+        {
+          "RecreateType": "AnimationFrame",
+          "Lifespan": 30.810546875
+        },
+        {
+          "RecreateType": "AnimationFrame",
+          "Lifespan": 35.205078125
+        }
+      ],
+      "Duration": 200,
+      "Rows": 4,
+      "Columns": 4,
+      "EaseType": "Ease In Cubic f(t)=t^3",
+      "EaseFactoryName": "EaseInCubic",
+      "AnimationSpeed": 1,
+      "IsLooping": false,
+      "Reverse": false,
+      "Freeze": true,
+      "EaseConstants": {},
+      "ResourceKey": "F1GunLightBlust"
+    }
+  ]
+}

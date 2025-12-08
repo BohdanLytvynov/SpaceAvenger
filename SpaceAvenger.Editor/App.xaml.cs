@@ -5,6 +5,7 @@ using SpaceAvenger.Services;
 using SpaceAvenger.Services.ResourceLoader;
 using System.IO;
 using System.Windows;
+using System.Windows.Threading;
 using ViewModelBaseLibDotNetCore.MessageBus;
 using ViewModelBaseLibDotNetCore.MessageBus.Base;
 using WPFGameEngine.FactoryWrapper;
@@ -101,13 +102,34 @@ namespace SpaceAvenger.Editor
 
         protected override void OnStartup(StartupEventArgs e)
         {
+            this.DispatcherUnhandledException += App_DispatcherUnhandledException;
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+
             Services.GetRequiredService<MainWindow>().Show();
 
             base.OnStartup(e);
         }
 
+        private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            Exception ex = e.ExceptionObject as Exception;
+            if (ex == null) return;
+            MessageBox.Show($"Error occurred! Error Message: {ex.Message}.",
+                "SA Editor", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+
+        private void App_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+        {
+            MessageBox.Show($"Error occurred! Error Message: {e.Exception.Message}.",
+                "SA Editor", MessageBoxButton.OK, MessageBoxImage.Error);
+            e.Handled = true;
+        }
+
         protected override void OnExit(ExitEventArgs e)
         {
+            this.DispatcherUnhandledException -= App_DispatcherUnhandledException;
+            AppDomain.CurrentDomain.UnhandledException -= CurrentDomain_UnhandledException;
+
             var main = Services.GetRequiredService<EditorMainWindowViewModel>();
             var buffVM = Services.GetRequiredService<BufferWindowViewModel>();
             buffVM.Clear();

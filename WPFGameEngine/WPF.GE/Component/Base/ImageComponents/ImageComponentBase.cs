@@ -24,5 +24,15 @@ namespace WPFGameEngine.WPF.GE.Component.Base.ImageComponents
             Texture = ResourceLoader.Load<TImage>(resourceKey);
             ResourceKey = resourceKey;
         }
+
+        public void TryLoad(string resourceName)
+        {
+            try
+            {
+                Load(resourceName);
+            }
+            catch (Exception ex)
+            {}
+        }
     }
 }

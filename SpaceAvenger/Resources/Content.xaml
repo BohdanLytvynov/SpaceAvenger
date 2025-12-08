@@ -39,15 +39,24 @@
     <!--#region SpaceShips -->
     <ImageSource x:Key="F10_Destr">pack://siteoforigin:,,,/Resources/Content/SpaceShips/F10/Destroyer/destroyer256.png
     </ImageSource>
+
+    <ImageSource x:Key="F1_Corvette">pack://siteoforigin:,,,/Resources/Content/SpaceShips/F1/Corvette/F1Corvette.png
+    </ImageSource>
     <!--#endregion-->
 
     <!--#region Weapons -->
     <ImageSource x:Key="F10_RailGun">pack://siteoforigin:,,,/Resources/Content/Weapons/F10/RailGun.png
     </ImageSource>
+
+    <ImageSource x:Key="F1_Lite_Turret">pack://siteoforigin:,,,/Resources/Content/Weapons/F1/F1LiteTurret.png
+    </ImageSource>
     <!--#endregion-->
 
     <!--#region Projectiles -->
     <ImageSource x:Key="F10_RailGunPrj">pack://siteoforigin:,,,/Resources/Content/Projectiles/F10/F10Prj.png
+    </ImageSource>
+
+    <ImageSource x:Key="F1_LightGunPrj">pack://siteoforigin:,,,/Resources/Content/Projectiles/F1/F1LightPrj.png
     </ImageSource>
     <!--#endregion-->
 
@@ -69,6 +78,13 @@
     </ImageSource>
     <ImageSource x:Key="F10JetStart_50_Atlas">pack://siteoforigin:,,,/Resources/Content/Jets/F10/F10Jet_Start_50_Atlas.png
     </ImageSource>
+
+    <ImageSource x:Key="F1JetIdle_50_Atlas">pack://siteoforigin:,,,/Resources/Content/Jets/F1/F1_JetIdle_50_Atlas.png
+    </ImageSource>
+    <ImageSource x:Key="F1JetStart_50_Atlas">pack://siteoforigin:,,,/Resources/Content/Jets/F1/F1_JetStart_50_Atlas.png
+    </ImageSource>
+    <ImageSource x:Key="F1JetMove_50_Atlas">pack://siteoforigin:,,,/Resources/Content/Jets/F1/F1_JetMoving_50_Atlas.png
+    </ImageSource>
     <!--#endregion-->
 
     <!--#region Explosions -->
@@ -79,6 +95,10 @@
     <ImageSource x:Key="Explosion3">pack://siteoforigin:,,,/Resources/Content/Explosions/Explosion3_Atlas.png
     </ImageSource>
     <ImageSource x:Key="Explosion4">pack://siteoforigin:,,,/Resources/Content/Explosions/Explosion4_Atlas.png
+    </ImageSource>
+    <ImageSource x:Key="F1GunLightBlust">pack://siteoforigin:,,,/Resources/Content/Explosions/F1GunBlastLight_50_Atlas.png
+    </ImageSource>
+    <ImageSource x:Key="F1LightPrjExplosion">pack://siteoforigin:,,,/Resources/Content/Explosions/F1LightPrjExplosion_50_Atlas.png
     </ImageSource>
     <!--#endregion-->
 

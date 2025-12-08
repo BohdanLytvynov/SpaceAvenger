@@ -40,6 +40,14 @@ namespace ViewModelBaseLibDotNetCore.VM
             }
         }
 
+        protected bool SetDefaultIfNull<T>(ref T field, T value, T defaultValue, [CallerMemberName] string PropName = "")
+        {
+            if (field == null)
+                field = defaultValue;
+
+            return Set(ref field, value, PropName);
+        }
+
         protected bool Set<T>(ref T field, T value, [CallerMemberName] string PropName = null)
         {            
             if (field == null)

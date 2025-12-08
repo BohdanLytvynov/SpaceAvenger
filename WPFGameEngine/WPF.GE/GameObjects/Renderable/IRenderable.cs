@@ -10,6 +10,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects.Renderable
         /// Controls Rendering of the Object, but Update calculations will still take place
         /// </summary>
         public bool IsVisible { get; set; }
+        public bool IsSelected { get; set; }
 
         void Render(DrawingContext dc, Matrix3x3 parent);
 
