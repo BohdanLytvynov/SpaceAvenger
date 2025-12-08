@@ -60,7 +60,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects.Renderable
             var Ycenter = Transform.ActualCenterPosition.Y;
 
             dc.DrawImage(Texture, new System.Windows.Rect
-                (0, 0, actualWidth, actualHeight));
+                (0, 0, Texture.Width, Texture.Height));
 
             if (GESettings.DrawGizmo)
             {
@@ -92,8 +92,8 @@ namespace WPFGameEngine.WPF.GE.GameObjects.Renderable
                         GESettings.BorderRectanglePen,
                         new System.Windows.Rect(
                             0, 0,
-                            actualWidth,
-                            actualHeight)
+                            Texture.Width,
+                            Texture.Height)
                         );
                 }
                 else
@@ -103,8 +103,8 @@ namespace WPFGameEngine.WPF.GE.GameObjects.Renderable
                         GESettings.SelectedBorderRectanglePen,
                         new System.Windows.Rect(
                             0,0,
-                            actualWidth,
-                            actualHeight)
+                            Texture.Width,
+                            Texture.Height)
                         );
                 }
             }

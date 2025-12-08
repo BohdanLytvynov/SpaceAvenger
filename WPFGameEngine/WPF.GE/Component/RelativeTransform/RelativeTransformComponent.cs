@@ -30,14 +30,16 @@ namespace WPFGameEngine.WPF.GE.Component.RelativeTransforms
             Matrix3x3 matrix = new Matrix3x3();
             //Move to center of the texture
             matrix.Translate(ActualCenterPosition * -1);
+            //Apply Scale
+            matrix.Scale(Scale);
             //Apply Rotation
             matrix.Rotate(Rotation);
+            //Move back to initial origin
+            matrix.Translate(ActualCenterPosition);
             //Apply Translate in the World with respect to parent
             matrix.Translate(new Vector2(ActualParentSize.Width * Position.X,
                 ActualParentSize.Height * Position.Y));//Here Position has a normalized values
-            //Move back to initial origin
-            matrix.Translate(ActualCenterPosition);
-            
+
             matrix.CheckMachineZero();
             return matrix;
         }

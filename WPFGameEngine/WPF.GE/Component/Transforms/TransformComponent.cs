@@ -63,13 +63,15 @@ namespace WPFGameEngine.WPF.GE.Component.Transforms
             Matrix3x3 matrix = new Matrix3x3();
             //Move to center of the texture
             matrix.Translate(ActualCenterPosition * -1);
+            //Apply Scale
+            matrix.Scale(Scale);
             //Apply Rotation
             matrix.Rotate(Rotation);
-            //Apply Translate in the World
-            matrix.Translate(Position);
             //Move back to initial origin
             matrix.Translate(ActualCenterPosition);
-            
+            //Apply Translate in the World
+            matrix.Translate(Position);
+
             matrix.CheckMachineZero();
             return matrix;
         }

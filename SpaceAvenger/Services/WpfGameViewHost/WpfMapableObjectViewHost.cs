@@ -16,7 +16,7 @@ using WPFGameEngine.WPF.GE.Math.Matrixes;
 
 namespace SpaceAvenger.Services.WpfGameViewHost
 {
-    internal class WpfMapableObjectViewHost : WpfGameObjectViewHost, IMapableObjectViewHost, IColliderView
+    public class WpfMapableObjectViewHost : WpfGameObjectViewHost, IMapableObjectViewHost, IColliderView
     {
         #region Fields
         public ICollisionManager CollisionManager { get; protected set; }
