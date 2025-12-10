@@ -47,9 +47,10 @@ namespace SpaceAvenger.Game.Core.Base
         {
             base.Render(dc, parent);
             var m = GetWorldTransformMatrix();
+            var sf = m.GetScaleFactors();
             var b = m.GetBasis();
             dc.DrawLine(new Pen() { Brush = Brushes.Orange, Thickness = 3 }, m.GetTranslate().ToPoint(),
-                (m.GetTranslate() + (b.X * Transform.ActualSize.Width)).ToPoint());
+                (m.GetTranslate() + (b.X * Transform.OriginalObjectSize.Width * sf.Width)).ToPoint());
         }
 
         public override void Update()

@@ -70,22 +70,6 @@ namespace WPFGameEngine.WPF.GE.Component.RelativeTransforms
             };
         }
 
-        public void XScaleCompensate(float value)
-        {
-            if (value == 0 || OriginalParentSize.Width == 0) return;
-            float actPos = Position.X - (value / OriginalParentSize.Width);
-            var oldy = Position.Y;
-            Position = new Vector2(actPos, oldy);
-        }
-
-        public void YScaleCompensate(float value)
-        {
-            if (value == 0 || OriginalParentSize.Height == 0) return;
-            float actPos = Position.Y - (value / OriginalParentSize.Height);
-            var oldX = Position.X;
-            Position = new Vector2(oldX, actPos);
-        }
-
         #endregion
 
     }

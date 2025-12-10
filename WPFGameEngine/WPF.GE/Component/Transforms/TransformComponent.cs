@@ -21,16 +21,6 @@ namespace WPFGameEngine.WPF.GE.Component.Transforms
         public Vector2 TextureCenterPosition { get => new Vector2(OriginalObjectSize.Width * CenterPosition.X, 
             OriginalObjectSize.Height * CenterPosition.Y); }
 
-        public Size ActualSize 
-        {
-            get
-            {
-                var scaleFactors = GetLocalTransformMatrix().GetScaleFactors();
-
-                return new Size(OriginalObjectSize.Width * scaleFactors.Width,
-                    OriginalObjectSize.Height * scaleFactors.Height);
-            }
-        }
         public override List<string> IncompatibleComponents => 
             new List<string>{ nameof(RelativeTransformComponent) };
 

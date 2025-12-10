@@ -8,17 +8,13 @@ namespace WPFGameEngine.WPF.GE.Component.Transforms
     public interface ITransform : IGEComponent
     {
         /// <summary>
-        /// Coordinates of the Center of the Texture in a Local Space
+        /// Coordinates of the Center of the Texture in a Local Space (Without Scaling Applied)
         /// </summary>
         public Vector2 TextureCenterPosition { get; }
         /// <summary>
         /// Original size of the object(Texture.Width, Texture.Height)
         /// </summary>
         public Size OriginalObjectSize { get; set; }
-        /// <summary>
-        /// Actual size of the Object after all scales Applied
-        /// </summary>
-        public Size ActualSize { get; }
         /// <summary>
         /// World Position Of the Object
         /// </summary>

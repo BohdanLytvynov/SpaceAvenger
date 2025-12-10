@@ -88,14 +88,6 @@ namespace SpaceAvenger.Editor.ViewModels.Components.RelativeTransforms
                 ScaleY = t.Scale.Height;
                 CenterPositionX = t.CenterPosition.X;
                 CenterPositionY = t.CenterPosition.Y;
-
-                var rt = t as IRelativeTransform;
-
-                if (rt != null)
-                { 
-                    EnableXScaleCompensation = rt.EnableXAxisCompensation;
-                    EnableYScaleComensation = rt.EnableYAxisCompensation;
-                }
             }
         }
 
