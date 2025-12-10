@@ -16,7 +16,7 @@
           "EnableXAxisCompensation": false,
           "EnableYAxisCompensation": false,
           "Position": {
-            "X": 0.33966148,
+            "X": 0.34720948,
             "Y": 0.42118022
           },
           "CenterPosition": {
@@ -923,8 +923,8 @@
           "EnableXAxisCompensation": false,
           "EnableYAxisCompensation": false,
           "Position": {
-            "X": -0.060384262,
-            "Y": 0.3846716
+            "X": -0.20832571,
+            "Y": 0.30617204
           },
           "CenterPosition": {
             "X": 0.5,
@@ -1799,8 +1799,8 @@
           "EnableXAxisCompensation": false,
           "EnableYAxisCompensation": false,
           "Position": {
-            "X": 0.0060384274,
-            "Y": 0.07369264
+            "X": -0.11774931,
+            "Y": 6.062402E-17
           },
           "CenterPosition": {
             "X": 0.5,
@@ -2675,8 +2675,8 @@
           "EnableXAxisCompensation": false,
           "EnableYAxisCompensation": false,
           "Position": {
-            "X": 0.6551693,
-            "Y": 0.39674845
+            "X": 0.52836233,
+            "Y": 0.31665984
           },
           "CenterPosition": {
             "X": 0.5,
@@ -3551,8 +3551,8 @@
           "EnableXAxisCompensation": false,
           "EnableYAxisCompensation": false,
           "Position": {
-            "X": 0.57666975,
-            "Y": 0.0872791
+            "X": 0.445334,
+            "Y": 0.012196039
           },
           "CenterPosition": {
             "X": 0.5,
@@ -4427,7 +4427,7 @@
         "X": 0.5,
         "Y": 0.5
       },
-      "Rotation": 0,
+      "Rotation": 360,
       "Scale": {
         "Width": 1,
         "Height": 1
@@ -4440,14 +4440,14 @@
     {
       "RecreateType": "ColliderComponent",
       "Position": {
-        "X": 0.4845837,
+        "X": 0.48609328,
         "Y": 0.502699
       },
       "ColliderShape": {
         "RecreateType": "Rectangle",
         "Size": {
-          "Width": 40.882812,
-          "Height": 151.41782
+          "Width": 43.911167,
+          "Height": 155.96036
         }
       }
     }

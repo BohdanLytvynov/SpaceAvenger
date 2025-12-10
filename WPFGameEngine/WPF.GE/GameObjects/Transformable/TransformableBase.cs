@@ -166,7 +166,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects.Transformable
         public Vector2 GetWorldCenter(Matrix3x3 worldMatrix)
         {
             var b = worldMatrix.GetBasis();
-            var center = Transform.ActualCenterPosition;
+            var center = Transform.TextureCenterPosition;
             var lx = b.X.Multiply(center.X);
             var ly = b.Y.Multiply(center.Y);
             var l = lx + ly;

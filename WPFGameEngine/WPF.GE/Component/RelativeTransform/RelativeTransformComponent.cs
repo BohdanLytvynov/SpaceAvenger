@@ -20,7 +20,7 @@ namespace WPFGameEngine.WPF.GE.Component.RelativeTransforms
         public override List<string> IncompatibleComponents => 
             new List<string> { nameof(TransformComponent) };
  
-        public Size ActualParentSize { get; set; }
+        public Size OriginalParentSize { get; set; }
         public bool EnableXAxisCompensation { get; set; }
         public bool EnableYAxisCompensation { get; set; }
 
@@ -29,16 +29,16 @@ namespace WPFGameEngine.WPF.GE.Component.RelativeTransforms
             //Create I matrix, diagonal is 1
             Matrix3x3 matrix = new Matrix3x3();
             //Move to center of the texture
-            matrix.Translate(ActualCenterPosition * -1);
-            //Apply Scale
+            matrix.Translate(TextureCenterPosition * -1);
+            ////Apply Scale
             matrix.Scale(Scale);
             //Apply Rotation
             matrix.Rotate(Rotation);
             //Move back to initial origin
-            matrix.Translate(ActualCenterPosition);
+            matrix.Translate(TextureCenterPosition);
             //Apply Translate in the World with respect to parent
-            matrix.Translate(new Vector2(ActualParentSize.Width * Position.X,
-                ActualParentSize.Height * Position.Y));//Here Position has a normalized values
+            matrix.Translate(new Vector2(OriginalParentSize.Width * Position.X,
+                OriginalParentSize.Height * Position.Y));//Here Position has a normalized values
 
             matrix.CheckMachineZero();
             return matrix;
@@ -72,16 +72,16 @@ namespace WPFGameEngine.WPF.GE.Component.RelativeTransforms
 
         public void XScaleCompensate(float value)
         {
-            if (value == 0 || ActualParentSize.Width == 0) return;
-            float actPos = Position.X - (value / ActualParentSize.Width);
+            if (value == 0 || OriginalParentSize.Width == 0) return;
+            float actPos = Position.X - (value / OriginalParentSize.Width);
             var oldy = Position.Y;
             Position = new Vector2(actPos, oldy);
         }
 
         public void YScaleCompensate(float value)
         {
-            if (value == 0 || ActualParentSize.Height == 0) return;
-            float actPos = Position.Y - (value / ActualParentSize.Height);
+            if (value == 0 || OriginalParentSize.Height == 0) return;
+            float actPos = Position.Y - (value / OriginalParentSize.Height);
             var oldX = Position.X;
             Position = new Vector2(oldX, actPos);
         }

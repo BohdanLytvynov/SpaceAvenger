@@ -37,8 +37,6 @@ namespace WPFGameEngine.WPF.GE.GameObjects.Renderable
 
             if (Texture == null) return;
 
-            var actualWidth = Transform.ActualSize.Width;
-            var actualHeight = Transform.ActualSize.Height;
             var globalMatrix = Transform.GetLocalTransformMatrix();
 
             if (parent != Matrix3x3.Identity)
@@ -56,8 +54,8 @@ namespace WPFGameEngine.WPF.GE.GameObjects.Renderable
 
             dc.PushTransform(new MatrixTransform(m));
 
-            var Xcenter = Transform.ActualCenterPosition.X;
-            var Ycenter = Transform.ActualCenterPosition.Y;
+            var Xcenter = Transform.TextureCenterPosition.X;
+            var Ycenter = Transform.TextureCenterPosition.Y;
 
             dc.DrawImage(Texture, new System.Windows.Rect
                 (0, 0, Texture.Width, Texture.Height));
@@ -68,12 +66,12 @@ namespace WPFGameEngine.WPF.GE.GameObjects.Renderable
                 dc.DrawLine(
                     GESettings.XAxisColor,
                     new System.Windows.Point(Xcenter, Ycenter),
-                    new System.Windows.Point(Xcenter + actualWidth * (1 - Transform.CenterPosition.X), Ycenter));
+                    new System.Windows.Point(Xcenter + Texture.Width * (1 - Transform.CenterPosition.X), Ycenter));
 
                 dc.DrawLine(
                     GESettings.YAxisColor,
                     new System.Windows.Point(Xcenter, Ycenter),
-                    new System.Windows.Point(Xcenter, Ycenter + actualHeight * (1 - Transform.CenterPosition.Y)));
+                    new System.Windows.Point(Xcenter, Ycenter + Texture.Height * (1 - Transform.CenterPosition.Y)));
 
                 dc.DrawEllipse(
                     GESettings.GizmoCenterBrush,

@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using System.Windows.Navigation;
 using WPFGameEngine.Attributes.Editor;
 using WPFGameEngine.WPF.GE.Component.Base;
 using WPFGameEngine.WPF.GE.Component.RelativeTransforms;
@@ -14,20 +15,30 @@ namespace WPFGameEngine.WPF.GE.Component.Transforms
     public class TransformComponent : ComponentBase, ITransform
     {
         #region Properties
-        /// <summary>
-        /// Actual Position of the Center with respect to texture
-        /// </summary>
-        public Vector2 ActualCenterPosition { get; set; }
-        /// <summary>
-        /// Actual Size of the Texture after Scaling applied
-        /// </summary>
-        public Size ActualSize { get; set; }
+
+        public Size OriginalObjectSize { get; set; }
+
+        public Vector2 TextureCenterPosition { get => new Vector2(OriginalObjectSize.Width * CenterPosition.X, 
+            OriginalObjectSize.Height * CenterPosition.Y); }
+
+        public Size ActualSize 
+        {
+            get
+            {
+                var scaleFactors = GetLocalTransformMatrix().GetScaleFactors();
+
+                return new Size(OriginalObjectSize.Width * scaleFactors.Width,
+                    OriginalObjectSize.Height * scaleFactors.Height);
+            }
+        }
         public override List<string> IncompatibleComponents => 
             new List<string>{ nameof(RelativeTransformComponent) };
-        public Vector2 Position { get; set; }
-        public Vector2 CenterPosition { get; set; }
-        public double Rotation { get; set; }//Degree
-        public Size Scale { get; set; }
+
+        public Vector2 Position { get; set; } //World position
+        public Vector2 CenterPosition { get; set; } //Local Center Position
+        public double Rotation { get; set; } //Degree
+        public Size Scale { get; set; } //Scale
+
         #endregion
 
         #region Ctor
@@ -56,25 +67,26 @@ namespace WPFGameEngine.WPF.GE.Component.Transforms
         #endregion
 
         #region Methods
-
+       
         public virtual Matrix3x3 GetLocalTransformMatrix()
         {
-            //Create I matrix, diagonal is 1
+
             Matrix3x3 matrix = new Matrix3x3();
-            //Move to center of the texture
-            matrix.Translate(ActualCenterPosition * -1);
-            //Apply Scale
+
+            matrix.Translate(TextureCenterPosition * -1);
+
             matrix.Scale(Scale);
-            //Apply Rotation
+
             matrix.Rotate(Rotation);
-            //Move back to initial origin
-            matrix.Translate(ActualCenterPosition);
-            //Apply Translate in the World
+
+            matrix.Translate(TextureCenterPosition);
+
             matrix.Translate(Position);
 
             matrix.CheckMachineZero();
             return matrix;
         }
+        
 
         #region IConvertToDto
 

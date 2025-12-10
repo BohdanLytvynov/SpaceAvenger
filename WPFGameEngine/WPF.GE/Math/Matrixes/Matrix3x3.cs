@@ -103,9 +103,9 @@ namespace WPFGameEngine.WPF.GE.Math.Matrixes
 
             float[,] rm = new float[3, 3]
             {
-                { cos, sin, 0f },
-                { -sin, cos, 0f },
-                { 0f, 0f, 1f }
+                {  cos,  sin, 0f },
+                { -sin,  cos, 0f },
+                {  0f,   0f,  1f }
             };
 
             m_Matrix = Multiply(m_Matrix, rm);
@@ -115,9 +115,9 @@ namespace WPFGameEngine.WPF.GE.Math.Matrixes
         {
             float[,] sm = new float[3, 3]
             {
-                { size.Width, 0f, 0f },
-                { 0f, size.Height, 0f },
-                { 0f, 0f, 1f }
+                { size.Width, 0f,          0f },
+                { 0f,         size.Height, 0f },
+                { 0f,         0f,          1f }
             };
 
             m_Matrix = Multiply(m_Matrix, sm);
@@ -196,14 +196,16 @@ namespace WPFGameEngine.WPF.GE.Math.Matrixes
                 m_Matrix[2, 1] = 0.0f;
         }
 
-        private static Vector2 CheckNormalize(Vector2 input)
-        { 
-            if(input.Length() != 1.0f)
-                return Vector2.Normalize(input);
-            return input;
+        public Size GetScaleFactors()
+        {
+            return new Size(
+                MathF.Sqrt(M11*M11 + M21*M21),
+                MathF.Sqrt(M12*M12 + M22*M22)
+                );
         }
 
         #region Private Methods
+
         private static float[,] Multiply(float[,] l, float[,] r)
         {
             int Rl = l.GetLength(0);
@@ -224,6 +226,13 @@ namespace WPFGameEngine.WPF.GE.Math.Matrixes
                 }
             }
             return res;
+        }
+
+        private static Vector2 CheckNormalize(Vector2 input)
+        {
+            if (input.Length() != 1.0f)
+                return Vector2.Normalize(input);
+            return input;
         }
 
         #endregion

@@ -9,7 +9,7 @@ namespace WPFGameEngine.WPF.GE.Component.RelativeTransforms
 
         public bool EnableYAxisCompensation { get; set; }
 
-        public Size ActualParentSize { get; set; }
+        public Size OriginalParentSize { get; set; }
 
         void XScaleCompensate(float value);
 

@@ -262,10 +262,10 @@
         {
           "RecreateType": "RelativeTransformComponent",
           "EnableXAxisCompensation": false,
-          "EnableYAxisCompensation": true,
+          "EnableYAxisCompensation": false,
           "Position": {
             "X": -0.15738411,
-            "Y": 0.26999098
+            "Y": 0.17035694
           },
           "CenterPosition": {
             "X": 0.5,
@@ -1381,7 +1381,7 @@
           "EnableYAxisCompensation": false,
           "Position": {
             "X": 0.53854024,
-            "Y": 0.6894475
+            "Y": 0.67586106
           },
           "CenterPosition": {
             "X": 0.5,
@@ -2497,7 +2497,7 @@
           "EnableYAxisCompensation": false,
           "Position": {
             "X": 0.21095991,
-            "Y": 0.7951119
+            "Y": 0.78152543
           },
           "CenterPosition": {
             "X": 0.5,
@@ -3613,7 +3613,7 @@
           "EnableYAxisCompensation": false,
           "Position": {
             "X": 0.53854454,
-            "Y": 0.20938456
+            "Y": 0.18372124
           },
           "CenterPosition": {
             "X": 0.5,
@@ -4729,7 +4729,7 @@
           "EnableYAxisCompensation": false,
           "Position": {
             "X": 0.22454637,
-            "Y": 0.10220249
+            "Y": 0.07653917
           },
           "CenterPosition": {
             "X": 0.5,
@@ -5845,7 +5845,7 @@
           "EnableYAxisCompensation": false,
           "Position": {
             "X": -0.15738414,
-            "Y": 0.5444185
+            "Y": 0.53385127
           },
           "CenterPosition": {
             "X": 0.5,
