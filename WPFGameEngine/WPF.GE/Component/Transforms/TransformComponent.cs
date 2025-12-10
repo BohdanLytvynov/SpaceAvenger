@@ -70,7 +70,6 @@ namespace WPFGameEngine.WPF.GE.Component.Transforms
        
         public virtual Matrix3x3 GetLocalTransformMatrix()
         {
-
             Matrix3x3 matrix = new Matrix3x3();
 
             matrix.Translate(TextureCenterPosition * -1);

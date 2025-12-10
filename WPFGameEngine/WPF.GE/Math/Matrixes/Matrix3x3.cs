@@ -198,10 +198,21 @@ namespace WPFGameEngine.WPF.GE.Math.Matrixes
 
         public Size GetScaleFactors()
         {
-            return new Size(
-                MathF.Sqrt(M11*M11 + M21*M21),
-                MathF.Sqrt(M12*M12 + M22*M22)
-                );
+            float scaleX = MathF.Sqrt(this.M11 * this.M11 + this.M12 * this.M12);
+            float scaleY = MathF.Sqrt(this.M21 * this.M21 + this.M22 * this.M22);
+
+            return new Size(scaleX, scaleY);
+        }
+
+        public Vector2 GetCenter(Vector2 localCenter)
+        {
+            // P'x = Px * M11 + Py * M21 + 1 * OffsetX
+            float newX = localCenter.X * M11 + localCenter.Y * M21 + OffsetX;
+
+            // P'y = Px * M12 + Py * M22 + 1 * OffsetY
+            float newY = localCenter.X * M12 + localCenter.Y * M22 + OffsetY;
+
+            return new Vector2(newX, newY);
         }
 
         #region Private Methods

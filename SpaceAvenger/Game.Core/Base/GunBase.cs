@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SpaceAvenger.Extensions.Math;
+using System;
 using System.Diagnostics;
 using System.Numerics;
 using System.Windows.Media;
@@ -6,6 +7,7 @@ using WPFGameEngine.GameViewControl;
 using WPFGameEngine.Timers.Base;
 using WPFGameEngine.WPF.GE.Component.Animations;
 using WPFGameEngine.WPF.GE.GameObjects;
+using WPFGameEngine.WPF.GE.Math.Matrixes;
 using WPFGameEngine.WPF.GE.Math.Sizes;
 
 namespace SpaceAvenger.Game.Core.Base
@@ -41,6 +43,15 @@ namespace SpaceAvenger.Game.Core.Base
             base.StartUp(viewHost, gameTimer);
         }
 
+        public override void Render(DrawingContext dc, Matrix3x3 parent)
+        {
+            base.Render(dc, parent);
+            var m = GetWorldTransformMatrix();
+            var b = m.GetBasis();
+            dc.DrawLine(new Pen() { Brush = Brushes.Orange, Thickness = 3 }, m.GetTranslate().ToPoint(),
+                (m.GetTranslate() + (b.X * Transform.ActualSize.Width)).ToPoint());
+        }
+
         public override void Update()
         {
             if (TimeRemainig > 0)
@@ -63,7 +74,7 @@ namespace SpaceAvenger.Game.Core.Base
                 shell.Translate(shellCenterPos);
                 var angle = Math.Atan2(m_ShootDirection.Y, m_ShootDirection.X) * 180 / Math.PI;
                 shell.Rotate(angle + 90);//Init sprite rotation to -90 deg, so we need to fix it by rotating to 90 deg
-                shell.Fire(m_ShootDirection);
+                //shell.Fire(m_ShootDirection);
                 m_fired = false;
                 Reload();
             }
@@ -100,8 +111,10 @@ namespace SpaceAvenger.Game.Core.Base
         private Vector2 GetBlastPosition()
         {
             var worldMatrix = GetWorldTransformMatrix();
-            return GetWorldCenter(worldMatrix)
-                + worldMatrix.GetBasis().X * ((1 - Transform.CenterPosition.X) * Transform.ActualSize.Width);
+            var basis = worldMatrix.GetBasis();
+            var p = basis.X * ((1 - Transform.CenterPosition.X) * Transform.ActualSize.Width);
+            return GetWorldCenter(worldMatrix) + 
+                p;
         }
 
         protected virtual Brush GetLoadIndicatorColor(float value)

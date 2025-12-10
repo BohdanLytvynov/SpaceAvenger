@@ -27,58 +27,56 @@ namespace WPFGameEngine.WPF.GE.GameObjects.Transformable
             
         }
 
-        private void ScaleRecursive(IGameObject obj, Size diff)
-        {
-            if (obj == null)
-                return;
+        //private void ScaleRecursive(IGameObject obj, Size diff)
+        //{
+        //    if (obj == null)
+        //        return;
 
-            if (obj.UniqueName == "Jet_Main_L")
-            { 
+        //    if (obj.UniqueName == "Jet_Main_L")
+        //    { 
             
-            }
+        //    }
 
-            if(!(obj is ITransformable transformable))
-                return;
+        //    if(!(obj is ITransformable transformable))
+        //        return;
 
-            var t = transformable.Transform;
+        //    var t = transformable.Transform;
 
-            if (t != null && t.Scale != diff)
-            {
-                //Cache old scale
-                Size oldSize = t.ActualSize;
-                //New Scale
-                t.Scale = new Size(diff.Width + t.Scale.Width,
-                    diff.Height + t.Scale.Height);
+        //    if (t != null && t.Scale != diff)
+        //    {
+        //        //Cache old scale
+        //        Size oldSize = t.ActualSize;
+        //        //New Scale
+        //        t.Scale = new Size(diff.Width + t.Scale.Width,
+        //            diff.Height + t.Scale.Height);
 
-                if (t is IRelativeTransform rt)
-                {
-                    //Need X Axis Compensation
-                    if (rt.EnableXAxisCompensation)
-                    {
-                        float dx = oldSize.Width * diff.Width;
-                        rt.XScaleCompensate(dx/2f);
-                    }
+        //        if (t is IRelativeTransform rt)
+        //        {
+        //            //Need X Axis Compensation
+        //            if (rt.EnableXAxisCompensation)
+        //            {
+        //                float dx = oldSize.Width * diff.Width;
+        //                rt.XScaleCompensate(dx/2f);
+        //            }
 
-                    //Need Y Axis Compensation
-                    if (rt.EnableYAxisCompensation)
-                    {
-                        float dy = oldSize.Height * diff.Height;
-                        rt.YScaleCompensate(dy/2f);
-                    }
-                }
-            }
+        //            //Need Y Axis Compensation
+        //            if (rt.EnableYAxisCompensation)
+        //            {
+        //                float dy = oldSize.Height * diff.Height;
+        //                rt.YScaleCompensate(dy/2f);
+        //            }
+        //        }
+        //    }
 
-            foreach (var item in obj.Children)
-            {
-                ScaleRecursive(item, diff);
-            }
-        }
+        //    foreach (var item in obj.Children)
+        //    {
+        //        ScaleRecursive(item, diff);
+        //    }
+        //}
 
         public void Scale(Size newScale)
         {
-            float dx = newScale.Width - Transform.Scale.Width;
-            float dy = newScale.Height - Transform.Scale.Height;
-            ScaleRecursive(this, new Size(dx, dy));
+            Transform.Scale = newScale;
         }
 
         private TransformComponent GetTransformComponent()
@@ -165,12 +163,8 @@ namespace WPFGameEngine.WPF.GE.GameObjects.Transformable
 
         public Vector2 GetWorldCenter(Matrix3x3 worldMatrix)
         {
-            var b = worldMatrix.GetBasis();
             var center = Transform.TextureCenterPosition;
-            var lx = b.X.Multiply(center.X);
-            var ly = b.Y.Multiply(center.Y);
-            var l = lx + ly;
-            return worldMatrix.GetTranslate() + l;
+            return worldMatrix.GetCenter(center);
         }
 
         public Vector2 GetDirection(Vector2 position, Matrix3x3 worldMatrix)

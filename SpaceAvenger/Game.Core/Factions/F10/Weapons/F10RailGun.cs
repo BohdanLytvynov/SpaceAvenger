@@ -24,12 +24,14 @@ namespace SpaceAvenger.Game.Core.Factions.F10.Weapons
         {
             base.Render(dc, parent);
 
-            var Gun_center = GetWorldCenter(GetWorldTransformMatrix());
+            var m = GetWorldTransformMatrix();
+
+            var Gun_center = GetWorldCenter(m);
 
             var brush = GetLoadIndicatorColor(TimeRemainig / ReloadTime);
 
             dc.DrawEllipse(brush, new Pen() { Brush = Brushes.Black, Thickness = 0 },
-                Gun_center.ToPoint(), Transform.Scale.Width * 7, Transform.Scale.Height * 7);
+                Gun_center.ToPoint(), Transform.Scale.Width * 0, Transform.Scale.Height * 0);
         }
     }
 }
