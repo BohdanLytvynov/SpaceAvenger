@@ -23,8 +23,9 @@ namespace WPFGameEngine.WPF.GE.GameObjects.Transformable
         /// </summary>
         /// <returns></returns>
         Vector2 GetWorldCenter(Matrix3x3 worldmatrix);
+        Size GetWorldScale(Matrix3x3 worldMatrix);
+        Size GetWorldScale();
         void LookAt(Vector2 position, double rotSpeed, double deltaTime, Matrix3x3 worldMatrix);
         Vector2 GetDirection(Vector2 position, Matrix3x3 worldMatrix);
-        Size GetActualSize();
     }
 }

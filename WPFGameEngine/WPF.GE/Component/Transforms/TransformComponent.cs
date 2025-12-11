@@ -1,5 +1,4 @@
 ﻿using System.Numerics;
-using System.Windows.Navigation;
 using WPFGameEngine.Attributes.Editor;
 using WPFGameEngine.WPF.GE.Component.Base;
 using WPFGameEngine.WPF.GE.Component.RelativeTransforms;
@@ -18,8 +17,12 @@ namespace WPFGameEngine.WPF.GE.Component.Transforms
 
         public Size OriginalObjectSize { get; set; }
 
-        public Vector2 TextureCenterPosition { get => new Vector2(OriginalObjectSize.Width * CenterPosition.X, 
-            OriginalObjectSize.Height * CenterPosition.Y); }
+        public Vector2 TextureCenterPosition 
+        { 
+            get => new Vector2(
+                OriginalObjectSize.Width * CenterPosition.X,
+                OriginalObjectSize.Height * CenterPosition.Y);
+        }
 
         public override List<string> IncompatibleComponents => 
             new List<string>{ nameof(RelativeTransformComponent) };
@@ -60,16 +63,17 @@ namespace WPFGameEngine.WPF.GE.Component.Transforms
        
         public virtual Matrix3x3 GetLocalTransformMatrix()
         {
+            //Identity matrix
             Matrix3x3 matrix = new Matrix3x3();
-
+            //Move to the new Center Origin(back and up)
             matrix.Translate(TextureCenterPosition * -1);
-
+            //Apply Local Scale
             matrix.Scale(Scale);
-
+            //Apply Local Rotation
             matrix.Rotate(Rotation);
-
+            //Compensate and restore center position
             matrix.Translate(TextureCenterPosition);
-
+            //Apply Translation in the World
             matrix.Translate(Position);
 
             matrix.CheckMachineZero();

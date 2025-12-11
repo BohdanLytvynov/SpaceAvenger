@@ -38,8 +38,8 @@ namespace WPFGameEngine.WPF.GE.GameObjects.Collidable
             base.Update();
             if (IsCollidable && Collider.CollisionShape != null)
             {
-                Collider.ActualObjectSize = Transform.ActualSize;
                 var globMatrix = GetWorldTransformMatrix();
+                Collider.ActualObjectSize = GetWorldScale(globMatrix);
                 var leftUpperCorner = globMatrix.GetTranslate();
                 Collider.CollisionShape.Scale = Transform.Scale;
                 Collider.CollisionShape.Scale.CheckNegativeSize();

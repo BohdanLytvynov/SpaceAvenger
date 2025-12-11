@@ -148,7 +148,9 @@ namespace SpaceAvenger.ViewModels.PagesVM
                         t.Rotate(-90);
                         t.Scale(new WPFGameEngine.WPF.GE.Math.Sizes.Size(0.7f, 0.7f));
 
-                        float x = (float)(w.Width / 2) - (t.Transform.ActualSize.Width / 2);
+                        var wScale = t.GetWorldScale();
+
+                        float x = (float)(w.Width / 2) - (wScale.Width / 2);
                         //Vertical - half of the screen
                         float y = (float)(w.Height / 2);
                         t.Translate(new System.Numerics.Vector2(x, y));
