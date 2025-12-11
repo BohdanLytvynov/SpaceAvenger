@@ -36,7 +36,6 @@ namespace SpaceAvenger.Game.Core.Factions.F10.Destroyer
         #region Methods
         public override void StartUp(IGameObjectViewHost objectViewHost, IGameTimer gameTimer)
         {
-
             base.StartUp(objectViewHost, gameTimer);
             m_targetMarkerPen = new Pen();
             m_targetMarkerPen = new Pen() { Brush = Brushes.Orange };

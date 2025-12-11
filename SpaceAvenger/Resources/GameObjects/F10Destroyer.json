@@ -25,8 +25,8 @@
           },
           "Rotation": 0,
           "Scale": {
-            "Width": 0.8,
-            "Height": 0.8
+            "Width": 0.7,
+            "Height": 0.7
           }
         },
         {
@@ -47,8 +47,8 @@
           "EnableXAxisCompensation": false,
           "EnableYAxisCompensation": false,
           "Position": {
-            "X": 0.40306494,
-            "Y": 0.6174291
+            "X": 0.40155533,
+            "Y": 0.5993139
           },
           "CenterPosition": {
             "X": 0.22978042,
@@ -56,8 +56,8 @@
           },
           "Rotation": 0,
           "Scale": {
-            "Width": 0.8,
-            "Height": 0.8
+            "Width": 0.7,
+            "Height": 0.7
           }
         },
         {
@@ -87,8 +87,8 @@
           },
           "Rotation": 0,
           "Scale": {
-            "Width": 0.8,
-            "Height": 0.8
+            "Width": 0.7,
+            "Height": 0.7
           }
         },
         {
@@ -110,7 +110,7 @@
           "EnableYAxisCompensation": false,
           "Position": {
             "X": 0.2536139,
-            "Y": 0.63705397
+            "Y": 0.6159195
           },
           "CenterPosition": {
             "X": 0.22978042,
@@ -118,8 +118,8 @@
           },
           "Rotation": 0,
           "Scale": {
-            "Width": 0.8,
-            "Height": 0.8
+            "Width": 0.7,
+            "Height": 0.7
           }
         },
         {
@@ -149,8 +149,8 @@
           },
           "Rotation": 0,
           "Scale": {
-            "Width": 0.8,
-            "Height": 0.8
+            "Width": 0.7,
+            "Height": 0.7
           }
         },
         {
@@ -172,7 +172,7 @@
           "EnableYAxisCompensation": false,
           "Position": {
             "X": 0.44986278,
-            "Y": 0.49967977
+            "Y": 0.4785453
           },
           "CenterPosition": {
             "X": 0.23279963,
@@ -180,8 +180,8 @@
           },
           "Rotation": 0,
           "Scale": {
-            "Width": 0.8,
-            "Height": 0.8
+            "Width": 0.7,
+            "Height": 0.7
           }
         },
         {
@@ -262,10 +262,10 @@
         {
           "RecreateType": "RelativeTransformComponent",
           "EnableXAxisCompensation": false,
-          "EnableYAxisCompensation": true,
+          "EnableYAxisCompensation": false,
           "Position": {
             "X": -0.15738411,
-            "Y": 0.26999098
+            "Y": 0.17035694
           },
           "CenterPosition": {
             "X": 0.5,
@@ -1381,7 +1381,7 @@
           "EnableYAxisCompensation": false,
           "Position": {
             "X": 0.53854024,
-            "Y": 0.6894475
+            "Y": 0.67586106
           },
           "CenterPosition": {
             "X": 0.5,
@@ -2497,7 +2497,7 @@
           "EnableYAxisCompensation": false,
           "Position": {
             "X": 0.21095991,
-            "Y": 0.7951119
+            "Y": 0.78152543
           },
           "CenterPosition": {
             "X": 0.5,
@@ -3613,7 +3613,7 @@
           "EnableYAxisCompensation": false,
           "Position": {
             "X": 0.53854454,
-            "Y": 0.20938456
+            "Y": 0.18372124
           },
           "CenterPosition": {
             "X": 0.5,
@@ -4729,7 +4729,7 @@
           "EnableYAxisCompensation": false,
           "Position": {
             "X": 0.22454637,
-            "Y": 0.10220249
+            "Y": 0.07653917
           },
           "CenterPosition": {
             "X": 0.5,
@@ -5845,7 +5845,7 @@
           "EnableYAxisCompensation": false,
           "Position": {
             "X": -0.15738414,
-            "Y": 0.5444185
+            "Y": 0.53385127
           },
           "CenterPosition": {
             "X": 0.5,

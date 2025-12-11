@@ -16,7 +16,7 @@ using WPFGameEngine.WPF.GE.Math.Matrixes;
 
 namespace SpaceAvenger.Services.WpfGameViewHost
 {
-    internal class WpfMapableObjectViewHost : WpfGameObjectViewHost, IMapableObjectViewHost, IColliderView
+    public class WpfMapableObjectViewHost : WpfGameObjectViewHost, IMapableObjectViewHost, IColliderView
     {
         #region Fields
         public ICollisionManager CollisionManager { get; protected set; }
@@ -37,10 +37,11 @@ namespace SpaceAvenger.Services.WpfGameViewHost
         public IObjectPoolManager ObjectPoolManager { get; init; }
         public IObjectBuilder ObjectBuilder { get; init; }
 
-        public TObject Instantiate<TObject>(Action<IGameObject>? config = null, bool useCache = true) 
+        public TObject Instantiate<TObject>(Action<IGameObject>? preStartUpConfig = null,
+            Action<IGameObject> postStartUpConfig = null, bool useCache = true) 
             where TObject : СacheableObject
         {
-            return (TObject)Instantiate(typeof(TObject).Name, config, useCache);
+            return (TObject)Instantiate(typeof(TObject).Name, preStartUpConfig, postStartUpConfig, useCache);
         }
 
         protected override void CompositionTarget_Rendering(object? sender, EventArgs e)
@@ -104,15 +105,17 @@ namespace SpaceAvenger.Services.WpfGameViewHost
             base.ClearWorld();
         }
 
-        public СacheableObject Instantiate(string typeName, Action<IGameObject>? config = null, bool useCache = true)
+        public СacheableObject Instantiate(string typeName, 
+            Action<IGameObject>? preStartUpConfig = null,
+            Action<IGameObject>? postStartUpConfig = null, 
+            bool useCache = true)
         {
             СacheableObject? obj = null;
             
             if (!useCache)
             {
                 obj = ObjectBuilder.Build(typeName) as СacheableObject;
-                config?.Invoke(obj);
-                AddObject(obj);
+                AddObject(obj, preStartUpConfig, postStartUpConfig);
             }
             else
             {
@@ -121,9 +124,8 @@ namespace SpaceAvenger.Services.WpfGameViewHost
                 if (obj == null)
                 {
                     obj = ObjectBuilder.Build(typeName) as СacheableObject;
-                    config?.Invoke(obj);
                     //Debug.WriteLine("Build:" + typeName);
-                    AddObject(obj);
+                    AddObject(obj, preStartUpConfig, postStartUpConfig);
                 }
                 else
                 {

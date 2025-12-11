@@ -81,7 +81,8 @@ namespace SpaceAvenger.Game.Core.UI.Slider
 
             dc.DrawRectangle(brush, new Pen() { Brush = Brushes.Transparent },
                         new System.Windows.Rect(0, 0,
-                        Transform.ActualSize.Width * normValue, Transform.ActualSize.Height));
+                        Transform.OriginalObjectSize.Width * normValue, 
+                        Transform.OriginalObjectSize.Height));
 
             dc.Pop();
             

@@ -27,15 +27,9 @@ namespace WPFGameEngine.WPF.GE.GameObjects
 
             if (Texture == null) return;
 
-            //Calculate actual size of the Image
-            float actualWidth = (float)Texture.Width * Transform.Scale.Width;
-            float actualHeight = (float)Texture.Height * Transform.Scale.Height;
+            Size originalSize = new Size((float)Texture.Width, (float)Texture.Height);
 
-            //Negative Value Protection
-            actualWidth = actualWidth < 0 ? 0 : actualWidth;
-            actualHeight = actualHeight < 0 ? 0 : actualHeight;
-
-            Transform.ActualSize = new Size(actualWidth, actualHeight);
+            Transform.OriginalObjectSize = originalSize;
 
             foreach (var child in Children)
             {
@@ -44,7 +38,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects
                     var childTransform = transformable.Transform as IRelativeTransform;
                     if (childTransform != null)
                     {
-                        childTransform.ActualParentSize = new Size(actualWidth, actualHeight);
+                        childTransform.OriginalParentSize = originalSize;
                     }
                 }
 
@@ -61,21 +55,9 @@ namespace WPFGameEngine.WPF.GE.GameObjects
 
             if (Texture == null) return;
 
-            //Calculate actual size of the Image
-            float actualWidth = (float)Texture.Width * Transform.Scale.Width;
-            float actualHeight = (float)Texture.Height * Transform.Scale.Height;
+            Size originalSize = new Size((float)Texture.Width, (float)Texture.Height);
 
-            //Negative Value Protection
-            actualWidth = actualWidth < 0 ? 0 : actualWidth;
-            actualHeight = actualHeight < 0 ? 0 : actualHeight;
-
-            Transform.ActualSize = new Size(actualWidth, actualHeight);
-            //Calculate the center of the Image
-            float Xcenter = actualWidth * Transform.CenterPosition.X;
-            float Ycenter = actualHeight * Transform.CenterPosition.Y;
-
-            Transform.ActualCenterPosition = new Vector2(Xcenter, Ycenter);
-            //Get matrix for current game object
+            Transform.OriginalObjectSize = originalSize;
 
             if (Animator != null)
             {
@@ -93,7 +75,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects
                     var childTransform = transformable.Transform as IRelativeTransform;
                     if (childTransform != null)
                     {
-                        childTransform.ActualParentSize = new Size(actualWidth, actualHeight);
+                        childTransform.OriginalParentSize = originalSize;
                     }
                 }
 

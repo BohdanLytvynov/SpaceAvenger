@@ -164,18 +164,10 @@ Minimum="-360.0" Maximum="360.0"
 Margin="10" LabelText="X-Scale: "
 Minimum="0" Maximum="1.0"
                  />
-            <CheckBox Content="Enable X-Scale Position Compensation:"
-                      Margin="10,0"
-                      IsChecked="{Binding EnableXScaleCompensation,
-                UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
             <controls:Slider Value="{Binding ScaleY, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
 Margin="10" LabelText="Y-Scale: "
 Minimum="0" Maximum="1.0"
                  />
-            <CheckBox Content="Enable Y-Scale Position Compensation:" 
-                      IsChecked="{Binding EnableYScaleComensation,
-                UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                      Margin="10,0"/>
             <controls:Slider Value="{Binding CenterPositionX, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
 Margin="10" LabelText="Center Position X: " Minimum="0" Maximum="1.0"/>
             <controls:Slider Value="{Binding CenterPositionY, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"

@@ -20,24 +20,24 @@ namespace WPFGameEngine.WPF.GE.Component.RelativeTransforms
         public override List<string> IncompatibleComponents => 
             new List<string> { nameof(TransformComponent) };
  
-        public Size ActualParentSize { get; set; }
-        public bool EnableXAxisCompensation { get; set; }
-        public bool EnableYAxisCompensation { get; set; }
+        public Size OriginalParentSize { get; set; }
 
         public override Matrix3x3 GetLocalTransformMatrix()
         {
             //Create I matrix, diagonal is 1
             Matrix3x3 matrix = new Matrix3x3();
             //Move to center of the texture
-            matrix.Translate(ActualCenterPosition * -1);
+            matrix.Translate(TextureCenterPosition * -1);
+            ////Apply Scale
+            matrix.Scale(Scale);
             //Apply Rotation
             matrix.Rotate(Rotation);
-            //Apply Translate in the World with respect to parent
-            matrix.Translate(new Vector2(ActualParentSize.Width * Position.X,
-                ActualParentSize.Height * Position.Y));//Here Position has a normalized values
             //Move back to initial origin
-            matrix.Translate(ActualCenterPosition);
-            
+            matrix.Translate(TextureCenterPosition);
+            //Apply Translate in the World with respect to parent
+            matrix.Translate(new Vector2(OriginalParentSize.Width * Position.X,
+                OriginalParentSize.Height * Position.Y));//Here Position has a normalized values
+
             matrix.CheckMachineZero();
             return matrix;
         }
@@ -50,8 +50,6 @@ namespace WPFGameEngine.WPF.GE.Component.RelativeTransforms
                 CenterPosition = CenterPosition,
                 Scale = Scale,
                 Rotation = Rotation,
-                EnableXAxisCompensation = EnableXAxisCompensation,
-                EnableYAxisCompensation = EnableYAxisCompensation
             };
         }
 
@@ -66,22 +64,6 @@ namespace WPFGameEngine.WPF.GE.Component.RelativeTransforms
                 Rotation = Rotation,
                 Scale = Scale,
             };
-        }
-
-        public void XScaleCompensate(float value)
-        {
-            if (value == 0 || ActualParentSize.Width == 0) return;
-            float actPos = Position.X - (value / ActualParentSize.Width);
-            var oldy = Position.Y;
-            Position = new Vector2(actPos, oldy);
-        }
-
-        public void YScaleCompensate(float value)
-        {
-            if (value == 0 || ActualParentSize.Height == 0) return;
-            float actPos = Position.Y - (value / ActualParentSize.Height);
-            var oldX = Position.X;
-            Position = new Vector2(oldX, actPos);
         }
 
         #endregion

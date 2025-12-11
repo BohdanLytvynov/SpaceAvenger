@@ -17,8 +17,6 @@ namespace SpaceAvenger.Editor.ViewModels.Components.RelativeTransforms
         private double m_XMin;
         private double m_YMin;
 
-        private bool m_EnableXScaleCompensation;
-        private bool m_EnableYScaleCompensation;
         #endregion
 
         #region Properties
@@ -34,25 +32,6 @@ namespace SpaceAvenger.Editor.ViewModels.Components.RelativeTransforms
         public double YMin 
         { get => m_YMin; set => Set(ref m_YMin, value); }
 
-        public bool EnableXScaleCompensation 
-        { 
-            get => m_EnableXScaleCompensation;
-            set
-            { 
-                Set(ref m_EnableXScaleCompensation, value);
-                UpdateEnableXScaleCompensation(value);
-            }
-        }
-
-        public bool EnableYScaleComensation 
-        { 
-            get => m_EnableYScaleCompensation;
-            set 
-            {
-                Set(ref m_EnableYScaleCompensation, value);
-                UpdateEnableYScaleCompensation(value);
-            }
-        }
         #endregion
 
         public RelativeTransformViewModel(IGameObjectMock gameObject) : 
@@ -88,35 +67,7 @@ namespace SpaceAvenger.Editor.ViewModels.Components.RelativeTransforms
                 ScaleY = t.Scale.Height;
                 CenterPositionX = t.CenterPosition.X;
                 CenterPositionY = t.CenterPosition.Y;
-
-                var rt = t as IRelativeTransform;
-
-                if (rt != null)
-                { 
-                    EnableXScaleCompensation = rt.EnableXAxisCompensation;
-                    EnableYScaleComensation = rt.EnableYAxisCompensation;
-                }
             }
-        }
-
-        protected virtual void UpdateEnableXScaleCompensation(bool value)
-        {
-            if (GameObject == null && !m_init) return;
-
-            var rt = GameObject.GetComponent<RelativeTransformComponent>();
-
-            if(rt == null) return;
-            rt.EnableXAxisCompensation = value;
-        }
-
-        protected virtual void UpdateEnableYScaleCompensation(bool value)
-        {
-            if (GameObject == null && !m_init) return;
-
-            var rt = GameObject.GetComponent<RelativeTransformComponent>();
-
-            if (rt == null) return;
-            rt.EnableYAxisCompensation = value;
         }
 
         protected override void UpdatePositionX(float x)

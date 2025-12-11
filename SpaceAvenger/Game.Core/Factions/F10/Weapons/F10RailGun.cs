@@ -2,6 +2,7 @@
 using SpaceAvenger.Game.Core.Animations.Explosions;
 using SpaceAvenger.Game.Core.Base;
 using SpaceAvenger.Game.Core.Factions.F10.Projectiles;
+using System.Numerics;
 using System.Windows.Media;
 using WPFGameEngine.GameViewControl;
 using WPFGameEngine.Timers.Base;
@@ -17,6 +18,7 @@ namespace SpaceAvenger.Game.Core.Factions.F10.Weapons
             ReloadSpeed = 1;
             ShellScaleMultipl = 2.0f / 4.0f;
             GunBlastScaleMultipl = 1f/2f;
+            XAxisGunBlastPositionMultipl = 20f;
             base.StartUp(viewHost, gameTimer);
         }
 
@@ -24,12 +26,14 @@ namespace SpaceAvenger.Game.Core.Factions.F10.Weapons
         {
             base.Render(dc, parent);
 
-            var Gun_center = GetWorldCenter(GetWorldTransformMatrix());
+            var m = GetWorldTransformMatrix();
+
+            var Gun_center = GetWorldCenter(m);
 
             var brush = GetLoadIndicatorColor(TimeRemainig / ReloadTime);
 
-            dc.DrawEllipse(brush, new Pen() { Brush = Brushes.Black, Thickness = 0 },
-                Gun_center.ToPoint(), Transform.Scale.Width * 7, Transform.Scale.Height * 7);
+            dc.DrawEllipse(brush, new Pen() { Brush = Brushes.Black, Thickness = 1f },
+                Gun_center.ToPoint(), Transform.Scale.Width * 5f, Transform.Scale.Height * 5f);
         }
     }
 }

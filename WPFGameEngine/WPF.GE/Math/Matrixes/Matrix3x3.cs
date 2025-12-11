@@ -103,9 +103,9 @@ namespace WPFGameEngine.WPF.GE.Math.Matrixes
 
             float[,] rm = new float[3, 3]
             {
-                { cos, sin, 0f },
-                { -sin, cos, 0f },
-                { 0f, 0f, 1f }
+                {  cos,  sin, 0f },
+                { -sin,  cos, 0f },
+                {  0f,   0f,  1f }
             };
 
             m_Matrix = Multiply(m_Matrix, rm);
@@ -115,9 +115,9 @@ namespace WPFGameEngine.WPF.GE.Math.Matrixes
         {
             float[,] sm = new float[3, 3]
             {
-                { size.Width, 0f, 0f },
-                { 0f, size.Height, 0f },
-                { 0f, 0f, 1f }
+                { size.Width, 0f,          0f },
+                { 0f,         size.Height, 0f },
+                { 0f,         0f,          1f }
             };
 
             m_Matrix = Multiply(m_Matrix, sm);
@@ -196,14 +196,27 @@ namespace WPFGameEngine.WPF.GE.Math.Matrixes
                 m_Matrix[2, 1] = 0.0f;
         }
 
-        private static Vector2 CheckNormalize(Vector2 input)
-        { 
-            if(input.Length() != 1.0f)
-                return Vector2.Normalize(input);
-            return input;
+        public Size GetScaleFactors()
+        {
+            float scaleX = MathF.Sqrt(this.M11 * this.M11 + this.M12 * this.M12);
+            float scaleY = MathF.Sqrt(this.M21 * this.M21 + this.M22 * this.M22);
+
+            return new Size(scaleX, scaleY);
+        }
+
+        public Vector2 GetCenter(Vector2 localCenter)
+        {
+            // P'x = Px * M11 + Py * M21 + 1 * OffsetX
+            float newX = localCenter.X * M11 + localCenter.Y * M21 + OffsetX;
+
+            // P'y = Px * M12 + Py * M22 + 1 * OffsetY
+            float newY = localCenter.X * M12 + localCenter.Y * M22 + OffsetY;
+
+            return new Vector2(newX, newY);
         }
 
         #region Private Methods
+
         private static float[,] Multiply(float[,] l, float[,] r)
         {
             int Rl = l.GetLength(0);
@@ -224,6 +237,13 @@ namespace WPFGameEngine.WPF.GE.Math.Matrixes
                 }
             }
             return res;
+        }
+
+        private static Vector2 CheckNormalize(Vector2 input)
+        {
+            if (input.Length() != 1.0f)
+                return Vector2.Normalize(input);
+            return input;
         }
 
         #endregion

@@ -83,8 +83,8 @@ namespace SpaceAvenger.ViewModels.PagesVM
         public GamePage_ViewModel()
         {
             #region InitFields
-            GESettings.DrawGizmo = false;
-            GESettings.DrawBorders = false;
+            GESettings.DrawGizmo = true;
+            GESettings.DrawBorders = true;
             GESettings.DrawColliders = false;
             #endregion
 
@@ -138,20 +138,25 @@ namespace SpaceAvenger.ViewModels.PagesVM
             m_controllerComponent = m_serviceProvider.GetRequiredService<IControllerComponent>();
             GameView.Instantiate<F10Destroyer>(
                 c => {
+                    c.RegisterComponent(m_controllerComponent);
+                },
+                c => {
                     if (c is ITransformable t)
                     {
-                        c.RegisterComponent(m_controllerComponent);
                         //Calculate Player Position
                         //Horizontal - must be the center of the window
                         t.Rotate(-90);
                         t.Scale(new WPFGameEngine.WPF.GE.Math.Sizes.Size(0.7f, 0.7f));
-                        
-                        float x = (float)(w.Width / 2) - (t.Transform.ActualSize.Width / 2);
+
+                        var wScale = t.GetWorldScale();
+
+                        float x = (float)(w.Width / 2) - (wScale.Width / 2);
                         //Vertical - half of the screen
                         float y = (float)(w.Height / 2);
-                        t.Translate(new System.Numerics.Vector2(x,y));
+                        t.Translate(new System.Numerics.Vector2(x, y));
                     }
-                });
+                }
+                );
 
             GameView.Instantiate<AstroBase>();
         }

@@ -27,58 +27,9 @@ namespace WPFGameEngine.WPF.GE.GameObjects.Transformable
             
         }
 
-        private void ScaleRecursive(IGameObject obj, Size diff)
-        {
-            if (obj == null)
-                return;
-
-            if (obj.UniqueName == "Jet_Main_L")
-            { 
-            
-            }
-
-            if(!(obj is ITransformable transformable))
-                return;
-
-            var t = transformable.Transform;
-
-            if (t != null && t.Scale != diff)
-            {
-                //Cache old scale
-                Size oldSize = t.ActualSize;
-                //New Scale
-                t.Scale = new Size(diff.Width + t.Scale.Width,
-                    diff.Height + t.Scale.Height);
-
-                if (t is IRelativeTransform rt)
-                {
-                    //Need X Axis Compensation
-                    if (rt.EnableXAxisCompensation)
-                    {
-                        float dx = oldSize.Width * diff.Width;
-                        rt.XScaleCompensate(dx/2f);
-                    }
-
-                    //Need Y Axis Compensation
-                    if (rt.EnableYAxisCompensation)
-                    {
-                        float dy = oldSize.Height * diff.Height;
-                        rt.YScaleCompensate(dy/2f);
-                    }
-                }
-            }
-
-            foreach (var item in obj.Children)
-            {
-                ScaleRecursive(item, diff);
-            }
-        }
-
         public void Scale(Size newScale)
         {
-            float dx = newScale.Width - Transform.Scale.Width;
-            float dy = newScale.Height - Transform.Scale.Height;
-            ScaleRecursive(this, new Size(dx, dy));
+            Transform.Scale = newScale;
         }
 
         private TransformComponent GetTransformComponent()
@@ -116,6 +67,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects.Transformable
             GetGlobalMatrixRec(this, ref m);
             return m;
         }
+
         #region Static Methods
         public static void RemoveObject(Func<IGameObject, bool> predicate, List<IGameObject> world, bool recursive = false)
         {
@@ -165,12 +117,23 @@ namespace WPFGameEngine.WPF.GE.GameObjects.Transformable
 
         public Vector2 GetWorldCenter(Matrix3x3 worldMatrix)
         {
-            var b = worldMatrix.GetBasis();
-            var center = Transform.ActualCenterPosition;
-            var lx = b.X.Multiply(center.X);
-            var ly = b.Y.Multiply(center.Y);
-            var l = lx + ly;
-            return worldMatrix.GetTranslate() + l;
+            return worldMatrix.GetCenter(Transform.TextureCenterPosition);
+        }
+
+        public Size GetWorldScale()
+        {
+            Size scaleFactors = GetWorldTransformMatrix().GetScaleFactors();
+            return new Size(
+                Transform.OriginalObjectSize.Width * scaleFactors.Width,
+                Transform.OriginalObjectSize.Height * scaleFactors.Height);
+        }
+
+        public Size GetWorldScale(Matrix3x3 worldMatrix)
+        {
+            Size scaleFactors = worldMatrix.GetScaleFactors();
+            return new Size(
+                Transform.OriginalObjectSize.Width * scaleFactors.Width,
+                Transform.OriginalObjectSize.Height * scaleFactors.Height);
         }
 
         public Vector2 GetDirection(Vector2 position, Matrix3x3 worldMatrix)
@@ -213,13 +176,6 @@ namespace WPFGameEngine.WPF.GE.GameObjects.Transformable
             double newAngle = currAngle + step;
             //Apply new rotation
             Rotate(newAngle);
-        }
-
-        public Size GetActualSize()
-        {
-            var transform = Transform;
-            return new Size((float)Texture.Width * transform.Scale.Width,
-                (float)Texture.Height * transform.Scale.Height);
         }
     }
 }

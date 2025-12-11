@@ -79,12 +79,12 @@ namespace SpaceAvenger.Game.Core.Base
             base.StartUp(viewHost, gameTimer);
             //Set Window Bounds
             var w = App.Current.MainWindow;
-
+            var wScale = GetWorldScale();
             PlayerMinX = 0f;
-            PlayerMaxX = (float)w.Width - this.Transform.ActualSize.Width;
+            PlayerMaxX = (float)w.Width - wScale.Width;
 
             PlayerMinY = 1f/4f * (float)w.Height;
-            PlayerMaxY = (float)w.Height - (this.Transform.ActualSize.Height + 50f);
+            PlayerMaxY = (float)w.Height - (wScale.Height + 50f);
         }
 
         public override void Update()

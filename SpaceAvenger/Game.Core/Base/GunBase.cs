@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SpaceAvenger.Extensions.Math;
+using System;
 using System.Diagnostics;
 using System.Numerics;
 using System.Windows.Media;
@@ -6,6 +7,7 @@ using WPFGameEngine.GameViewControl;
 using WPFGameEngine.Timers.Base;
 using WPFGameEngine.WPF.GE.Component.Animations;
 using WPFGameEngine.WPF.GE.GameObjects;
+using WPFGameEngine.WPF.GE.Math.Matrixes;
 using WPFGameEngine.WPF.GE.Math.Sizes;
 
 namespace SpaceAvenger.Game.Core.Base
@@ -14,8 +16,8 @@ namespace SpaceAvenger.Game.Core.Base
         where TShell : ProjectileBase
         where TGunBlast : ExplosionBase
     {
-        private ExplosionBase? m_Blast;        
-        private bool m_fired;        
+        private ExplosionBase? m_Blast;
+        private bool m_fired;
         protected Vector2 m_ShootDirection;
         private IAnimation? m_blastAnimation;
 
@@ -30,6 +32,7 @@ namespace SpaceAvenger.Game.Core.Base
         public bool GunLoaded { get => TimeRemainig <= 0; }
         public float ShellScaleMultipl { get; protected set; }
         public float GunBlastScaleMultipl { get; protected set; }
+        public float XAxisGunBlastPositionMultipl { get; protected set; }
 
         public override void StartUp(IGameObjectViewHost viewHost, IGameTimer gameTimer)
         {
@@ -39,6 +42,13 @@ namespace SpaceAvenger.Game.Core.Base
             m_fired = false;
             TimeRemainig = 0;
             base.StartUp(viewHost, gameTimer);
+        }
+
+        public override void Render(DrawingContext dc, Matrix3x3 parent)
+        {
+            base.Render(dc, parent);
+            dc.DrawEllipse(Brushes.BlueViolet, new Pen() { Brush = Brushes.Black },
+                GetBlastPosition().ToPoint(), 5, 5);
         }
 
         public override void Update()
@@ -56,9 +66,8 @@ namespace SpaceAvenger.Game.Core.Base
             {
                 var shell = MapableViewHost.Instantiate<TShell>();
                 shell.Scale(Transform.Scale * ShellScaleMultipl);
-                Size shellSize = shell.GetActualSize();
                 var blastPos = GetBlastPosition();
-                Vector2 shellCenterPos = blastPos - new Vector2(shellSize.Width / 2, shellSize.Height / 2);
+                Vector2 shellCenterPos = blastPos - shell.Transform.TextureCenterPosition;
                 m_Blast.UpdatePosition(blastPos);
                 shell.Translate(shellCenterPos);
                 var angle = Math.Atan2(m_ShootDirection.Y, m_ShootDirection.X) * 180 / Math.PI;
@@ -94,14 +103,16 @@ namespace SpaceAvenger.Game.Core.Base
             m_Blast.Rotate(angle);
             m_Blast.Explode(GetBlastPosition());
             m_fired = true;
-            //Debug.WriteLine("Shooting");
         }
 
         private Vector2 GetBlastPosition()
         {
             var worldMatrix = GetWorldTransformMatrix();
-            return GetWorldCenter(worldMatrix)
-                + worldMatrix.GetBasis().X * ((1 - Transform.CenterPosition.X) * Transform.ActualSize.Width);
+            var basis = worldMatrix.GetBasis();
+            var actSize = GetWorldScale(worldMatrix);
+            var center = GetWorldCenter(worldMatrix);
+            return center + basis.X * (((1 - Transform.CenterPosition.X) * actSize.Width) + 
+                XAxisGunBlastPositionMultipl);
         }
 
         protected virtual Brush GetLoadIndicatorColor(float value)

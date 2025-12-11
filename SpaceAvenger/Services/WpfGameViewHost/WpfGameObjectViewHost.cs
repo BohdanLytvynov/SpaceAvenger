@@ -83,31 +83,20 @@ namespace SpaceAvenger.Services.WpfGameViewHost
             }
         }
 
-        public void AddObject(IGameObject gameObject)
+        public void AddObject(IGameObject gameObject, Action<IGameObject> preStartUpConfig = null,
+            Action<IGameObject> postStartUpConfig = null)
         {
             if (gameObject == null)
                 throw new ArgumentNullException(nameof(gameObject));
 
+            preStartUpConfig?.Invoke(gameObject);
+
             if(gameObject is IUpdatable updatable)
                 updatable.StartUp(this, m_gameTimer);
 
+            postStartUpConfig?.Invoke(gameObject);
+
             World.Add(gameObject);
-        }
-
-        public void AddObjects(IEnumerable<IGameObject> gameObjects)
-        {
-            if (gameObjects == null)
-                return;
-
-            if (gameObjects.Count() == 0)
-                return;
-
-            foreach (var item in gameObjects)
-            {
-                if(item is IUpdatable updatable)
-                    updatable.StartUp(this, m_gameTimer);
-                World.Add(item);
-            }
         }
 
         public void RemoveObject(IGameObject gameObject)
