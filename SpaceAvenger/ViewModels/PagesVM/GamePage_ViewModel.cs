@@ -5,7 +5,6 @@ using System.Windows.Media;
 using System.Windows;
 using SpaceAvenger.Services.Realizations.Message;
 using c = SpaceAvenger.Services.Constants;
-using WPFGameEngine.WPF.GE.GameObjects;
 using WPFGameEngine.WPF.GE.Settings;
 using ViewModelBaseLibDotNetCore.PageManager.Base;
 using ViewModelBaseLibDotNetCore.MessageBus.Base;
@@ -19,7 +18,6 @@ using WPFGameEngine.ObjectPools.Base;
 using SpaceAvenger.Game.Core.Factions.F10.Destroyer;
 using WPFGameEngine.CollisionDetection.CollisionManager.Base;
 using SpaceAvenger.Game.Core.Factions.Neutrals;
-using WPFGameEngine.WPF.GE.LevelManagers.Base;
 using WPFGameEngine.WPF.GE.GameObjects.Transformable;
 
 namespace SpaceAvenger.ViewModels.PagesVM
@@ -83,8 +81,8 @@ namespace SpaceAvenger.ViewModels.PagesVM
         public GamePage_ViewModel()
         {
             #region InitFields
-            GESettings.DrawGizmo = true;
-            GESettings.DrawBorders = true;
+            GESettings.DrawGizmo = false;
+            GESettings.DrawBorders = false;
             GESettings.DrawColliders = false;
             #endregion
 

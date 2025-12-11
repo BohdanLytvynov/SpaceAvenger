@@ -44,13 +44,6 @@ namespace SpaceAvenger.Game.Core.Base
             base.StartUp(viewHost, gameTimer);
         }
 
-        public override void Render(DrawingContext dc, Matrix3x3 parent)
-        {
-            base.Render(dc, parent);
-            dc.DrawEllipse(Brushes.BlueViolet, new Pen() { Brush = Brushes.Black },
-                GetBlastPosition().ToPoint(), 5, 5);
-        }
-
         public override void Update()
         {
             if (TimeRemainig > 0)

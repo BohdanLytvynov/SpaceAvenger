@@ -11,7 +11,7 @@ namespace SpaceAvenger.Game.Core.Factions.F10.Projectiles
         {
             ProjectileSpeed = 800f;
             Damage = 100f;
-            ExplosionScale = new Size(2,2);
+            ExplosionScale = new Size(1f,1f);
         }
     }
 }

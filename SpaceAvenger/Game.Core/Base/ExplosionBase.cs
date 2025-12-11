@@ -19,15 +19,16 @@ namespace SpaceAvenger.Game.Core.Base
         {
             Enable();
             Translate(position + new Vector2(
-                -(Transform.OriginalObjectSize.Width/2f),
-                -Transform.OriginalObjectSize.Height/2f));//Move to the center origin of the texture
+                -(Transform.TextureCenterPosition.X),
+                -Transform.TextureCenterPosition.Y));//Move to the center origin of the texture
             Animation.Start();
         }
 
         public void UpdatePosition(Vector2 position)
         {
-            Translate(position + new Vector2(-Transform.OriginalObjectSize.Width / 2f,
-                -Transform.OriginalObjectSize.Height / 2f));//Move to the center origin of the texture
+            Translate(position + new Vector2(
+                -Transform.TextureCenterPosition.X,
+                -Transform.TextureCenterPosition.Y));//Move to the center origin of the texture
         }
 
         public override void Update()

@@ -33,7 +33,7 @@ namespace SpaceAvenger.Game.Core.Base
             double winWidth = w.Width;
             double winHeight = w.Height;
             float x = position.X;
-            float y = position.Y + Transform.OriginalObjectSize.Height/2f;
+            float y = position.Y + Transform.TextureCenterPosition.Y;
             return x >= 0 && x <= winWidth && y >= 0 && y <=winHeight;
         }
 
