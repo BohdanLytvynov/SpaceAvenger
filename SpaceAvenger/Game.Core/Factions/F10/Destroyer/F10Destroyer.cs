@@ -4,22 +4,19 @@ using SpaceAvenger.Game.Core.Base;
 using SpaceAvenger.Game.Core.Enums;
 using SpaceAvenger.Game.Core.Factions.F10.Engines;
 using SpaceAvenger.Game.Core.Factions.F10.Weapons;
-using SpaceAvenger.Services.WPFInputControllers;
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Media;
 using WPFGameEngine.GameViewControl;
 using WPFGameEngine.Timers.Base;
-using WPFGameEngine.WPF.GE.Component.Controllers;
 using WPFGameEngine.WPF.GE.Math.Matrixes;
 
 namespace SpaceAvenger.Game.Core.Factions.F10.Destroyer
 {
-    public class F10Destroyer : ExplosiveSpaceShipBase<Explosion1>
+    public class F10Destroyer : Moveable_Explosive_SpaceShipBase<F10Jet, Explosion1>
     {
         private IEnumerable<F10RailGun> m_battery;
         private Pen m_targetMarkerPen;
-        
+
         public F10Destroyer() : base(Faction.F10)
         {
             HorSpeed = 80;
@@ -36,20 +33,8 @@ namespace SpaceAvenger.Game.Core.Factions.F10.Destroyer
             m_targetMarkerPen = new Pen();
             m_targetMarkerPen = new Pen() { Brush = Brushes.Orange };
             m_targetMarkerPen.Freeze();
-            m_controller = (WPFInputController)GetComponent<ControllerComponent>(false);
 
             m_battery = GetAllChildrenOfType<F10RailGun>();
-
-            m_Engines = GetAllChildrenOfType<F10Jet>();
-
-            m_mainEngines = m_Engines.Where(e => e.UniqueName.Equals("Jet_Main_L") 
-            || e.UniqueName.Equals("Jet_Main_R")).Select(e => e as F10Jet);
-
-            m_leftAccelerators = m_Engines.Where(e => e.UniqueName.Equals("Jet_Accelerator_L_1")
-            || e.UniqueName.Equals("Jet_Accelerator_L_2")).Select(e => e as F10Jet);
-
-            m_rightAccelerators = m_Engines.Where(e => e.UniqueName.Equals("Jet_Accelerator_R_1")
-            || e.UniqueName.Equals("Jet_Accelerator_R_2")).Select(e => e as F10Jet);
         }
 
         public override void Update()
@@ -87,37 +72,6 @@ namespace SpaceAvenger.Game.Core.Factions.F10.Destroyer
             }
         }
 
-        protected override void MoveForward()
-        {
-            foreach (var item in m_mainEngines)
-            {
-                item.Start();
-            }
-        }
-
-        protected override void MoveBackward()
-        {
-            foreach (var item in m_mainEngines)
-            {
-                item.Stop();
-            }
-        }
-
-        protected override void MoveLeft()
-        {
-            foreach (var item in m_rightAccelerators)
-            {
-                item.Start();
-            }
-        }
-
-        protected override void MoveRight()
-        {
-            foreach (var item in m_leftAccelerators)
-            {
-                item.Start();
-            }
-        }
         #endregion
     }
 }

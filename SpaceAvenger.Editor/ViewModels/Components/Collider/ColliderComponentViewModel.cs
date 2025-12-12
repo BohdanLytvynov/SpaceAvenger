@@ -133,11 +133,11 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Collider
             var collider = GameObject.Collider;
 
             var transform = GameObject.Transform;
-            XMax = transform.ActualSize.Width;
-            YMax = transform.ActualSize.Height;
+            XMax = transform.OriginalObjectSize.Width * transform.Scale.Width;
+            YMax = transform.OriginalObjectSize.Height * transform.Scale.Height;
 
-            m_XRel = collider.Position.X * transform.ActualSize.Width;
-            m_YRel = collider.Position.Y * transform.ActualSize.Height;
+            m_XRel = collider.Position.X * transform.OriginalObjectSize.Width * transform.Scale.Width;
+            m_YRel = collider.Position.Y * transform.OriginalObjectSize.Height * transform.Scale.Height;
 
             var shape = GameObject.Collider.CollisionShape;
 

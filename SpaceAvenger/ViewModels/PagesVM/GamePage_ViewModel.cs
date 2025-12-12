@@ -15,10 +15,7 @@ using WPFGameEngine.WPF.GE.Component.Controllers;
 using Microsoft.Extensions.DependencyInjection;
 using SpaceAvenger.Services.WpfGameViewHost;
 using WPFGameEngine.ObjectPools.Base;
-using SpaceAvenger.Game.Core.Factions.F10.Destroyer;
 using WPFGameEngine.CollisionDetection.CollisionManager.Base;
-using SpaceAvenger.Game.Core.Factions.Neutrals;
-using WPFGameEngine.WPF.GE.GameObjects.Transformable;
 using SpaceAvenger.Game.Core.Levels;
 
 namespace SpaceAvenger.ViewModels.PagesVM

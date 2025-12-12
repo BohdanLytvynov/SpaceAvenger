@@ -26,24 +26,6 @@ namespace SpaceAvenger.Game.Core.Factions.Neutrals
             base.StartUp(gameObjectViewHost, gameTimer);
         }
 
-        protected override void MoveBackward()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        protected override void MoveForward()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        protected override void MoveLeft()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        protected override void MoveRight()
-        {
-            throw new System.NotImplementedException();
-        }
+     
     }
 }

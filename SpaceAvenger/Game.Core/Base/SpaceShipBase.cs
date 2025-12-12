@@ -9,6 +9,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using WPFGameEngine.GameViewControl;
 using WPFGameEngine.Timers.Base;
+using WPFGameEngine.WPF.GE.Component.Controllers;
 using WPFGameEngine.WPF.GE.GameObjects;
 
 namespace SpaceAvenger.Game.Core.Base
@@ -43,8 +44,6 @@ namespace SpaceAvenger.Game.Core.Base
         protected Brush BarLow;
         protected Brush BarHigh;
         protected Brush BarMedium;
-
-        protected IEnumerable<JetBase> m_Engines;
 
         #endregion
 
@@ -83,8 +82,10 @@ namespace SpaceAvenger.Game.Core.Base
             PlayerMinX = 0f;
             PlayerMaxX = (float)w.Width - wScale.Width;
 
-            PlayerMinY = 1f/4f * (float)w.Height;
+            PlayerMinY = 1f / 4f * (float)w.Height;
             PlayerMaxY = (float)w.Height - (wScale.Height + 50f);
+
+            m_controller = (WPFInputController)GetComponent<ControllerComponent>(false);
         }
 
         public override void Update()
@@ -171,20 +172,14 @@ namespace SpaceAvenger.Game.Core.Base
         }
 
         public virtual void DoDamage(float damage)
-        { 
+        {
             HP -= damage;
         }
 
-        protected abstract void MoveForward();
-        protected abstract void MoveBackward();
-        protected abstract void MoveLeft();
-        protected abstract void MoveRight();
-        protected virtual void StopAllEngines()
-        {
-            foreach (var item in m_Engines)
-            {
-                item.Stop();
-            }
-        }
+        protected virtual void MoveForward() { }
+        protected virtual void MoveBackward() { }
+        protected virtual void MoveLeft() { }
+        protected virtual void MoveRight() { }
+        protected virtual void StopAllEngines() { }
     }
 }
