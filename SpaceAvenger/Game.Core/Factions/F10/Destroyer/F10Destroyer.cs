@@ -19,11 +19,7 @@ namespace SpaceAvenger.Game.Core.Factions.F10.Destroyer
     {
         private IEnumerable<F10RailGun> m_battery;
         private Pen m_targetMarkerPen;
-
-        private IEnumerable<F10Jet?> m_mainEngines;
-        private IEnumerable<F10Jet?> m_rightAccelerators;
-        private IEnumerable<F10Jet?> m_leftAccelerators;
-
+        
         public F10Destroyer() : base(Faction.F10)
         {
             HorSpeed = 80;

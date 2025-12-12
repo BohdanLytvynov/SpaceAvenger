@@ -23,7 +23,7 @@ namespace SpaceAvenger.Game.Core.Base
             {
                 if (obj is SpaceShipBase s && s.Faction != Faction)
                 {
-                    s.HP -= Damage;
+                    s.DoDamage(Damage);
                     Collider.DisableCollision();
                     Hide();
                     var expl = (GameView as IMapableObjectViewHost).Instantiate<TExplosion>();
@@ -32,7 +32,7 @@ namespace SpaceAvenger.Game.Core.Base
                 }
             }
 
-            base.ProcessCollision(info);
+            //base.ProcessCollision(info);
         }
     }
 }

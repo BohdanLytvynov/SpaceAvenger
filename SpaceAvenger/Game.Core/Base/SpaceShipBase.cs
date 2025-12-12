@@ -170,6 +170,11 @@ namespace SpaceAvenger.Game.Core.Base
             base.OnGetFromPool();
         }
 
+        public virtual void DoDamage(float damage)
+        { 
+            HP -= damage;
+        }
+
         protected abstract void MoveForward();
         protected abstract void MoveBackward();
         protected abstract void MoveLeft();
