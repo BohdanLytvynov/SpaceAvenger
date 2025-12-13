@@ -13,6 +13,10 @@ namespace WPFGameEngine.WPF.GE.GameObjects
 {
     public abstract class GameObject : IGameObject
     {
+        #region Metadata
+        
+        #endregion
+
         #region Nested Classes
         public class ZIndexGameObjectComparer : IComparer<IGameObject>
         {
@@ -89,6 +93,8 @@ namespace WPFGameEngine.WPF.GE.GameObjects
             }
         }
 
+        public List<string> Metadata { get; }
+
         #endregion
 
         #region Ctor
@@ -102,6 +108,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects
             ZIndex = 0;
             m_id = ++m_globId;
             UniqueName = this.GetType().Name + $"_{m_id}";
+            Metadata = new List<string>();
         }
         
         #endregion

@@ -13,8 +13,6 @@
       "Components": [
         {
           "RecreateType": "RelativeTransformComponent",
-          "EnableXAxisCompensation": false,
-          "EnableYAxisCompensation": false,
           "Position": {
             "X": 0.40291864,
             "Y": 0.2568918
@@ -44,8 +42,6 @@
       "Components": [
         {
           "RecreateType": "RelativeTransformComponent",
-          "EnableXAxisCompensation": false,
-          "EnableYAxisCompensation": false,
           "Position": {
             "X": 0.40155533,
             "Y": 0.5993139
@@ -75,8 +71,6 @@
       "Components": [
         {
           "RecreateType": "RelativeTransformComponent",
-          "EnableXAxisCompensation": false,
-          "EnableYAxisCompensation": false,
           "Position": {
             "X": 0.2536139,
             "Y": 0.23549862
@@ -106,8 +100,6 @@
       "Components": [
         {
           "RecreateType": "RelativeTransformComponent",
-          "EnableXAxisCompensation": false,
-          "EnableYAxisCompensation": false,
           "Position": {
             "X": 0.2536139,
             "Y": 0.6159195
@@ -137,8 +129,6 @@
       "Components": [
         {
           "RecreateType": "RelativeTransformComponent",
-          "EnableXAxisCompensation": false,
-          "EnableYAxisCompensation": false,
           "Position": {
             "X": 0.44986278,
             "Y": 0.375892
@@ -168,8 +158,6 @@
       "Components": [
         {
           "RecreateType": "RelativeTransformComponent",
-          "EnableXAxisCompensation": false,
-          "EnableYAxisCompensation": false,
           "Position": {
             "X": 0.44986278,
             "Y": 0.4785453
@@ -199,14 +187,12 @@
       "Components": [
         {
           "RecreateType": "RelativeTransformComponent",
-          "EnableXAxisCompensation": false,
-          "EnableYAxisCompensation": false,
           "Position": {
             "X": 0,
             "Y": 0
           },
           "CenterPosition": {
-            "X": 0.5,
+            "X": 0,
             "Y": 0.5
           },
           "Rotation": 0,
@@ -230,14 +216,12 @@
       "Components": [
         {
           "RecreateType": "RelativeTransformComponent",
-          "EnableXAxisCompensation": false,
-          "EnableYAxisCompensation": false,
           "Position": {
             "X": 0,
             "Y": 0.062422983
           },
           "CenterPosition": {
-            "X": 0.5,
+            "X": 0,
             "Y": 0.5
           },
           "Rotation": 0,
@@ -261,8 +245,6 @@
       "Components": [
         {
           "RecreateType": "RelativeTransformComponent",
-          "EnableXAxisCompensation": false,
-          "EnableYAxisCompensation": false,
           "Position": {
             "X": -0.15738411,
             "Y": 0.17035694
@@ -1377,8 +1359,6 @@
       "Components": [
         {
           "RecreateType": "RelativeTransformComponent",
-          "EnableXAxisCompensation": false,
-          "EnableYAxisCompensation": false,
           "Position": {
             "X": 0.53854024,
             "Y": 0.67586106
@@ -2493,8 +2473,6 @@
       "Components": [
         {
           "RecreateType": "RelativeTransformComponent",
-          "EnableXAxisCompensation": false,
-          "EnableYAxisCompensation": false,
           "Position": {
             "X": 0.21095991,
             "Y": 0.78152543
@@ -3609,8 +3587,6 @@
       "Components": [
         {
           "RecreateType": "RelativeTransformComponent",
-          "EnableXAxisCompensation": false,
-          "EnableYAxisCompensation": false,
           "Position": {
             "X": 0.53854454,
             "Y": 0.18372124
@@ -4725,8 +4701,6 @@
       "Components": [
         {
           "RecreateType": "RelativeTransformComponent",
-          "EnableXAxisCompensation": false,
-          "EnableYAxisCompensation": false,
           "Position": {
             "X": 0.22454637,
             "Y": 0.07653917
@@ -5841,8 +5815,6 @@
       "Components": [
         {
           "RecreateType": "RelativeTransformComponent",
-          "EnableXAxisCompensation": false,
-          "EnableYAxisCompensation": false,
           "Position": {
             "X": -0.15738414,
             "Y": 0.53385127

@@ -13,8 +13,6 @@
       "Components": [
         {
           "RecreateType": "RelativeTransformComponent",
-          "EnableXAxisCompensation": false,
-          "EnableYAxisCompensation": false,
           "Position": {
             "X": 0.34720948,
             "Y": 0.42118022
@@ -44,8 +42,6 @@
       "Components": [
         {
           "RecreateType": "RelativeTransformComponent",
-          "EnableXAxisCompensation": false,
-          "EnableYAxisCompensation": false,
           "Position": {
             "X": 0.15397988,
             "Y": 0.85443735
@@ -920,8 +916,6 @@
       "Components": [
         {
           "RecreateType": "RelativeTransformComponent",
-          "EnableXAxisCompensation": false,
-          "EnableYAxisCompensation": false,
           "Position": {
             "X": -0.20832571,
             "Y": 0.30617204
@@ -1796,8 +1790,6 @@
       "Components": [
         {
           "RecreateType": "RelativeTransformComponent",
-          "EnableXAxisCompensation": false,
-          "EnableYAxisCompensation": false,
           "Position": {
             "X": -0.11774931,
             "Y": 6.062402E-17
@@ -2672,8 +2664,6 @@
       "Components": [
         {
           "RecreateType": "RelativeTransformComponent",
-          "EnableXAxisCompensation": false,
-          "EnableYAxisCompensation": false,
           "Position": {
             "X": 0.52836233,
             "Y": 0.31665984
@@ -3548,8 +3538,6 @@
       "Components": [
         {
           "RecreateType": "RelativeTransformComponent",
-          "EnableXAxisCompensation": false,
-          "EnableYAxisCompensation": false,
           "Position": {
             "X": 0.445334,
             "Y": 0.012196039
@@ -4414,14 +4402,72 @@
           }
         }
       ]
+    },
+    {
+      "ZIndex": 0,
+      "Enabled": true,
+      "ObjectName": "Bar",
+      "UniqueName": "HP",
+      "Children": [],
+      "Components": [
+        {
+          "RecreateType": "RelativeTransformComponent",
+          "Position": {
+            "X": -0.09208731,
+            "Y": 0.9469304
+          },
+          "CenterPosition": {
+            "X": 0,
+            "Y": 0.5
+          },
+          "Rotation": -90,
+          "Scale": {
+            "Width": 0.4627558,
+            "Height": 0.44024557
+          }
+        },
+        {
+          "RecreateType": "Sprite",
+          "ResourceKey": "Slider1"
+        }
+      ]
+    },
+    {
+      "ZIndex": 0,
+      "Enabled": true,
+      "ObjectName": "Bar",
+      "UniqueName": "Shield",
+      "Children": [],
+      "Components": [
+        {
+          "RecreateType": "RelativeTransformComponent",
+          "Position": {
+            "X": -0.19809003,
+            "Y": 0.9439291
+          },
+          "CenterPosition": {
+            "X": 0,
+            "Y": 0.5
+          },
+          "Rotation": -90,
+          "Scale": {
+            "Width": 0.4597544,
+            "Height": 0.44774896
+          }
+        },
+        {
+          "RecreateType": "Sprite",
+          "ResourceKey": "Slider1"
+        }
+      ]
     }
   ],
   "Components": [
     {
       "RecreateType": "TransformComponent",
       "Position": {
-        "X": 163.0375,
-        "Y": 259.65234
+        "X": 29.100573,
+        "Y": 160.99527
       },
       "CenterPosition": {
         "X": 0.5,

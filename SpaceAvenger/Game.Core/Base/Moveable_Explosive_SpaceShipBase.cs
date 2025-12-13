@@ -15,20 +15,26 @@ namespace SpaceAvenger.Game.Core.Base
         private IEnumerable<TJetType?>? m_rightAccelerators;
         private IEnumerable<TJetType?>? m_leftAccelerators;
 
+        public abstract List<string> MainEnginesNames 
+        { get; }
+
+        public abstract List<string> RightAcceleratorsNames 
+        { get; }
+
+        public abstract List<string> LeftAcceleratorsNames 
+        { get; }
+
         public override void StartUp(IGameObjectViewHost viewHost, IGameTimer gameTimer)
         {
             base.StartUp(viewHost, gameTimer);
 
             var allEngines = GetAllChildrenOfType<TJetType>();
 
-            m_mainEngines = allEngines.Where(e => e.UniqueName.Equals("Jet_Main_L")
-            || e.UniqueName.Equals("Jet_Main_R")).Select(e => e as TJetType);
+            m_leftAccelerators = allEngines.Where(e => LeftAcceleratorsNames.Contains(e.UniqueName!));
 
-            m_leftAccelerators = allEngines.Where(e => e.UniqueName.Equals("Jet_Accelerator_L_1")
-            || e.UniqueName.Equals("Jet_Accelerator_L_2")).Select(e => e as TJetType);
+            m_rightAccelerators = allEngines.Where(e => RightAcceleratorsNames.Contains(e.UniqueName!));
 
-            m_rightAccelerators = allEngines.Where(e => e.UniqueName.Equals("Jet_Accelerator_R_1")
-            || e.UniqueName.Equals("Jet_Accelerator_R_2")).Select(e => e as TJetType);
+            m_mainEngines = allEngines.Where(e => MainEnginesNames.Contains(e.UniqueName!));
         }
 
         protected Moveable_Explosive_SpaceShipBase(Faction faction) : base(faction)
@@ -38,9 +44,9 @@ namespace SpaceAvenger.Game.Core.Base
 
         protected override void StopAllEngines()
         {
-            StopAll(m_mainEngines);
-            StopAll(m_leftAccelerators);
-            StopAll(m_rightAccelerators);
+            StopAll(m_mainEngines!);
+            StopAll(m_leftAccelerators!);
+            StopAll(m_rightAccelerators!);
         }
 
         private void StopAll(IEnumerable<JetBase>? jets)
@@ -55,7 +61,7 @@ namespace SpaceAvenger.Game.Core.Base
 
         protected override void MoveForward()
         {
-            foreach (var item in m_mainEngines)
+            foreach (var item in m_mainEngines!)
             {
                 item.Start();
             }
@@ -63,7 +69,7 @@ namespace SpaceAvenger.Game.Core.Base
 
         protected override void MoveBackward()
         {
-            foreach (var item in m_mainEngines)
+            foreach (var item in m_mainEngines!)
             {
                 item.Stop();
             }
@@ -71,7 +77,7 @@ namespace SpaceAvenger.Game.Core.Base
 
         protected override void MoveLeft()
         {
-            foreach (var item in m_rightAccelerators)
+            foreach (var item in m_rightAccelerators!)
             {
                 item.Start();
             }
@@ -79,7 +85,7 @@ namespace SpaceAvenger.Game.Core.Base
 
         protected override void MoveRight()
         {
-            foreach (var item in m_leftAccelerators)
+            foreach (var item in m_leftAccelerators!)
             {
                 item.Start();
             }

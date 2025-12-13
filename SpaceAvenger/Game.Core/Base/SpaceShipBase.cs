@@ -2,8 +2,6 @@
 using SpaceAvenger.Game.Core.UI.Slider;
 using SpaceAvenger.Services.WPFInputControllers;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -17,15 +15,15 @@ namespace SpaceAvenger.Game.Core.Base
     public abstract class SpaceShipBase : СacheableObject
     {
         #region Fields
-        //private bool m_moveForward;
 
-        private float PlayerMinX;
-        private float PlayerMinY;
+        private float m_PlayerMinX;
+        private float m_PlayerMinY;
 
-        private float PlayerMaxX;
-        private float PlayerMaxY;
+        private float m_PlayerMaxX;
+        private float m_PlayerMaxY;
 
-
+        private float m_MinY;
+        private float m_MaxY;
         #endregion
 
         protected WPFInputController m_controller;
@@ -33,6 +31,7 @@ namespace SpaceAvenger.Game.Core.Base
         #region Properties
         public float HP { get; set; }
         public float Shield { get; set; }
+        public float ShieldRegenSpeed { get; protected set; }
         public float HorSpeed { get; protected set; }
         public float VertSpeed { get; protected set; }
         public Faction Faction { get; private set; }
@@ -79,25 +78,36 @@ namespace SpaceAvenger.Game.Core.Base
             //Set Window Bounds
             var w = App.Current.MainWindow;
             var wScale = GetWorldScale();
-            PlayerMinX = 0f;
-            PlayerMaxX = (float)w.Width - wScale.Width;
-
-            PlayerMinY = 1f / 4f * (float)w.Height;
-            PlayerMaxY = (float)w.Height - (wScale.Height + 50f);
 
             m_controller = (WPFInputController)GetComponent<ControllerComponent>(false);
+
+            if (m_controller != null)
+            {
+                m_PlayerMinX = 0f;
+                m_PlayerMaxX = (float)w.ActualWidth - wScale.Width;
+
+                m_PlayerMinY = 1f / 4f * (float)w.ActualHeight;
+                m_PlayerMaxY = (float)w.ActualHeight - (wScale.Height + 50f);
+            }
+            else
+            {
+                m_MinY = 0f - wScale.Height + 20f;
+                m_MaxY = (float)w.ActualHeight + 50f;
+            }
+            
         }
 
         public override void Update()
         {
-            if (m_controller != null)
+            var delta = GameTimer.deltaTime;
+            float timeDelta = (float)delta.TotalSeconds;
+
+            if (m_controller != null)//Player Controls
             {
-                var delta = GameTimer.deltaTime;
                 var basis = Transform.GetLocalTransformMatrix().GetBasis();
                 var curr = Transform.Position;
 
                 Vector2 translateVector = Vector2.Zero;
-                float timeDelta = (float)delta.TotalSeconds;
 
                 bool isMoving = false;
 
@@ -128,8 +138,8 @@ namespace SpaceAvenger.Game.Core.Base
 
                 Vector2 newPos = curr + translateVector;
 
-                float clampedX = Math.Clamp(newPos.X, PlayerMinX, PlayerMaxX);
-                float clampedY = Math.Clamp(newPos.Y, PlayerMinY, PlayerMaxY);
+                float clampedX = Math.Clamp(newPos.X, m_PlayerMinX, m_PlayerMaxX);
+                float clampedY = Math.Clamp(newPos.Y, m_PlayerMinY, m_PlayerMaxY);
 
                 Vector2 finalPos = new Vector2(clampedX, clampedY);
 
@@ -138,14 +148,14 @@ namespace SpaceAvenger.Game.Core.Base
             else
             {
                 //Base Enemy AI
-                float minY;
-                float maxY;
 
-                float minX;
-                float maxX;
+                if (Transform.Position.Y >= m_MinY && Transform.Position.Y <= m_MaxY)
+                {
 
-
+                }
             }
+
+            Shield += ShieldRegenSpeed * timeDelta;
 
             HPBar.Update(HP);
             ShieldBar?.Update(Shield);
@@ -173,7 +183,14 @@ namespace SpaceAvenger.Game.Core.Base
 
         public virtual void DoDamage(float damage)
         {
-            HP -= damage;
+            if (Shield == 0f || Shield - damage <= 0f)
+            {
+                HP -= damage;
+            }
+            else
+            { 
+                Shield -= damage;
+            }
         }
 
         protected virtual void MoveForward() { }

@@ -13,6 +13,10 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         IConvertToDto<GameObjectDto>, 
         IGameEngineEntity
     {
+        #region Metadata
+        public List<string> Metadata { get; }
+        #endregion
+
         #region Lazy Loading
         IAnimation? Animation { get; }
         IAnimator? Animator { get; }

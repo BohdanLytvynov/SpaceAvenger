@@ -15,6 +15,15 @@ namespace SpaceAvenger.Game.Core.Factions.F1.Corvettes
         private IEnumerable<F1LiteTurret> m_battery;
         private Pen m_targetMarkerPen;
 
+        public override List<string> MainEnginesNames => 
+            new List<string>() { "Main_Jet" };
+
+        public override List<string> LeftAcceleratorsNames => 
+            new List<string>() { "Jet_Accelerator_L_1", "Jet_Accelerator_L_2" };
+
+        public override List<string> RightAcceleratorsNames => 
+            new List<string>() { "Jet_Accelerator_R_1", "Jet_Accelerator_R_2" };
+
         public F1Corvette() : base(Faction.F1)
         {
             HorSpeed = 70f;
