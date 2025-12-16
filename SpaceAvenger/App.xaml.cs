@@ -169,7 +169,6 @@ namespace SpaceAvenger
             mainWindow.Show();
 
             pm.SwitchPage(nameof(Main_Page), FrameType.MainFrame);
-            pm.SwitchPage(nameof(UserProfileInfo_Page), FrameType.InfoFrame);
         }
     }
 }

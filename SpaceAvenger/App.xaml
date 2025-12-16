@@ -7,7 +7,6 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/SpaceAvenger;component/Resources/CommonStyles.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/SpaceAvenger;component/Resources/Content.xaml"/>
-                <ResourceDictionary Source="pack://application:,,,/SpaceAvenger;component/Resources/DataTemplates.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

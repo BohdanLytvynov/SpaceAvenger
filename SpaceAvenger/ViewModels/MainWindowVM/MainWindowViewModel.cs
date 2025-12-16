@@ -3,11 +3,9 @@ using System.Threading.Tasks;
 using ViewModelBaseLibDotNetCore.Commands;
 using System.Windows.Input;
 using System.Windows.Controls;
-using Models.DAL.Entities.User;
 using System.Windows;
 using SpaceAvenger.Enums.FrameTypes;
 using SpaceAvenger.Attributes.PageManager;
-using SpaceAvenger.Services.Realizations.Message;
 using ViewModelBaseLibDotNetCore.PageManager.Base;
 using ViewModelBaseLibDotNetCore.MessageBus.Base;
 using ViewModelBaseLibDotNetCore.PageManagers;
@@ -118,16 +116,16 @@ namespace SpaceAvenger.ViewModels.MainWindowVM
             
             m_pageManager.OnSwitchScreenMethodInvoked += PageManager_OnSwitchScreenMethodInvoked;
 
-            Subscriptions.Add(m_messageBus.RegisterHandler<ChooseProfileMessage_User, User>(OnMessageRecieved));
+            //Subscriptions.Add(m_messageBus.RegisterHandler<ChooseProfileMessage_User, User>(OnMessageRecieved));
 
             #endregion
         }
 
-        private void OnMessageRecieved(ChooseProfileMessage_User message)
-        {
-            if (message.Content is not null)
-                OnOpenInfoButtonPressedExecute(null);
-        }
+        //private void OnMessageRecieved(ChooseProfileMessage_User message)
+        //{
+        //    if (message.Content is not null)
+        //        OnOpenInfoButtonPressedExecute(null);
+        //}
 
         private void PageManager_OnSwitchScreenMethodInvoked(object? obj, PageManagerEventArgs<FrameType> args)
         {
