@@ -89,6 +89,7 @@ namespace SpaceAvenger.Game.Core.AI
             var worldScale = spaceShip.GetWorldScale(worldMatrix);
             Vector2 translate = Vector2.Zero;
             Vector2 currTranslate = spaceShip.Transform.Position;
+
             switch (m_moveDir)
             {
                 case MoveDir.Down:

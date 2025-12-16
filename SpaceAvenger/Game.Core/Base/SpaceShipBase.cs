@@ -103,6 +103,7 @@ namespace SpaceAvenger.Game.Core.Base
             HP = HPBar.Max;
             Shield = ShieldBar?.Max ?? 0;
             IsAlive = true;
+            AIModule?.Init(GameView, this);
             base.OnGetFromPool();
         }
 

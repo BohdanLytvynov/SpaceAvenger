@@ -17,6 +17,8 @@ namespace WPFGameEngine.WPF.GE.AI.Base
 
         public virtual void Init(IGameObjectViewHost gameView, IGameObject gameObject)
         {
+            if (GameView != null) return;
+
             GameView = gameView ?? throw new ArgumentNullException(nameof(gameView));
         }
     }

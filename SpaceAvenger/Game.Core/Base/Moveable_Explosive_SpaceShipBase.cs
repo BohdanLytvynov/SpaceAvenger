@@ -61,7 +61,7 @@ namespace SpaceAvenger.Game.Core.Base
                 m_PlayerMaxX = (float)w.ActualWidth - wScale.Width;
 
                 m_PlayerMinY = 1f / 4f * (float)w.Height;
-                m_PlayerMaxY = (float)w.ActualHeight - (wScale.Height + 50f);
+                m_PlayerMaxY = (float)w.ActualHeight - (wScale.Height + 100f);
             }
         }
 
