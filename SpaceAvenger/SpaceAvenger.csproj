@@ -54,6 +54,10 @@
     <None Remove="Resources\GameObjects\Explosion4.json" />
     <None Remove="Resources\GameObjects\F10Destroyer.json" />
     <None Remove="Resources\GameObjects\F10RailGunProjectile.json" />
+    <None Remove="Resources\GameObjects\F1Corvette.json" />
+    <None Remove="Resources\GameObjects\F1LightGunBlast.json" />
+    <None Remove="Resources\GameObjects\F1LightGunPrj.json" />
+    <None Remove="Resources\GameObjects\F1LightPrjExplosion.json" />
     <None Remove="Resources\GameObjects\GunBlast.json" />
   </ItemGroup>
 
@@ -217,6 +221,18 @@
     <Content Include="Resources\GameObjects\F10RailGunProjectile.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resources\GameObjects\F1Corvette.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\GameObjects\F1LightGunBlast.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\GameObjects\F1LightGunPrj.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\GameObjects\F1LightPrjExplosion.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\GameObjects\GunBlast.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -232,6 +248,7 @@
   <ItemGroup>
     <Folder Include="DataBase\" />
     <Folder Include="Game.Core\WPFGameObjects\" />
+    <Folder Include="Factories\" />
     <Folder Include="Resources\Content\SpaceShips\F3\Fighter\" />
   </ItemGroup>
 

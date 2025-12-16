@@ -8,7 +8,7 @@ namespace WPFGameEngine.CollisionDetection.CollisionManager.Base
     {
         #region Fields
         private readonly object m_lock;
-        
+
         private volatile bool m_running;
         private CancellationTokenSource m_cancellationTokenSource;
         private Task m_checkTask;
@@ -108,28 +108,30 @@ namespace WPFGameEngine.CollisionDetection.CollisionManager.Base
             {
                 if (!m_running)
                 {
-                    try 
-                    { 
+                    try
+                    {
                         await Task.Delay(100, token);
                     }
-                    catch (TaskCanceledException) 
-                    { 
+                    catch (TaskCanceledException)
+                    {
                         break;
                     }
                     continue;
                 }
-
-                List<ICollidable?> currentObjects;
+                
                 lock (m_lock)
                 {
-                    currentObjects = World.Where(x => x != null && x.Enabled &&
+                    List<IGameObject> worldSnapshot = new List<IGameObject>(World);
+                    m_CollisionBuffer.Clear();
+                }
+
+                List<ICollidable?> currentObjects = World.Where(x => x != null && x.Enabled &&
                     (x is ICollidable collidable) &&
                     collidable.IsCollidable &&
                     collidable.Collider.CollisionEnabled &&
                     collidable.Collider.CollisionResolved)
                         .Select(x => x as ICollidable)
-                        .ToList();
-                }
+                        .ToList(); ;
 
                 int len = currentObjects.Count;
                 //Brute Force
@@ -139,8 +141,8 @@ namespace WPFGameEngine.CollisionDetection.CollisionManager.Base
                     {
                         var obj1 = currentObjects[i];
                         var obj2 = currentObjects[j];
-                        
-                        if(obj1 == null || obj2 == null)
+
+                        if (obj1 == null || obj2 == null)
                             continue;
 
                         if (CollisionHelper.Intersects(

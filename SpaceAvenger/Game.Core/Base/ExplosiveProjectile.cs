@@ -21,18 +21,23 @@ namespace SpaceAvenger.Game.Core.Base
 
             foreach (var obj in collect)
             {
-                if (obj is SpaceShipBase s && s.Faction != Faction)
+                if (obj is SpaceShipBase s && s.Faction != this.Faction)
                 {
                     s.DoDamage(Damage);
                     Collider.DisableCollision();
-                    Hide();
+                    var prevPos = GetWorldCenter(GetWorldTransformMatrix());
+                    AddToPool(this);
                     var expl = (GameView as IMapableObjectViewHost).Instantiate<TExplosion>();
                     expl.Scale(ExplosionScale);
-                    expl.Explode(GetWorldCenter(GetWorldTransformMatrix()));
+                    expl.Explode(prevPos);
                 }
             }
+        }
 
-            //base.ProcessCollision(info);
+        public override void OnGetFromPool()
+        {
+            Collider.EnableCollision();
+            base.OnGetFromPool();
         }
     }
 }

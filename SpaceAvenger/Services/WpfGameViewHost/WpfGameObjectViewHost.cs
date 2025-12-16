@@ -27,6 +27,7 @@ namespace SpaceAvenger.Services.WpfGameViewHost
         #endregion
 
         #region Properties
+        public IGameTimer GameTimer { get => m_gameTimer; }
         public List<IGameObject> World { get; protected set; }
         public GameState GameState { get; protected set; }
         protected override int VisualChildrenCount => m_visualCollection.Count;
@@ -132,6 +133,40 @@ namespace SpaceAvenger.Services.WpfGameViewHost
         public virtual void ClearWorld()
         {
             World.Clear();
+        }
+
+        public IGameObject GetObject(Func<IGameObject, bool> predicate, bool recursiveSearch = false)
+        {
+            IGameObject res = null;
+
+            foreach (var gameObject in World)
+            {
+                if (!recursiveSearch)
+                {
+                    if (predicate.Invoke(gameObject))
+                    {
+                        res = gameObject;
+                        break;
+                    }
+                }
+                else
+                {
+                    if (predicate.Invoke(gameObject))
+                    {
+                        res = gameObject;
+                        break;
+                    }
+                    else
+                    {
+                        res = gameObject.FindChild(predicate, true);
+
+                        if (res != null)
+                            break;
+                    }
+                }
+            }
+
+            return res;
         }
 
         #endregion

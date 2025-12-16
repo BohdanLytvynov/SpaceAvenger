@@ -63,7 +63,7 @@ namespace SpaceAvenger.Services.WpfGameViewHost
                                 updatable.Update();
                             if (world[i] is ICollidable collidable)
                                 collidable.ProcessCollision(CollisionManager.GetCollisionInfo(id));
-                                CollisionManager.RemoveFromBuffer(id);
+                            //CollisionManager.RemoveFromBuffer(id);
                             if (world[i] is IRenderable renderable)
                                 renderable.Render(dc, Matrix3x3.Identity);
                         }

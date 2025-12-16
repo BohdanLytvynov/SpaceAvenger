@@ -30,11 +30,11 @@ namespace SpaceAvenger.Game.Core.Base
         protected override bool IsInWindowBounds(Vector2 position)
         {
             var w = App.Current.MainWindow;
-            double winWidth = w.Width;
-            double winHeight = w.Height;
+            double winWidth = w.ActualWidth;
+            double winHeight = w.ActualHeight;
             float x = position.X;
-            float y = position.Y + Transform.TextureCenterPosition.Y;
-            return x >= 0 && x <= winWidth && y >= 0 && y <=winHeight;
+            float y = position.Y;
+            return (x >= 0 && x <= winWidth) && (y >= 0 && y <=winHeight);
         }
 
         public override void Update()
@@ -49,20 +49,13 @@ namespace SpaceAvenger.Game.Core.Base
         {
             m_dir = dir;
             Move = true;
-            Enable();
         }
 
         public override void OnAddToPool()
         {
-            m_dir = Vector2.Zero;
             Move = false;
+            m_dir = Vector2.Zero;
             base.OnAddToPool();
-        }
-
-        public override void OnGetFromPool()
-        {
-            Collider.EnableCollision();
-            base.OnGetFromPool();
         }
     }
 }

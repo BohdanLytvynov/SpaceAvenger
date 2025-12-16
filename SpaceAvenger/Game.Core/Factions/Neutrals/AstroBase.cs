@@ -1,7 +1,7 @@
-﻿using SpaceAvenger.Game.Core.Animations.Explosions;
+﻿using SpaceAvenger.Game.Core.AI;
+using SpaceAvenger.Game.Core.Animations.Explosions;
 using SpaceAvenger.Game.Core.Base;
 using SpaceAvenger.Game.Core.Enums;
-using SpaceAvenger.Game.Core.Factions.F10.Engines;
 using System.Numerics;
 using WPFGameEngine.GameViewControl;
 using WPFGameEngine.Timers.Base;
@@ -13,6 +13,11 @@ namespace SpaceAvenger.Game.Core.Factions.Neutrals
     {
         public AstroBase() : base(Faction.Neutrals)
         {
+        }
+
+        public override void ConfigureAI(SpaceShipControlModule aIModule)
+        {
+            //throw new System.NotImplementedException();
         }
 
         public override void StartUp(IGameObjectViewHost gameObjectViewHost, IGameTimer gameTimer)

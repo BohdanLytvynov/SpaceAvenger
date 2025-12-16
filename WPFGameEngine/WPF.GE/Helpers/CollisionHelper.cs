@@ -23,7 +23,7 @@ namespace WPFGameEngine.WPF.GE.Helpers
                 return Intersects((Circle)b, (Rectangle)a);
             if (a is Circle && b is Triangle)
                 return Intersects((Circle)a, (Triangle)b);
-            if(a is Triangle && b is Circle)
+            if (a is Triangle && b is Circle)
                 return Intersects((Circle)b, (Triangle)a);
 
             return SATIntersects(a, b);
@@ -178,7 +178,7 @@ namespace WPFGameEngine.WPF.GE.Helpers
         /// <param name="shape2"></param>
         /// <returns></returns>
         public static bool SATIntersects(IShape2D shape1, IShape2D shape2)
-        { 
+        {
             var normalsA = shape1.GetNormals();
             var normalsB = shape2.GetNormals();
             var normalsAll = normalsA.Concat(normalsB).Distinct().ToList();
@@ -188,7 +188,7 @@ namespace WPFGameEngine.WPF.GE.Helpers
                 (float minA, float maxA) = Project(shape1, normal);
                 (float minB, float maxB) = Project(shape2, normal);
 
-                if(maxA < minB || maxB < minA)
+                if (maxA < minB || maxB < minA)
                     return false;
             }
 
@@ -196,7 +196,7 @@ namespace WPFGameEngine.WPF.GE.Helpers
         }
 
         public static (float min, float max) Project(IShape2D shape, Vector2 axis)
-        { 
+        {
             float min = float.MaxValue;
             float max = float.MinValue;
             var vertexes = shape.GetVertexes();
@@ -204,8 +204,8 @@ namespace WPFGameEngine.WPF.GE.Helpers
             foreach (var vertex in vertexes)
             {
                 float projection = Vector2.Dot(vertex, axis);
-                if(projection < min) min = projection;
-                if(projection > max) max = projection;
+                if (projection < min) min = projection;
+                if (projection > max) max = projection;
             }
 
             return (min, max);

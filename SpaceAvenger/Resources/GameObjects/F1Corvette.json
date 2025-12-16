@@ -14,14 +14,14 @@
         {
           "RecreateType": "RelativeTransformComponent",
           "Position": {
-            "X": 0.34720948,
-            "Y": 0.42118022
+            "X": 0.30560914,
+            "Y": 0.35886633
           },
           "CenterPosition": {
             "X": 0.5,
             "Y": 0.5
           },
-          "Rotation": -180,
+          "Rotation": 0,
           "Scale": {
             "Width": 1,
             "Height": 1
@@ -43,14 +43,14 @@
         {
           "RecreateType": "RelativeTransformComponent",
           "Position": {
-            "X": 0.15397988,
-            "Y": 0.85443735
+            "X": -0.19328828,
+            "Y": 0.24088515
           },
           "CenterPosition": {
             "X": 0.5,
             "Y": 0.5
           },
-          "Rotation": 0,
+          "Rotation": 90,
           "Scale": {
             "Width": 1,
             "Height": 1
@@ -917,14 +917,14 @@
         {
           "RecreateType": "RelativeTransformComponent",
           "Position": {
-            "X": -0.20832571,
-            "Y": 0.30617204
+            "X": 0.30616334,
+            "Y": -0.053129435
           },
           "CenterPosition": {
             "X": 0.5,
             "Y": 0.5
           },
-          "Rotation": 90,
+          "Rotation": 180,
           "Scale": {
             "Width": 0.6,
             "Height": 0.6
@@ -1791,14 +1791,14 @@
         {
           "RecreateType": "RelativeTransformComponent",
           "Position": {
-            "X": -0.11774931,
-            "Y": 6.062402E-17
+            "X": 0.60285497,
+            "Y": 0.02796286
           },
           "CenterPosition": {
             "X": 0.5,
             "Y": 0.5
           },
-          "Rotation": 90,
+          "Rotation": 180,
           "Scale": {
             "Width": 0.6,
             "Height": 0.6
@@ -2665,14 +2665,14 @@
         {
           "RecreateType": "RelativeTransformComponent",
           "Position": {
-            "X": 0.52836233,
-            "Y": 0.31665984
+            "X": 0.30626923,
+            "Y": 0.5419485
           },
           "CenterPosition": {
             "X": 0.5,
             "Y": 0.5
           },
-          "Rotation": -90,
+          "Rotation": 0,
           "Scale": {
             "Width": 0.6,
             "Height": 0.6
@@ -3539,14 +3539,14 @@
         {
           "RecreateType": "RelativeTransformComponent",
           "Position": {
-            "X": 0.445334,
-            "Y": 0.012196039
+            "X": 0.6019176,
+            "Y": 0.45478445
           },
           "CenterPosition": {
             "X": 0.5,
             "Y": 0.5
           },
-          "Rotation": -90,
+          "Rotation": 0,
           "Scale": {
             "Width": 0.6,
             "Height": 0.6
@@ -4413,17 +4413,17 @@
         {
           "RecreateType": "RelativeTransformComponent",
           "Position": {
-            "X": -0.09208731,
-            "Y": 0.9469304
+            "X": -0.3245334,
+            "Y": -0.1398143
           },
           "CenterPosition": {
-            "X": 0,
+            "X": 0.5,
             "Y": 0.5
           },
-          "Rotation": -90,
+          "Rotation": 0,
           "Scale": {
-            "Width": 0.4627558,
-            "Height": 0.44024557
+            "Width": 0.60694313,
+            "Height": 0.5558138
           }
         },
         {
@@ -4442,17 +4442,17 @@
         {
           "RecreateType": "RelativeTransformComponent",
           "Position": {
-            "X": -0.19809003,
-            "Y": 0.9439291
+            "X": -0.32691967,
+            "Y": -0.24607319
           },
           "CenterPosition": {
-            "X": 0,
+            "X": 0.5,
             "Y": 0.5
           },
-          "Rotation": -90,
+          "Rotation": 0,
           "Scale": {
-            "Width": 0.4597544,
-            "Height": 0.44774896
+            "Width": 0.60694313,
+            "Height": 0.5590094
           }
         },
         {
@@ -4473,7 +4473,7 @@
         "X": 0.5,
         "Y": 0.5
       },
-      "Rotation": 360,
+      "Rotation": 0,
       "Scale": {
         "Width": 1,
         "Height": 1
@@ -4486,15 +4486,13 @@
     {
       "RecreateType": "ColliderComponent",
       "Position": {
-        "X": 0.48609328,
+        "X": 0.39022577,
         "Y": 0.502699
       },
       "ColliderShape": {
-        "RecreateType": "Rectangle",
-        "Size": {
-          "Width": 43.911167,
-          "Height": 155.96036
-        }
+        "RecreateType": "Triangle",
+        "Height": 207.10793,
+        "Base": 133.2555
       }
     }
   ]

@@ -1,4 +1,5 @@
 ﻿using System.Windows.Media.Imaging;
+using WPFGameEngine.WPF.GE.AI.Base;
 using WPFGameEngine.WPF.GE.Component.Animations;
 using WPFGameEngine.WPF.GE.Component.Animators;
 using WPFGameEngine.WPF.GE.Component.Base;
@@ -13,8 +14,12 @@ namespace WPFGameEngine.WPF.GE.GameObjects
 {
     public abstract class GameObject : IGameObject
     {
+        #region AI
+        public IAIModule AIModule { get; protected set; }
+        #endregion
+
         #region Metadata
-        
+        public List<string> Metadata { get; }
         #endregion
 
         #region Nested Classes
@@ -92,8 +97,6 @@ namespace WPFGameEngine.WPF.GE.GameObjects
                 return Parent != null;
             }
         }
-
-        public List<string> Metadata { get; }
 
         #endregion
 

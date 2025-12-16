@@ -177,5 +177,59 @@ namespace WPFGameEngine.WPF.GE.GameObjects.Transformable
             //Apply new rotation
             Rotate(newAngle);
         }
+
+        public bool LookAtWithTreshold(Vector2 position, 
+            double rotSpeed, double deltaTime, Matrix3x3 worldMatrix,
+            double threshold)
+        {
+            bool isAimed = false;
+
+            //Get Dir Vector to Target
+            var dir = GetDirection(position, worldMatrix);
+            //Check that we are not in bounds of target
+            if (dir.LengthSquared() < 0.0001)
+                return isAimed;
+            //Get Local Basis -> Xl, Yl
+            var basis = GetBasis();
+            //Calculate angle to rotate to
+            var angle = dir.GetAngleDeg(basis.X);
+            //Decide the hemicircle of rotation according to Yl
+            double sign = Vector2.Dot(dir, basis.Y) < 0 ? -1 : 1;
+            //Get Current Angle
+            double currAngle = Transform.Rotation;
+            //Calculate destination angle
+            double destAngle = currAngle + sign * angle;
+            //LERP
+            //Get short rotation Way
+            double diff = destAngle - currAngle;
+            //Clamp between -180, 180, so we can operate using hemicirles
+            while (diff > 180) diff -= 360;
+            while (diff < -180) diff += 360;
+
+            isAimed = System.Math.Abs(diff) <= threshold;
+
+            if (isAimed)
+            {
+                Transform.Rotation = destAngle;
+                return true;
+            }
+
+            //Claculate rotation Step independent to FPS
+            double step = diff * rotSpeed * deltaTime;
+            //Get new Angle
+            double newAngle = currAngle + step;
+
+            if (System.Math.Sign(step) != System.Math.Sign(diff) 
+                || System.Math.Abs(step) >= System.Math.Abs(diff))
+            {
+                newAngle = destAngle;
+                isAimed = true;
+            }
+
+            //Apply new rotation
+            Rotate(newAngle);
+
+            return isAimed;
+        }
     }
 }

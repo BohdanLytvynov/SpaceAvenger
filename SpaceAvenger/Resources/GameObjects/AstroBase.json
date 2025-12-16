@@ -14,17 +14,17 @@
         {
           "RecreateType": "RelativeTransformComponent",
           "Position": {
-            "X": 0,
+            "X": 0.110247664,
             "Y": -0.11443291
           },
           "CenterPosition": {
-            "X": 0.5,
+            "X": 0,
             "Y": 0.5
           },
           "Rotation": 0,
           "Scale": {
-            "Width": 0.8524869,
-            "Height": 1
+            "Width": 0.76054907,
+            "Height": 0.80666715
           }
         },
         {

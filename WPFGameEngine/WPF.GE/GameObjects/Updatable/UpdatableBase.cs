@@ -31,6 +31,8 @@ namespace WPFGameEngine.WPF.GE.GameObjects
 
             Transform.OriginalObjectSize = originalSize;
 
+            AIModule?.Init(GameView, this);
+
             foreach (var child in Children)
             {
                 if (child is ITransformable transformable)
@@ -67,6 +69,8 @@ namespace WPFGameEngine.WPF.GE.GameObjects
             {
                 Animation.Update(GameTimer);
             }
+
+            AIModule?.Process(this);
 
             foreach (var child in Children)
             {

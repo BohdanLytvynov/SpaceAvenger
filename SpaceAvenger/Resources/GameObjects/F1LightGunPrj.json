@@ -28,14 +28,14 @@
     {
       "RecreateType": "ColliderComponent",
       "Position": {
-        "X": 0.4966606,
+        "X": 0.693189,
         "Y": 0.48156452
       },
       "ColliderShape": {
         "RecreateType": "Rectangle",
         "Size": {
-          "Width": 65.109665,
-          "Height": 45.425346
+          "Width": 38.531708,
+          "Height": 30.504269
         }
       }
     }

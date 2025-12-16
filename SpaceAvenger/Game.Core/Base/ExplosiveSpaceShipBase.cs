@@ -12,11 +12,6 @@ namespace SpaceAvenger.Game.Core.Base
         protected IAnimation ExplosiveAnimation;
         protected float ExplosionSpeed;
 
-        public override void StartUp(IGameObjectViewHost viewHost, IGameTimer gameTimer)
-        {
-            base.StartUp(viewHost, gameTimer);
-        }
-
         public ExplosiveSpaceShipBase(Faction factionName) : base(factionName)
         {
         }

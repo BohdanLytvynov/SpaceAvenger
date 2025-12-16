@@ -75,11 +75,30 @@ namespace WPFGameEngine.WPF.GE.Geometry.Realizations
         public override List<Vector2> GetNormals()
         {
             List<Vector2> result = new List<Vector2>();
-            result.Add(-Basis.X);
-            var sideDir = Vector2.Normalize(B - C);
-            result.Add(sideDir.GetPerpendicular());
-            sideDir = Vector2.Normalize(B - LeftUpperCorner);
-            result.Add(sideDir.GetPerpendicular()*-1);
+            var vertexes = GetVertexes(); // { B, LeftUpperCorner, C }
+            // Циклический обход всех ребер (i=0, i=1, i=2)
+            for (int i = 0; i < vertexes.Count; i++)
+            {
+                // Текущая вершина V1
+                Vector2 V1 = vertexes[i];
+
+                // Следующая вершина V2 (для последнего ребра (i=2) берется V0)
+                Vector2 V2 = vertexes[(i + 1) % vertexes.Count];
+
+                // 1. Вектор ребра V1 -> V2
+                Vector2 edge = V2 - V1;
+
+                // 2. Нормаль (Перпендикуляр)
+                // Предполагаем, что GetPerpendicular() возвращает (-y, x) или (y, -x)
+                Vector2 normal = edge.GetPerpendicular();
+
+                // 3. Нормализация - КРИТИЧНЫЙ ШАГ!
+                Vector2 normalizedNormal = Vector2.Normalize(normal);
+
+                result.Add(normalizedNormal);
+            }
+
+            // В результате будет ровно 3 корректные нормали.
             return result;
         }
 

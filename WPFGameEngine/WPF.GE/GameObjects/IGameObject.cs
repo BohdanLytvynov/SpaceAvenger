@@ -1,5 +1,6 @@
 ﻿using System.Windows.Media.Imaging;
 using WPFGameEngine.Factories.Base;
+using WPFGameEngine.WPF.GE.AI.Base;
 using WPFGameEngine.WPF.GE.Component.Animations;
 using WPFGameEngine.WPF.GE.Component.Animators;
 using WPFGameEngine.WPF.GE.Component.Base;
@@ -13,8 +14,12 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         IConvertToDto<GameObjectDto>, 
         IGameEngineEntity
     {
+        #region AI
+        IAIModule AIModule { get; }
+        #endregion
+
         #region Metadata
-        public List<string> Metadata { get; }
+        List<string> Metadata { get; }
         #endregion
 
         #region Lazy Loading

@@ -31,10 +31,10 @@ namespace WPFGameEngine.WPF.GE.Geometry.Base
 
         public abstract List<Vector2> GetVertexes();
 
-        public bool IntersectsWith(IShape2D other)
-        { 
-            return CollisionHelper.Intersects(this, other);
-        }
+        //public bool IntersectsWith(IShape2D other)
+        //{ 
+        //    return CollisionHelper.Intersects(this, other);
+        //}
         //To do -> need to be moved to Wpf
         public virtual void Render(DrawingContext drawingContext)
         {

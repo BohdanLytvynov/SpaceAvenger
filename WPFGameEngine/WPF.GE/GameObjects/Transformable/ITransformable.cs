@@ -26,6 +26,8 @@ namespace WPFGameEngine.WPF.GE.GameObjects.Transformable
         Size GetWorldScale(Matrix3x3 worldMatrix);
         Size GetWorldScale();
         void LookAt(Vector2 position, double rotSpeed, double deltaTime, Matrix3x3 worldMatrix);
+        bool LookAtWithTreshold(Vector2 position, double rotSpeed, 
+            double deltaTime, Matrix3x3 worldMatrix, double threshold);
         Vector2 GetDirection(Vector2 position, Matrix3x3 worldMatrix);
     }
 }

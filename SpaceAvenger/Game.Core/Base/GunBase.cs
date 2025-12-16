@@ -1,18 +1,15 @@
 ﻿using SpaceAvenger.Extensions.Math;
 using System;
-using System.Diagnostics;
 using System.Numerics;
 using System.Windows.Media;
 using WPFGameEngine.GameViewControl;
 using WPFGameEngine.Timers.Base;
 using WPFGameEngine.WPF.GE.Component.Animations;
-using WPFGameEngine.WPF.GE.GameObjects;
 using WPFGameEngine.WPF.GE.Math.Matrixes;
-using WPFGameEngine.WPF.GE.Math.Sizes;
 
 namespace SpaceAvenger.Game.Core.Base
 {
-    public class GunBase<TShell, TGunBlast> : MapableObject
+    public class GunBase<TShell, TGunBlast> : WeaponBase
         where TShell : ProjectileBase
         where TGunBlast : ExplosionBase
     {
@@ -64,7 +61,7 @@ namespace SpaceAvenger.Game.Core.Base
                 m_Blast.UpdatePosition(blastPos);
                 shell.Translate(shellCenterPos);
                 var angle = Math.Atan2(m_ShootDirection.Y, m_ShootDirection.X) * 180 / Math.PI;
-                shell.Rotate(angle + 90);//Init sprite rotation to -90 deg, so we need to fix it by rotating to 90 deg
+                shell.Rotate(angle);
                 shell.Fire(m_ShootDirection);
                 m_fired = false;
                 Reload();
@@ -79,12 +76,26 @@ namespace SpaceAvenger.Game.Core.Base
             base.Update();
         }
 
+        public override void Render(DrawingContext dc, Matrix3x3 parent)
+        {
+            base.Render(dc, parent);
+
+            var m = GetWorldTransformMatrix();
+
+            var Gun_center = GetWorldCenter(m);
+
+            var brush = GetLoadIndicatorColor(TimeRemainig / ReloadTime);
+
+            dc.DrawEllipse(brush, new Pen() { Brush = Brushes.Black, Thickness = 1f },
+                Gun_center.ToPoint(), Transform.Scale.Width * 5f, Transform.Scale.Height * 5f);
+        }
+
         protected virtual void Reload()
         {
             TimeRemainig = ReloadTime;
         }
 
-        public virtual void Shoot(Vector2 dir)
+        public override void Shoot(Vector2 dir)
         {
             if (!GunLoaded || m_fired)
                 return;

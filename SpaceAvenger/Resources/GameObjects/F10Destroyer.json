@@ -6945,13 +6945,13 @@
     {
       "RecreateType": "ColliderComponent",
       "Position": {
-        "X": 0.37438247,
-        "Y": 0.49817017
+        "X": 0.35520893,
+        "Y": 0.49976796
       },
       "ColliderShape": {
         "RecreateType": "Triangle",
-        "Height": 342.20428,
-        "Base": 240.75433
+        "Height": 329.125,
+        "Base": 244.03415
       }
     }
   ]

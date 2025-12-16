@@ -1,6 +1,7 @@
 ﻿using SpaceAvenger.Game.Core.Animations.Explosions;
 using SpaceAvenger.Game.Core.Base;
 using SpaceAvenger.Game.Core.Enums;
+using WPFGameEngine.WPF.GE.Math.Sizes;
 
 namespace SpaceAvenger.Game.Core.Factions.F1.Projectiles
 {
@@ -8,6 +9,9 @@ namespace SpaceAvenger.Game.Core.Factions.F1.Projectiles
     {
         public F1LightGunPrj() : base(Faction.F1)
         {
+            ProjectileSpeed = 300f;
+            Damage = 100f;
+            ExplosionScale = new Size(1f, 1f);
         }
     }
 }

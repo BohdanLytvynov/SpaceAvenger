@@ -25,9 +25,7 @@ namespace WPFGameEngine.FactoryWrapper
 
         #region Fields
         public Dictionary<string, IFactory> ProductFactoryMap { get; protected set; }
-        #endregion
 
-        #region Properties
         private IAnimationFactory m_AnimationFactory;
         private IAnimatorFactory m_AnimatorFactory;
         private ISpriteFactory m_SpriteFactory;
@@ -35,10 +33,9 @@ namespace WPFGameEngine.FactoryWrapper
         private IRelativeTransformFactory m_RelativeTransformFactory;
         private IColliderFactory m_colliderFactory;
 
+        #endregion
         #region Add Tools
         public IResourceLoader ResourceLoader => m_resourceLoader;
-        #endregion
-
         #endregion
 
         #region Ctor
