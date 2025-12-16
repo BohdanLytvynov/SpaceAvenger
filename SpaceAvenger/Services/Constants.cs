@@ -6,6 +6,8 @@
 
         public const string START_GAME_COMMAND = "start";
         public const string STOP_GAME_COMMAND = "stop";
+        public const string PAUSE_GAME_COMMAND = "pause";
+        public const string RESUME_GAME_COMMAND = "resume";
 
         #endregion
 

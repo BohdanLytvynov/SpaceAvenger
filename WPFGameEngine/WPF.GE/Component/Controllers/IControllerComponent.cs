@@ -11,6 +11,7 @@ namespace WPFGameEngine.WPF.GE.Component.Controllers
         MouseButton MouseButton { get; }
 
         bool IsKeyDown(Key key);
+        void ReleaseKey(Key key);
 
         bool IsMouseButtonDown(MouseButton mouseButton);
     }

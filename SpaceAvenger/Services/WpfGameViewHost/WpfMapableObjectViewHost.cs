@@ -58,12 +58,11 @@ namespace SpaceAvenger.Services.WpfGameViewHost
                     {
                         if (world[i] != null)
                         {
-                            int id = World[i].Id;
+                            int id = world[i].Id;
                             if (world[i] is IUpdatable updatable)
                                 updatable.Update();
                             if (world[i] is ICollidable collidable)
-                                collidable.ProcessCollision(CollisionManager.GetCollisionInfo(id));
-                            //CollisionManager.RemoveFromBuffer(id);
+                                collidable.ProcessCollision(CollisionManager.GetCollisionInfo(id));                            
                             if (world[i] is IRenderable renderable)
                                 renderable.Render(dc, Matrix3x3.Identity);
                         }
@@ -103,6 +102,7 @@ namespace SpaceAvenger.Services.WpfGameViewHost
         {
             CollisionManager.Clear();
             base.ClearWorld();
+            ObjectPoolManager.Clear();
         }
 
         public СacheableObject Instantiate(string typeName, 

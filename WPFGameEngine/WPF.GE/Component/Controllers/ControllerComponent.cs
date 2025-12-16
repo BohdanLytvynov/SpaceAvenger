@@ -30,6 +30,8 @@ namespace WPFGameEngine.WPF.GE.Component.Controllers
 
         public abstract bool IsKeyDown(Key key);
 
+        public abstract void ReleaseKey(Key key);
+
         public abstract bool IsMouseButtonDown(MouseButton mouseButton);
         #endregion
     }

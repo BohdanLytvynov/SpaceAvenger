@@ -34,6 +34,11 @@ namespace WPFGameEngine.ObjectPools.PoolManagers
             m_PoolMap[name].Insert(mapableObject);//O(1)
         }
 
+        public void Clear()
+        {
+            m_PoolMap.Clear();
+        }
+
         public TObject? GetFromPool<TObject>()
             where TObject : СacheableObject
         {

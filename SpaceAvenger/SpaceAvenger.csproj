@@ -248,7 +248,6 @@
   <ItemGroup>
     <Folder Include="DataBase\" />
     <Folder Include="Game.Core\WPFGameObjects\" />
-    <Folder Include="Factories\" />
     <Folder Include="Resources\Content\SpaceShips\F3\Fighter\" />
   </ItemGroup>
 

@@ -11,10 +11,24 @@ namespace SpaceAvenger.Game.Core.Levels
 {
     public class SurvivalLevel : LevelBase
     {
+        SpaceShipBase m_curr;
+
+        SpaceShipBase m_player;
+
+        public override LevelStatistics GetCurrentLevelStatistics()
+        {
+            return new LevelStatistics() 
+            {
+                EnemyCount = EnemyCount,
+                ShipsDestroyed = ShipsDestroyed,
+                IsAlive = m_player.IsAlive,
+            };
+        }
+
         public override void StartUp(IGameObjectViewHost viewHost, IGameTimer gameTimer)
         {
             base.StartUp(viewHost, gameTimer);
-
+            CurrentEnemyCount = EnemyCount;
             //Init Player Here
             var w = App.Current.MainWindow;
 
@@ -22,7 +36,7 @@ namespace SpaceAvenger.Game.Core.Levels
 
             if(mapView == null) return;
             //Set up Player
-            mapView.Instantiate<F10Destroyer>(
+            m_player = mapView.Instantiate<F10Destroyer>(
                 c => {
 
                     c.Metadata.Add("Player");
@@ -49,23 +63,63 @@ namespace SpaceAvenger.Game.Core.Levels
                         //Vertical - half of the screen
                         float y = (float)(w.ActualHeight / 2);
                         t.Translate(new System.Numerics.Vector2(x, y));
+                        var ship = c as SpaceShipBase;
+                        if (ship != null)
+                        {
+                            ship.UseCaching = false;
+                        }
                     }
                 }
                 );
-
-            mapView.Instantiate<F1Corvette>(c => 
-            {
-                //(c as SpaceShipBase).ConfigureAI(new AI.SpaceShipControlModule());
-                if (c is ITransformable t)
-                {
-                    t.Scale(new WPFGameEngine.WPF.GE.Math.Sizes.Size(0.7f, 0.7f));
-                }
-            });
         }
 
         public override void Update()
         {
-            
+            bool isAlive = m_player.IsAlive;
+            //Player was killed
+            if (m_player.IsDestroyed)
+            {
+                OnLevelFinished(new LevelStatistics()
+                {
+                    ShipsDestroyed = ShipsDestroyed,
+                    EnemyCount = EnemyCount,
+                    IsAlive = isAlive
+                });
+                return;
+            }
+
+            if (m_curr?.IsDestroyed ?? false)
+            {
+                ShipsDestroyed++;
+            }
+
+            //Win
+            if (EnemyCount == ShipsDestroyed && m_player.IsAlive
+                && m_curr.IsDestroyed)
+            {
+                OnLevelFinished(new LevelStatistics()
+                {
+                    ShipsDestroyed = ShipsDestroyed,
+                    EnemyCount = EnemyCount,
+                    IsAlive = isAlive
+                });
+                return;
+            }
+
+            if (m_curr?.IsDestroyed ?? true && CurrentEnemyCount > 0 && m_player.IsAlive)
+            {
+                IMapableObjectViewHost mapView = GameView as IMapableObjectViewHost;
+
+                m_curr = mapView.Instantiate<F1Corvette>(c =>
+                {
+                    if (c is ITransformable t)
+                    {
+                        t.Scale(new WPFGameEngine.WPF.GE.Math.Sizes.Size(0.7f, 0.7f));
+                    }
+                });
+                
+                CurrentEnemyCount--;
+            }
         }
     }
 }

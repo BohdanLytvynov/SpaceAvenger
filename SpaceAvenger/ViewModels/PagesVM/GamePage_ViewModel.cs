@@ -16,7 +16,10 @@ using Microsoft.Extensions.DependencyInjection;
 using SpaceAvenger.Services.WpfGameViewHost;
 using WPFGameEngine.ObjectPools.Base;
 using WPFGameEngine.CollisionDetection.CollisionManager.Base;
-using SpaceAvenger.Game.Core.Levels;
+using WPFGameEngine.WPF.GE.Levels;
+using System.Windows.Input;
+using SpaceAvenger.Views.DialogWindow;
+using SpaceAvenger.Views.Pages;
 
 namespace SpaceAvenger.ViewModels.PagesVM
 {
@@ -38,9 +41,22 @@ namespace SpaceAvenger.ViewModels.PagesVM
         private IServiceProvider m_serviceProvider;
         private IControllerComponent m_controllerComponent;
         private ICollisionManager m_collisionManager;
+
+        private int m_ShipsDestroyed;
+        private int m_EnemyShips;
+
+        private ILevel m_curr;
+
         #endregion
 
         #region Properties
+
+        public int ShipsDestroyed 
+        { get => m_ShipsDestroyed; set => Set(ref m_ShipsDestroyed, value); }
+
+        public int EnemyShips 
+        { get => m_EnemyShips; set => Set(ref m_EnemyShips, value); }
+
         public Rect BackViewport 
         {
             get=> m_backViewport; 
@@ -50,6 +66,12 @@ namespace SpaceAvenger.ViewModels.PagesVM
         public WpfMapableObjectViewHost GameView { get=> m_GameView; set=> Set(ref m_GameView, value); }
 
         public ImageSource Background { get=> m_GameBack; set=> Set(ref m_GameBack, value); }
+        #endregion
+
+        #region Commands
+        public ICommand OnEscapeButtonPressed { get; }
+        public ICommand OnResumeButtonPressed { get; }
+        public ICommand OnExitButtonPressed { get; }
         #endregion
 
         #region Ctor
@@ -97,12 +119,30 @@ namespace SpaceAvenger.ViewModels.PagesVM
         {
             if (gameMessage.Content.Equals(c.START_GAME_COMMAND))
             {
-                Initialize();
+                m_curr = gameMessage.Level;
+                Initialize(m_curr);
                 m_GameView.StartGame();
             }
             else if (gameMessage.Content.Equals(c.STOP_GAME_COMMAND))
             {
+                //Escaping from the Game
                 m_GameView.Stop();
+                m_GameView.ClearWorld();
+                m_PageManager.SwitchPage(nameof(LevelStatistics_Page), FrameType.MainFrame);
+                m_MessageBus.Send<LevelStatisticMessage, LevelStatistics>(
+                        new LevelStatisticMessage(m_curr.GetCurrentLevelStatistics())
+                        );
+
+            }
+            else if (gameMessage.Content.Equals(c.PAUSE_GAME_COMMAND))
+            {
+                //Pausing the game
+                m_GameView.Pause();
+            }
+            else if (gameMessage.Content.Equals(c.RESUME_GAME_COMMAND))
+            { 
+                //Resume the Game
+                m_GameView.Resume();
             }
         }
 
@@ -122,17 +162,47 @@ namespace SpaceAvenger.ViewModels.PagesVM
 
         private void Update()
         {
-            MoveBackground();
+            if (m_controllerComponent != null 
+                && GameView.GameState == WPFGameEngine.Enums.GameState.Running &&
+                m_controllerComponent.IsKeyDown(Key.Escape))
+            {
+                GameView.Pause();
+                EscDialog escDialog = new EscDialog(m_MessageBus);
+                escDialog.Topmost = true;
+                m_controllerComponent.ReleaseKey(Key.Escape);
+                escDialog.ShowDialog();
+            }
+
+            if (GameView.GameState == WPFGameEngine.Enums.GameState.Running)
+            {
+                MoveBackground();
+            }
+
+            if (m_curr != null)
+            { 
+                EnemyShips = m_curr.CurrentEnemyCount;
+                ShipsDestroyed = m_curr.ShipsDestroyed;
+            }
         }
 
         #endregion
 
-        private void Initialize()
+        private void Initialize(ILevel level)
         {
-            SurvivalLevel survivalLevel = new SurvivalLevel();
             m_controllerComponent = m_serviceProvider.GetRequiredService<IControllerComponent>();
-            survivalLevel.ControllerComponent = m_controllerComponent;
-            GameView.AddObject(survivalLevel);
+            level.ControllerComponent = m_controllerComponent;
+            level.OnGameFinished += Level_OnGameFinished;
+            GameView.AddObject(level);
+        }
+
+        private void Level_OnGameFinished(LevelStatistics obj)
+        {
+            GameView.Stop();
+            GameView.ClearWorld();
+            m_PageManager.SwitchPage(nameof(LevelStatistics_Page), FrameType.MainFrame);
+            m_MessageBus.Send<LevelStatisticMessage, LevelStatistics>(
+                    new LevelStatisticMessage(obj)
+                    );
         }
 
         protected override void Unsubscribe()

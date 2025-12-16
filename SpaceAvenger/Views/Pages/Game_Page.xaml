@@ -11,15 +11,39 @@
       x:Name="Root"
       d:DataContext="{d:DesignInstance vm:GamePage_ViewModel, IsDesignTimeCreatable=True}" 
       Background="Transparent"
-      Focusable="True">
-    <Grid>
+      Focusable="True"
+      >
+    <Grid x:Name="main">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="35"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
         <Grid.Background>
             <ImageBrush ImageSource="{StaticResource Back1_GamePage}" 
                             Stretch="UniformToFill" 
                             TileMode="FlipX"
                         Viewport="{Binding BackViewport, UpdateSourceTrigger=PropertyChanged}"/>
         </Grid.Background>
-        <Label Width="{Binding RelativeSource={RelativeSource 
+        <Grid Grid.Row="0" Panel.ZIndex="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="300"/>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="300"/>
+                <ColumnDefinition Width="20"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="2" Style="{StaticResource textBlockHeaders}"
+                       Text="{Binding EnemyShips, UpdateSourceTrigger=PropertyChanged,
+                StringFormat='Кількість ворогів: {0}'}"
+                       />
+            <TextBlock Grid.Column="4" Style="{StaticResource textBlockHeaders}"
+                       Text="{Binding ShipsDestroyed, UpdateSourceTrigger=PropertyChanged,
+                StringFormat='Знищено: {0}'}"
+                       />
+        </Grid>
+
+        <Label Grid.Row="0" Grid.RowSpan="2" Width="{Binding RelativeSource={RelativeSource 
             Mode=FindAncestor, AncestorType=Page}, Path=ActualWidth, 
             UpdateSourceTrigger=PropertyChanged}"
                Height="{Binding RelativeSource={RelativeSource 

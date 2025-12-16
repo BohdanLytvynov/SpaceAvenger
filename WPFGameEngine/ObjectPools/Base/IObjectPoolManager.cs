@@ -8,5 +8,6 @@ namespace WPFGameEngine.ObjectPools.Base
         TObject? GetFromPool<TObject>()
             where TObject : СacheableObject;
         СacheableObject? GetFromPool(string typeName);
+        void Clear();
     }
 }

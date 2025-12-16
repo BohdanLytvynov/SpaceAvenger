@@ -21,7 +21,8 @@ namespace SpaceAvenger.Game.Core.Base
         public float VertSpeed { get; protected set; }
         public Faction Faction { get; private set; }
         public bool IsAlive { get; private set; }
-
+        public bool IsDestroyed { get; protected set; }
+        public float DestrAnimIndex { get; set; }
         protected Bar HPBar;
         protected Bar ShieldBar;
 
@@ -43,6 +44,7 @@ namespace SpaceAvenger.Game.Core.Base
             BarLow = Brushes.Red;
             BarHigh = Brushes.Green;
             BarMedium = Brushes.Orange;
+            IsDestroyed = false;
 
             HPBar = FindChild(x => x.UniqueName.Equals("HP")) as Bar;
             HPBar.Max = HP;
@@ -90,12 +92,16 @@ namespace SpaceAvenger.Game.Core.Base
 
         protected virtual void Destroy()
         {
+            IsDestroyed = true;
             Disable(true);
             AddToPool(this);
         }
 
         public override void OnGetFromPool()
         {
+            IsDestroyed = false;
+            HP = HPBar.Max;
+            Shield = ShieldBar?.Max ?? 0;
             IsAlive = true;
             base.OnGetFromPool();
         }

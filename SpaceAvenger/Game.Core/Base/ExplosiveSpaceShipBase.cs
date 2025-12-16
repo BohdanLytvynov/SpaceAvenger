@@ -14,12 +14,14 @@ namespace SpaceAvenger.Game.Core.Base
 
         public ExplosiveSpaceShipBase(Faction factionName) : base(factionName)
         {
+            DestrAnimIndex = 1f / 3f;
         }
 
         public override void Update()
         {
-            if (ExplosiveAnimation != null && ExplosiveAnimation.IsRunning && ExplosiveAnimation.CurrentFrameIndex
-                == ExplosiveAnimation.AnimationFrames.Count * 1/3)
+            if (ExplosiveAnimation != null 
+                && ExplosiveAnimation.IsRunning && (ExplosiveAnimation.CurrentFrameIndex
+                == (int)(ExplosiveAnimation.AnimationFrames.Count * DestrAnimIndex))               )
             {
                 base.Destroy();
             }

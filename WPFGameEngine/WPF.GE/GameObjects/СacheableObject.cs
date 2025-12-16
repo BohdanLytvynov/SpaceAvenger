@@ -7,7 +7,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects
     public abstract class СacheableObject : MapableObject
     {
         public bool Cached { get; set; }
-        public bool UseCaching { get; protected set; }
+        public bool UseCaching { get; set; }
 
         public override void StartUp(IGameObjectViewHost viewHost, IGameTimer gameTimer)
         {
@@ -32,7 +32,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects
 
         public virtual void OnAddToPool()
         {
-            Translate(new Vector2(200, 200));
+            Translate(new Vector2(100, 100));
             Disable(true);
             Cached = true;
         }
@@ -40,11 +40,12 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         public virtual void OnGetFromPool()
         {
             Cached = false;
-            Enable();
+            Enable(true);
         }
 
         protected void AddToPool(СacheableObject gameObject)
         {
+            if (!UseCaching) return;
             gameObject.OnAddToPool();
             (GameView as IMapableObjectViewHost).ObjectPoolManager.AddToPool(gameObject);
         }

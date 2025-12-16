@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SpaceAvenger.Enums.FrameTypes
 {
-    internal enum FrameType : byte
+    public enum FrameType : byte
     {
         MainFrame = 1,
         InfoFrame

@@ -90,8 +90,7 @@ namespace SpaceAvenger.ViewModels.PagesVM
 
         private void OnSurvivalModeButtonPressedExecute(object p)
         {
-            m_PageManager.SwitchPage(nameof(Game_Page), FrameType.MainFrame);
-            m_messageBus.Send<GameMessage, string>(new GameMessage(c.START_GAME_COMMAND));
+            m_PageManager.SwitchPage(nameof(Levels_Page), FrameType.MainFrame);
         }
 
         #endregion

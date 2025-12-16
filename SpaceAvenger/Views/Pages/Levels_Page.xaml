@@ -4,9 +4,11 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:SpaceAvenger.Views.Pages"
+      xmlns:vm="clr-namespace:SpaceAvenger.ViewModels.PagesVM"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="Levels_Page">
+      Title="Levels_Page"
+      d:DataContext="{d:DesignInstance vm:Levels_ViewModel, IsDesignTimeCreatable=True}">
 
     <Page.Background>
         <ImageBrush 
@@ -27,14 +29,77 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="20"/>
                 <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="40"/>
+                <ColumnDefinition Width="200"/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="1" Content="Back" 
+            <Button Grid.Column="1" Content="Назад" 
                 Style="{StaticResource Button}"
-                FontSize="16" Foreground="White"/>
+                FontSize="16" Foreground="White"
+                    Command="{Binding OnBackButtonPressed}"/>
+
+            <Button Grid.Column="3" Content="Розпочати гру" 
+    Style="{StaticResource Button}"
+    FontSize="16" Foreground="White" Command="{Binding OnStartGameButtonPressed}"/>
         </Grid>
-        <TextBlock Text="Choose a Mission Commander:"
+        <TextBlock Text="Налаштування рівня:"
                Style="{StaticResource textBlockHeaders}"/>
-        <ListView Background="{StaticResource LVBack}" Grid.Row="1"/>
+        <Grid Grid.Row="1">
+            <Grid.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#A5313C5D"/>
+                    <GradientStop Color="#333F4861" Offset="1"/>
+                </LinearGradientBrush>
+            </Grid.Background>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="32"/>
+                <ColumnDefinition Width="250"/>
+                <ColumnDefinition Width="40"/>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="32"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="40"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Column="1" Grid.Row="1" 
+                       Text="Введіть кількість ворогів:" 
+                       Style="{StaticResource textBlockHeaders}"/>
+            <TextBox Grid.Row="1" Grid.Column="3" Style="{StaticResource TextBox}">
+                <TextBox.Text>
+                    <Binding Path="EnemiesCount" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                        <Binding.ValidationRules>
+                            <DataErrorValidationRule/>
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
+            <RichTextBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" Margin="20"
+                         FontSize="16" Foreground="White"
+                       >
+                <RichTextBox.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#33000000"/>
+                        <GradientStop Color="#33FFFFFF" Offset="1"/>
+                    </LinearGradientBrush>
+                </RichTextBox.Background>
+                <RichTextBox.Document>
+                    <FlowDocument>
+                        <Paragraph TextAlignment="Center">Правила Гри
+                        </Paragraph>
+                        <Paragraph>Використовуючи клавіши W A D 
+                            керуйте космічним кораблем. Для прискорення 
+                            і руху вперед натисніть W, Щоб полетіти в ліво - тисніть A, а для польоту 
+                            вправо - D. Курсором наводьте зброю на ворогів і клікайте для стрільби.                            
+                        </Paragraph>
+                        <Paragraph>Тут ви можете задати кількість ворогів. 
+                            Обережно! якщо противник скриється від вас то він зявиться з тилу.
+                        </Paragraph>
+                    </FlowDocument>
+                </RichTextBox.Document>
+            </RichTextBox>
+        </Grid>
     </Grid>
 </Page>
