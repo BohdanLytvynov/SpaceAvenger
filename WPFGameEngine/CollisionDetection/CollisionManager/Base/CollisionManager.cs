@@ -147,7 +147,7 @@ namespace WPFGameEngine.CollisionDetection.CollisionManager.Base
 
                         if (CollisionHelper.Intersects(
                             obj1.Collider.CollisionShape,
-                            obj2.Collider.CollisionShape))
+                            obj2.Collider.CollisionShape).Intersects)
                         {
                             lock (m_lock)
                             {

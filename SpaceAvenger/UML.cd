@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="SpaceAvenger.Game.Core.Factions.F1.Engines.F1Jet">
+    <Position X="1" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Game.Core\Factions\F1\Engines\F1Jet.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SpaceAvenger.Game.Core.Base.JetBase" Collapsed="true">
+    <Position X="2.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAQAAAACAAAAAQAAAAAAAAABAAIAAAJAAAAAAABAI=</HashCode>
+      <FileName>Game.Core\Base\JetBase.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WPFGameEngine.WPF.GE.GameObjects.MapableObject" Collapsed="true">
+    <Position X="2" Y="3" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
