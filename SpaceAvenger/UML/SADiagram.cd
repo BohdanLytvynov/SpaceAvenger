@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="SpaceAvenger.Services.WpfGameViewHost.WpfGameObjectViewHost">
+    <Position X="3.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAgACABEBCAIABAAAAIEIAgBAAAAAAAIAAAAAkAMAA=</HashCode>
+      <FileName>Services\WpfGameViewHost\WpfGameObjectViewHost.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="SpaceAvenger.Services.WpfGameViewHost.WpfMapableObjectViewHost">
+    <Position X="6" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgABAAAACAAABAAAQAAAAgAIAAAAAAIAAAAAiAAAA=</HashCode>
+      <FileName>Services\WpfGameViewHost\WpfMapableObjectViewHost.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

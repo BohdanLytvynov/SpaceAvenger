@@ -8,6 +8,6 @@ namespace WPFGameEngine.ObjectPools.Base
 
         СacheableObject? Get();
 
-        void Insert(СacheableObject mapableObject);
+        void Insert(СacheableObject cachableObject);
     }
 }
