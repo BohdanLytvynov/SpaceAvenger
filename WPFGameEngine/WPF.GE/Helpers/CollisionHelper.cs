@@ -319,32 +319,41 @@ namespace WPFGameEngine.WPF.GE.Helpers
         }
 
         /// <summary>
-        /// Separate Axis Theorem
+        /// Проверяет пересечение двух фигур с использованием теоремы о разделяющей оси (SAT).
         /// </summary>
-        /// <param name="shape1"></param>
-        /// <param name="shape2"></param>
-        /// <returns></returns>
+        /// <param name="shape1">Первая фигура для проверки.</param>
+        /// <param name="shape2">Вторая фигура для проверки.</param>
+        /// <returns>
+        /// Объект <see cref="CollisionResult"/>, содержащий информацию о факте столкновения, 
+        /// глубине проникновения и векторе минимального выталкивания (MTV).
+        /// </returns>
         public static CollisionResult SATIntersects(IShape2D shape1, IShape2D shape2)
         {
             float minOverlap = float.MaxValue;
             Vector2 smallestAxis = Vector2.Zero;
 
+            // 1. Получаем уникальные нормали (оси) обеих фигур для проверки
             var normalsA = shape1.GetNormals();
             var normalsB = shape2.GetNormals();
             var normalsAll = normalsA.Concat(normalsB).Distinct();
 
             foreach (var normal in normalsAll)
             {
+                // 2. Проецируем обе фигуры на текущую ось
                 (float minA, float maxA) = Project(shape1, normal);
                 (float minB, float maxB) = Project(shape2, normal);
 
+                // 3. Проверка на наличие "разделяющей оси"
+                // Если проекции не пересекаются хотя бы на одной оси, фигуры не сталкиваются
                 if (maxA < minB || maxB < minA)
                 {
                     return new CollisionResult { Intersects = false };
                 }
 
+                // 4. Вычисляем величину наложения проекций
                 float overlap = SMath.Min(maxA, maxB) - SMath.Max(minA, minB);
 
+                // 5. Поиск оси с минимальным наложением (ось минимального выталкивания)
                 if (overlap < minOverlap)
                 {
                     minOverlap = overlap;
@@ -352,6 +361,7 @@ namespace WPFGameEngine.WPF.GE.Helpers
                 }
             }
 
+            // 6. Убеждаемся, что вектор выталкивания направлен от первой фигуры ко второй
             Vector2 center1 = shape1.CenterPosition;
             Vector2 center2 = shape2.CenterPosition;
             if (Vector2.Dot(center2 - center1, smallestAxis) < 0)
@@ -359,11 +369,12 @@ namespace WPFGameEngine.WPF.GE.Helpers
                 smallestAxis = -smallestAxis;
             }
 
+            // 7. Возвращаем результат столкновения
             return new CollisionResult
             {
                 Intersects = true,
                 Overlap = minOverlap,
-                MTV = smallestAxis * minOverlap
+                MTV = smallestAxis * minOverlap // Minimum Translation Vector
             };
         }
 

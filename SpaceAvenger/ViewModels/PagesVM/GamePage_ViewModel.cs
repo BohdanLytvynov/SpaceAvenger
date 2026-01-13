@@ -99,9 +99,9 @@ namespace SpaceAvenger.ViewModels.PagesVM
         public GamePage_ViewModel()
         {
             #region InitFields
-            GESettings.DrawGizmo = true;
-            GESettings.DrawBorders = true;
-            GESettings.DrawColliders = true;
+            GESettings.DrawGizmo = false;
+            GESettings.DrawBorders = false;
+            GESettings.DrawColliders = false;
             #endregion
 
             m_BackMoveSpeed = 2;

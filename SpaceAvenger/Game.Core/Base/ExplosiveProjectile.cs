@@ -1,6 +1,8 @@
 ﻿using SpaceAvenger.Game.Core.Enums;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
+using WPFGameEngine.Extensions;
 using WPFGameEngine.GameViewControl;
 using WPFGameEngine.WPF.GE.GameObjects;
 
@@ -25,9 +27,12 @@ namespace SpaceAvenger.Game.Core.Base
                 {
                     s.DoDamage(Damage);
                     Collider.DisableCollision();
-                    var prevPos = GetWorldCenter(GetWorldTransformMatrix());
+                    var matrix = GetWorldTransformMatrix();
+                    var prevPos = GetWorldCenter(matrix);
                     AddToPool(this);
                     var expl = (GameView as IMapableObjectViewHost).Instantiate<TExplosion>();
+                    var angle = matrix.GetBasis().X.GetAngleDeg(expl.GetBasis().X);
+                    expl.Rotate(angle);
                     expl.Scale(ExplosionScale);
                     expl.Explode(prevPos);
                 }

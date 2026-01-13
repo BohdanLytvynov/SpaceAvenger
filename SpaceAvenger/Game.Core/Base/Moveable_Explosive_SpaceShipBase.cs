@@ -143,7 +143,7 @@ namespace SpaceAvenger.Game.Core.Base
                 item.Start();
             }
 
-            return basis.X * timeDelta * VertSpeed;
+            return basis.X * (timeDelta * VertSpeed + (VertAcceleration * timeDelta * timeDelta) / 2f);
         }
 
         protected virtual Vector2 MoveBackward(Basis2D basis, float timeDelta)

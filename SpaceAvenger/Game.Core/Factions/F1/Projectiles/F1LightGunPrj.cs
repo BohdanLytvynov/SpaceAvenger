@@ -10,7 +10,7 @@ namespace SpaceAvenger.Game.Core.Factions.F1.Projectiles
         public F1LightGunPrj() : base(Faction.F1)
         {
             ProjectileSpeed = 300f;
-            Damage = 300f;
+            Damage = 50;
             ExplosionScale = new Size(1f, 1f);
         }
     }

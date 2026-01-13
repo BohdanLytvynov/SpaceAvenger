@@ -2,6 +2,10 @@
 
 namespace WPFGameEngine.WPF.GE.Textures
 {
+    /// <summary>
+    /// TO DO. Abstract Texture Wrapper for moving to the cross platform app
+    /// </summary>
+    /// <typeparam name="TObject"></typeparam>
     public abstract class Texture2D<TObject> : ITexture2D<TObject>
     {
         public abstract double Width { get; protected set; }

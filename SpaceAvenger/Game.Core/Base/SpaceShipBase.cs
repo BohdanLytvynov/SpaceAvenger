@@ -19,6 +19,7 @@ namespace SpaceAvenger.Game.Core.Base
         public float ShieldRegenSpeed { get; protected set; }
         public float HorSpeed { get; protected set; }
         public float VertSpeed { get; protected set; }
+        public float VertAcceleration { get; protected set; }
         public Faction Faction { get; private set; }
         public bool IsAlive { get; private set; }
         public bool IsDestroyed { get; protected set; }
