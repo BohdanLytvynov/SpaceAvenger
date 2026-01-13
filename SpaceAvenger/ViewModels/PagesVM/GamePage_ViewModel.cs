@@ -20,6 +20,7 @@ using WPFGameEngine.WPF.GE.Levels;
 using System.Windows.Input;
 using SpaceAvenger.Views.DialogWindow;
 using SpaceAvenger.Views.Pages;
+using WPFGameEngine.ObjectInstantiators;
 
 namespace SpaceAvenger.ViewModels.PagesVM
 {
@@ -36,8 +37,7 @@ namespace SpaceAvenger.ViewModels.PagesVM
         private ImageSource m_GameBack;
         private WpfMapableObjectViewHost m_GameView;
         private IGameTimer m_gameTimer;
-        private IObjectBuilder m_objectBuilder;
-        private IObjectPoolManager m_objPoolManager;
+        private IObjectInstantiator m_ObjectInstantiator;
         private IServiceProvider m_serviceProvider;
         private IControllerComponent m_controllerComponent;
         private ICollisionManager m_collisionManager;
@@ -80,20 +80,18 @@ namespace SpaceAvenger.ViewModels.PagesVM
             IPageManagerService<FrameType> pageManager,
             IMessageBus messageBus,
             IGameTimer gameTimer,
-            IObjectBuilder objectBuilder,
-            IObjectPoolManager objectPoolManager,
+            IObjectInstantiator instantiator,
             IServiceProvider serviceProvider,
             ICollisionManager collisionManager) : this()
         {
             m_collisionManager = collisionManager ?? throw new ArgumentNullException(nameof(collisionManager));
-            m_objPoolManager = objectPoolManager ?? throw new ArgumentNullException(nameof(objectPoolManager));
+            m_ObjectInstantiator = instantiator ?? throw new ArgumentNullException(nameof(instantiator));
             m_serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
-            m_objectBuilder = objectBuilder ?? throw new ArgumentNullException(nameof(objectBuilder));
             m_MessageBus = messageBus ?? throw new ArgumentNullException(nameof(messageBus));
             m_PageManager = pageManager ?? throw new ArgumentNullException(nameof(pageManager));
             m_gameTimer = gameTimer ?? throw new ArgumentNullException(nameof(gameTimer));
             m_GameView = new WpfMapableObjectViewHost(m_gameTimer, 
-                m_objectBuilder, m_objPoolManager, m_collisionManager);
+                m_ObjectInstantiator, m_collisionManager);
             GameView.OnUpdate += Update;
             Subscriptions.Add(m_MessageBus.RegisterHandler<GameMessage, string>(OnMessageRecieved));
         }
@@ -101,9 +99,9 @@ namespace SpaceAvenger.ViewModels.PagesVM
         public GamePage_ViewModel()
         {
             #region InitFields
-            GESettings.DrawGizmo = false;
-            GESettings.DrawBorders = false;
-            GESettings.DrawColliders = false;
+            GESettings.DrawGizmo = true;
+            GESettings.DrawBorders = true;
+            GESettings.DrawColliders = true;
             #endregion
 
             m_BackMoveSpeed = 2;

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows;
 using System.Windows.Media;
 using WPFGameEngine.Enums;
@@ -92,7 +91,7 @@ namespace SpaceAvenger.Services.WpfGameViewHost
 
             preStartUpConfig?.Invoke(gameObject);
 
-            if(gameObject is IUpdatable updatable)
+            if(gameObject is IUpdatable updatable && !updatable.StartUpCalled)
                 updatable.StartUp(this, m_gameTimer);
 
             postStartUpConfig?.Invoke(gameObject);

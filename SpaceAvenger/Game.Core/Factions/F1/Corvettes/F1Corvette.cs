@@ -38,6 +38,7 @@ namespace SpaceAvenger.Game.Core.Factions.F1.Corvettes
             base.StartUp(viewHost, gameTimer);
             TargetMarkerPen = new Pen() { Brush = Brushes.Green };
             TargetMarkerPen.Freeze();
+            Disable(true);
         }
     }
 }

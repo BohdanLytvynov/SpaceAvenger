@@ -6,6 +6,7 @@ using WPFGameEngine.CollisionDetection.CollisionManager.Base;
 using WPFGameEngine.Enums;
 using WPFGameEngine.GameViewControl;
 using WPFGameEngine.ObjectBuilders.Base;
+using WPFGameEngine.ObjectInstantiators;
 using WPFGameEngine.ObjectPools.Base;
 using WPFGameEngine.Timers.Base;
 using WPFGameEngine.WPF.GE.GameObjects;
@@ -19,23 +20,19 @@ namespace SpaceAvenger.Services.WpfGameViewHost
     public class WpfMapableObjectViewHost : WpfGameObjectViewHost, IMapableObjectViewHost, IColliderView
     {
         #region Fields
-        public ICollisionManager CollisionManager { get; protected set; }
+        public ICollisionManager CollisionManager { get; init; }
+        public IObjectInstantiator ObjectInstantiator { get; init; }
         #endregion
 
         public WpfMapableObjectViewHost(IGameTimer gameTimer, 
-            IObjectBuilder objectBuilder,
-            IObjectPoolManager objectPoolManager,
+            IObjectInstantiator objectInstantiator,
             ICollisionManager collisionManager) :
             base(gameTimer)
         {
             CollisionManager = collisionManager ?? throw new ArgumentNullException(nameof(collisionManager));
             CollisionManager.World = World;
-            ObjectBuilder = objectBuilder ?? throw new ArgumentNullException(nameof(objectBuilder));
-            ObjectPoolManager = objectPoolManager ?? throw new ArgumentNullException(nameof(objectPoolManager));
+            ObjectInstantiator = objectInstantiator ?? throw new ArgumentNullException(nameof(objectInstantiator));
         }
-
-        public IObjectPoolManager ObjectPoolManager { get; init; }
-        public IObjectBuilder ObjectBuilder { get; init; }
 
         public TObject Instantiate<TObject>(Action<IGameObject>? preStartUpConfig = null,
             Action<IGameObject> postStartUpConfig = null, bool useCache = true) 
@@ -49,6 +46,7 @@ namespace SpaceAvenger.Services.WpfGameViewHost
             m_gameTimer.UpdateTime();
             if (GameState == GameState.Running)
             {
+                ObjectInstantiator.Update(m_gameTimer.totalTime.TotalMilliseconds);
                 m_visualCollection.Clear();
                 var world = World.OrderByDescending(x => x.ZIndex).ToList();
                 using (DrawingContext dc = m_drawingSurface.RenderOpen())
@@ -102,7 +100,7 @@ namespace SpaceAvenger.Services.WpfGameViewHost
         {
             CollisionManager.Clear();
             base.ClearWorld();
-            ObjectPoolManager.Clear();
+            ObjectInstantiator.Clear();
         }
 
         public СacheableObject Instantiate(string typeName, 
@@ -110,28 +108,11 @@ namespace SpaceAvenger.Services.WpfGameViewHost
             Action<IGameObject>? postStartUpConfig = null, 
             bool useCache = true)
         {
-            СacheableObject? obj = null;
-            
-            if (!useCache)
+            bool poolUsed;
+            СacheableObject? obj = ObjectInstantiator.Instantiate(typeName, out poolUsed, useCache) as СacheableObject;
+            if (!poolUsed)
             {
-                obj = ObjectBuilder.Build(typeName) as СacheableObject;
                 AddObject(obj, preStartUpConfig, postStartUpConfig);
-            }
-            else
-            {
-                obj = ObjectPoolManager.GetFromPool(typeName);
-
-                if (obj == null)
-                {
-                    obj = ObjectBuilder.Build(typeName) as СacheableObject;
-                    //Debug.WriteLine("Build:" + typeName);
-                    AddObject(obj, preStartUpConfig, postStartUpConfig);
-                }
-                else
-                {
-                    //Debug.WriteLine("Use From Pool:" + typeName);
-                    obj.OnGetFromPool();
-                }
             }
             return obj;
         }

@@ -33,6 +33,7 @@ using WPFGameEngine.WPF.GE.Component.Controllers;
 using WPFGameEngine.ObjectPools.Base;
 using WPFGameEngine.ObjectPools.PoolManagers;
 using WPFGameEngine.CollisionDetection.CollisionManager.Base;
+using WPFGameEngine.ObjectInstantiators;
 
 namespace SpaceAvenger
 {
@@ -89,6 +90,7 @@ namespace SpaceAvenger
                     importer,
                     factoryWrapper);
             });
+            services.AddSingleton<IObjectInstantiator, ObjectInstantiator>();
             // Add ViewModels (Windows)
             services.AddSingleton<MainWindowViewModel>();
             // Add ViewModels (Pages)

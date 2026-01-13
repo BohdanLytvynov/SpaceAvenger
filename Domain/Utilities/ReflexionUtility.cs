@@ -1,14 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Reflection;
 
 namespace Domain.Utilities
 {
+    /// <summary>
+    /// Helper for the reflexion Functions
+    /// </summary>
     public static class ReflexionUtility
     {
+        /// <summary>
+        /// Get the collection of the TypeInfo from the Assembly, filtered by the predicate
+        /// </summary>
+        /// <param name="assembly">Assembly for check</param>
+        /// <param name="predicate">Filtering predicate</param>
+        /// <returns>Collection of the TypeInfo objects</returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="Exception"></exception>
         public static IEnumerable<TypeInfo> GetObjectsTypeInfo(Assembly assembly,
             Func<TypeInfo, bool> predicate)
         {

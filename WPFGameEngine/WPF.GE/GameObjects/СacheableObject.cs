@@ -1,5 +1,6 @@
 ﻿using System.Numerics;
 using WPFGameEngine.GameViewControl;
+using WPFGameEngine.ObjectPools.ThreadSafePools;
 using WPFGameEngine.Timers.Base;
 
 namespace WPFGameEngine.WPF.GE.GameObjects
@@ -8,6 +9,10 @@ namespace WPFGameEngine.WPF.GE.GameObjects
     {
         public bool Cached { get; set; }
         public bool UseCaching { get; set; }
+        /// <summary>
+        /// Controls Time of Delay, that must pass before object will be ready to use from the Object Pool, Set in ms
+        /// </summary>
+        public double Delay { get; protected set; }
 
         public override void StartUp(IGameObjectViewHost viewHost, IGameTimer gameTimer)
         {
@@ -23,8 +28,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects
             {
                 AddToPool(this);
             }
-                
-            
+
             base.Update();
         }
 
@@ -32,22 +36,21 @@ namespace WPFGameEngine.WPF.GE.GameObjects
 
         public virtual void OnAddToPool()
         {
-            Translate(new Vector2(100, 100));
-            Disable(true);
+            Translate(Vector2.Zero);
+            Hide();
             Cached = true;
         }
 
         public virtual void OnGetFromPool()
         {
             Cached = false;
-            Enable(true);
         }
 
         protected void AddToPool(СacheableObject gameObject)
         {
             if (!UseCaching) return;
-            gameObject.OnAddToPool();
-            (GameView as IMapableObjectViewHost).ObjectPoolManager.AddToPool(gameObject);
+            if (Cached) return;
+            (GameView as IMapableObjectViewHost).ObjectInstantiator.AddToPool(new DelayedItem(gameObject, Delay));
         }
     }
 }

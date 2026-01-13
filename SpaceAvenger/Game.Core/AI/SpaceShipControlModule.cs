@@ -1,6 +1,5 @@
 ﻿using SpaceAvenger.Game.Core.Base;
 using SpaceAvenger.Game.Core.Base.Interfaces;
-using SpaceAvenger.Game.Core.Factions.F1.Corvettes;
 using System;
 using System.Numerics;
 using System.Windows;
@@ -14,6 +13,9 @@ using WPFGameEngine.WPF.GE.Math.Basis;
 
 namespace SpaceAvenger.Game.Core.AI
 {
+    /// <summary>
+    /// Controls the move direction of the Ship
+    /// </summary>
     internal enum MoveDir
     { 
         Down = 0,
@@ -22,22 +24,43 @@ namespace SpaceAvenger.Game.Core.AI
 
     public class SpaceShipControlModule : AIModuleBase
     {
+        //Current move direction
         private MoveDir m_moveDir;
+        //Current window
         private Window m_mainWindow;
-
+        //lower horizontal scene border
         private float m_MinY;
+        //upper horizontal scene border
         private float m_MaxY;
+        //left scene border
         private float m_MinX;
+        //rigth scene border
         private float m_MaxX;
         private float m_Offset;
+        //current X position 
         private float m_currX;
 
+        //Randomizer
         private Random m_Random;
-
+        /// <summary>
+        /// Delegate for time calculation required to fly to another side of the window
+        /// </summary>
         public Func<float, float> GetTime { get; set; }
+        /// <summary>
+        /// The function for moving left, must be Set during the SpaceShip Configuration
+        /// </summary>
         public Func<Basis2D, float, Vector2> MoveLeft { get; set; }
+        /// <summary>
+        /// The function for moving right
+        /// </summary>
         public Func<Basis2D, float, Vector2> MoveRight { get; set; }
+        /// <summary>
+        /// The function for moving forward
+        /// </summary>
         public Func<Basis2D, float, Vector2> MoveForward { get; set; }
+        /// <summary>
+        /// The function for moving backward
+        /// </summary>
         public Func<Basis2D, float, Vector2> MoveBackward { get; set; }
 
         public SpaceShipControlModule()
@@ -46,7 +69,11 @@ namespace SpaceAvenger.Game.Core.AI
             m_currX = 0f;
             m_Offset = 40f;
         }
-
+        /// <summary>
+        /// Method for Initializing the AI module
+        /// </summary>
+        /// <param name="gameView">The World</param>
+        /// <param name="gameObject">Current GameObject</param>
         public override void Init(IGameObjectViewHost gameView, IGameObject gameObject)
         {
             base.Init(gameView, gameObject);

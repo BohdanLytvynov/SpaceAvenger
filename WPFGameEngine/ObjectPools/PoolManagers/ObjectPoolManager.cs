@@ -1,19 +1,13 @@
-﻿using WPFGameEngine.ObjectPools.Base;
-using WPFGameEngine.ObjectPools.SimpleObjectPools;
+﻿using WPFGameEngine.ObjectPools.ThreadSafePools;
 using WPFGameEngine.WPF.GE.GameObjects;
 
 namespace WPFGameEngine.ObjectPools.PoolManagers
 {
-    public class ObjectPoolManager : IObjectPoolManager
-    {
-        #region Fields
-        private Dictionary<string, IObjectPool> m_PoolMap;
-        #endregion
-
+    public class ObjectPoolManager : ObjectPoolManagerBase<ObjectPool>
+    {        
         #region Ctor
-        public ObjectPoolManager()
+        public ObjectPoolManager() : base()
         {
-            m_PoolMap = new Dictionary<string, IObjectPool>();
         }
         #endregion
 
@@ -22,34 +16,28 @@ namespace WPFGameEngine.ObjectPools.PoolManagers
         /// Adds object to the Pool B:O(1) W:O(n)
         /// </summary>
         /// <param name="mapableObject"></param>
-        public void AddToPool(СacheableObject mapableObject)
+        public override void AddToPool(DelayedItem delayedItem)
         {
-            string name = mapableObject.ObjectName;//O(1)
+            string name = delayedItem.Cacheable.ObjectName;//O(1)
 
-            if (!m_PoolMap.ContainsKey(name))//O(1)
+            if (!PoolManagerMap.ContainsKey(name))//O(1)
             {
-                m_PoolMap.Add(name, new ObjectPool());//O(1)
+                PoolManagerMap.Add(name, new ObjectPool());//O(1)
             }
 
-            m_PoolMap[name].Insert(mapableObject);//O(1)
+            PoolManagerMap[name].InsertWithDelay(delayedItem);//O(1)
         }
 
-        public void Clear()
-        {
-            m_PoolMap.Clear();
-        }
-
-        public TObject? GetFromPool<TObject>()
-            where TObject : СacheableObject
+        public override TObject? GetFromPool<TObject>() where TObject : class
         {
             return GetFromPool(typeof(TObject).Name) as TObject;
         }
 
-        public СacheableObject? GetFromPool(string typeName)
+        public override СacheableObject? GetFromPool(string typeName)
         {
-            IObjectPool pool = null;
+            ObjectPool? pool = null;
           
-            if (m_PoolMap.TryGetValue(typeName, out pool) && pool != null)
+            if (PoolManagerMap.TryGetValue(typeName, out pool) && pool != null)
             {
                 return pool.Get();
             }

@@ -105,6 +105,7 @@ namespace SpaceAvenger.Game.Core.Base
             IsAlive = true;
             AIModule?.Init(GameView, this);
             base.OnGetFromPool();
+            Enable(true);
         }
 
         public virtual void DoDamage(float damage)
