@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using WPFGameEngine.CollisionDetection.CollisionManager.Base;
 using WPFGameEngine.Extensions;
 using WPFGameEngine.GameViewControl;
 using WPFGameEngine.WPF.GE.GameObjects;
@@ -15,15 +16,13 @@ namespace SpaceAvenger.Game.Core.Base
         {
         }
 
-        public override void ProcessCollision(List<IGameObject>? info)
+        public override void ProcessCollision(List<CollisionData>? info)
         {
             if (info == null) return;
-
-            var collect = info.Where(x => x is SpaceShipBase s && s.Faction != this.Faction).ToList().Distinct();
-
-            foreach (var obj in collect)
+            
+            foreach (var obj in info)
             {
-                if (obj is SpaceShipBase s && s.Faction != this.Faction)
+                if (obj.Object is SpaceShipBase s)
                 {
                     s.DoDamage(Damage);
                     Collider.DisableCollision();

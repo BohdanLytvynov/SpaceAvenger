@@ -1,9 +1,25 @@
-﻿using WPFGameEngine.WPF.GE.GameObjects;
+﻿using System.Numerics;
+using WPFGameEngine.CollisionDetection.CollisionMatrixes;
+using WPFGameEngine.WPF.GE.GameObjects;
 using WPFGameEngine.WPF.GE.GameObjects.Collidable;
 using WPFGameEngine.WPF.GE.Helpers;
 
 namespace WPFGameEngine.CollisionDetection.CollisionManager.Base
 {
+    public struct CollisionData
+    {
+        public ICollidable Object { get; }
+        public Vector2 MTV { get; }
+        public float Overlap { get; }
+
+        public CollisionData(ICollidable gameObject, Vector2 mtv, float overlap)
+        {
+            Object = gameObject;
+            MTV = mtv;
+            Overlap = overlap;
+        }
+    }
+
     public class CollisionManager : ICollisionManager
     {
         #region Fields
@@ -14,7 +30,7 @@ namespace WPFGameEngine.CollisionDetection.CollisionManager.Base
         private Task m_checkTask;
         private const int COLLISION_CHECK_DELAY_MS = 16;
 
-        private readonly Dictionary<int, List<IGameObject>> m_CollisionBuffer;
+        private readonly Dictionary<int, List<CollisionData>> m_CollisionBuffer;
 
         public List<IGameObject> World { get; set; }
         #endregion
@@ -23,7 +39,7 @@ namespace WPFGameEngine.CollisionDetection.CollisionManager.Base
         public CollisionManager()
         {
             m_lock = new object();
-            m_CollisionBuffer = new Dictionary<int, List<IGameObject>>();
+            m_CollisionBuffer = new Dictionary<int, List<CollisionData>>();
             m_running = false;
         }
 
@@ -66,17 +82,17 @@ namespace WPFGameEngine.CollisionDetection.CollisionManager.Base
             }
         }
 
-        private void AddToBuffer(int key, IGameObject gameObject)
+        private void AddToBuffer(int ownerId, CollisionData collisionData)
         {
-            if (m_CollisionBuffer.TryGetValue(key, out var info))
+            // ownerId — это ID того, КТО столкнулся
+            // collisionData.Object — это ТОТ, С КЕМ столкнулись
+            if (m_CollisionBuffer.TryGetValue(ownerId, out var info))
             {
-                info.Add(gameObject);
+                info.Add(collisionData);
             }
             else
             {
-                var colInfo = new List<IGameObject>();
-                colInfo.Add(gameObject);
-                m_CollisionBuffer.Add(key, colInfo);
+                m_CollisionBuffer.Add(ownerId, new List<CollisionData>() { collisionData });
             }
         }
 
@@ -90,7 +106,7 @@ namespace WPFGameEngine.CollisionDetection.CollisionManager.Base
             }
         }
 
-        public List<IGameObject>? GetCollisionInfo(int key)
+        public List<CollisionData>? GetCollisionInfo(int key)
         {
             lock (m_lock)
             {
@@ -104,6 +120,9 @@ namespace WPFGameEngine.CollisionDetection.CollisionManager.Base
 
         private async Task CheckCollisions(CancellationToken token)
         {
+            //Init capacity is used to reduce amount of allocations
+            List<ICollidable> currentObjects = new List<ICollidable>(128);
+
             while (!token.IsCancellationRequested)
             {
                 if (!m_running)
@@ -118,20 +137,25 @@ namespace WPFGameEngine.CollisionDetection.CollisionManager.Base
                     }
                     continue;
                 }
-                
+
                 lock (m_lock)
                 {
-                    List<IGameObject> worldSnapshot = new List<IGameObject>(World);
+                    currentObjects.Clear();
                     m_CollisionBuffer.Clear();
+                    //Good approach is to use froeach iterator instead of LINQs. 
+                    //Cause we should avoid lots Allocations, and GC procedures
+                    foreach (var obj in World)
+                    {
+                        if (obj is ICollidable collidable &&
+                            obj.Enabled && collidable.IsVisible &&
+                            collidable.IsCollidable &&
+                            collidable.Collider.CollisionEnabled &&
+                            collidable.Collider.CollisionResolved)
+                        {
+                            currentObjects.Add(collidable);
+                        }
+                    }
                 }
-
-                List<ICollidable?> currentObjects = World.Where(x => x != null && x.Enabled &&
-                    (x is ICollidable collidable) &&
-                    collidable.IsCollidable &&
-                    collidable.Collider.CollisionEnabled &&
-                    collidable.Collider.CollisionResolved)
-                        .Select(x => x as ICollidable)
-                        .ToList(); ;
 
                 int len = currentObjects.Count;
                 //Brute Force
@@ -145,14 +169,21 @@ namespace WPFGameEngine.CollisionDetection.CollisionManager.Base
                         if (obj1 == null || obj2 == null)
                             continue;
 
-                        if (CollisionHelper.Intersects(
+                        if(!CollisionMatrix.CanCollide(obj1.CollisionLayer, obj2.CollisionLayer))
+                            continue;
+
+                        var colInfo = CollisionHelper.Intersects(
                             obj1.Collider.CollisionShape,
-                            obj2.Collider.CollisionShape).Intersects)
+                            obj2.Collider.CollisionShape);
+
+                        if (colInfo.Intersects)
                         {
                             lock (m_lock)
                             {
-                                AddToBuffer(obj1.Id, obj2);
-                                AddToBuffer(obj2.Id, obj1);
+                                // Для первого объекта записываем данные о втором
+                                AddToBuffer(obj1.Id, new CollisionData(obj2, colInfo.MTV, colInfo.Overlap));
+                                // Для второго объекта записываем данные о первом (инвертируем MTV)
+                                AddToBuffer(obj2.Id, new CollisionData(obj1, colInfo.MTV * -1, colInfo.Overlap));
                             }
                         }
                     }
@@ -182,6 +213,7 @@ namespace WPFGameEngine.CollisionDetection.CollisionManager.Base
                 m_CollisionBuffer.Clear();
             }
         }
+
         #endregion
     }
 }

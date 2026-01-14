@@ -17,16 +17,26 @@ namespace WPFGameEngine.ObjectPools.ThreadSafePools
         /// <summary>
         /// Gets Time when the reset will be finished
         /// </summary>
-        public double GetReadyAtTime(double globalTime) => Delay + globalTime;
+        public double ReadyAt  => Delay + GlobalTime;
         /// <summary>
         /// Delay Time
         /// </summary>
         public double Delay { get; set; }
-
-        public DelayedItem(СacheableObject сacheableObject, double delay)
+        /// <summary>
+        /// Time of cooling start
+        /// </summary>
+        public double GlobalTime { get; set; }
+        /// <summary>
+        /// Main ctor
+        /// </summary>
+        /// <param name="сacheableObject">Object for cache</param>
+        /// <param name="delay">Time for cooling</param>
+        /// <param name="globalTime">Time, when cooling will start</param>
+        public DelayedItem(СacheableObject сacheableObject, double delay, double globalTime)
         {
             Cacheable = сacheableObject;
             Delay = delay;
+            GlobalTime = globalTime;
         }
     }
 
@@ -38,7 +48,7 @@ namespace WPFGameEngine.ObjectPools.ThreadSafePools
         #region Fields
         private readonly ConcurrentStack<СacheableObject> m_AvailableStack;//Stack that holds objects that are available
         private readonly ConcurrentQueue<DelayedItem> m_waitingObjects;//Queue that holds objects that are in cooling stage
-
+        private double m_globalTime;//Used for debug
         #endregion
 
         #region Ctor
@@ -61,7 +71,7 @@ namespace WPFGameEngine.ObjectPools.ThreadSafePools
                 obj.Enable(true);
                 obj.Show();
                 obj.OnGetFromPool();
-                Debug.WriteLine($"{obj.ObjectName} taken from the Pool");
+                Debug.WriteLine($"{obj.ObjectName} taken from the Pool - {m_globalTime}");
                 return obj;
             }
             return null;
@@ -72,7 +82,7 @@ namespace WPFGameEngine.ObjectPools.ThreadSafePools
         /// <param name="delayedItem">Object for inserting</param>
         public void InsertWithDelay(DelayedItem delayedItem)
         {
-            Debug.WriteLine($"{delayedItem.Cacheable.ObjectName} Added to Waiting queue");
+            Debug.WriteLine($"{delayedItem.Cacheable.ObjectName} Added to Waiting queue - {m_globalTime}");
             delayedItem.Cacheable.OnAddToPool();
             m_waitingObjects.Enqueue(delayedItem);
         }
@@ -90,13 +100,14 @@ namespace WPFGameEngine.ObjectPools.ThreadSafePools
         /// <param name="currentTime">Game global time</param>
         public void Update(double currentTime)
         {
+            m_globalTime = currentTime;
             //Try to peek the first object from the queue, check if it is ready
-            while (m_waitingObjects.TryPeek(out var delayedItem) && currentTime >= delayedItem.GetReadyAtTime(currentTime))
+            while (m_waitingObjects.TryPeek(out var delayedItem) && currentTime >= delayedItem.ReadyAt)
             {
-                //Move object from the waiting queue to the avaliables
+                //Move object from the waiting queue to the availables
                 if (m_waitingObjects.TryDequeue(out var readyItem))
                 {
-                    Debug.WriteLine($"{delayedItem.Cacheable.ObjectName} Added to Pool after waiting");
+                    Debug.WriteLine($"{delayedItem.Cacheable.ObjectName} Added to Pool after waiting - {m_globalTime}");
                     //Disable all the calculations for the Item that will be added to the pool
                     readyItem.Cacheable.Disable(true);
                     m_AvailableStack.Push(readyItem.Cacheable);

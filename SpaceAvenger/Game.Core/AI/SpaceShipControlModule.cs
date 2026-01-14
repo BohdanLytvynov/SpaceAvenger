@@ -1,5 +1,6 @@
 ﻿using SpaceAvenger.Game.Core.Base;
 using SpaceAvenger.Game.Core.Base.Interfaces;
+using SpaceAvenger.Services;
 using System;
 using System.Numerics;
 using System.Windows;
@@ -210,7 +211,7 @@ namespace SpaceAvenger.Game.Core.AI
 
             spaceShip.Translate(finalPos);
 
-            var player = GameView.GetObject(o => o.Metadata.Contains("Player"));
+            var player = GameView.GetObject(o => o.Metadata.Contains(Constants.PLAYER));
             var playerTransform = player.GetComponent<TransformComponent>();
             if (player == null) return;
 
@@ -237,11 +238,11 @@ namespace SpaceAvenger.Game.Core.AI
                 
             }
 
-            //Shoot Weapons
-            if (distance <= battleShip.DetectionDistance * battleShip.DetectionDistance)
-            {
-                battleShip.ShootWeapons(playerTransform.Position);
-            }
+            ////Shoot Weapons
+            //if (distance <= battleShip.DetectionDistance * battleShip.DetectionDistance)
+            //{
+            //    battleShip.ShootWeapons(playerTransform.Position);
+            //}
         }
     }
 }

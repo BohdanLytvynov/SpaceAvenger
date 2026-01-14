@@ -1,5 +1,8 @@
-﻿
-using System.Windows.Media;
+﻿using System.Windows.Media;
+using WPFGameEngine.CollisionDetection.CollisionManager.Base;
+using WPFGameEngine.CollisionDetection.CollisionMatrixes;
+using WPFGameEngine.GameViewControl;
+using WPFGameEngine.Timers.Base;
 using WPFGameEngine.WPF.GE.Component.Collider;
 using WPFGameEngine.WPF.GE.GameObjects.Renderable;
 using WPFGameEngine.WPF.GE.Math.Matrixes;
@@ -23,7 +26,9 @@ namespace WPFGameEngine.WPF.GE.GameObjects.Collidable
             }
         }
 
-        public virtual void ProcessCollision(List<IGameObject>? collisionInfo)
+        public CollisionLayer CollisionLayer { get; set; }
+
+        public virtual void ProcessCollision(List<CollisionData>? collisionInfo)
         {
         
         }

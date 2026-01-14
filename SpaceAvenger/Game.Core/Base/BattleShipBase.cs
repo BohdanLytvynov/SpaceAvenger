@@ -4,6 +4,7 @@ using SpaceAvenger.Game.Core.Enums;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Windows.Media;
+using WPFGameEngine.CollisionDetection.CollisionMatrixes;
 using WPFGameEngine.GameViewControl;
 using WPFGameEngine.Timers.Base;
 using WPFGameEngine.WPF.GE.Math.Matrixes;
@@ -24,7 +25,6 @@ namespace SpaceAvenger.Game.Core.Base
         private bool m_useThreshold;
         public Pen TargetMarkerPen { get; protected set; }
         private IEnumerable<TPrimWeapons> m_PrimWeapons;
-
         public WeaponType WeaponType { get; protected set; }
         public float DetectionDistance { get; set; }
         public bool WeaponsAimed 
@@ -53,6 +53,8 @@ namespace SpaceAvenger.Game.Core.Base
         {
             base.StartUp(viewHost, gameTimer);
             m_PrimWeapons = GetAllChildrenOfType<TPrimWeapons>();
+
+            SetProjectileCollisionLayer(m_PrimWeapons, ProjectileCollisionLayer);
         }
 
         public override void Update()
@@ -124,6 +126,14 @@ namespace SpaceAvenger.Game.Core.Base
             }
 
             return null;
+        }
+
+        private void SetProjectileCollisionLayer(IEnumerable<WeaponBase> weapons, CollisionLayer collisionLayer)
+        {
+            foreach (var w in weapons)
+            {
+                w.ProjectilesCollisionLayer = collisionLayer;
+            }
         }
     }
 }

@@ -3,6 +3,7 @@ using SpaceAvenger.Game.Core.Enums;
 using SpaceAvenger.Game.Core.UI.Slider;
 using SpaceAvenger.Services.WPFInputControllers;
 using System.Windows.Media;
+using WPFGameEngine.CollisionDetection.CollisionMatrixes;
 using WPFGameEngine.GameViewControl;
 using WPFGameEngine.Timers.Base;
 using WPFGameEngine.WPF.GE.GameObjects;
@@ -14,6 +15,7 @@ namespace SpaceAvenger.Game.Core.Base
         protected WPFInputController m_controller;
 
         #region Properties
+        public CollisionLayer ProjectileCollisionLayer { get; set; }
         public float HP { get; set; }
         public float Shield { get; protected set; }
         public float ShieldRegenSpeed { get; protected set; }

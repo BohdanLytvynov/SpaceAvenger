@@ -1,4 +1,5 @@
-﻿using WPFGameEngine.ObjectBuilders.Base;
+﻿using System.Diagnostics;
+using WPFGameEngine.ObjectBuilders.Base;
 using WPFGameEngine.ObjectPools.Base;
 using WPFGameEngine.ObjectPools.ThreadSafePools;
 using WPFGameEngine.WPF.GE.GameObjects;
@@ -51,6 +52,7 @@ namespace WPFGameEngine.ObjectInstantiators
                 if (obj == null)
                 {
                     obj = m_builder.Build(typeName) as СacheableObject;
+                    Debug.WriteLine($"Object was Build {obj.ObjectName}");
                 }
                 else
                 { 

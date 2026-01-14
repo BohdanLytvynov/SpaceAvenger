@@ -11,6 +11,6 @@ namespace WPFGameEngine.CollisionDetection.CollisionManager.Base
         void Stop();
         void RemoveFromBuffer(int key);
         void Clear();
-        List<IGameObject>? GetCollisionInfo(int key);
+        List<CollisionData>? GetCollisionInfo(int key);
     }
 }

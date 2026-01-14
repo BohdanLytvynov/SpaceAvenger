@@ -5,15 +5,33 @@ using SMath = System.Math;
 
 namespace WPFGameEngine.WPF.GE.Helpers
 {
+    /// <summary>
+    /// Structure that stores Result of the collision
+    /// </summary>
     public struct CollisionResult
     {
+        /// <summary>
+        /// Figures Intersects?
+        /// </summary>
         public bool Intersects;
+        /// <summary>
+        /// Minimum Translation Vector
+        /// </summary>
         public Vector2 MTV;
+        /// <summary>
+        /// The amount of Overlaping
+        /// </summary>
         public float Overlap;
     }
 
     public static class CollisionHelper
     {
+        /// <summary>
+        /// Checks if two figures intersects
+        /// </summary>
+        /// <param name="a">First Figure</param>
+        /// <param name="b">Second Figure</param>
+        /// <returns>Object that will have CollisionResult Details</returns>
         public static CollisionResult Intersects(IShape2D a, IShape2D b)
         {
             // 1. AABB Check (Fast Reject)
@@ -37,7 +55,7 @@ namespace WPFGameEngine.WPF.GE.Helpers
         }
 
         /// <summary>
-        /// Checks collision of 2 Rectangles
+        /// Checks collision of 2 Rectangles using Axis Aligned Bounding Box Approach
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
@@ -58,18 +76,22 @@ namespace WPFGameEngine.WPF.GE.Helpers
         /// <returns></returns>
         public static CollisionResult Intersects(Circle a, Circle b)
         {
+            //Vector, build from 1-st circle center to another circle center
             Vector2 delta = b.CenterPosition - a.CenterPosition;
+            //Length of this vector squared. We use squared value, cause taking square root is a very time consuming operation
             float distanceSquared = delta.LengthSquared();
+            //Sum of circles radii
             float radiiSum = a.Radius + b.Radius;
-
+            //Circles do not collide
             if (distanceSquared > radiiSum * radiiSum)
             {
                 return new CollisionResult { Intersects = false };
             }
-
+            //Distance between 2 Circle Centers
             float distance = MathF.Sqrt(distanceSquared);
-
-            float overlap = (distance == 0) ? a.Radius + b.Radius : radiiSum - distance;
+            //Case 1 -> 2 Circles overlapes (Their centers are equal), so we need to push circle out by Radii Sum
+            //Case 2 -> Centers are not equal. Overlap = (a.r+b.r) - dist between circle centers
+            float overlap = (distance == 0) ? radiiSum : radiiSum - distance;
 
             Vector2 normal = (distance == 0) ? new Vector2(0, 1) : Vector2.Normalize(delta);
 

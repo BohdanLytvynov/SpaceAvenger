@@ -14,5 +14,10 @@
         #region Pathes
         public const string PATH_TO_CONTENT = "pack://application:,,,/SpaceAvenger;component/Resources/Content.xaml";
         #endregion
+
+        #region Roles
+        public const string PLAYER = "Player";
+        public const string ENEMY = "Enemy";
+        #endregion
     }
 }

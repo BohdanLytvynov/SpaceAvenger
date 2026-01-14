@@ -50,7 +50,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         {
             if (!UseCaching) return;
             if (Cached) return;
-            (GameView as IMapableObjectViewHost).ObjectInstantiator.AddToPool(new DelayedItem(gameObject, Delay));
+            (GameView as IMapableObjectViewHost).ObjectInstantiator.AddToPool(new DelayedItem(gameObject, Delay, GameTimer.totalTime.Milliseconds));
         }
     }
 }
