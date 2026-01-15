@@ -1,8 +1,10 @@
-﻿using System.Numerics;
+﻿using System.Diagnostics;
+using System.Numerics;
 using WPFGameEngine.CollisionDetection.CollisionMatrixes;
 using WPFGameEngine.WPF.GE.GameObjects;
 using WPFGameEngine.WPF.GE.GameObjects.Collidable;
 using WPFGameEngine.WPF.GE.Helpers;
+using WPFGameEngine.WPF.GE.Settings;
 
 namespace WPFGameEngine.CollisionDetection.CollisionManager.Base
 {
@@ -23,14 +25,21 @@ namespace WPFGameEngine.CollisionDetection.CollisionManager.Base
     public class CollisionManager : ICollisionManager
     {
         #region Fields
-        private readonly object m_lock;
+        private readonly object m_worldLock;
 
         private volatile bool m_running;
         private CancellationTokenSource m_cancellationTokenSource;
         private Task m_checkTask;
-        private const int COLLISION_CHECK_DELAY_MS = 16;
+        List<ICollidable> m_currentObjects = new List<ICollidable>(128);
+        private List<IGameObject> m_worldSnapshot = new List<IGameObject>(256);
 
-        private readonly Dictionary<int, List<CollisionData>> m_CollisionBuffer;
+        // "Чистовик" для игрового потока
+        private Dictionary<int, List<CollisionData>> m_ReadOnlyBuffer = new();
+        // "Черновик" для фонового потока
+        private Dictionary<int, List<CollisionData>> m_BackBuffer = new();
+        // Объект синхронизации только для момента подмены буферов
+        private readonly object m_swapLock = new object();
+        private readonly Stack<List<CollisionData>> m_ListPool = new Stack<List<CollisionData>>();
 
         public List<IGameObject> World { get; set; }
         #endregion
@@ -38,8 +47,9 @@ namespace WPFGameEngine.CollisionDetection.CollisionManager.Base
         #region Ctor
         public CollisionManager()
         {
-            m_lock = new object();
-            m_CollisionBuffer = new Dictionary<int, List<CollisionData>>();
+            m_ReadOnlyBuffer = new Dictionary<int, List<CollisionData>>();
+            m_BackBuffer = new Dictionary<int, List<CollisionData>>();
+            m_worldLock = new object();
             m_running = false;
         }
 
@@ -81,36 +91,31 @@ namespace WPFGameEngine.CollisionDetection.CollisionManager.Base
                 m_running = false;
             }
         }
-
-        private void AddToBuffer(int ownerId, CollisionData collisionData)
+        /// <summary>
+        //Adds an object to the backbuffer using List<CollisionData> Pool
+        /// </summary>
+        /// <param name="ownerId">An objects</param>
+        /// <param name="data">List of all the CollisionData with objects that collided with an Object</param>
+        private void AddToBackBuffer(int ownerId, CollisionData data)
         {
-            // ownerId — это ID того, КТО столкнулся
-            // collisionData.Object — это ТОТ, С КЕМ столкнулись
-            if (m_CollisionBuffer.TryGetValue(ownerId, out var info))
+            if (!m_BackBuffer.TryGetValue(ownerId, out var list))
             {
-                info.Add(collisionData);
+                list = GetListFromPool();//Use Pool instead fo new Allocations
+                m_BackBuffer.Add(ownerId, list);
             }
-            else
-            {
-                m_CollisionBuffer.Add(ownerId, new List<CollisionData>() { collisionData });
-            }
+            list.Add(data);
         }
 
-        public void RemoveFromBuffer(int key)
-        {
-            lock (m_lock)
-            {
-                if (!m_CollisionBuffer.ContainsKey(key)) return;
-
-                m_CollisionBuffer.Remove(key);
-            }
-        }
-
+        /// <summary>
+        /// Reads the content of the readonly buffer
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public List<CollisionData>? GetCollisionInfo(int key)
         {
-            lock (m_lock)
+            lock (m_swapLock)
             {
-                if (m_CollisionBuffer.TryGetValue(key, out var info))
+                if (m_ReadOnlyBuffer.TryGetValue(key, out var info))
                 {
                     return info;
                 }
@@ -120,11 +125,9 @@ namespace WPFGameEngine.CollisionDetection.CollisionManager.Base
 
         private async Task CheckCollisions(CancellationToken token)
         {
-            //Init capacity is used to reduce amount of allocations
-            List<ICollidable> currentObjects = new List<ICollidable>(128);
-
             while (!token.IsCancellationRequested)
             {
+                //Waiting if pause requested
                 if (!m_running)
                 {
                     try
@@ -138,38 +141,42 @@ namespace WPFGameEngine.CollisionDetection.CollisionManager.Base
                     continue;
                 }
 
-                lock (m_lock)
+                lock (m_worldLock)
                 {
-                    currentObjects.Clear();
-                    m_CollisionBuffer.Clear();
-                    //Good approach is to use froeach iterator instead of LINQs. 
-                    //Cause we should avoid lots Allocations, and GC procedures
-                    foreach (var obj in World)
+                    m_worldSnapshot.Clear();
+                    if (World != null)
+                        m_worldSnapshot.AddRange(World);
+                }
+
+                m_currentObjects.Clear();
+                //Good approach is to use froeach iterator instead of LINQs. 
+                //Cause we should avoid lots Allocations, and GC procedures
+                foreach (var obj in m_worldSnapshot)
+                {
+                    if (obj is ICollidable collidable &&
+                        obj.Enabled && collidable.IsVisible &&
+                        collidable.IsCollidable &&
+                        collidable.Collider.CollisionEnabled)
                     {
-                        if (obj is ICollidable collidable &&
-                            obj.Enabled && collidable.IsVisible &&
-                            collidable.IsCollidable &&
-                            collidable.Collider.CollisionEnabled &&
-                            collidable.Collider.CollisionResolved)
-                        {
-                            currentObjects.Add(collidable);
-                        }
+                        m_currentObjects.Add(collidable);
                     }
                 }
 
-                int len = currentObjects.Count;
+                Debug.WriteLine($"{m_currentObjects.Count} Found that can Collide!");
+
+                int len = m_currentObjects.Count;
                 //Brute Force
                 for (int i = 0; i < len; i++)//O(N^2)/2
                 {
                     for (int j = i + 1; j < len; j++)
                     {
-                        var obj1 = currentObjects[i];
-                        var obj2 = currentObjects[j];
+                        var obj1 = m_currentObjects[i];
+                        var obj2 = m_currentObjects[j];
 
-                        if (obj1 == null || obj2 == null)
+                        if (obj1.Id >= obj2.Id)
                             continue;
 
-                        if(!CollisionMatrix.CanCollide(obj1.CollisionLayer, obj2.CollisionLayer))
+                        if (!CollisionMatrix.CanCollide(obj1.CollisionLayer, obj2.CollisionLayer))
                             continue;
 
                         var colInfo = CollisionHelper.Intersects(
@@ -178,20 +185,17 @@ namespace WPFGameEngine.CollisionDetection.CollisionManager.Base
 
                         if (colInfo.Intersects)
                         {
-                            lock (m_lock)
-                            {
-                                // Для первого объекта записываем данные о втором
-                                AddToBuffer(obj1.Id, new CollisionData(obj2, colInfo.MTV, colInfo.Overlap));
-                                // Для второго объекта записываем данные о первом (инвертируем MTV)
-                                AddToBuffer(obj2.Id, new CollisionData(obj1, colInfo.MTV * -1, colInfo.Overlap));
-                            }
+                            AddToBackBuffer(obj1.Id, new CollisionData(obj2, colInfo.MTV, colInfo.Overlap));
+                            AddToBackBuffer(obj2.Id, new CollisionData(obj1, colInfo.MTV * -1, colInfo.Overlap));
                         }
                     }
                 }
 
+                SwapBuffers();
+                PrepareBackBuffer();
                 try
                 {
-                    await Task.Delay(COLLISION_CHECK_DELAY_MS, token);
+                    await Task.Delay(CollisionSettings.CollisionCheckDelay_MS, token);
                 }
                 catch (TaskCanceledException)
                 {
@@ -208,12 +212,78 @@ namespace WPFGameEngine.CollisionDetection.CollisionManager.Base
 
         public void Clear()
         {
-            lock (m_lock)
+            lock (m_swapLock)
             {
-                m_CollisionBuffer.Clear();
+                // 1. Очищаем основные данные
+                m_ReadOnlyBuffer.Clear();
+                m_BackBuffer.Clear();
+                // 2. Очищаем пул списков, чтобы освободить память в куче
+                // Это важно при выходе, чтобы ссылки на ICollidable внутри списков не висели в памяти
+                foreach (var list in m_ListPool)
+                {
+                    list.Clear();
+                }
+                m_currentObjects.Clear();
+                m_ListPool.Clear();
             }
         }
 
+
+        public void ForceRemove(int id)
+        {
+            lock (m_swapLock)
+            {
+                // Удаляем из текущего чистовика, чтобы логика Update его больше не видела
+                m_ReadOnlyBuffer.Remove(id);
+
+                // Удаляем из черновика, чтобы он не перекочевал в следующий кадр
+                if (m_BackBuffer.TryGetValue(id, out var list))
+                {
+                    m_ListPool.Push(list); // Возвращаем список в пул
+                    m_BackBuffer.Remove(id);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Return the empty ready to use list from pool, or create and return new one, if pool is empty
+        /// </summary>
+        /// <returns></returns>
+        private List<CollisionData> GetListFromPool()
+        {
+            if (m_ListPool.Count > 0)
+            {
+                var list = m_ListPool.Pop();
+                list.Clear();
+                return list;
+            }
+            return new List<CollisionData>(8);
+        }
+
+        /// <summary>
+        /// Clears the BackBuffer by pushing all it's List<CollisionData> to the List Pool
+        /// </summary>
+        private void PrepareBackBuffer()
+        {
+            foreach (var pair in m_BackBuffer)
+            {
+                m_ListPool.Push(pair.Value);
+            }
+            m_BackBuffer.Clear();
+        }
+
+        /// <summary>
+        /// Swaps references of Readonly Buffer and BackBuffer
+        /// </summary>
+        private void SwapBuffers()
+        {
+            lock (m_swapLock)
+            {
+                var temp = m_ReadOnlyBuffer;
+                m_ReadOnlyBuffer = m_BackBuffer;
+                m_BackBuffer = temp;
+            }
+        }
         #endregion
     }
 }

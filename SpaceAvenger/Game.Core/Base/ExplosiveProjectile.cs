@@ -1,11 +1,8 @@
 ﻿using SpaceAvenger.Game.Core.Enums;
 using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
 using WPFGameEngine.CollisionDetection.CollisionManager.Base;
 using WPFGameEngine.Extensions;
 using WPFGameEngine.GameViewControl;
-using WPFGameEngine.WPF.GE.GameObjects;
 
 namespace SpaceAvenger.Game.Core.Base
 {
@@ -26,6 +23,8 @@ namespace SpaceAvenger.Game.Core.Base
                 {
                     s.DoDamage(Damage);
                     Collider.DisableCollision();
+                    base.ProcessCollision(info);
+
                     var matrix = GetWorldTransformMatrix();
                     var prevPos = GetWorldCenter(matrix);
                     AddToPool(this);

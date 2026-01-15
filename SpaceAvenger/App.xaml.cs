@@ -34,6 +34,7 @@ using WPFGameEngine.ObjectPools.Base;
 using WPFGameEngine.ObjectPools.PoolManagers;
 using WPFGameEngine.CollisionDetection.CollisionManager.Base;
 using WPFGameEngine.ObjectInstantiators;
+using WPFGameEngine.WPF.GE.Settings;
 
 namespace SpaceAvenger
 {
@@ -51,6 +52,9 @@ namespace SpaceAvenger
         private static IServiceCollection InitializeServices()
         {
             var services = new ServiceCollection();
+            CollisionSettings.WorldXPosition = 0;
+            CollisionSettings.WorldYPosition = 0;
+            
             services.AddSingleton<ICollisionManager, CollisionManager>();
             services.AddSingleton<IObjectPoolManager, ObjectPoolManager>();
 
@@ -95,7 +99,19 @@ namespace SpaceAvenger
             services.AddSingleton<MainWindowViewModel>();
             // Add ViewModels (Pages)
 
-            services.AddSingleton<MainWindow>();
+            services.AddSingleton<MainWindow>(c =>
+            {
+                MainWindow w = new MainWindow();
+                App.Current.MainWindow = w;
+                w.Loaded += (s, e) => 
+                {
+                    CollisionSettings.WorldXPosition = 0;
+                    CollisionSettings.WorldYPosition = 0;
+                    CollisionSettings.WorldWidth = w.ActualWidth;
+                    CollisionSettings.WorldHeight = w.ActualHeight;
+                };
+                return w;
+            });
 
             services.AddPageViewModelsAsSingleton();
 
@@ -159,10 +175,7 @@ namespace SpaceAvenger
                 pm.AddPage(
                 page.Name, view);
             }
-
             var mainWindow = Services.GetRequiredService<MainWindow>();
-            App.Current.MainWindow = mainWindow;
-
             var mainWindowViewModel = Services.GetRequiredService<MainWindowViewModel>();
 
             mainWindow.DataContext = mainWindowViewModel;

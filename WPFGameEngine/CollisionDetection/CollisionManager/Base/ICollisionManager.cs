@@ -9,7 +9,7 @@ namespace WPFGameEngine.CollisionDetection.CollisionManager.Base
         void Pause();
         void Resume();
         void Stop();
-        void RemoveFromBuffer(int key);
+        void ForceRemove(int id);
         void Clear();
         List<CollisionData>? GetCollisionInfo(int key);
     }

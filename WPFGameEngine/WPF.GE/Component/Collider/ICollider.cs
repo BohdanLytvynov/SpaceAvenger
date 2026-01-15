@@ -9,7 +9,6 @@ namespace WPFGameEngine.WPF.GE.Component.Collider
     public interface ICollider : IGEComponent
     {
         public bool CollisionEnabled { get; }
-        public bool CollisionResolved { get; set; }
         public Basis2D Basis { get; set; }
         /// <summary>
         /// Actual Size of the object with Collider

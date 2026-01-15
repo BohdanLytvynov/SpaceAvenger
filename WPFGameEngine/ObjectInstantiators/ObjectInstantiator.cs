@@ -52,7 +52,7 @@ namespace WPFGameEngine.ObjectInstantiators
                 if (obj == null)
                 {
                     obj = m_builder.Build(typeName) as СacheableObject;
-                    Debug.WriteLine($"Object was Build {obj.ObjectName}");
+                    //Debug.WriteLine($"Object was Build {obj.ObjectName}");
                 }
                 else
                 { 

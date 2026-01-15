@@ -2,7 +2,6 @@
 using WPFGameEngine.CollisionDetection.CollisionManager.Base;
 using WPFGameEngine.CollisionDetection.CollisionMatrixes;
 using WPFGameEngine.GameViewControl;
-using WPFGameEngine.Timers.Base;
 using WPFGameEngine.WPF.GE.Component.Collider;
 using WPFGameEngine.WPF.GE.GameObjects.Renderable;
 using WPFGameEngine.WPF.GE.Math.Matrixes;
@@ -30,7 +29,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects.Collidable
 
         public virtual void ProcessCollision(List<CollisionData>? collisionInfo)
         {
-        
+            (GameView as IColliderView).CollisionManager.ForceRemove(this.Id);
         }
 
         protected CollidableBase() : base()

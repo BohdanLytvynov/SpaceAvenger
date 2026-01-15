@@ -71,7 +71,7 @@ namespace WPFGameEngine.ObjectPools.ThreadSafePools
                 obj.Enable(true);
                 obj.Show();
                 obj.OnGetFromPool();
-                Debug.WriteLine($"{obj.ObjectName} taken from the Pool - {m_globalTime}");
+                //Debug.WriteLine($"{obj.ObjectName} taken from the Pool - {m_globalTime}");
                 return obj;
             }
             return null;
@@ -82,7 +82,7 @@ namespace WPFGameEngine.ObjectPools.ThreadSafePools
         /// <param name="delayedItem">Object for inserting</param>
         public void InsertWithDelay(DelayedItem delayedItem)
         {
-            Debug.WriteLine($"{delayedItem.Cacheable.ObjectName} Added to Waiting queue - {m_globalTime}");
+            //Debug.WriteLine($"{delayedItem.Cacheable.ObjectName} Added to Waiting queue - {m_globalTime}");
             delayedItem.Cacheable.OnAddToPool();
             m_waitingObjects.Enqueue(delayedItem);
         }
@@ -107,7 +107,7 @@ namespace WPFGameEngine.ObjectPools.ThreadSafePools
                 //Move object from the waiting queue to the availables
                 if (m_waitingObjects.TryDequeue(out var readyItem))
                 {
-                    Debug.WriteLine($"{delayedItem.Cacheable.ObjectName} Added to Pool after waiting - {m_globalTime}");
+                    //Debug.WriteLine($"{delayedItem.Cacheable.ObjectName} Added to Pool after waiting - {m_globalTime}");
                     //Disable all the calculations for the Item that will be added to the pool
                     readyItem.Cacheable.Disable(true);
                     m_AvailableStack.Push(readyItem.Cacheable);

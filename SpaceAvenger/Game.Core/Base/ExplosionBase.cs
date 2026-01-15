@@ -9,7 +9,8 @@ namespace SpaceAvenger.Game.Core.Base
     {
         public override void StartUp(IGameObjectViewHost viewHost, IGameTimer gameTimer)
         {
-            Delay = 300;
+            if (Delay == 0)
+                Delay = 300;
             Animation.Stop();
             Animation.Reset(Animation.Reverse);
             base.StartUp(viewHost, gameTimer);

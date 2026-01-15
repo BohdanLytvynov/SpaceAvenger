@@ -17,5 +17,10 @@ namespace SpaceAvenger.Extensions.Math
         {
             return new Point(v.X, v.Y);
         }
+
+        public static System.Drawing.Point ToDrawingPoint(this Vector2 v)
+        {
+            return new System.Drawing.Point((int)v.X, (int)v.Y);
+        }
     }
 }

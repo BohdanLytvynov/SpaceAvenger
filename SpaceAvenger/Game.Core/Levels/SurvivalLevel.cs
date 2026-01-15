@@ -3,7 +3,9 @@ using SpaceAvenger.Game.Core.Factions.F1.Corvettes;
 using SpaceAvenger.Game.Core.Factions.F10.Destroyer;
 using SpaceAvenger.Services;
 using System;
+using System.Numerics;
 using WPFGameEngine.CollisionDetection.CollisionMatrixes;
+using WPFGameEngine.Extensions;
 using WPFGameEngine.GameViewControl;
 using WPFGameEngine.Timers.Base;
 using WPFGameEngine.WPF.GE.GameObjects.Transformable;
@@ -126,6 +128,9 @@ namespace SpaceAvenger.Game.Core.Levels
                     }
                 });
                 m_curr.CollisionLayer = CollisionLayer.Enemy;
+
+                m_curr.Rotate(90);
+
                 CurrentEnemyCount--;
             }
         }

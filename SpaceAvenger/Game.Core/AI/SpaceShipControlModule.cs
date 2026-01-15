@@ -94,13 +94,6 @@ namespace SpaceAvenger.Game.Core.AI
             m_moveDir = MoveDir.Down;
 
             t.Translate(new Vector2(m_currX, m_MinY));
-
-            var angle = worldMatrix.GetBasis().X.GetAngleDeg(new Vector2(0f, 1f));
-
-            if (angle != 0)
-            { 
-                t.Rotate(angle);
-            }
         }
 
         public override void Process(IGameObject gameObject)
