@@ -3,13 +3,12 @@ using WPFGameEngine.CollisionDetection.CollisionManager.Base;
 using WPFGameEngine.CollisionDetection.CollisionMatrixes;
 using WPFGameEngine.GameViewControl;
 using WPFGameEngine.WPF.GE.Component.Collider;
-using WPFGameEngine.WPF.GE.GameObjects.Renderable;
 using WPFGameEngine.WPF.GE.Math.Matrixes;
 using WPFGameEngine.WPF.GE.Settings;
 
 namespace WPFGameEngine.WPF.GE.GameObjects.Collidable
 {
-    public abstract class CollidableBase : RenderableBase, ICollidable
+    public abstract class CollidableBase : СacheableObject, ICollidable
     {
         public bool IsCollidable => Collider != null;
 
@@ -40,16 +39,18 @@ namespace WPFGameEngine.WPF.GE.GameObjects.Collidable
         public override void Update()
         {
             base.Update();
+            //To do move to the GetWorldCenter, it's impossible, cause we don't use transform component 
+            //in a collider component and local matrix can't be calculated. And we use Vector math approach
             if (IsCollidable && Collider.CollisionShape != null)
             {
                 var globMatrix = GetWorldTransformMatrix();
                 Collider.ActualObjectSize = GetWorldScale(globMatrix);
-                var leftUpperCorner = globMatrix.GetTranslate();
+                var leftUpperCorner = globMatrix.GetTranslate();//
                 Collider.CollisionShape.Scale = Transform.Scale;
                 Collider.CollisionShape.Scale.CheckNegativeSize();
                 Collider.Basis = globMatrix.GetBasis();
                 Collider.CollisionShape.Basis = Collider.Basis;
-                Collider.CollisionShape.CenterPosition = leftUpperCorner +
+                Collider.CollisionShape.CenterPosition = leftUpperCorner +//
                     Collider.ActualCenterPosition;
                 Collider.CollisionShape.CalculatePoints();
             }
@@ -64,6 +65,11 @@ namespace WPFGameEngine.WPF.GE.GameObjects.Collidable
             {
                 Collider.CollisionShape.Render(dc);
             }
+        }
+
+        public override void ForceUpdateOfLazyProperties()
+        {
+            m_colliderComponent = null;
         }
     }
 }

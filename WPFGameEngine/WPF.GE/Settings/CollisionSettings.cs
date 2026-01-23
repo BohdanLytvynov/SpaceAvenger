@@ -10,6 +10,7 @@
         public static int MaxItemsPerNode { get; set; } = 16;
         public static int SpatialThreshold { get; set; } = 5000;
         public static int CollisionCheckDelay_MS { get; set; } = 16;
+        public static int RaycastCheckDelay_MS { get; set; } = 3;
 
     }
 }

@@ -1,25 +1,18 @@
 ﻿using System.Numerics;
 using WPFGameEngine.Attributes.Editor;
-using WPFGameEngine.WPF.GE.Component.Base;
+using WPFGameEngine.WPF.GE.Component.Collider.Base;
 using WPFGameEngine.WPF.GE.Dto.Base;
 using WPFGameEngine.WPF.GE.Dto.Components;
 using WPFGameEngine.WPF.GE.Geometry.Base;
-using WPFGameEngine.WPF.GE.Math.Basis;
-using WPFGameEngine.WPF.GE.Math.Sizes;
 
 namespace WPFGameEngine.WPF.GE.Component.Collider
 {
     [VisibleInEditor(FactoryName = nameof(ColliderComponent),
         DisplayName = "Collider",
         GameObjectType = Enums.GEObjectType.Component)]
-    public class ColliderComponent : ComponentBase, ICollider
+    public class ColliderComponent : ColliderComponentBase, ICollider
     {
-        public override List<string> IncompatibleComponents => new List<string>() 
-        { nameof(ColliderComponent) };
-        public IShape2D CollisionShape { get; set; }
-        public Size ActualObjectSize { get; set; }
-        public Vector2 Position { get; set; }
-        public Vector2 ActualCenterPosition
+        public override Vector2 ActualCenterPosition
         {
             get
             {
@@ -30,41 +23,23 @@ namespace WPFGameEngine.WPF.GE.Component.Collider
                 return locX + locY;
             }
         }
-
-        public Basis2D Basis { get; set; }
-
-        public bool CollisionEnabled { get; private set; }
-
-        public bool CollisionResolved { get; set; }
+        public override List<string> IncompatibleComponents => new List<string>() 
+        { nameof(ColliderComponent), nameof(RaycastComponent) };
+        public IShape2D CollisionShape { get; set; }
 
         public ColliderComponent() : base(nameof(ColliderComponent))
         {
-            CollisionEnabled = true;
-            CollisionResolved = true;
+            EnableCollision();
+            ResolveCollision();
         }
 
         public override DtoBase ToDto()
         {
             return new ColliderDto()
             { 
-                ColliderShape = CollisionShape,
+                ColliderShape = CollisionShape!,
                 Position = Position,
             };
-        }
-
-        public void EnableCollision()
-        {
-            CollisionEnabled = true;
-        }
-
-        public void DisableCollision()
-        {
-            CollisionEnabled = false;
-        }
-
-        public void ResolveCollision()
-        {
-            CollisionResolved = true;
         }
 
         #region IClonable

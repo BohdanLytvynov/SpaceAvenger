@@ -396,6 +396,19 @@ Margin="10" LabelText="Center Position X: " Minimum="0" Maximum="1.0"/>
         </StackPanel>
     </DataTemplate>
 
+    <DataTemplate DataType="{x:Type colliderVM:RaycastComponentViewModel}">
+        <StackPanel Orientation="Vertical" Width="{Binding Path=ActualWidth,
+            RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}}"
+                IsEnabled="{Binding ManageComponentEnabled, 
+        UpdateSourceTrigger=PropertyChanged}">
+
+            <Rectangle Style="{StaticResource BorderRectStyle}"/>
+            <TextBlock Text="{Binding ComponentName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DescLabel}"/>
+            <Rectangle Style="{StaticResource BorderRectStyle}"/>
+
+        </StackPanel>
+    </DataTemplate>
+
     <DataTemplate DataType="{x:Type easeOptionsVM:EaseOptionsViewModel}">
         <StackPanel Orientation="Vertical" IsEnabled="False">
             <controls:Slider MinHeight="60" Minimum="1" Maximum="1000"

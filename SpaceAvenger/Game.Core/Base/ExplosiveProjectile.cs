@@ -1,6 +1,6 @@
 ﻿using SpaceAvenger.Game.Core.Enums;
 using System.Collections.Generic;
-using WPFGameEngine.CollisionDetection.CollisionManager.Base;
+using WPFGameEngine.CollisionDetection.RaycastManager;
 using WPFGameEngine.Extensions;
 using WPFGameEngine.GameViewControl;
 
@@ -13,7 +13,7 @@ namespace SpaceAvenger.Game.Core.Base
         {
         }
 
-        public override void ProcessCollision(List<CollisionData>? info)
+        public override void ProcessHit(List<RaycastData>? info)
         {
             if (info == null) return;
             
@@ -22,8 +22,8 @@ namespace SpaceAvenger.Game.Core.Base
                 if (obj.Object is SpaceShipBase s)
                 {
                     s.DoDamage(Damage);
-                    Collider.DisableCollision();
-                    base.ProcessCollision(info);
+                    RaycastComponent.DisableCollision();
+                    base.ProcessHit(info);
 
                     var matrix = GetWorldTransformMatrix();
                     var prevPos = GetWorldCenter(matrix);
@@ -39,7 +39,7 @@ namespace SpaceAvenger.Game.Core.Base
 
         public override void OnGetFromPool()
         {
-            Collider.EnableCollision();
+            RaycastComponent.EnableCollision();
             base.OnGetFromPool();
         }
     }

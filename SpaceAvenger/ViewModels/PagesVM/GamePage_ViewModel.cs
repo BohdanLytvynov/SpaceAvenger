@@ -21,6 +21,7 @@ using System.Windows.Input;
 using SpaceAvenger.Views.DialogWindow;
 using SpaceAvenger.Views.Pages;
 using WPFGameEngine.ObjectInstantiators;
+using WPFGameEngine.CollisionDetection.RaycastManager;
 
 namespace SpaceAvenger.ViewModels.PagesVM
 {
@@ -41,6 +42,7 @@ namespace SpaceAvenger.ViewModels.PagesVM
         private IServiceProvider m_serviceProvider;
         private IControllerComponent m_controllerComponent;
         private ICollisionManager m_collisionManager;
+        private IRaycastManager m_raycastManager;
 
         private int m_ShipsDestroyed;
         private int m_EnemyShips;
@@ -82,7 +84,8 @@ namespace SpaceAvenger.ViewModels.PagesVM
             IGameTimer gameTimer,
             IObjectInstantiator instantiator,
             IServiceProvider serviceProvider,
-            ICollisionManager collisionManager) : this()
+            ICollisionManager collisionManager,
+            IRaycastManager raycastManager) : this()
         {
             m_collisionManager = collisionManager ?? throw new ArgumentNullException(nameof(collisionManager));
             m_ObjectInstantiator = instantiator ?? throw new ArgumentNullException(nameof(instantiator));
@@ -91,7 +94,7 @@ namespace SpaceAvenger.ViewModels.PagesVM
             m_PageManager = pageManager ?? throw new ArgumentNullException(nameof(pageManager));
             m_gameTimer = gameTimer ?? throw new ArgumentNullException(nameof(gameTimer));
             m_GameView = new WpfMapableObjectViewHost(m_gameTimer, 
-                m_ObjectInstantiator, m_collisionManager);
+                m_ObjectInstantiator, m_collisionManager, m_raycastManager);
             GameView.OnUpdate += Update;
             Subscriptions.Add(m_MessageBus.RegisterHandler<GameMessage, string>(OnMessageRecieved));
         }

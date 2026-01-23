@@ -231,5 +231,10 @@ namespace WPFGameEngine.WPF.GE.GameObjects.Transformable
 
             return isAimed;
         }
+
+        public override void ForceUpdateOfLazyProperties()
+        {
+            m_transform = null;
+        }
     }
 }

@@ -2,12 +2,12 @@
 using System.Numerics;
 using WPFGameEngine.GameViewControl;
 using WPFGameEngine.Timers.Base;
-using WPFGameEngine.WPF.GE.GameObjects;
+using WPFGameEngine.WPF.GE.GameObjects.Raycastable;
 using WPFGameEngine.WPF.GE.Math.Sizes;
 
 namespace SpaceAvenger.Game.Core.Base
 {
-    public abstract class ProjectileBase : СacheableObject
+    public abstract class ProjectileBase : RaycastableBase
     {
         private Vector2 m_dir;
         public float ProjectileSpeed { get; protected set; }

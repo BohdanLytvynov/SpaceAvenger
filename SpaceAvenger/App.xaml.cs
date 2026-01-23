@@ -35,6 +35,7 @@ using WPFGameEngine.ObjectPools.PoolManagers;
 using WPFGameEngine.CollisionDetection.CollisionManager.Base;
 using WPFGameEngine.ObjectInstantiators;
 using WPFGameEngine.WPF.GE.Settings;
+using WPFGameEngine.CollisionDetection.RaycastManager;
 
 namespace SpaceAvenger
 {
@@ -56,6 +57,7 @@ namespace SpaceAvenger
             CollisionSettings.WorldYPosition = 0;
             
             services.AddSingleton<ICollisionManager, CollisionManager>();
+            services.AddSingleton<IRaycastManager, RaycastManager>();
             services.AddSingleton<IObjectPoolManager, ObjectPoolManager>();
 
             services.AddSingleton<IControllerComponent>(c =>

@@ -15,6 +15,12 @@ namespace WPFGameEngine.WPF.GE.Math.Matrixes
         /// 2 {OffX, OffY, 1}
         /// M11 - ScaleX,
         /// M22 - ScaleY
+        /// How to apply transform to Matrix
+        ///                       0     1    2
+        ///    0   1  2       0 {M11,  M12,  0},
+        /// { Px, Py, 1 }  *  1 {M21,  M22,  0},
+        ///                   2 {OffX, OffY, 1}
+        ///P - Point
         /// </summary>
         private float[,] m_Matrix;
 

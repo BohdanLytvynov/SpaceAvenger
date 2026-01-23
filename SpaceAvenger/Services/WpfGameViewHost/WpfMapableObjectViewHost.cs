@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Windows.Media;
 using WPFGameEngine.CollisionDetection.CollisionManager.Base;
+using WPFGameEngine.CollisionDetection.RaycastManager;
 using WPFGameEngine.Enums;
 using WPFGameEngine.GameViewControl;
 using WPFGameEngine.ObjectBuilders.Base;
@@ -11,6 +12,7 @@ using WPFGameEngine.ObjectPools.Base;
 using WPFGameEngine.Timers.Base;
 using WPFGameEngine.WPF.GE.GameObjects;
 using WPFGameEngine.WPF.GE.GameObjects.Collidable;
+using WPFGameEngine.WPF.GE.GameObjects.Raycastable;
 using WPFGameEngine.WPF.GE.GameObjects.Renderable;
 using WPFGameEngine.WPF.GE.GameObjects.Updatable;
 using WPFGameEngine.WPF.GE.Math.Matrixes;
@@ -21,14 +23,17 @@ namespace SpaceAvenger.Services.WpfGameViewHost
     {
         #region Fields
         public ICollisionManager CollisionManager { get; init; }
+        public IRaycastManager RaycastManager { get; init; }
         public IObjectInstantiator ObjectInstantiator { get; init; }
         #endregion
 
         public WpfMapableObjectViewHost(IGameTimer gameTimer, 
             IObjectInstantiator objectInstantiator,
-            ICollisionManager collisionManager) :
+            ICollisionManager collisionManager,
+            IRaycastManager raycastManager) :
             base(gameTimer)
         {
+            RaycastManager = raycastManager ?? throw new ArgumentNullException(nameof(raycastManager));
             CollisionManager = collisionManager ?? throw new ArgumentNullException(nameof(collisionManager));
             CollisionManager.World = World;
             ObjectInstantiator = objectInstantiator ?? throw new ArgumentNullException(nameof(objectInstantiator));
@@ -61,6 +66,8 @@ namespace SpaceAvenger.Services.WpfGameViewHost
                                 updatable.Update();
                             if (world[i] is ICollidable collidable)
                                 collidable.ProcessCollision(CollisionManager.GetCollisionInfo(id));
+                            if (world[i] is IRaycastable raycastable)
+                                raycastable.ProcessHit(RaycastManager.GetCollisionInfo(id));
                             if (world[i] is IRenderable renderable)
                                 renderable.Render(dc, Matrix3x3.Identity);
                         }

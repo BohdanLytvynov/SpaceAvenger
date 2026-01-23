@@ -1,10 +1,7 @@
 ﻿using System.Windows.Media;
 using WPFGameEngine.GameViewControl;
 using WPFGameEngine.Timers.Base;
-using WPFGameEngine.WPF.GE.Component.RelativeTransforms;
-using WPFGameEngine.WPF.GE.GameObjects.Transformable;
 using WPFGameEngine.WPF.GE.Math.Matrixes;
-using WPFGameEngine.WPF.GE.Math.Sizes;
 using WPFGameEngine.WPF.GE.Settings;
 
 namespace WPFGameEngine.WPF.GE.GameObjects.Renderable

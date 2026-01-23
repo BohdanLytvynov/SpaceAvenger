@@ -6,11 +6,11 @@ using System.Windows.Media;
 using WPFGameEngine.CollisionDetection.CollisionMatrixes;
 using WPFGameEngine.GameViewControl;
 using WPFGameEngine.Timers.Base;
-using WPFGameEngine.WPF.GE.GameObjects;
+using WPFGameEngine.WPF.GE.GameObjects.Collidable;
 
 namespace SpaceAvenger.Game.Core.Base
 {
-    public abstract class SpaceShipBase : СacheableObject
+    public abstract class SpaceShipBase : CollidableBase
     {
         protected WPFInputController m_controller;
 

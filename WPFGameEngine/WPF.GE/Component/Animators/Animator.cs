@@ -1,5 +1,4 @@
-﻿using System.Text.Json.Serialization;
-using System.Windows.Media.Imaging;
+﻿using System.Windows.Media.Imaging;
 using WPFGameEngine.Attributes.Editor;
 using WPFGameEngine.Timers.Base;
 using WPFGameEngine.WPF.GE.Component.Animations;

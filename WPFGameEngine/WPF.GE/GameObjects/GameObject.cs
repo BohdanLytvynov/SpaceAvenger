@@ -547,6 +547,10 @@ namespace WPFGameEngine.WPF.GE.GameObjects
             return false;
         }
 
+        public virtual void ForceUpdateOfLazyProperties()
+        {
+        }
+
         #endregion
     }
 }
