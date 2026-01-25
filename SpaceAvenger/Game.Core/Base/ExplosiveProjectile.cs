@@ -9,22 +9,32 @@ namespace SpaceAvenger.Game.Core.Base
     public abstract class ExplosiveProjectile<TExplosion> : ProjectileBase
         where TExplosion : ExplosionBase
     {
+        private object m_hitLock;
+        private List<RaycastData> m_raycastInfo;
+
         protected ExplosiveProjectile(Faction faction) : base(faction)
         {
+            m_hitLock = new object();
+            m_raycastInfo = new List<RaycastData>();
         }
 
         public override void ProcessHit(List<RaycastData>? info)
         {
             if (info == null) return;
-            
-            foreach (var obj in info)
+
+            lock (m_hitLock)
+            {
+                m_raycastInfo.Clear();
+                m_raycastInfo.AddRange(info);
+            }
+
+            foreach (var obj in m_raycastInfo)
             {
                 if (obj.Object is SpaceShipBase s)
                 {
                     s.DoDamage(Damage);
-                    RaycastComponent.DisableCollision();
+                    ColliderComponent.DisableCollision();
                     base.ProcessHit(info);
-
                     var matrix = GetWorldTransformMatrix();
                     var prevPos = GetWorldCenter(matrix);
                     AddToPool(this);
@@ -39,7 +49,7 @@ namespace SpaceAvenger.Game.Core.Base
 
         public override void OnGetFromPool()
         {
-            RaycastComponent.EnableCollision();
+            ColliderComponent.EnableCollision();
             base.OnGetFromPool();
         }
     }

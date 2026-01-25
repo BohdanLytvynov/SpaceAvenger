@@ -406,6 +406,16 @@ Margin="10" LabelText="Center Position X: " Minimum="0" Maximum="1.0"/>
             <TextBlock Text="{Binding ComponentName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DescLabel}"/>
             <Rectangle Style="{StaticResource BorderRectStyle}"/>
 
+            <StackPanel Orientation="Vertical">
+                <controls:Slider Value="{Binding XRel, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                    Margin="10" LabelText="Relative X-Position: "
+                    Minimum="0" Maximum="{Binding XMax, UpdateSourceTrigger=PropertyChanged}"
+                    />
+                <controls:Slider Value="{Binding YRel, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                    Margin="10" LabelText="Relative Y-Position: "
+                    Minimum="0" Maximum="{Binding YMax, UpdateSourceTrigger=PropertyChanged}"
+                    />
+            </StackPanel>
         </StackPanel>
     </DataTemplate>
 

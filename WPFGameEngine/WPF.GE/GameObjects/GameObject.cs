@@ -104,7 +104,6 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         protected GameObject()
         {
             ObjectName = string.Empty;
-            UniqueName = string.Empty;
             m_components = new Dictionary<string, IGEComponent>();
             m_children = new List<IGameObject>();
             Enabled = true;

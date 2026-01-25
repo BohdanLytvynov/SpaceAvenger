@@ -1,6 +1,7 @@
 ﻿using System.Numerics;
 using WPFGameEngine.CollisionDetection.Base;
 using WPFGameEngine.CollisionDetection.CollisionMatrixes;
+using WPFGameEngine.WPF.GE.Component.Collider;
 using WPFGameEngine.WPF.GE.GameObjects.Collidable;
 using WPFGameEngine.WPF.GE.Helpers;
 using WPFGameEngine.WPF.GE.Settings;
@@ -85,7 +86,7 @@ namespace WPFGameEngine.CollisionDetection.CollisionManager.Base
                     if (obj is ICollidable collidable &&
                         obj.Enabled && collidable.IsVisible &&
                         collidable.IsCollidable &&
-                        collidable.Collider.CollisionEnabled)
+                        collidable.ColliderComponent.CollisionEnabled)
                     {
                         m_currentCollidableObjects.Add(collidable);
                     }
@@ -105,10 +106,11 @@ namespace WPFGameEngine.CollisionDetection.CollisionManager.Base
                         //Check if that objects should Collide
                         if (!CollisionMatrix.CanCollide(obj1.CollisionLayer, obj2.CollisionLayer))
                             continue;
+
                         //Collision Checking
                         var colInfo = CollisionHelper.Intersects(
-                            obj1.Collider.CollisionShape,
-                            obj2.Collider.CollisionShape);
+                            (obj1.ColliderComponent as ICollider)!.CollisionShape,
+                            (obj2.ColliderComponent as ICollider)!.CollisionShape);
 
                         if (colInfo.Intersects)//Case of collision
                         {

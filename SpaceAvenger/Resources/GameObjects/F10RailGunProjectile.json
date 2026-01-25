@@ -24,6 +24,13 @@
     {
       "RecreateType": "Sprite",
       "ResourceKey": "F10_RailGunPrj"
+    },
+    {
+      "RecreateType": "RaycastComponent",
+      "Position": {
+        "X": 0.96312904,
+        "Y": 0.4800549
+      }
     }
   ]
 }

@@ -2,6 +2,8 @@
 using WPFGameEngine.GameViewControl;
 using WPFGameEngine.ObjectPools.ThreadSafePools;
 using WPFGameEngine.Timers.Base;
+using WPFGameEngine.WPF.GE.Component.Collider;
+using WPFGameEngine.WPF.GE.Settings;
 
 namespace WPFGameEngine.WPF.GE.GameObjects
 {
@@ -36,13 +38,14 @@ namespace WPFGameEngine.WPF.GE.GameObjects
 
         public virtual void OnAddToPool()
         {
-            Translate(Vector2.Zero);
             Hide();
             Cached = true;
+            Translate(ObjectPoolSettings.ObjectPoolPosition);
         }
 
         public virtual void OnGetFromPool()
         {
+            //ResetRaycastPosition(Transform.Position);
             Cached = false;
         }
 
@@ -50,6 +53,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         {
             if (!UseCaching) return;
             if (Cached) return;
+            gameObject.OnAddToPool();
             (GameView as IMapableObjectViewHost).ObjectInstantiator.AddToPool(new DelayedItem(gameObject, Delay, GameTimer.totalTime.Milliseconds));
         }
     }

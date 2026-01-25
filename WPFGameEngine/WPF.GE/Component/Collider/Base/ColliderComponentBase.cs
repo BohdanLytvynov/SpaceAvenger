@@ -10,12 +10,18 @@ namespace WPFGameEngine.WPF.GE.Component.Collider.Base
         #region Properties
 
         public bool CollisionEnabled { get; private set; }
-        public bool CollisionResolved { get; private set; }
         public Size ActualObjectSize { get; set; }
         public Vector2 Position { get; set; }
-        public abstract Vector2 ActualCenterPosition
+        public Vector2 ActualCenterPosition
         {
-            get;
+            get
+            {
+                var actX = Position.X * ActualObjectSize.Width;
+                var actY = Position.Y * ActualObjectSize.Height;
+                var locX = Basis.X * actX;
+                var locY = Basis.Y * actY;
+                return locX + locY;
+            }
         }
         public Basis2D Basis { get; set; }
 
@@ -25,6 +31,7 @@ namespace WPFGameEngine.WPF.GE.Component.Collider.Base
 
         protected ColliderComponentBase(string componentName) : base(componentName)
         {
+            EnableCollision();
         }
 
         #endregion
@@ -39,11 +46,6 @@ namespace WPFGameEngine.WPF.GE.Component.Collider.Base
         {
             CollisionEnabled = true;
         }
-        public void ResolveCollision()
-        {
-            CollisionResolved = true;
-        }
-
         #endregion
     }
 }

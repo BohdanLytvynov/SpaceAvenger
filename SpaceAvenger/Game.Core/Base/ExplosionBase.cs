@@ -47,5 +47,7 @@ namespace SpaceAvenger.Game.Core.Base
             Animation.Stop();
             base.OnGetFromPool();
         }
+
+        protected override bool IsInWindowBounds(Vector2 position) => true;
     }
 }

@@ -16,6 +16,8 @@
         //Collision matrix
         private static readonly Dictionary<CollisionLayer, CollisionLayer> m_matrix = new();
 
+        public static Dictionary<CollisionLayer, CollisionLayer> Matrix { get => m_matrix; }
+
         static CollisionMatrix()
         {
             // Player -> 11010
@@ -27,6 +29,10 @@
             // Enemy -> 10101
             // Enemies collides with Player, Player Projectiles and Obstacles
             m_matrix[CollisionLayer.Enemy] = CollisionLayer.Player | CollisionLayer.PlayerProjectile | CollisionLayer.Obstacle;
+            // Enemy Projectile -> 10001
+            // Enemy Projectiles collides with Player and Obstacles
+            m_matrix[CollisionLayer.EnemyProjectile] = CollisionLayer.Player | CollisionLayer.Obstacle;
+            // Obstacle can collide with Enemy, Player, Enemy Projectiles, Player Projectiles
         }
         /// <summary>
         /// Determine can 2 Collision Layers collide
@@ -45,6 +51,7 @@
             //Player and Enemy Projectile -> 11010 & 00100 = 11010, that is not 00000
             //Example of collision layers that don't collide:
             //Player and Player Projectile -> 11010 & 00100 = 00000, no collision is possible
+            //Enemy Projectile and Player -> 10001 & 00001 = 00001, that is not 00000
         }
     }
 }

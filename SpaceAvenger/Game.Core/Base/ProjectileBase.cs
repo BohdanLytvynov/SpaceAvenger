@@ -1,13 +1,15 @@
 ﻿using SpaceAvenger.Game.Core.Enums;
 using System.Numerics;
+using WPFGameEngine.CollisionDetection.Grid;
 using WPFGameEngine.GameViewControl;
 using WPFGameEngine.Timers.Base;
-using WPFGameEngine.WPF.GE.GameObjects.Raycastable;
+using WPFGameEngine.WPF.GE.Component.Collider;
+using WPFGameEngine.WPF.GE.GameObjects;
 using WPFGameEngine.WPF.GE.Math.Sizes;
 
 namespace SpaceAvenger.Game.Core.Base
 {
-    public abstract class ProjectileBase : RaycastableBase
+    public abstract class ProjectileBase : СacheableObject
     {
         private Vector2 m_dir;
         public float ProjectileSpeed { get; protected set; }
@@ -56,6 +58,12 @@ namespace SpaceAvenger.Game.Core.Base
             Move = false;
             m_dir = Vector2.Zero;
             base.OnAddToPool();
+        }
+
+        public override void Translate(Vector2 position)
+        {
+            ResetRaycastPosition(position);
+            base.Translate(position);
         }
     }
 }

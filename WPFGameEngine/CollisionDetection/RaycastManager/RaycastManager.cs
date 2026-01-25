@@ -1,9 +1,8 @@
 ﻿using System.Numerics;
 using WPFGameEngine.CollisionDetection.Base;
-using WPFGameEngine.CollisionDetection.CollisionManager.Base;
 using WPFGameEngine.CollisionDetection.CollisionMatrixes;
+using WPFGameEngine.WPF.GE.Component.Collider;
 using WPFGameEngine.WPF.GE.GameObjects.Collidable;
-using WPFGameEngine.WPF.GE.GameObjects.Raycastable;
 using WPFGameEngine.WPF.GE.Settings;
 using static WPFGameEngine.WPF.GE.Helpers.RayCastHelper;
 
@@ -46,13 +45,14 @@ namespace WPFGameEngine.CollisionDetection.RaycastManager
             T = t;
         }
     }
-    public class RaycastManager : ThreadSafeCollisionManager<RaycastData, IRaycastable>, 
+    public class RaycastManager : ThreadSafeCollisionManager<RaycastData, ICollidable>, 
         IRaycastManager
     {
         List<ICollidable> m_collidableFilteredObjects;
         private object m_posLock;
         private Vector2 m_prev;
         private Vector2 m_curr;
+        private IRaycastComponent m_raycastComponent;
 
         public RaycastManager() : base()
         {
@@ -87,24 +87,30 @@ namespace WPFGameEngine.CollisionDetection.RaycastManager
                         m_worldSnapshot.AddRange(World);//Copy only references to objects
                 }
 
+                m_collidableFilteredObjects.Clear();
                 m_currentCollidableObjects.Clear();//Clear before filtration
                 //Good approach is to use froeach iterator instead of LINQs. 
                 //Cause we should avoid lots of Allocations, and GC procedures
                 //Filter all the objects, that can raycast
                 foreach (var obj in m_worldSnapshot)
                 {
-                    if (obj is IRaycastable raycastable &&
-                        obj.Enabled && raycastable.IsVisible &&
-                        raycastable.IsRaycastable &&
-                        raycastable.RaycastComponent.CollisionEnabled)
-                    {
-                        m_currentCollidableObjects.Add(raycastable);
-                    }
+                    var collidable = obj as ICollidable;
 
-                    if (obj is ICollidable collidable &&
-                        obj.Enabled && collidable.IsVisible &&
-                        collidable.IsCollidable &&
-                        collidable.Collider.CollisionEnabled)
+                    if(collidable == null)
+                        continue;
+
+                    if (collidable.IsRaycastable
+                        && collidable.Enabled
+                        && collidable.IsVisible
+                        && collidable.ColliderComponent.CollisionEnabled)
+                    {
+                        m_currentCollidableObjects.Add(collidable);
+                    }
+                    else if (collidable.IsCollidable
+                        && collidable.Enabled
+                        && collidable.IsVisible
+                        && collidable.ColliderComponent.CollisionEnabled
+                        && (collidable.ColliderComponent is ICollider col && col.CollisionShape != null))
                     { 
                         m_collidableFilteredObjects.Add(collidable);
                     }
@@ -121,23 +127,24 @@ namespace WPFGameEngine.CollisionDetection.RaycastManager
                         var obj1 = m_currentCollidableObjects[i];
                         var obj2 = m_collidableFilteredObjects[j];
 
-                        if (obj1.Id >= obj2.Id)//Avoiding of double check A - B and B - A
-                            continue;
+                        //if (obj1.Id >= obj2.Id)//Avoiding of double check A - B and B - A
+                        //    continue;
                         //Check if that objects should Collide
                         if (!CollisionMatrix.CanCollide(obj1.CollisionLayer, obj2.CollisionLayer))
                             continue;
                         //Prev and Current Position data shouldn't change during calculation
                         lock (m_posLock)
                         {
-                            m_prev = obj1.RaycastComponent.PreviousPosition;
-                            m_curr = obj1.RaycastComponent.CurrentPosition;
+                            m_raycastComponent = (obj1.ColliderComponent as IRaycastComponent)!;
+                            m_prev = m_raycastComponent.PreviousPosition;
+                            m_curr = m_raycastComponent.CurrentPosition;
                         }
 
                         //Collision Checking
                         var hitData = RaycastHelper.RayIntersectsShape(
                             m_prev,
                             m_curr,
-                            obj2.Collider.CollisionShape
+                            (obj2.ColliderComponent as ICollider)!.CollisionShape
                             );
 
                         if (hitData.IsHit)

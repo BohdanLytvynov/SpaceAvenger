@@ -26,17 +26,10 @@
       "ResourceKey": "F1_LightGunPrj"
     },
     {
-      "RecreateType": "ColliderComponent",
+      "RecreateType": "RaycastComponent",
       "Position": {
-        "X": 0.693189,
-        "Y": 0.48156452
-      },
-      "ColliderShape": {
-        "RecreateType": "Rectangle",
-        "Size": {
-          "Width": 38.531708,
-          "Height": 30.504269
-        }
+        "X": 0.7445106,
+        "Y": 0.49226302
       }
     }
   ]

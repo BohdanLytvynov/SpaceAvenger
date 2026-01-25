@@ -1,18 +1,14 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Windows.Media;
 using WPFGameEngine.CollisionDetection.CollisionManager.Base;
 using WPFGameEngine.CollisionDetection.RaycastManager;
 using WPFGameEngine.Enums;
 using WPFGameEngine.GameViewControl;
-using WPFGameEngine.ObjectBuilders.Base;
 using WPFGameEngine.ObjectInstantiators;
-using WPFGameEngine.ObjectPools.Base;
 using WPFGameEngine.Timers.Base;
 using WPFGameEngine.WPF.GE.GameObjects;
 using WPFGameEngine.WPF.GE.GameObjects.Collidable;
-using WPFGameEngine.WPF.GE.GameObjects.Raycastable;
 using WPFGameEngine.WPF.GE.GameObjects.Renderable;
 using WPFGameEngine.WPF.GE.GameObjects.Updatable;
 using WPFGameEngine.WPF.GE.Math.Matrixes;
@@ -36,6 +32,7 @@ namespace SpaceAvenger.Services.WpfGameViewHost
             RaycastManager = raycastManager ?? throw new ArgumentNullException(nameof(raycastManager));
             CollisionManager = collisionManager ?? throw new ArgumentNullException(nameof(collisionManager));
             CollisionManager.World = World;
+            RaycastManager.World = World;
             ObjectInstantiator = objectInstantiator ?? throw new ArgumentNullException(nameof(objectInstantiator));
         }
 
@@ -65,9 +62,12 @@ namespace SpaceAvenger.Services.WpfGameViewHost
                             if (world[i] is IUpdatable updatable)
                                 updatable.Update();
                             if (world[i] is ICollidable collidable)
-                                collidable.ProcessCollision(CollisionManager.GetCollisionInfo(id));
-                            if (world[i] is IRaycastable raycastable)
-                                raycastable.ProcessHit(RaycastManager.GetCollisionInfo(id));
+                            {
+                                if (collidable.IsCollidable)
+                                    collidable.ProcessCollision(CollisionManager.GetCollisionInfo(id));
+                                else if (collidable.IsRaycastable)
+                                    collidable.ProcessHit(RaycastManager.GetCollisionInfo(id));
+                            }
                             if (world[i] is IRenderable renderable)
                                 renderable.Render(dc, Matrix3x3.Identity);
                         }
@@ -82,24 +82,28 @@ namespace SpaceAvenger.Services.WpfGameViewHost
         public override void StartGame()
         {
             CollisionManager.Start();
+            RaycastManager.Start();
             base.StartGame();
         }
 
         public override void Resume()
         {
             CollisionManager.Resume();
+            RaycastManager?.Resume();
             base.Resume();
         }
 
         public override void Pause()
         {
             CollisionManager.Pause();
+            RaycastManager?.Pause();
             base.Pause();
         }
 
         public override void Stop()
         {
             CollisionManager.Stop();
+            RaycastManager.Stop();
             base.Stop();
         }
 

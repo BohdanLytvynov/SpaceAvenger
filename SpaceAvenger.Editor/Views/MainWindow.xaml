@@ -115,10 +115,10 @@
                                     <CheckBox Content="Enabled" Margin="10" 
                                           IsChecked="{Binding Enabled, 
                                     UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                                    <TextBlock Text="{Binding ObjName, UpdateSourceTrigger=PropertyChanged, StringFormat='Object name:{0}'}"
+                                    <TextBlock Text="{Binding ObjName, UpdateSourceTrigger=PropertyChanged, StringFormat='Object name: {0}'}"
                                            Style="{StaticResource FieldName}"
                                            Margin="15,0,0,0"/>
-                                    <TextBlock Text="{Binding UniqueName, UpdateSourceTrigger=PropertyChanged, StringFormat='Unique name:{0}'}"
+                                    <TextBlock Text="{Binding UniqueName, UpdateSourceTrigger=PropertyChanged, StringFormat='Unique name: {0}'}"
                                             Style="{StaticResource FieldName}"
                                             Margin="15,0,0,0"/>
                                 </StackPanel>

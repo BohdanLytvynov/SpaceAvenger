@@ -83,7 +83,6 @@ namespace WPFGameEngine.ObjectPools.ThreadSafePools
         public void InsertWithDelay(DelayedItem delayedItem)
         {
             //Debug.WriteLine($"{delayedItem.Cacheable.ObjectName} Added to Waiting queue - {m_globalTime}");
-            delayedItem.Cacheable.OnAddToPool();
             m_waitingObjects.Enqueue(delayedItem);
         }
         /// <summary>

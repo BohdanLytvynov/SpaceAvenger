@@ -74,7 +74,7 @@ namespace ViewModelBaseLibDotNetCore.VM
             if (m_dispatcher is null)
                 throw new Exception("Dispatcher is not initialized!");
 
-            m_dispatcher?.Invoke(work);
+            m_dispatcher.Invoke(work);
         }
     }
 }

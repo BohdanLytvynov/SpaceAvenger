@@ -28,10 +28,6 @@ namespace WPFGameEngine.WPF.GE.Component.Collider.Base
         /// </summary>
         bool CollisionEnabled { get; }
         /// <summary>
-        /// Is Collision Resolved
-        /// </summary>
-        bool CollisionResolved { get; }
-        /// <summary>
         /// Enable Collision
         /// </summary>
         void EnableCollision();
@@ -39,9 +35,5 @@ namespace WPFGameEngine.WPF.GE.Component.Collider.Base
         /// Disable Collision
         /// </summary>
         void DisableCollision();
-        /// <summary>
-        /// Resolve Collision
-        /// </summary>
-        void ResolveCollision();
     }
 }

@@ -87,6 +87,7 @@ namespace SpaceAvenger.ViewModels.PagesVM
             ICollisionManager collisionManager,
             IRaycastManager raycastManager) : this()
         {
+            m_raycastManager = raycastManager ?? throw new ArgumentNullException(nameof(raycastManager));
             m_collisionManager = collisionManager ?? throw new ArgumentNullException(nameof(collisionManager));
             m_ObjectInstantiator = instantiator ?? throw new ArgumentNullException(nameof(instantiator));
             m_serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
@@ -114,7 +115,7 @@ namespace SpaceAvenger.ViewModels.PagesVM
 
         #region Methods
 
-        #region Set BackGround
+        #region Message Processing
 
         private void OnMessageRecieved(GameMessage gameMessage)
         {

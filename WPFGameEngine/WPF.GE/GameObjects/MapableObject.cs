@@ -1,10 +1,10 @@
 ﻿using WPFGameEngine.GameViewControl;
 using WPFGameEngine.Timers.Base;
-using WPFGameEngine.WPF.GE.GameObjects.Renderable;
+using WPFGameEngine.WPF.GE.GameObjects.Collidable;
 
 namespace WPFGameEngine.WPF.GE.GameObjects
 {
-    public abstract class MapableObject : RenderableBase
+    public abstract class MapableObject : CollidableBase
     {
         protected IMapableObjectViewHost? MapableViewHost;
 
