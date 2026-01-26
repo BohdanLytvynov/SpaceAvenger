@@ -22,7 +22,9 @@ namespace SpaceAvenger.Game.Core.AI
         Down = 0,
         Up,
     }
-
+    /// <summary>
+    /// Base AI module for the spaceship
+    /// </summary>
     public class SpaceShipControlModule : AIModuleBase
     {
         //Current move direction
@@ -84,7 +86,7 @@ namespace SpaceAvenger.Game.Core.AI
 
             m_mainWindow = App.Current.MainWindow;
             var worldMatrix = t.GetWorldTransformMatrix();
-            WPFGameEngine.WPF.GE.Math.Sizes.Size wScale = t.GetWorldScale(worldMatrix);
+            WPFGameEngine.WPF.GE.Math.Sizes.Size wScale = t.GetWorldScale(worldMatrix);//Actual scale of the GO
 
             m_MinY = 0f - (wScale.Height + m_Offset);
             m_MaxY = (float)m_mainWindow.ActualHeight + m_Offset;
@@ -95,7 +97,10 @@ namespace SpaceAvenger.Game.Core.AI
 
             t.Translate(new Vector2(m_currX, m_MinY));
         }
-
+        /// <summary>
+        /// Method for calculating new values and applying new behaviors. Called when Update is called
+        /// </summary>
+        /// <param name="gameObject"></param>
         public override void Process(IGameObject gameObject)
         {
             base.Process(gameObject);
@@ -138,7 +143,7 @@ namespace SpaceAvenger.Game.Core.AI
                         }
 
                         spaceShip.Translate(new Vector2(m_currX, currTranslate.Y));
-
+                        //Calculate proper rotation when ship is comming form the top or bootom of the screen
                         var angle = basis.X.GetAngleDeg(new Vector2(0f, -1f));
 
                         if (angle > 0)
@@ -203,7 +208,7 @@ namespace SpaceAvenger.Game.Core.AI
             Vector2 finalPos = new Vector2(Xclamped, Yclamped);
 
             spaceShip.Translate(finalPos);
-
+            //Find Player and shoot him
             var player = GameView.GetObject(o => o.Metadata.Contains(Constants.PLAYER));
             var playerTransform = player.GetComponent<TransformComponent>();
             if (player == null) return;
@@ -211,7 +216,7 @@ namespace SpaceAvenger.Game.Core.AI
             var battleShip = gameObject as IBattleShip;
 
             if (battleShip == null) return;
-
+            //Distance from player to current battleship
             var distance = (playerTransform.Position - spaceShip.Transform.Position).LengthSquared();
 
             if (distance <= battleShip.DetectionDistance * battleShip.DetectionDistance)
@@ -230,12 +235,6 @@ namespace SpaceAvenger.Game.Core.AI
                 }
                 
             }
-
-            ////Shoot Weapons
-            //if (distance <= battleShip.DetectionDistance * battleShip.DetectionDistance)
-            //{
-            //    battleShip.ShootWeapons(playerTransform.Position);
-            //}
         }
     }
 }
