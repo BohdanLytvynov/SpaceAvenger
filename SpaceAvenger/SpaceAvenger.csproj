@@ -240,7 +240,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Domain\Domain.csproj" />
-    <ProjectReference Include="..\JsonDataProvider\JsonDataProvider.csproj" />
     <ProjectReference Include="..\ViewModelBaseLibDotNetCore\ViewModelBaseLibDotNetCore.csproj" />
     <ProjectReference Include="..\WPFGameEngine\WPFGameEngine.csproj" />
   </ItemGroup>
@@ -248,13 +247,31 @@
   <ItemGroup>
     <Folder Include="DataBase\" />
     <Folder Include="Game.Core\WPFGameObjects\" />
-    <Folder Include="Factories\" />
     <Folder Include="Resources\Content\SpaceShips\F3\Fighter\" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="FontAwesome5" Version="2.1.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Resources\Strings\GameStrings.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>GameStrings.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\Strings\GameStrings.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>GameStrings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>

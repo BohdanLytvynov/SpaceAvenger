@@ -1,185 +1,141 @@
-﻿using WPFGameEngine.WPF.GE.GameObjects;
+﻿using System.Numerics;
+using WPFGameEngine.CollisionDetection.Base;
+using WPFGameEngine.CollisionDetection.CollisionMatrixes;
+using WPFGameEngine.WPF.GE.Component.Collider;
 using WPFGameEngine.WPF.GE.GameObjects.Collidable;
 using WPFGameEngine.WPF.GE.Helpers;
+using WPFGameEngine.WPF.GE.Settings;
 
 namespace WPFGameEngine.CollisionDetection.CollisionManager.Base
 {
-    public class CollisionManager : ICollisionManager
+    public struct CollisionData
     {
-        #region Fields
-        private readonly object m_lock;
+        /// <summary>
+        /// Objects that is in collision 
+        /// </summary>
+        public ICollidable Object { get; }
+        /// <summary>
+        /// Minimum Translation Vector
+        /// </summary>
+        public Vector2 MTV { get; }
+        /// <summary>
+        /// How far overlapping occures
+        /// </summary>
+        public float Overlap { get; }
 
-        private volatile bool m_running;
-        private CancellationTokenSource m_cancellationTokenSource;
-        private Task m_checkTask;
-        private const int COLLISION_CHECK_DELAY_MS = 16;
-
-        private readonly Dictionary<int, List<IGameObject>> m_CollisionBuffer;
-
-        public List<IGameObject> World { get; set; }
-        #endregion
-
-        #region Ctor
-        public CollisionManager()
+        public CollisionData(ICollidable gameObject, Vector2 mtv, float overlap)
         {
-            m_lock = new object();
-            m_CollisionBuffer = new Dictionary<int, List<IGameObject>>();
-            m_running = false;
+            Object = gameObject;
+            MTV = mtv;
+            Overlap = overlap;
+        }
+
+        public CollisionData(ICollidable gameObject) : this(gameObject, Vector2.Zero, 0f)
+        {
+            
+        }
+    }
+
+    public class CollisionManager : ThreadSafeCollisionManager<CollisionData, ICollidable>, ICollisionManager
+    {
+        #region Ctor
+        public CollisionManager() : base()
+        {
         }
 
         #endregion
 
         #region Methods
-        public void Start()
-        {
-            if (!m_running)
-            {
-                m_cancellationTokenSource = new CancellationTokenSource();
-                m_checkTask = Task.Run(() => CheckCollisions(m_cancellationTokenSource.Token));
-                m_running = true;
-            }
-        }
-
-        public void Pause()
-        {
-            if (m_running)
-                m_running = false;
-        }
-
-        public void Stop()
-        {
-            if (m_running)
-            {
-                m_cancellationTokenSource.Cancel();
-
-                try
-                {
-                    m_checkTask.Wait();
-                }
-                catch (System.AggregateException)
-                {
-
-                }
-                Clear();
-                m_checkTask = null;
-                m_running = false;
-            }
-        }
-
-        private void AddToBuffer(int key, IGameObject gameObject)
-        {
-            if (m_CollisionBuffer.TryGetValue(key, out var info))
-            {
-                info.Add(gameObject);
-            }
-            else
-            {
-                var colInfo = new List<IGameObject>();
-                colInfo.Add(gameObject);
-                m_CollisionBuffer.Add(key, colInfo);
-            }
-        }
-
-        public void RemoveFromBuffer(int key)
-        {
-            lock (m_lock)
-            {
-                if (!m_CollisionBuffer.ContainsKey(key)) return;
-
-                m_CollisionBuffer.Remove(key);
-            }
-        }
-
-        public List<IGameObject>? GetCollisionInfo(int key)
-        {
-            lock (m_lock)
-            {
-                if (m_CollisionBuffer.TryGetValue(key, out var info))
-                {
-                    return info;
-                }
-                return null;
-            }
-        }
-
-        private async Task CheckCollisions(CancellationToken token)
+        /// <summary>
+        /// Main Collision checker
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        protected override async Task CheckCollisions(CancellationToken token)
         {
             while (!token.IsCancellationRequested)
             {
+                //Waiting if pause requested
                 if (!m_running)
                 {
                     try
                     {
-                        await Task.Delay(100, token);
+                        await Task.Delay(100, token);//Wait for 100 ms, that is done to avoid the empty executions,
+                        //Also it can react to cancellation scenario, and it will just cancel thread execution
                     }
                     catch (TaskCanceledException)
                     {
-                        break;
+                        break;//In case of cancel scenario
                     }
-                    continue;
+                    continue;//Case if there
                 }
-                
-                lock (m_lock)
+                //Lock the access to world, to be sure that it can't be modified by another Thread, adding or removing of new object
+                lock (m_worldLock)
                 {
-                    List<IGameObject> worldSnapshot = new List<IGameObject>(World);
-                    m_CollisionBuffer.Clear();
+                    m_worldSnapshot.Clear();//Clear previous data
+                    if (World != null)
+                        m_worldSnapshot.AddRange(World);//Copy only references to objects
                 }
 
-                List<ICollidable?> currentObjects = World.Where(x => x != null && x.Enabled &&
-                    (x is ICollidable collidable) &&
-                    collidable.IsCollidable &&
-                    collidable.Collider.CollisionEnabled &&
-                    collidable.Collider.CollisionResolved)
-                        .Select(x => x as ICollidable)
-                        .ToList(); ;
+                m_currentCollidableObjects.Clear();//Clear before filtration
+                //Good approach is to use froeach iterator instead of LINQs. 
+                //Cause we should avoid lots of Allocations, and GC procedures
+                //Filter all the objects, that can collide
+                foreach (var obj in m_worldSnapshot)
+                {
+                    if (obj is ICollidable collidable &&
+                        obj.Enabled && collidable.IsVisible &&
+                        collidable.IsCollidable &&
+                        collidable.ColliderComponent.CollisionEnabled)
+                    {
+                        m_currentCollidableObjects.Add(collidable);
+                    }
+                }
 
-                int len = currentObjects.Count;
+                int len = m_currentCollidableObjects.Count;//Length of the collection with objects, that can collide, we reduce calls to the Count property
                 //Brute Force
                 for (int i = 0; i < len; i++)//O(N^2)/2
                 {
                     for (int j = i + 1; j < len; j++)
                     {
-                        var obj1 = currentObjects[i];
-                        var obj2 = currentObjects[j];
+                        var obj1 = m_currentCollidableObjects[i];
+                        var obj2 = m_currentCollidableObjects[j];
 
-                        if (obj1 == null || obj2 == null)
+                        if (obj1.Id >= obj2.Id)//Avoiding of double check A - B and B - A
+                            continue;
+                        //Check if that objects should Collide
+                        if (!CollisionMatrix.CanCollide(obj1.CollisionLayer, obj2.CollisionLayer))
                             continue;
 
-                        if (CollisionHelper.Intersects(
-                            obj1.Collider.CollisionShape,
-                            obj2.Collider.CollisionShape))
+                        //Collision Checking
+                        var colInfo = CollisionHelper.Intersects(
+                            (obj1.ColliderComponent as ICollider)!.CollisionShape,
+                            (obj2.ColliderComponent as ICollider)!.CollisionShape);
+
+                        if (colInfo.Intersects)//Case of collision
                         {
-                            lock (m_lock)
-                            {
-                                AddToBuffer(obj1.Id, obj2);
-                                AddToBuffer(obj2.Id, obj1);
-                            }
+                            //Write new data to the Back Buffer, it is used only by collision checking thread
+                            AddToBackBuffer(obj1.Id, new CollisionData(obj2, colInfo.MTV, colInfo.Overlap));
+                            AddToBackBuffer(obj2.Id, new CollisionData(obj1, colInfo.MTV * -1, colInfo.Overlap));
                         }
                     }
                 }
+                //Swap the references in Buffers, now Readonly Game - Loop buffer will be the Back Buffer,
+                //where are the actual collision info is now placed
+                SwapBuffers();
+                //Prepare Back Buffer for next iteration
+                PrepareBackBuffer();
 
                 try
                 {
-                    await Task.Delay(COLLISION_CHECK_DELAY_MS, token);
+                    //We use this to have some delay, 16 ms by default,
+                    //again it can handle task cancellation scenario
+                    await Task.Delay(CollisionSettings.CollisionCheckDelay_MS, token);
                 }
                 catch (TaskCanceledException)
                 {
-                    break;
+                    break;//Case of task cancellation
                 }
-            }
-        }
-
-        public void Resume()
-        {
-            if (!m_running)
-                m_running = true;
-        }
-
-        public void Clear()
-        {
-            lock (m_lock)
-            {
-                m_CollisionBuffer.Clear();
             }
         }
         #endregion

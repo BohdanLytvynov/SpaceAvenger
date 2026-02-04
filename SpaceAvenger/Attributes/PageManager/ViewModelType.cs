@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SpaceAvenger.Attributes.PageManager
 {
@@ -10,7 +6,9 @@ namespace SpaceAvenger.Attributes.PageManager
     { 
         Page = 1, Window
     }
-
+    /// <summary>
+    ///Sets the View type (Page or Window) for mapping with ViewModel.
+    /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
     internal class ViewModelType : Attribute
     {

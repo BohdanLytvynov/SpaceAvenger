@@ -51,6 +51,9 @@ namespace SpaceAvenger.Editor.ViewModels.Helpers
                         assemblyLoader,
                         factoryWrapper);
                     break;
+                case nameof(RaycastComponent):
+                    c = new RaycastComponentViewModel(gameObject);
+                    break;
                 default:
                     throw new Exception($"Unsupported component Type! Component: {component.ComponentName}");
             }

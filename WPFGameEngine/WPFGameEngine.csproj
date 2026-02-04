@@ -19,4 +19,8 @@
     <Folder Include="WPF.GE\Geometry\Base\Base\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="OmniCollections.Spatial" Version="1.0.1" />
+  </ItemGroup>
+
 </Project>

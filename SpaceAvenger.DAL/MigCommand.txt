@@ -1,0 +1,29 @@
+﻿1) Adding of the migrations:
+dotnet ef migrations add InitialCreate 
+  --project YourProject.DataAccess
+  --startup-project YourProject.WebApi
+
+2) Removing migration:
+dotnet ef migrations remove
+--project YourProject.DataAccess
+--startup-project YourProject.WebApi
+
+3) Updating Database:
+dotnet ef database update 
+--project YourProject.DataAccess
+--startup-project YourProject.WebApi
+
+4) Move to the previous migration:
+dotnet ef database update NameOfPreviousMigration
+  --project YourProject.DataAccess
+  --startup-project YourProject.WebApi
+
+5) Full reset of DB:
+dotnet ef database update 0
+
+  Reminder: migrations is a stack of layers. And it is an images of the DB states.
+  When 'dotnet ef migrations add InitialCreate' is executed -> the image will be created
+  We can create lots of images and the using 'update database' will create all 
+  the required tables. Also by 'update' command we can jump from 1 migration image to another.
+
+dotnet ef migrations add BaseSetup --project SpaceAvenger.DAL/SpaceAvenger.DAL.csproj --startup-project SpaceAvenger/SpaceAvenger.csproj

@@ -11,7 +11,7 @@
     UpdateSourceTrigger=PropertyChanged}" Height="450" Width="800" 
         d:DataContext="{d:DesignInstance mainVm:MainWindowViewModel, IsDesignTimeCreatable=True}">
     <Grid>
-        <Grid x:Name="UserInfoGrid" Panel.ZIndex="1">
+        <Grid x:Name="UserInfoGrid" Panel.ZIndex="10">
             <Grid.RowDefinitions>
                 <RowDefinition Height="{Binding Height, 
                     UpdateSourceTrigger=PropertyChanged,

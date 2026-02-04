@@ -11,7 +11,7 @@ namespace SpaceAvenger.Game.Core.Factions.F1.Weapons
         public override void StartUp(IGameObjectViewHost viewHost, IGameTimer gameTimer)
         {
             ReloadTime = 0.5f;
-            ReloadSpeed = 0.15f;
+            ReloadSpeed = 0.45f;
             ShellScaleMultipl = 2.0f / 4.0f;
             GunBlastScaleMultipl = 1f / 2f;
             XAxisGunBlastPositionMultipl = 0f;

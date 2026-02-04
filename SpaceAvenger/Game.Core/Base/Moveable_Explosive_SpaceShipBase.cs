@@ -61,7 +61,7 @@ namespace SpaceAvenger.Game.Core.Base
                 m_PlayerMaxX = (float)w.ActualWidth - wScale.Width;
 
                 m_PlayerMinY = 1f / 4f * (float)w.Height;
-                m_PlayerMaxY = (float)w.ActualHeight - (wScale.Height + 50f);
+                m_PlayerMaxY = (float)w.ActualHeight - (wScale.Height + 100f);
             }
         }
 
@@ -143,7 +143,7 @@ namespace SpaceAvenger.Game.Core.Base
                 item.Start();
             }
 
-            return basis.X * timeDelta * VertSpeed;
+            return basis.X * (timeDelta * VertSpeed + (VertAcceleration * timeDelta * timeDelta) / 2f);
         }
 
         protected virtual Vector2 MoveBackward(Basis2D basis, float timeDelta)

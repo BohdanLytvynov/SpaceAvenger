@@ -26,70 +26,70 @@
       "AnimationFrames": [
         {
           "RecreateType": "AnimationFrame",
-          "Lifespan": 0.048828125
+          "Lifespan": 0.0244140625
         },
         {
           "RecreateType": "AnimationFrame",
-          "Lifespan": 0.341796875
+          "Lifespan": 0.1708984375
         },
         {
           "RecreateType": "AnimationFrame",
-          "Lifespan": 0.927734375
+          "Lifespan": 0.4638671875
         },
         {
           "RecreateType": "AnimationFrame",
-          "Lifespan": 1.806640625
+          "Lifespan": 0.9033203125
         },
         {
           "RecreateType": "AnimationFrame",
-          "Lifespan": 2.978515625
+          "Lifespan": 1.4892578125
         },
         {
           "RecreateType": "AnimationFrame",
-          "Lifespan": 4.443359375
+          "Lifespan": 2.2216796875
         },
         {
           "RecreateType": "AnimationFrame",
-          "Lifespan": 6.201171875
+          "Lifespan": 3.1005859375
         },
         {
           "RecreateType": "AnimationFrame",
-          "Lifespan": 8.251953125
+          "Lifespan": 4.1259765625
         },
         {
           "RecreateType": "AnimationFrame",
-          "Lifespan": 10.595703125
+          "Lifespan": 5.2978515625
         },
         {
           "RecreateType": "AnimationFrame",
-          "Lifespan": 13.232421875
+          "Lifespan": 6.6162109375
         },
         {
           "RecreateType": "AnimationFrame",
-          "Lifespan": 16.162109375
+          "Lifespan": 8.0810546875
         },
         {
           "RecreateType": "AnimationFrame",
-          "Lifespan": 19.384765625
+          "Lifespan": 9.6923828125
         },
         {
           "RecreateType": "AnimationFrame",
-          "Lifespan": 22.900390625
+          "Lifespan": 11.4501953125
         },
         {
           "RecreateType": "AnimationFrame",
-          "Lifespan": 26.708984375
+          "Lifespan": 13.3544921875
         },
         {
           "RecreateType": "AnimationFrame",
-          "Lifespan": 30.810546875
+          "Lifespan": 15.4052734375
         },
         {
           "RecreateType": "AnimationFrame",
-          "Lifespan": 35.205078125
+          "Lifespan": 17.6025390625
         }
       ],
-      "Duration": 200,
+      "Duration": 100,
       "Rows": 4,
       "Columns": 4,
       "EaseType": "Ease In Cubic f(t)=t^3",

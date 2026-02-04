@@ -19,6 +19,7 @@ namespace WPFGameEngine.WPF.GE.Dto.Base
     [JsonDerivedType(typeof(AnimationDto), nameof(Animation))]
     [JsonDerivedType(typeof(RelativeTransformDto), nameof(RelativeTransformComponent))]
     [JsonDerivedType(typeof(ColliderDto), nameof(ColliderComponent))]
+    [JsonDerivedType(typeof(RaycastDto), nameof(RaycastComponent))]
     public abstract class ComponentDto : DtoBase, IConvertToObject<IGEComponent>
     {
         public abstract IGEComponent ToObject(IFactoryWrapper factoryWrapper);

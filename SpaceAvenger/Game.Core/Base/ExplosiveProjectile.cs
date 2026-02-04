@@ -1,33 +1,46 @@
 ﻿using SpaceAvenger.Game.Core.Enums;
 using System.Collections.Generic;
-using System.Linq;
+using WPFGameEngine.CollisionDetection.RaycastManager;
+using WPFGameEngine.Extensions;
 using WPFGameEngine.GameViewControl;
-using WPFGameEngine.WPF.GE.GameObjects;
 
 namespace SpaceAvenger.Game.Core.Base
 {
     public abstract class ExplosiveProjectile<TExplosion> : ProjectileBase
         where TExplosion : ExplosionBase
     {
+        private object m_hitLock;
+        private List<RaycastData> m_raycastInfo;
+
         protected ExplosiveProjectile(Faction faction) : base(faction)
         {
+            m_hitLock = new object();
+            m_raycastInfo = new List<RaycastData>();
         }
 
-        public override void ProcessCollision(List<IGameObject>? info)
+        public override void ProcessHit(List<RaycastData>? info)
         {
             if (info == null) return;
 
-            var collect = info.Where(x => x is SpaceShipBase s && s.Faction != this.Faction).ToList().Distinct();
-
-            foreach (var obj in collect)
+            lock (m_hitLock)
             {
-                if (obj is SpaceShipBase s && s.Faction != this.Faction)
+                m_raycastInfo.Clear();
+                m_raycastInfo.AddRange(info);
+            }
+
+            foreach (var obj in m_raycastInfo)
+            {
+                if (obj.Object is SpaceShipBase s)
                 {
                     s.DoDamage(Damage);
-                    Collider.DisableCollision();
-                    var prevPos = GetWorldCenter(GetWorldTransformMatrix());
+                    ColliderComponent.DisableCollision();
+                    base.ProcessHit(info);
+                    var matrix = GetWorldTransformMatrix();
+                    var prevPos = GetWorldCenter(matrix);
                     AddToPool(this);
                     var expl = (GameView as IMapableObjectViewHost).Instantiate<TExplosion>();
+                    var angle = matrix.GetBasis().X.GetAngleDeg(expl.GetBasis().X);
+                    expl.Rotate(angle);
                     expl.Scale(ExplosionScale);
                     expl.Explode(prevPos);
                 }
@@ -36,7 +49,7 @@ namespace SpaceAvenger.Game.Core.Base
 
         public override void OnGetFromPool()
         {
-            Collider.EnableCollision();
+            ColliderComponent.EnableCollision();
             base.OnGetFromPool();
         }
     }

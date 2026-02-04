@@ -1,16 +1,17 @@
-﻿using Data.DataBase;
-using Data.Repositories.Realizations.UserRep;
-using Domain.Utilities;
-using Models.DAL.Entities.User;
+﻿using AutoMapper;
+using Domain.Services.StringResourceLoaders;
+using Microsoft.EntityFrameworkCore;
 using SpaceAvenger.Attributes.PageManager;
+using SpaceAvenger.DAL.Models;
+using SpaceAvenger.DAL.Repositories.Users;
+using SpaceAvenger.DAL.RepositoryWrappers;
 using SpaceAvenger.Enums.FrameTypes;
 using SpaceAvenger.Services.Realizations.Message;
 using SpaceAvenger.ViewModels.UserProfile;
 using SpaceAvenger.Views.Pages;
 using System;
 using System.Collections.ObjectModel;
-using System.IO;
-using System.Threading.Tasks;
+using System.Linq;
 using System.Windows.Input;
 using ViewModelBaseLibDotNetCore.Commands;
 using ViewModelBaseLibDotNetCore.MessageBus.Base;
@@ -23,35 +24,31 @@ namespace SpaceAvenger.ViewModels.PagesVM
     internal class ChooseProfile_ViewModel : ViewModelBase
     {
         #region Fields
-
-        private UserRepository m_userRepository;
-
+        private IUserRepository m_userRepository;
         private ObservableCollection<UserProfileVM> m_profileList;
-
         private int m_SelectedUserIndex;
-
         private IPageManagerService<FrameType> m_PageManager;
-
         private IMessageBus m_messageBus;
-                                
+        private IRepositoryWrapper m_repositoryWrapper;
+        private IStringResourceLoader m_StringResourceLoader;
+        private IMapper m_mapper;
+        private const int NEW_ID = -1;
         #endregion
 
         #region Properties
 
-        public ObservableCollection<UserProfileVM> ProfileList 
-        { get=> m_profileList; set=> m_profileList = value; }
+        public ObservableCollection<UserProfileVM> ProfileList
+        { get => m_profileList; set => m_profileList = value; }
 
-        public int SelectedUserIndex 
-        { get=> m_SelectedUserIndex; set => Set(ref m_SelectedUserIndex, value); }
+        public int SelectedUserIndex
+        { get => m_SelectedUserIndex; set => Set(ref m_SelectedUserIndex, value); }
 
         #endregion
 
         #region Commands
 
         public ICommand OnAddNewProfileButtonPressed { get; }
-
         public ICommand OnEditUserProfileButtonPressed { get; }
-
         public ICommand OnDeleteUserProfileButtonPressed { get; }
 
         #endregion
@@ -60,43 +57,45 @@ namespace SpaceAvenger.ViewModels.PagesVM
 
         public ChooseProfile_ViewModel()
         {
-            
+
         }
 
-        public ChooseProfile_ViewModel(IPageManagerService<FrameType> pageManager,
-            IMessageBus messageBus) : this()
+        public ChooseProfile_ViewModel(
+            IPageManagerService<FrameType> pageManager,
+            IRepositoryWrapper repositoryWrapper,
+            IMessageBus messageBus,
+            IStringResourceLoader stringResourceLoader,
+            IMapper mapper) : this()
         {
-            m_messageBus = messageBus;
-
-            m_PageManager = pageManager;
-
+            m_mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            m_messageBus = messageBus ?? throw new ArgumentNullException(nameof(messageBus));
+            m_PageManager = pageManager ?? throw new ArgumentNullException(nameof(pageManager));
+            m_repositoryWrapper = repositoryWrapper ?? throw new ArgumentNullException(nameof(repositoryWrapper));
             m_SelectedUserIndex = -1;
-
-            string pathToDBfolder = Environment.CurrentDirectory +
-                Path.DirectorySeparatorChar +
-                "Database";
-
-            IOUtility.CreateDirectoryIfNotExists(pathToDBfolder);
-
-            string pathToFile = pathToDBfolder + Path.DirectorySeparatorChar + "Local.db";
-
-            IOUtility.CreateFileIfNotExists(pathToFile);
-
-            m_userRepository = new UserRepository(
-                new SpaceAvengerDbContext(pathToFile));
-
             m_profileList = new ObservableCollection<UserProfileVM>();
+            m_userRepository = m_repositoryWrapper.UserRepository;
+            m_StringResourceLoader = stringResourceLoader ?? throw new ArgumentNullException(nameof(stringResourceLoader));
 
-            var users = m_userRepository.GetAllAsync().Result;
+            var users = m_userRepository.GetAll().Where(t => true)
+                .Include(c => c.Commander)
+                .ThenInclude(c => c.Rank).ToList();
 
             foreach (var user in users)
             {
-                var upvm = new UserProfileVM(m_profileList.Count + 1, user);
+                var upvm = new UserProfileVM(
+                    m_profileList.Count + 1,
+                    user.Id,
+                    user.Commander.MaleFemale, 
+                    user.ProfileName, 
+                    user.Commander.CreatedDate,
+                    m_StringResourceLoader.GetString(user.Commander.Rank.LevelNameKey),
+                    user.Commander.Confirmed);
+
                 upvm.OnUserProfileConfirmedEvent += Up_OnUserProfileConfirmedEvent;
                 upvm.OnUserProfileSelectedEvent += Up_OnUserProfileSelectedEvent;
                 m_profileList.Add(upvm);
             }
-            
+
             OnAddNewProfileButtonPressed = new Command(
                 OnAddNewProfileButtonPressedExecute,
                 CanOnAddNewProfileButtonPressedExecute
@@ -113,27 +112,20 @@ namespace SpaceAvenger.ViewModels.PagesVM
                 );
 
             #region Subscriptions
-            
+
             #endregion
         }
 
-        private void Up_OnUserProfileSelectedEvent(User obj)
+        private void Up_OnUserProfileSelectedEvent(UserProfileVM obj)
         {
             m_PageManager.SwitchPage(nameof(Main_Page), FrameType.MainFrame);
-
-            m_messageBus.Send<ChooseProfileMessage_User, User>(new ChooseProfileMessage_User(obj));
+            m_messageBus.Send<ChooseProfileMessage_User, UserProfileVM>(new ChooseProfileMessage_User(obj));
         }
 
 
         #endregion
 
         #region Methods
-
-        #region On Recieve Message
-
-        
-
-        #endregion
 
         #region On Add New Profile Button Pressed
         private bool CanOnAddNewProfileButtonPressedExecute(object p)
@@ -143,30 +135,58 @@ namespace SpaceAvenger.ViewModels.PagesVM
 
         private void OnAddNewProfileButtonPressedExecute(object p)
         {
+            var lowestRank = m_repositoryWrapper.StarFleetRankRepository.GetLowest();
             var up = new UserProfileVM(
-                    ProfileList.Count + 1,
-                    new User(Guid.Empty,
-                    "Enter your name Commander",
-                    true, 0,
-                    StarFleetRanks.Cadet_4th_Grade,
-                    default));
+                    ProfileList.Count + 1, NEW_ID,
+                    true, "Please enter your name Commander", default,
+                    m_StringResourceLoader.GetString(lowestRank.LevelNameKey),
+                    false);
 
-            up.OnUserProfileConfirmedEvent += Up_OnUserProfileConfirmedEvent; 
+            up.OnUserProfileConfirmedEvent += Up_OnUserProfileConfirmedEvent;
             up.OnUserProfileSelectedEvent += Up_OnUserProfileSelectedEvent;
 
             ProfileList.Add(up);
         }
 
-        private async Task Up_OnUserProfileConfirmedEvent(User obj)
+        private void Up_OnUserProfileConfirmedEvent(UserProfileVM obj)
         {
-            if (obj.Id.Equals(Guid.Empty))
+            if (obj.Id.Equals(NEW_ID))
             {
-                var r = await m_userRepository.AddAsync(obj);
+                var lowestRank = m_repositoryWrapper
+                    .StarFleetRankRepository.GetLowest();
+                var uefFaction = m_repositoryWrapper
+                    .FactionRepository.GetUEF();
+
+                var user = m_mapper.Map<User>(obj);
+                if (user == null) return; //To Do Exception Throw
+                var com = m_mapper.Map<Commander>(obj);
+                if (com == null) return; //To Do Exception Throw
+                com.Faction = uefFaction;
+                com.Rank = lowestRank;
+                user.Commander = com;
+                m_userRepository.Add(user);
             }
             else
             {
-                var r = await m_userRepository.UpdateAsync(obj);
-            }            
+                var user = m_userRepository.GetById(obj.Id)
+                    .Include(x => x.Commander).FirstOrDefault();
+
+                if (user == null) return;//To Do Exception Throw
+                var com = user.Commander;
+                if (com == null) return;//To Do Exception Throw
+
+                user.ProfileName = obj.UserName;
+                com.Name = obj.UserName;
+                com.MaleFemale = obj.MaleFemale;
+
+                var comRepo = m_repositoryWrapper.CommanderRepository;
+                comRepo.Edit(com.Id, com);
+
+                if (comRepo.Save() == 0) return;//To Do Exception Throw
+
+                m_userRepository.Edit(user.Id, user);
+            }
+            m_userRepository.Save();
         }
 
         #endregion
@@ -180,7 +200,11 @@ namespace SpaceAvenger.ViewModels.PagesVM
 
         private void OnEditUserProfileButtonpressedExecute(object p)
         {
-            ProfileList[m_SelectedUserIndex]!.Confirmed = false;                         
+            var profile = ProfileList[m_SelectedUserIndex];
+
+            if (profile == null) return;
+
+            profile.Confirmed = false;
         }
 
         #endregion
@@ -193,13 +217,23 @@ namespace SpaceAvenger.ViewModels.PagesVM
 
         private void OnDeleteUserProfileButtonPressedExecute(object p)
         {
-            var r = m_userRepository.Remove(ProfileList[SelectedUserIndex].User);
+            var selectedProfile = ProfileList[m_SelectedUserIndex];
 
-            if(r)
+            if (selectedProfile.Id == NEW_ID)
+            {
+                ProfileList.RemoveAt(m_SelectedUserIndex);
+                return;
+            }
+
+            m_userRepository.DeleteById(selectedProfile.Id);
+
+            var r = m_userRepository.Save();
+            if (r > 0)
+            {
                 ProfileList.RemoveAt(SelectedUserIndex);
-
-            SelectedUserIndex = -1;
-        }       
+                SelectedUserIndex = -1;
+            }
+        }
         #endregion
 
         #endregion

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows;
 using System.Windows.Media;
 using WPFGameEngine.Enums;
@@ -29,7 +28,7 @@ namespace SpaceAvenger.Services.WpfGameViewHost
         #region Properties
         public IGameTimer GameTimer { get => m_gameTimer; }
         public List<IGameObject> World { get; protected set; }
-        public GameState GameState { get; protected set; }
+        public GameState GameState { get => m_gameState; protected set => m_gameState = value; }
         protected override int VisualChildrenCount => m_visualCollection.Count;
         #endregion
 
@@ -92,7 +91,7 @@ namespace SpaceAvenger.Services.WpfGameViewHost
 
             preStartUpConfig?.Invoke(gameObject);
 
-            if(gameObject is IUpdatable updatable)
+            if(gameObject is IUpdatable updatable && !updatable.StartUpCalled)
                 updatable.StartUp(this, m_gameTimer);
 
             postStartUpConfig?.Invoke(gameObject);
@@ -132,6 +131,10 @@ namespace SpaceAvenger.Services.WpfGameViewHost
 
         public virtual void ClearWorld()
         {
+            foreach (var gameObject in World)
+            {
+                gameObject.Disable(true);
+            }
             World.Clear();
         }
 

@@ -39,6 +39,7 @@ namespace SpaceAvenger.Services.WPFInputControllers
             m_activeKeys.Add(Key.D, false);
             m_activeKeys.Add(Key.E, false);
             m_activeKeys.Add(Key.R, false);
+            m_activeKeys.Add(Key.Escape, false);
 
             if (m_hwndSource != null)
             {
@@ -146,6 +147,12 @@ namespace SpaceAvenger.Services.WPFInputControllers
         public override object Clone()
         {
             return new WPFInputController(m_window);
+        }
+
+        public override void ReleaseKey(Key key)
+        {
+            if (m_activeKeys.ContainsKey(key))
+                m_activeKeys[key] = false;
         }
         #endregion
     }

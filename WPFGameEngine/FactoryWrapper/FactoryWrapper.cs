@@ -32,6 +32,7 @@ namespace WPFGameEngine.FactoryWrapper
         private ITransformFactory m_TransformFactory;
         private IRelativeTransformFactory m_RelativeTransformFactory;
         private IColliderFactory m_colliderFactory;
+        private IRaycasterComponentFactory m_RaycasterComponentFactory;
 
         #endregion
         #region Add Tools
@@ -49,6 +50,7 @@ namespace WPFGameEngine.FactoryWrapper
             m_TransformFactory = new TransformFactory();
             m_RelativeTransformFactory = new RelativeTransformFactory();
             m_colliderFactory = new ColliderFactory();
+            m_RaycasterComponentFactory = new RaycasterComponentFactory();
 
             ProductFactoryMap = new Dictionary<string, IFactory>();
 

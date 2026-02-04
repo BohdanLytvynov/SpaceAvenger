@@ -13,6 +13,8 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         public IGameObjectViewHost GameView { get; private set; }
         public IGameTimer GameTimer { get; private set; }
 
+        public bool StartUpCalled { get; private set; }
+
         protected UpdatableBase() : base()
         {
 
@@ -47,6 +49,8 @@ namespace WPFGameEngine.WPF.GE.GameObjects
                 if (child is IUpdatable updatable)
                     updatable.StartUp(viewHost, gameTimer);
             }
+
+            StartUpCalled = true;
         }
 
         public virtual void Update()

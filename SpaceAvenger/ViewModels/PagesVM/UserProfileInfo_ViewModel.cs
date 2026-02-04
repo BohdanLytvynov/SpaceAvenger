@@ -1,6 +1,7 @@
-﻿using Models.DAL.Entities.User;
-using SpaceAvenger.Attributes.PageManager;
+﻿using SpaceAvenger.Attributes.PageManager;
+using SpaceAvenger.DAL.Models;
 using SpaceAvenger.Services.Realizations.Message;
+using SpaceAvenger.ViewModels.UserProfile;
 using System;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -9,13 +10,14 @@ using ViewModelBaseLibDotNetCore.VM;
 
 namespace SpaceAvenger.ViewModels.PagesVM
 {
+
     [ViewModelType(ViewModelUsage.Page)]
     internal class UserProfileInfo_ViewModel : SubscriptableViewModel
     {
         #region Fields
         private string m_userName;
 
-        private StarFleetRanks m_Rank;
+        private string m_Rank;
 
         private DateTime m_enlisted;
 
@@ -28,30 +30,30 @@ namespace SpaceAvenger.ViewModels.PagesVM
         private Image m_userImage;
 
         private IMessageBus m_messageBus;
-        
+
         #endregion
 
         #region Properties
 
-        public string UserName 
-        { get=> m_userName; set=> Set(ref m_userName, value); }
+        public string UserName
+        { get => m_userName; set => Set(ref m_userName, value); }
 
-        public  StarFleetRanks Rank 
-        { get=> m_Rank; set=> Set(ref m_Rank, value); }
+        public string Rank
+        { get => m_Rank; set => Set(ref m_Rank, value); }
 
-        public DateTime Enlisted 
-        { get=> m_enlisted; set => Set(ref m_enlisted, value); }
+        public DateTime Enlisted
+        { get => m_enlisted; set => Set(ref m_enlisted, value); }
 
-        public int MissionsCount 
-        { get=> m_missionsCount; set=> Set(ref m_missionsCount, value); }
+        public int MissionsCount
+        { get => m_missionsCount; set => Set(ref m_missionsCount, value); }
 
-        public float Points 
-        { get=> m_Points; set=> Set(ref m_Points, value); }
+        public float Points
+        { get => m_Points; set => Set(ref m_Points, value); }
 
-        public bool MaleFemale 
-        { 
-            get=> m_male_Female;
-            set 
+        public bool MaleFemale
+        {
+            get => m_male_Female;
+            set
             {
                 Set(ref m_male_Female, value);
 
@@ -63,11 +65,11 @@ namespace SpaceAvenger.ViewModels.PagesVM
                 {
                     UserImage = LoadImageUsingUri((ImageSource)App.Current.TryFindResource("HumanCF")); ;
                 }
-            } 
+            }
         }
 
-        public Image UserImage 
-        { get=> m_userImage; set=>Set(ref m_userImage, value); }
+        public Image UserImage
+        { get => m_userImage; set => Set(ref m_userImage, value); }
 
         #endregion
         public UserProfileInfo_ViewModel()
@@ -75,11 +77,10 @@ namespace SpaceAvenger.ViewModels.PagesVM
             #region Init Fields
 
             m_userName = string.Empty;
-
+            m_Rank = string.Empty;
             m_userImage = new Image();
-
             MaleFemale = false;
-            
+
             #endregion
         }
 
@@ -90,7 +91,7 @@ namespace SpaceAvenger.ViewModels.PagesVM
 
             #region Create Subscription
 
-            Subscriptions.Add(m_messageBus.RegisterHandler<ChooseProfileMessage_User, User>(OnMessageRecieved));
+            Subscriptions.Add(m_messageBus.RegisterHandler<ChooseProfileMessage_User, UserProfileVM>(OnMessageRecieved));
 
             #endregion
         }
@@ -99,11 +100,11 @@ namespace SpaceAvenger.ViewModels.PagesVM
         #region Methods
 
         private void OnMessageRecieved(ChooseProfileMessage_User msg)
-        { 
+        {
             UserName = msg.Content.UserName;
             MaleFemale = msg.Content.MaleFemale;
-            Rank = msg.Content.Rank;
-            Enlisted = msg.Content.CreatedDate;
+            Rank = msg.Content.RankName;
+            Enlisted = msg.Content.EnlistedDate;
             MissionsCount = msg.Content.MissionsCount;
             Points = msg.Content.Points;
         }

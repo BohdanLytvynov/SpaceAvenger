@@ -55,6 +55,7 @@ namespace SpaceAvenger.Game.Core.Base
                 == m_blastAnimation.AnimationFrames.Count / 4)
             {
                 var shell = MapableViewHost.Instantiate<TShell>();
+                shell.CollisionLayer = ProjectilesCollisionLayer;
                 shell.Scale(Transform.Scale * ShellScaleMultipl);
                 var blastPos = GetBlastPosition();
                 Vector2 shellCenterPos = blastPos - shell.Transform.TextureCenterPosition;

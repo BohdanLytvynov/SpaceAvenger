@@ -25,10 +25,11 @@ namespace SpaceAvenger.Game.Core.Factions.F10.Destroyer
         {
             HorSpeed = 80;
             VertSpeed = 80;
+            VertAcceleration = 20f;
             HP = 4000;
             Shield = 2000;
-            ShipExplosionScale = 5;
-            ShipExplosionScale = 5f;
+            ExplosionSpeed = 0.7f;
+            ShipExplosionScale = 20f; 
             ShieldRegenSpeed = 20f;
         }
 

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using SpaceAvenger.Editor.Strings;
 using SpaceAvenger.Editor.ViewModels;
 using SpaceAvenger.Editor.Views;
 using SpaceAvenger.Services;
@@ -114,14 +115,14 @@ namespace SpaceAvenger.Editor
         {
             Exception ex = e.ExceptionObject as Exception;
             if (ex == null) return;
-            MessageBox.Show($"Error occurred! Error Message: {ex.Message}.",
-                "SA Editor", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show(string.Format(StringResources.ErrorWithException, ex.Message),
+                StringResources.App_Name, MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
         private void App_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
-            MessageBox.Show($"Error occurred! Error Message: {e.Exception.Message}.",
-                "SA Editor", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show(string.Format(StringResources.ErrorWithException, e.Exception.Message),
+                StringResources.App_Name, MessageBoxButton.OK, MessageBoxImage.Error);
             e.Handled = true;
         }
 

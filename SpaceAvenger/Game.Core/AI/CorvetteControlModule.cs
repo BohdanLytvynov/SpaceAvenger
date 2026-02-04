@@ -4,6 +4,9 @@ using WPFGameEngine.WPF.GE.GameObjects;
 
 namespace SpaceAvenger.Game.Core.AI
 {
+    /// <summary>
+    /// AI Control Module for the Corvete Type
+    /// </summary>
     public class CorvetteControlModule : SpaceShipControlModule
     {
         public CorvetteControlModule() : base()
@@ -16,7 +19,7 @@ namespace SpaceAvenger.Game.Core.AI
             var corvette = gameObject as IBattleShip;
 
             if (corvette == null) return;
-
+            //Switch to the Primary Weapons, Corvetes has ligth canons
             corvette.SetWeaponType(WeaponType.Primary);
 
             base.Process(gameObject);

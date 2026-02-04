@@ -1,9 +1,5 @@
 ﻿using SpaceAvenger.Game.Core.AI;
 using SpaceAvenger.Game.Core.Enums;
-using System.Collections.Generic;
-using System.Numerics;
-using WPFGameEngine.GameViewControl;
-using WPFGameEngine.Timers.Base;
 
 namespace SpaceAvenger.Game.Core.Base.ShipClasses
 {

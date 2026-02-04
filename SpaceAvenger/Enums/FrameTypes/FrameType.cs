@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SpaceAvenger.Enums.FrameTypes
+﻿namespace SpaceAvenger.Enums.FrameTypes
 {
-    internal enum FrameType : byte
+    /// <summary>
+    /// We have 2 types of frame -> MainFrame is the MainWindow, Also info frame is the info panel on top of the screen
+    /// </summary>
+    public enum FrameType : byte
     {
         MainFrame = 1,
         InfoFrame

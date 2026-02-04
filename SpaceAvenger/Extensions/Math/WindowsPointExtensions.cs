@@ -3,16 +3,28 @@ using System.Windows;
 
 namespace SpaceAvenger.Extensions.Math
 {
+    /// <summary>
+    /// Used to create Windows.Point from the Vector2 class
+    /// </summary>
     public static class WindowsPointExtensions
     {
-        public static Point FromVector2(this Vector2 vector)
-        { 
-            return new Point(vector.X, vector.Y);
-        }
-
+        /// <summary>
+        /// Build System.Windows.Point from the vector
+        /// </summary>
+        /// <param name="v"></param>
+        /// <returns></returns>
         public static Point ToPoint(this Vector2 v)
         {
             return new Point(v.X, v.Y);
+        }
+        /// <summary>
+        /// Builds System.Drawing.Point from the vector
+        /// </summary>
+        /// <param name="v"></param>
+        /// <returns></returns>
+        public static System.Drawing.Point ToDrawingPoint(this Vector2 v)
+        {
+            return new System.Drawing.Point((int)v.X, (int)v.Y);
         }
     }
 }

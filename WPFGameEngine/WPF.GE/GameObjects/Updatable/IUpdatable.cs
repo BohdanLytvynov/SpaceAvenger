@@ -6,6 +6,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects.Updatable
 {
     public interface IUpdatable : ITransformable
     {
+        public bool StartUpCalled { get; }
         public IGameObjectViewHost GameView { get; }
 
         public IGameTimer GameTimer { get; }

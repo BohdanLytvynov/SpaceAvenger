@@ -9,7 +9,8 @@ namespace SpaceAvenger.Game.Core.Base
     {
         public override void StartUp(IGameObjectViewHost viewHost, IGameTimer gameTimer)
         {
-            Disable(true);
+            if (Delay == 0)
+                Delay = 300;
             Animation.Stop();
             Animation.Reset(Animation.Reverse);
             base.StartUp(viewHost, gameTimer);
@@ -17,7 +18,6 @@ namespace SpaceAvenger.Game.Core.Base
 
         public void Explode(Vector2 position)
         {
-            Enable();
             Translate(position + new Vector2(
                 -(Transform.TextureCenterPosition.X),
                 -Transform.TextureCenterPosition.Y));//Move to the center origin of the texture
@@ -35,22 +35,19 @@ namespace SpaceAvenger.Game.Core.Base
         {
             if (!Animation.IsRunning && Animation.IsCompleted)
             {
-                Disable(true);
                 AddToPool(this);
             }
 
             base.Update();
         }
 
-        public override void OnAddToPool()
-        {
-            base.OnAddToPool();
-        }
-
         public override void OnGetFromPool()
         {
             Animation.Reset(Animation.Reverse);
-            Translate(Vector2.Zero);
+            Animation.Stop();
+            base.OnGetFromPool();
         }
+
+        protected override bool IsInWindowBounds(Vector2 position) => true;
     }
 }

@@ -77,5 +77,12 @@ namespace WPFGameEngine.WPF.GE.GameObjects
         bool IsEnabledAll(IGameObject gameObject);
         #endregion
 
+        #region For Editor
+        /// <summary>
+        /// This is used in Editor to clear the Lazy Property if the component was removed
+        /// </summary>
+        void ForceUpdateOfLazyProperties();
+        #endregion
+
     }
 }

@@ -79,7 +79,7 @@ namespace SpaceAvenger.Editor.ViewModels
         public OptionsViewModel SelectedComponent
         {
             get => m_SelectedComponent;
-            set => Set(ref m_SelectedComponent, value);
+            set => SetIfNull(ref m_SelectedComponent, value);
         }
 
         public int SelectedComponentIndex
@@ -644,6 +644,7 @@ namespace SpaceAvenger.Editor.ViewModels
         {
             var componentViewModel = Components[SelectedComponentIndex];
             componentViewModel.GameObject.UnregisterComponent(componentViewModel.ComponentName);
+            componentViewModel.GameObject.ForceUpdateOfLazyProperties();
             Components.RemoveAt(SelectedComponentIndex);
             SelectedComponentIndex = -1;
         }
@@ -744,7 +745,10 @@ namespace SpaceAvenger.Editor.ViewModels
         {
             GameObject.RemoveObject(obj => obj.ObjectName.Equals(SelectedPrefab.PrefabName), 
                 GameView.World, true);
-            File.Delete(PathToExport + Path.DirectorySeparatorChar + SelectedPrefab.PrefabName + ".json");
+            string file = PathToExport + Path.DirectorySeparatorChar + SelectedPrefab.PrefabName + ".json";
+            if (File.Exists(file))
+                File.Delete(file);
+
             Prefabs.Remove(SelectedPrefab);
             m_SelectedPrefab = new PrefabViewModel();
         }

@@ -1,7 +1,6 @@
-﻿using Models.DAL.Entities.User;
+﻿using SpaceAvenger.DAL.Models;
 using System;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using ViewModelBaseLibDotNetCore.Commands;
 using ViewModelBaseLibDotNetCore.VM;
@@ -11,43 +10,37 @@ namespace SpaceAvenger.ViewModels.UserProfile
     public class UserProfileVM : ViewModelBase, IEquatable<UserProfileVM>
     {
         #region Events
-        public event Func<User, Task>? OnUserProfileConfirmedEvent;
+        public event Action<UserProfileVM>? OnUserProfileConfirmedEvent;
 
-        public event Action<User>? OnUserProfileSelectedEvent;
+        public event Action<UserProfileVM>? OnUserProfileSelectedEvent;
         #endregion
 
         #region Fields
 
-        private User m_user;
-        
+        private bool m_MaleFemale;
+        private string m_UserName;
+        private string m_RankName;
         private int m_Number;
-
         private bool m_Confirmed;
-
         private DateTime m_enlistedDate;
-        
+        private int m_MissionsCount;
+        private float m_points;
         #endregion
 
         #region Properties
-
-        public User User { get=> m_user; set => Set(ref m_user, value); }
-        
+        public int Id { get; init; }
+        public bool MaleFemale { get => m_MaleFemale; set => Set(ref m_MaleFemale, value); }
+        public string UserName { get => m_UserName; set => Set(ref m_UserName, value); }
+        public string RankName { get => m_RankName; set => Set(ref m_RankName, value); }
         public int Number { get => m_Number; set => Set(ref m_Number, value); }
-
-        public bool Confirmed 
-        { 
-            get=> m_Confirmed;
-            set
-            {
-                Set(ref m_Confirmed, value);
-                
-                if(value != m_user.Confirmed)
-                    m_user.Confirmed = value;
-            } 
+        public bool Confirmed
+        {
+            get => m_Confirmed;
+            set => Set(ref m_Confirmed, value);
         }
-
-        public DateTime EnlistedDate { get=> m_enlistedDate; set => Set(ref m_enlistedDate, value); }
-
+        public DateTime EnlistedDate { get => m_enlistedDate; set => Set(ref m_enlistedDate, value); }
+        public int MissionsCount { get => m_MissionsCount; set => Set(ref m_MissionsCount, value); }
+        public float Points { get => m_points; set => Set(ref m_points, value); }
         #endregion
 
         #region Commands
@@ -58,16 +51,21 @@ namespace SpaceAvenger.ViewModels.UserProfile
 
         #region
 
-        public UserProfileVM(int number, User user)
-        {            
-            m_user = user;
-
-            m_enlistedDate = m_user.CreatedDate;
-
+        public UserProfileVM(int number,
+            int id,
+            bool maleFemale,
+            string userName,
+            DateTime enlistedDate,
+            string rankName,
+            bool confirmed = false)
+        {
+            Id = id;
+            m_UserName = userName;
+            m_enlistedDate = enlistedDate;
             m_Number = number;
-
-            m_Confirmed = user.Confirmed;
-
+            m_Confirmed = confirmed;
+            m_RankName = rankName;
+            m_MaleFemale = maleFemale;
             #region Init Commands
             OnConfirmButtonPressed = new Command(
                 canExecute: CanOnConfirmedButtonPressedExecute,
@@ -83,28 +81,18 @@ namespace SpaceAvenger.ViewModels.UserProfile
 
         #region Methods
 
-        private void OnUserProfileConfirmed(User user)
-        { 
+        private void OnUserProfileConfirmed(UserProfileVM user)
+        {
             var temp = Volatile.Read(ref OnUserProfileConfirmedEvent);
 
             temp?.Invoke(user);
         }
 
-        private void OnUserProfileSelected(User user)
+        private void OnUserProfileSelected(UserProfileVM user)
         {
             var temp = Volatile.Read(ref OnUserProfileSelectedEvent);
 
             temp?.Invoke(user);
-        }
-
-        public override string ToString()
-        {
-            return $"{m_Number}) {m_user.UserName} {m_user.MaleFemale} {m_user.Rank} {m_user.MissionsCount} {m_user.CreatedDate.ToShortDateString()}";
-        }
-
-        public override int GetHashCode()
-        {
-            return HashCode.Combine(m_user.Id, m_user.UserName);
         }
 
         public override bool Equals(object? obj)
@@ -113,14 +101,14 @@ namespace SpaceAvenger.ViewModels.UserProfile
 
             if (user is null) return false;
 
-            return user.User.Id.Equals(this.User.Id);
+            return user.Id.Equals(this.Id);
         }
 
         public bool Equals(UserProfileVM? other)
         {
             if (other == null) return false;
 
-            return other.User.Id.Equals(this.User.Id);
+            return other.Id.Equals(this.Id);
         }
 
         #region On Confirmed Button Pressed Execute
@@ -130,12 +118,8 @@ namespace SpaceAvenger.ViewModels.UserProfile
         private void OnConfirmButtonPressedExecute(object p)
         {
             Confirmed = true;
-
             EnlistedDate = DateTime.UtcNow;
-
-            m_user.CreatedDate = EnlistedDate;
-
-            OnUserProfileConfirmed(m_user);
+            OnUserProfileConfirmed(this);
         }
 
         #endregion
@@ -146,7 +130,7 @@ namespace SpaceAvenger.ViewModels.UserProfile
 
         private void OnSelectButtonPressedExecute(object p)
         {
-            OnUserProfileSelected(m_user);
+            OnUserProfileSelected(this);
         }
         #endregion
 

@@ -44,7 +44,7 @@ namespace WPFGameEngine.WPF.GE.GameObjects.Transformable
             }
         }
 
-        public void Translate(Vector2 position)
+        public virtual void Translate(Vector2 position)
         {
             Transform.Position = position;
         }
@@ -230,6 +230,11 @@ namespace WPFGameEngine.WPF.GE.GameObjects.Transformable
             Rotate(newAngle);
 
             return isAimed;
+        }
+
+        public override void ForceUpdateOfLazyProperties()
+        {
+            m_transform = null;
         }
     }
 }

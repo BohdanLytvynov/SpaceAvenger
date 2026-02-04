@@ -2,7 +2,6 @@
 using System.Text.Json.Serialization;
 using System.Windows.Media;
 using WPFGameEngine.WPF.GE.Geometry.Realizations;
-using WPFGameEngine.WPF.GE.Helpers;
 using WPFGameEngine.WPF.GE.Math.Basis;
 using WPFGameEngine.WPF.GE.Math.Sizes;
 using WPFGameEngine.WPF.GE.Settings;

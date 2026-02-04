@@ -5,9 +5,34 @@ using SMath = System.Math;
 
 namespace WPFGameEngine.WPF.GE.Helpers
 {
+    /// <summary>
+    /// Structure that stores Result of the collision
+    /// </summary>
+    public struct CollisionResult
+    {
+        /// <summary>
+        /// Figures Intersects?
+        /// </summary>
+        public bool Intersects;
+        /// <summary>
+        /// Minimum Translation Vector
+        /// </summary>
+        public Vector2 MTV;
+        /// <summary>
+        /// The amount of Overlaping
+        /// </summary>
+        public float Overlap;
+    }
+
     public static class CollisionHelper
     {
-        public static bool Intersects(IShape2D a, IShape2D b)
+        /// <summary>
+        /// Checks if two figures intersects
+        /// </summary>
+        /// <param name="a">First Figure</param>
+        /// <param name="b">Second Figure</param>
+        /// <returns>Object that will have CollisionResult Details</returns>
+        public static CollisionResult Intersects(IShape2D a, IShape2D b)
         {
             // 1. AABB Check (Fast Reject)
             //if (!IntersectsAABB(a.GetBounds(), b.GetBounds()))
@@ -30,7 +55,7 @@ namespace WPFGameEngine.WPF.GE.Helpers
         }
 
         /// <summary>
-        /// Checks collision of 2 Rectangles
+        /// Checks collision of 2 Rectangles using Axis Aligned Bounding Box Approach
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
@@ -49,13 +74,33 @@ namespace WPFGameEngine.WPF.GE.Helpers
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns></returns>
-        public static bool Intersects(Circle a, Circle b)
+        public static CollisionResult Intersects(Circle a, Circle b)
         {
-            float dx = a.CenterPosition.X - b.CenterPosition.X;
-            float dy = a.CenterPosition.Y - b.CenterPosition.Y;
-            float distanceSquared = dx * dx + dy * dy;
+            //Vector, build from 1-st circle center to another circle center
+            Vector2 delta = b.CenterPosition - a.CenterPosition;
+            //Length of this vector squared. We use squared value, cause taking square root is a very time consuming operation
+            float distanceSquared = delta.LengthSquared();
+            //Sum of circles radii
             float radiiSum = a.Radius + b.Radius;
-            return distanceSquared <= radiiSum * radiiSum;
+            //Circles do not collide
+            if (distanceSquared > radiiSum * radiiSum)
+            {
+                return new CollisionResult { Intersects = false };
+            }
+            //Distance between 2 Circle Centers
+            float distance = MathF.Sqrt(distanceSquared);
+            //Case 1 -> 2 Circles overlapes (Their centers are equal), so we need to push circle out by Radii Sum
+            //Case 2 -> Centers are not equal. Overlap = (a.r+b.r) - dist between circle centers
+            float overlap = (distance == 0) ? radiiSum : radiiSum - distance;
+
+            Vector2 normal = (distance == 0) ? new Vector2(0, 1) : Vector2.Normalize(delta);
+
+            return new CollisionResult
+            {
+                Intersects = true,
+                Overlap = overlap,
+                MTV = normal * overlap
+            };
         }
 
         /// <summary>
@@ -64,13 +109,100 @@ namespace WPFGameEngine.WPF.GE.Helpers
         /// <param name="circle"></param>
         /// <param name="rect"></param>
         /// <returns></returns>
-        public static bool Intersects(Circle circle, Rectangle rect)
+        public static CollisionResult Intersects(Circle circle, Rectangle rect)
         {
-            var closestWorld = GetClosestPointOfRectangle(rect, circle.CenterPosition);
-            Vector2 disp = circle.CenterPosition - closestWorld;
-            float dd = disp.LengthSquared();
-            float rr = circle.Radius * circle.Radius;
-            return dd <= rr;
+            // 1. Находим ближайшую точку на прямоугольнике к центру круга
+            // Используем Clamp для ограничения координат центра круга границами прямоугольника
+            float closestX = SMath.Clamp(circle.CenterPosition.X, rect.LeftUpperCorner.X, rect.RightLowerCorner.X);
+            float closestY = SMath.Clamp(circle.CenterPosition.Y, rect.LeftUpperCorner.Y, rect.RightLowerCorner.Y);
+
+            Vector2 closestPoint = new Vector2(closestX, closestY);
+            Vector2 direction = circle.CenterPosition - closestPoint;
+            float distanceSquared = direction.LengthSquared();
+            float radiusSquared = circle.Radius * circle.Radius;
+
+            // Проверка: есть ли столкновение вообще?
+            if (distanceSquared > radiusSquared && !IsPointInside(circle.CenterPosition, rect))
+            {
+                return new CollisionResult { Intersects = false };
+            }
+
+            float distance = MathF.Sqrt(distanceSquared);
+            Vector2 normal;
+            float overlap;
+
+            // СЛУЧАЙ А: Центр круга ВНУТРИ прямоугольника
+            if (distance < float.Epsilon)
+            {
+                // Ищем кратчайшее расстояние до одной из 4-х сторон
+                float distLeft = circle.CenterPosition.X - rect.LeftUpperCorner.X;
+                float distRight = rect.RightLowerCorner.X - circle.CenterPosition.X;
+                float distTop = circle.CenterPosition.Y - rect.LeftUpperCorner.Y;
+                float distBottom = rect.RightLowerCorner.Y - circle.CenterPosition.Y;
+
+                float minOverlap = MathF.Min(MathF.Min(distLeft, distRight), MathF.Min(distTop, distBottom));
+
+                if (minOverlap == distLeft) normal = new Vector2(-1, 0);
+                else if (minOverlap == distRight) normal = new Vector2(1, 0);
+                else if (minOverlap == distTop) normal = new Vector2(0, -1);
+                else normal = new Vector2(0, 1);
+
+                overlap = minOverlap + circle.Radius;
+            }
+            // СЛУЧАЙ Б: Центр круга СНАРУЖИ, но он касается или пересекает грань
+            else
+            {
+                normal = Vector2.Normalize(direction);
+                overlap = circle.Radius - distance;
+            }
+
+            return new CollisionResult
+            {
+                Intersects = true,
+                Overlap = overlap,
+                MTV = normal * overlap
+            };
+        }
+
+        // Вспомогательный метод для проверки вхождения точки в Rect
+        private static bool IsPointInside(Vector2 point, Rectangle rect)
+        {
+            return point.X >= rect.LeftUpperCorner.X && point.X <= rect.RightLowerCorner.X &&
+                   point.Y >= rect.LeftUpperCorner.Y && point.Y <= rect.RightLowerCorner.Y;
+        }
+
+        private static (Vector2 normal, float overlap) GetInternalTriangleExit(Circle circle, Triangle tri)
+        {
+            Vector2[] vertices = { tri.LeftUpperCorner, tri.B, tri.C };
+            float minDistance = float.MaxValue;
+            Vector2 bestNormal = Vector2.Zero;
+
+            for (int i = 0; i < 3; i++)
+            {
+                Vector2 v1 = vertices[i];
+                Vector2 v2 = vertices[(i + 1) % 3];
+
+                // Вектор стороны и нормаль к ней
+                Vector2 edge = v2 - v1;
+                // Получаем перпендикуляр (нормаль), направленный наружу
+                Vector2 edgeNormal = Vector2.Normalize(new Vector2(-edge.Y, edge.X));
+
+                // Проверяем, в ту ли сторону смотрит нормаль (должна от центра треугольника)
+                Vector2 centerTri = (tri.LeftUpperCorner + tri.B + tri.C) / 3f;
+                if (Vector2.Dot(edgeNormal, v1 - centerTri) < 0) edgeNormal = -edgeNormal;
+
+                // Расстояние от центра круга до прямой (проекция на нормаль)
+                float dist = SMath.Abs(Vector2.Dot(circle.CenterPosition - v1, edgeNormal));
+
+                if (dist < minDistance)
+                {
+                    minDistance = dist;
+                    bestNormal = edgeNormal;
+                }
+            }
+
+            // Итоговый overlap: расстояние до края + радиус
+            return (bestNormal, minDistance + circle.Radius);
         }
 
         /// <summary>
@@ -79,13 +211,50 @@ namespace WPFGameEngine.WPF.GE.Helpers
         /// <param name="circle"></param>
         /// <param name="triangle"></param>
         /// <returns></returns>
-        public static bool Intersects(Circle circle, Triangle triangle)
+        public static CollisionResult Intersects(Circle circle, Triangle triangle)
         {
-            Vector2 closestPoint = GetClosestPointToTriangle(triangle.LeftUpperCorner, triangle.B, triangle.C, circle.CenterPosition);
-            Vector2 disp = circle.CenterPosition - closestPoint;
-            float dd = disp.LengthSquared();
-            float rr = circle.Radius * circle.Radius;
-            return dd <= rr;
+            // Используем ваши вершины (предположим, это LeftUpperCorner, B и C)
+            Vector2 closestPoint = GetClosestPointToTriangle(
+                triangle.LeftUpperCorner,
+                triangle.B,
+                triangle.C,
+                circle.CenterPosition
+            );
+
+            Vector2 direction = circle.CenterPosition - closestPoint;
+            float distanceSquared = direction.LengthSquared();
+            float radiusSquared = circle.Radius * circle.Radius;
+
+            // 1. Ранний выход, если столкновения нет
+            if (distanceSquared > radiusSquared)
+            {
+                return new CollisionResult { Intersects = false };
+            }
+
+            float distance = MathF.Sqrt(distanceSquared);
+            Vector2 normal;
+            float overlap;
+
+            // 2. Специфический случай: центр круга ВНУТРИ треугольника
+            // Если ближайшая точка совпадает с центром, расстояние равно 0
+            if (distance < float.Epsilon)
+            {
+                // Находим кратчайшее расстояние до сторон треугольника для выталкивания
+                (normal, overlap) = GetInternalTriangleExit(circle, triangle);
+            }
+            else
+            {
+                // Стандартный случай: выталкиваем от ближайшей точки к центру
+                normal = direction / distance;
+                overlap = circle.Radius - distance;
+            }
+
+            return new CollisionResult
+            {
+                Intersects = true,
+                Overlap = overlap,
+                MTV = normal * overlap
+            };
         }
 
         /// <summary>
@@ -172,27 +341,63 @@ namespace WPFGameEngine.WPF.GE.Helpers
         }
 
         /// <summary>
-        /// Separate Axis Theorem
+        /// Проверяет пересечение двух фигур с использованием теоремы о разделяющей оси (SAT).
         /// </summary>
-        /// <param name="shape1"></param>
-        /// <param name="shape2"></param>
-        /// <returns></returns>
-        public static bool SATIntersects(IShape2D shape1, IShape2D shape2)
+        /// <param name="shape1">Первая фигура для проверки.</param>
+        /// <param name="shape2">Вторая фигура для проверки.</param>
+        /// <returns>
+        /// Объект <see cref="CollisionResult"/>, содержащий информацию о факте столкновения, 
+        /// глубине проникновения и векторе минимального выталкивания (MTV).
+        /// </returns>
+        public static CollisionResult SATIntersects(IShape2D shape1, IShape2D shape2)
         {
+            float minOverlap = float.MaxValue;
+            Vector2 smallestAxis = Vector2.Zero;
+
+            // 1. Получаем уникальные нормали (оси) обеих фигур для проверки
             var normalsA = shape1.GetNormals();
             var normalsB = shape2.GetNormals();
-            var normalsAll = normalsA.Concat(normalsB).Distinct().ToList();
+            var normalsAll = normalsA.Concat(normalsB).Distinct();
 
             foreach (var normal in normalsAll)
             {
+                // 2. Проецируем обе фигуры на текущую ось
                 (float minA, float maxA) = Project(shape1, normal);
                 (float minB, float maxB) = Project(shape2, normal);
 
+                // 3. Проверка на наличие "разделяющей оси"
+                // Если проекции не пересекаются хотя бы на одной оси, фигуры не сталкиваются
                 if (maxA < minB || maxB < minA)
-                    return false;
+                {
+                    return new CollisionResult { Intersects = false };
+                }
+
+                // 4. Вычисляем величину наложения проекций
+                float overlap = SMath.Min(maxA, maxB) - SMath.Max(minA, minB);
+
+                // 5. Поиск оси с минимальным наложением (ось минимального выталкивания)
+                if (overlap < minOverlap)
+                {
+                    minOverlap = overlap;
+                    smallestAxis = normal;
+                }
             }
 
-            return true;
+            // 6. Убеждаемся, что вектор выталкивания направлен от первой фигуры ко второй
+            Vector2 center1 = shape1.CenterPosition;
+            Vector2 center2 = shape2.CenterPosition;
+            if (Vector2.Dot(center2 - center1, smallestAxis) < 0)
+            {
+                smallestAxis = -smallestAxis;
+            }
+
+            // 7. Возвращаем результат столкновения
+            return new CollisionResult
+            {
+                Intersects = true,
+                Overlap = minOverlap,
+                MTV = smallestAxis * minOverlap // Minimum Translation Vector
+            };
         }
 
         public static (float min, float max) Project(IShape2D shape, Vector2 axis)

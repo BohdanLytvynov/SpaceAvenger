@@ -1,4 +1,5 @@
 ﻿using SpaceAvenger.Editor.Mock;
+using SpaceAvenger.Editor.Strings;
 using SpaceAvenger.Editor.ViewModels.Components.Base;
 using SpaceAvenger.Editor.ViewModels.GeometryConfigViewModel;
 using SpaceAvenger.Editor.ViewModels.GeometryConfigViewModel.GeometryConfigBase;
@@ -130,16 +131,15 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Collider
         protected override void LoadCurrentGameObjProperties()
         {
             if (GameObject == null && !GameObject.IsCollidable) return;
-            var collider = GameObject.Collider;
+            var collider = GameObject.ColliderComponent;
 
-            var transform = GameObject.Transform;
-            XMax = transform.OriginalObjectSize.Width * transform.Scale.Width;
-            YMax = transform.OriginalObjectSize.Height * transform.Scale.Height;
+            XMax = collider.ActualObjectSize.Width;
+            YMax = collider.ActualObjectSize.Height;
 
-            m_XRel = collider.Position.X * transform.OriginalObjectSize.Width * transform.Scale.Width;
-            m_YRel = collider.Position.Y * transform.OriginalObjectSize.Height * transform.Scale.Height;
+            m_XRel = collider.Position.X * collider.ActualObjectSize.Width;
+            m_YRel = collider.Position.Y * collider.ActualObjectSize.Height;
 
-            var shape = GameObject.Collider.CollisionShape;
+            var shape = (GameObject.ColliderComponent as ICollider)?.CollisionShape;
 
             if (shape == null) return;
             string shapeType = shape.GetType().Name;
@@ -153,7 +153,9 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Collider
 
             GeomConfig.Clear();
             GeometryConfigViewModelBase geomConfig = null;
-            IShape2D shape = GameObject.Collider.CollisionShape;
+            var collider = GameObject.ColliderComponent as ICollider;
+            if (collider == null) return;
+            IShape2D shape = (collider).CollisionShape;
             switch (factoryName)
             {
                 case nameof(Circle):
@@ -169,9 +171,9 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Collider
                     geomConfig = new TriangleConfigViewModel(shape);
                     break;
                 default:
-                    throw new NotImplementedException();
+                    throw new NotImplementedException(string.Format(StringResources.FailToCreateObjException, nameof(shape)));
             }
-            GameObject.Collider.CollisionShape = shape;
+            collider.CollisionShape = shape;
             GeomConfig.Add(geomConfig);
         }
 
@@ -191,7 +193,7 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Collider
                     geomConfig = new TriangleConfigViewModel(shape);
                     break;
                 default:
-                    throw new NotImplementedException();
+                    throw new NotImplementedException(string.Format(StringResources.FailToCreateObjException, nameof(shape)));
             }
             GeomConfig.Add(geomConfig);
         }
@@ -199,7 +201,7 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Collider
         private void UpdateRelX(double value)
         { 
             if(GameObject == null) return;
-            var collider = GameObject.Collider;
+            var collider = GameObject.ColliderComponent;
             if(collider == null) return;
             float oldY = collider.Position.Y;
             float x = (float)value / collider.ActualObjectSize.Width;
@@ -209,7 +211,7 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Collider
         private void UpdateRelY(double value)
         { 
             if (GameObject == null) return;
-            var collider = GameObject.Collider;
+            var collider = GameObject.ColliderComponent;
             if(collider == null) return;
             float oldX = collider.Position.X;
             float y = (float)value / collider.ActualObjectSize.Height;

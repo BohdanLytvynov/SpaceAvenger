@@ -23,7 +23,6 @@ namespace WPFGameEngine.WPF.GE.Geometry.Base
         [JsonIgnore]
         public Vector2 LeftUpperCorner { get; set; }
         void Render(DrawingContext drawingContext);
-        //bool IntersectsWith(IShape2D other);
         Rectangle GetBounds();
         List<Vector2> GetNormals();
         void CalculatePoints();

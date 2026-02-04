@@ -26,17 +26,10 @@
       "ResourceKey": "F10_RailGunPrj"
     },
     {
-      "RecreateType": "ColliderComponent",
+      "RecreateType": "RaycastComponent",
       "Position": {
-        "X": 0.9331106,
-        "Y": 0.45696855
-      },
-      "ColliderShape": {
-        "RecreateType": "Rectangle",
-        "Size": {
-          "Width": 25.687805,
-          "Height": 14.44939
-        }
+        "X": 0.96312904,
+        "Y": 0.4800549
       }
     }
   ]

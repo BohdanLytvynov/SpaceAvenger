@@ -3,15 +3,15 @@ using System.Threading.Tasks;
 using ViewModelBaseLibDotNetCore.Commands;
 using System.Windows.Input;
 using System.Windows.Controls;
-using Models.DAL.Entities.User;
 using System.Windows;
 using SpaceAvenger.Enums.FrameTypes;
 using SpaceAvenger.Attributes.PageManager;
-using SpaceAvenger.Services.Realizations.Message;
 using ViewModelBaseLibDotNetCore.PageManager.Base;
 using ViewModelBaseLibDotNetCore.MessageBus.Base;
 using ViewModelBaseLibDotNetCore.PageManagers;
 using ViewModelBaseLibDotNetCore.VM;
+using SpaceAvenger.Services.Realizations.Message;
+using SpaceAvenger.ViewModels.UserProfile;
 
 namespace SpaceAvenger.ViewModels.MainWindowVM
 {
@@ -19,7 +19,7 @@ namespace SpaceAvenger.ViewModels.MainWindowVM
     internal class MainWindowViewModel : SubscriptableViewModel, IDisposable
     {
         #region Fields
-               
+
         object m_mainframe;
 
         private object m_infoFrame;
@@ -118,7 +118,7 @@ namespace SpaceAvenger.ViewModels.MainWindowVM
             
             m_pageManager.OnSwitchScreenMethodInvoked += PageManager_OnSwitchScreenMethodInvoked;
 
-            Subscriptions.Add(m_messageBus.RegisterHandler<ChooseProfileMessage_User, User>(OnMessageRecieved));
+            Subscriptions.Add(m_messageBus.RegisterHandler<ChooseProfileMessage_User, UserProfileVM>(OnMessageRecieved));
 
             #endregion
         }
@@ -134,7 +134,6 @@ namespace SpaceAvenger.ViewModels.MainWindowVM
             switch (args.FrameType)
             {
                 case FrameType.MainFrame:
-
                     MainFrame = args.Page;
                     break;
                 case FrameType.InfoFrame:

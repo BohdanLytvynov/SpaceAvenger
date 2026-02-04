@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Threading;
 
 
@@ -74,7 +68,7 @@ namespace ViewModelBaseLibDotNetCore.VM
             if (m_dispatcher is null)
                 throw new Exception("Dispatcher is not initialized!");
 
-            m_dispatcher?.Invoke(work);
+            m_dispatcher.Invoke(work);
         }
     }
 }

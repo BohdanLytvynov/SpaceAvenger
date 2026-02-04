@@ -80,7 +80,7 @@ namespace ViewModelBaseLibDotNetCore.PageManagers
                     new PageManagerEventArgs<TFrameType>(temp, frame));
             }
             else
-                throw new Exception("Storage has no key value pairs with {pageKey} key");
+                throw new Exception($"Storage has no key value pairs with {pageKey} key");
         }
 
         public IEnumerable<string> GetAllKeys()
