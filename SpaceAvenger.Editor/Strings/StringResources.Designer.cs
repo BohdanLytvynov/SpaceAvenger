@@ -77,5 +77,14 @@ namespace SpaceAvenger.Editor.Strings {
                 return ResourceManager.GetString("ErrorWithException", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fail to create the object of type: {0}.
+        /// </summary>
+        internal static string FailToCreateObjException {
+            get {
+                return ResourceManager.GetString("FailToCreateObjException", resourceCulture);
+            }
+        }
     }
 }

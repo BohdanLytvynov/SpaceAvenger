@@ -1,4 +1,5 @@
 ﻿using SpaceAvenger.Editor.Mock;
+using SpaceAvenger.Editor.Strings;
 using SpaceAvenger.Editor.ViewModels.Components.Base;
 using SpaceAvenger.Editor.ViewModels.GeometryConfigViewModel;
 using SpaceAvenger.Editor.ViewModels.GeometryConfigViewModel.GeometryConfigBase;
@@ -170,7 +171,7 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Collider
                     geomConfig = new TriangleConfigViewModel(shape);
                     break;
                 default:
-                    throw new NotImplementedException();
+                    throw new NotImplementedException(string.Format(StringResources.FailToCreateObjException, nameof(shape)));
             }
             collider.CollisionShape = shape;
             GeomConfig.Add(geomConfig);
@@ -192,7 +193,7 @@ namespace SpaceAvenger.Editor.ViewModels.Components.Collider
                     geomConfig = new TriangleConfigViewModel(shape);
                     break;
                 default:
-                    throw new NotImplementedException();
+                    throw new NotImplementedException(string.Format(StringResources.FailToCreateObjException, nameof(shape)));
             }
             GeomConfig.Add(geomConfig);
         }

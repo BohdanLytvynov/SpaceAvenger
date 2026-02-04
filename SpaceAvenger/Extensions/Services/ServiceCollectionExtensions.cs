@@ -1,6 +1,12 @@
 ﻿using Domain.Utilities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using SpaceAvenger.Attributes.PageManager;
+using SpaceAvenger.DAL.Data;
+using SpaceAvenger.DAL.RepositoryWrappers;
+using System;
+using System.Configuration;
+using System.IO;
 using System.Reflection;
 
 namespace SpaceAvenger.Extensions.Services
@@ -29,6 +35,35 @@ namespace SpaceAvenger.Extensions.Services
             {
                 services.AddSingleton(viewModel.AsType());
             }
+        }
+
+        public static void InitDatabase(this IServiceCollection services)
+        {
+            string pathToDBfolder = Environment.CurrentDirectory +
+                Path.DirectorySeparatorChar +
+                "Database";
+
+            IOUtility.CreateDirectoryIfNotExists(pathToDBfolder);
+
+            string pathToFile = pathToDBfolder + Path.DirectorySeparatorChar + "Local.mdf";
+
+            IOUtility.CreateFileIfNotExists(pathToFile);
+
+            services.AddSingleton<SADataContext>( c =>
+            {
+                return new SADataContext(
+                    ConfigurationManager.ConnectionStrings["SADBConnection"]
+                    .ConnectionString);
+            });
+        }
+
+        public static void InitRepositoryWrapper(this IServiceCollection services)
+        {
+            services.AddSingleton<IRepositoryWrapper, RepositoryWrapper>(c =>
+            {
+                var db = c.GetRequiredService<SADataContext>();
+                return new RepositoryWrapper(db);
+            });
         }
     }
 }

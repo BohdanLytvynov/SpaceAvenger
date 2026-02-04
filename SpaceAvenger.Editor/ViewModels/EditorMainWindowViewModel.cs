@@ -745,7 +745,10 @@ namespace SpaceAvenger.Editor.ViewModels
         {
             GameObject.RemoveObject(obj => obj.ObjectName.Equals(SelectedPrefab.PrefabName), 
                 GameView.World, true);
-            File.Delete(PathToExport + Path.DirectorySeparatorChar + SelectedPrefab.PrefabName + ".json");
+            string file = PathToExport + Path.DirectorySeparatorChar + SelectedPrefab.PrefabName + ".json";
+            if (File.Exists(file))
+                File.Delete(file);
+
             Prefabs.Remove(SelectedPrefab);
             m_SelectedPrefab = new PrefabViewModel();
         }

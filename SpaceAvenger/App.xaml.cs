@@ -27,7 +27,6 @@ using SpaceAvenger.Services;
 using WPFGameEngine.ObjectBuilders;
 using WPFGameEngine.WPF.GE.GameObjects;
 using WPFGameEngine.FactoryWrapper;
-using SpaceAvenger.ViewModels.PagesVM;
 using SpaceAvenger.Services.WPFInputControllers;
 using WPFGameEngine.WPF.GE.Component.Controllers;
 using WPFGameEngine.ObjectPools.Base;
@@ -36,6 +35,8 @@ using WPFGameEngine.CollisionDetection.CollisionManager.Base;
 using WPFGameEngine.ObjectInstantiators;
 using WPFGameEngine.WPF.GE.Settings;
 using WPFGameEngine.CollisionDetection.RaycastManager;
+using Domain.Services.StringResourceLoaders;
+using ViewModelBaseLibDotNetCore.Extensions;
 
 namespace SpaceAvenger
 {
@@ -53,9 +54,19 @@ namespace SpaceAvenger
         private static IServiceCollection InitializeServices()
         {
             var services = new ServiceCollection();
-            CollisionSettings.WorldXPosition = 0;
-            CollisionSettings.WorldYPosition = 0;
-            
+            var currAssembly = Assembly.GetExecutingAssembly();
+
+            services.AddSingleton<IStringResourceLoader>(c =>
+            {
+                return new StringResourceLoader(
+                    "SpaceAvenger.Resources.Strings.GameStrings",
+                    currAssembly);
+            });
+
+            services.ConfigureMapper(currAssembly);
+            services.InitDatabase();
+            services.InitRepositoryWrapper();
+
             services.AddSingleton<ICollisionManager, CollisionManager>();
             services.AddSingleton<IRaycastManager, RaycastManager>();
             services.AddSingleton<IObjectPoolManager, ObjectPoolManager>();
@@ -87,11 +98,11 @@ namespace SpaceAvenger
 
             services.AddSingleton<IObjectBuilder>(c =>
             {
-                var assembly = Assembly.GetExecutingAssembly();
+                
                 var importer = c.GetRequiredService<IGameObjectImporter>();
                 var factoryWrapper = c.GetRequiredService<IFactoryWrapper>();
                 return new ObjectBuilder(
-                    assembly,
+                    currAssembly,
                     typeof(MapableObject),
                     importer,
                     factoryWrapper);
@@ -99,7 +110,6 @@ namespace SpaceAvenger
             services.AddSingleton<IObjectInstantiator, ObjectInstantiator>();
             // Add ViewModels (Windows)
             services.AddSingleton<MainWindowViewModel>();
-            // Add ViewModels (Pages)
 
             services.AddSingleton<MainWindow>(c =>
             {
@@ -185,7 +195,8 @@ namespace SpaceAvenger
 
             mainWindow.Show();
 
-            pm.SwitchPage(nameof(Main_Page), FrameType.MainFrame);
+            pm.SwitchPage(nameof(ChooseProfile_Page), FrameType.MainFrame);
+            pm.SwitchPage(nameof(UserProfileInfo_Page), FrameType.InfoFrame);
         }
     }
 }

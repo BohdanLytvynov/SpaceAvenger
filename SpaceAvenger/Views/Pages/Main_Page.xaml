@@ -55,7 +55,7 @@
                         <ColumnDefinition Width="10"/>
                     </Grid.ColumnDefinitions>
                     <Button Grid.Row="1" Grid.Column="1"
-                Content="Нова Гра" Style="{StaticResource Button}"
+                Content="New Game" Style="{StaticResource Button}"
                         Foreground="White" FontSize="16"
                         Command="{Binding OnSurvivalModeButtonPressed}"/>
                     <!--<Button Grid.Row="3" Grid.Column="1"
@@ -73,11 +73,11 @@
                     Foreground="White" FontSize="16"
                     />-->
                     <Button Grid.Row="3" Grid.Column="1"
-                        Content="Автор" Style="{StaticResource Button}"
+                        Content="Author" Style="{StaticResource Button}"
                         Foreground="White" FontSize="16" Click="Button_Click"
 />
                     <Button Grid.Row="5" Grid.Column="1"
-                Content="Вихід" 
+                Content="Exit" 
                        Foreground="White" FontSize="16" Style="{StaticResource Button}"
                             Command="{StaticResource ExitCommand}">
                     </Button>

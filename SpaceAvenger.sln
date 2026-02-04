@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPFGameEngine", "WPFGameEng
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpaceAvenger.Editor", "SpaceAvenger.Editor\SpaceAvenger.Editor.csproj", "{F2E69FF8-CE6F-49CC-9D1B-9410F817941B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpaceAvenger.DAL", "SpaceAvenger.DAL\SpaceAvenger.DAL.csproj", "{6ACFC549-885C-4DE2-A16C-DE18F0BD387C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{F2E69FF8-CE6F-49CC-9D1B-9410F817941B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F2E69FF8-CE6F-49CC-9D1B-9410F817941B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F2E69FF8-CE6F-49CC-9D1B-9410F817941B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6ACFC549-885C-4DE2-A16C-DE18F0BD387C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6ACFC549-885C-4DE2-A16C-DE18F0BD387C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6ACFC549-885C-4DE2-A16C-DE18F0BD387C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6ACFC549-885C-4DE2-A16C-DE18F0BD387C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

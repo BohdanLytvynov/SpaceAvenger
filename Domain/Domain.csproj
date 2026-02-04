@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SpaceAvenger.DAL\SpaceAvenger.DAL.csproj" />
+  </ItemGroup>
+
 </Project>

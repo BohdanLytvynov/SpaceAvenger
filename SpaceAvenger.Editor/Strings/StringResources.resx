@@ -125,4 +125,7 @@
     <value>Error occurred! Error Message: {0}</value>
     <comment>Used where we display error</comment>
   </data>
+  <data name="FailToCreateObjException" xml:space="preserve">
+    <value>Fail to create the object of type: {0}</value>
+  </data>
 </root>

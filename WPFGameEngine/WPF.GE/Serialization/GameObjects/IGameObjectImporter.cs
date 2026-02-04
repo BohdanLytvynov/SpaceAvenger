@@ -5,5 +5,6 @@ namespace WPFGameEngine.WPF.GE.Serialization.GameObjects
 {
     public interface IGameObjectImporter : IObjectImporter<GameObjectDto>
     {
+
     }
 }
