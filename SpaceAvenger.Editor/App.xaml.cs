@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Domain.Utilities;
+using Microsoft.Extensions.DependencyInjection;
 using SpaceAvenger.Editor.Strings;
 using SpaceAvenger.Editor.ViewModels;
 using SpaceAvenger.Editor.Views;
@@ -52,7 +53,8 @@ namespace SpaceAvenger.Editor
             services.AddSingleton<IAssemblyLoader>(c =>
             { 
                 IAssemblyLoader assemblyLoader = new AssemblyLoader();
-                string pathToAssembly = Environment.CurrentDirectory + Path.DirectorySeparatorChar + "WPFGameEngine.dll";
+                string pathToAssembly = RuntimeUtility.GetPathToExe()
+                + Path.DirectorySeparatorChar + "WPFGameEngine.dll";
                 assemblyLoader.LoadAssembly(pathToAssembly);
                 return assemblyLoader;
             });

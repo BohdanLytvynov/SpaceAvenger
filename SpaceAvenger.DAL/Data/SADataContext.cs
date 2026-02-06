@@ -23,7 +23,7 @@ namespace SpaceAvenger.DAL.Data
         {
             m_conStr = conString ?? throw new ArgumentNullException(nameof(conString));
 
-            if(string.IsNullOrEmpty(m_conStr))
+            if (string.IsNullOrEmpty(m_conStr))
                 throw new ArgumentNullException(nameof(conString));
         }
         #endregion
@@ -31,7 +31,7 @@ namespace SpaceAvenger.DAL.Data
         #region Methods
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(m_conStr);
+            optionsBuilder.UseSqlite(m_conStr);
             base.OnConfiguring(optionsBuilder);
         }
 
@@ -40,8 +40,8 @@ namespace SpaceAvenger.DAL.Data
             modelBuilder.Entity<User>()
                 .HasOne(x => x.Commander)
                 .WithOne(x => x.User)
-                .HasForeignKey<Commander>(x=>x.UserId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .HasForeignKey<Commander>(x => x.UserId)
+                .OnDelete(DeleteBehavior.Cascade);//Delete User - Delete Commander
 
             modelBuilder.Entity<Commander>()
                 .HasOne(x => x.Faction)
@@ -54,6 +54,113 @@ namespace SpaceAvenger.DAL.Data
                 .WithMany(x => x.Commanders)
                 .HasForeignKey(x => x.RankId)
                 .OnDelete(DeleteBehavior.NoAction);//Weak ref for dictionary - tables
+
+            modelBuilder.Entity<Commander>()
+                .HasOne(x => x.CommanderWallet)
+                .WithOne(x => x.Commander)
+                .HasForeignKey<Commander>(x => x.CommanderWalletId)
+                .OnDelete(DeleteBehavior.Cascade);//Delete Commander - Delete Wallet
+
+            modelBuilder.Entity<Commander>()
+                .HasMany(x => x.SpaceShips)
+                .WithOne(x => x.Commander)
+                .HasForeignKey(x => x.CommanderId)
+                .OnDelete(DeleteBehavior.Cascade);//Delete All Commander Ships when we delete commander            
+
+            modelBuilder.Entity<Faction>()
+                .HasMany(x => x.SpaceShips)
+                .WithOne(x => x.Faction)
+                .HasForeignKey(x => x.FactionId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Faction>()
+                .HasMany(x => x.SpaceShipClasses)
+                .WithOne(x => x.Faction)
+                .HasForeignKey(x => x.FactionId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            #region Faction - Bonus -> n:m
+
+            modelBuilder.Entity<FactionBonus>().HasKey(x => new { x.FactionId, x.BonusId });
+
+            modelBuilder.Entity<FactionBonus>()
+                .HasOne(fb => fb.Faction)
+                .WithMany(f => f.FactionBonuses)
+                .HasForeignKey(fb => fb.FactionId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+
+            modelBuilder.Entity<FactionBonus>()
+                .HasOne(fb => fb.Bonus)
+                .WithMany(b => b.FactionBonuses)
+                .HasForeignKey(fb => fb.BonusId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            #endregion
+
+            #region Currency - Commander Wallet 1:m
+
+            modelBuilder.Entity<CommanderWallet>()
+                .HasOne(x => x.Currency)
+                .WithMany(x => x.CommanderWallets)
+                .HasForeignKey(x => x.CurrencyId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            #endregion
+
+            #region Faction - Currency n:m
+
+            modelBuilder.Entity<FactionCurrency>()
+                .HasKey(x => new { x.CurrencyId, x.FactionId });
+
+            modelBuilder.Entity<FactionCurrency>()
+                .HasOne(x => x.Currency)
+                .WithMany(x => x.FactionCurrency)
+                .HasForeignKey(x => x.CurrencyId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<FactionCurrency>()
+                .HasOne(x => x.Faction)
+                .WithMany(x => x.FactionCurrency)
+                .HasForeignKey(x => x.FactionId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            #endregion
+
+            #region Faction - Planet m:n 
+
+            modelBuilder.Entity<FactionHomeWorlds>()
+                .HasKey(x => new { x.FactionId, x.HomePlanetId });
+
+            modelBuilder.Entity<FactionHomeWorlds>()
+                .HasOne(x => x.Faction)
+                .WithMany(x => x.FactionHomeWorlds)
+                .HasForeignKey(x => x.FactionId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<FactionHomeWorlds>()
+                .HasOne(x => x.HomePlanet)
+                .WithMany(x => x.FactionHomePlanets)
+                .HasForeignKey(x => x.HomePlanetId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            #endregion
+
+            #region Faction Bounds
+
+            modelBuilder.Entity<Faction>()
+                .HasMany(x => x.Planets)
+                .WithOne(x => x.Faction)
+                .HasForeignKey(x => x.FactionId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            #endregion
+
+            modelBuilder.Entity<SpaceShip>()
+                .HasOne(x => x.ShipClass)
+                .WithOne(x => x.SapceShip)
+                .HasForeignKey<SpaceShip>(x => x.ShipClassId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             SetUpDatabase(modelBuilder);
 
@@ -75,7 +182,17 @@ namespace SpaceAvenger.DAL.Data
                     NameKey = BuildKey("UEF", SA_DALConstants.FullNameKey),
                     ShortNameKey = BuildKey("UEF", SA_DALConstants.ShortNameKey),
                     ShortDescriptionKey = BuildKey("UEF", SA_DALConstants.ShortDescKey),
-                    DescriptionKey = BuildKey("UEF", SA_DALConstants.DescKey)
+                    DescriptionKey = BuildKey("UEF", SA_DALConstants.DescKey),
+                    FactionCode = "F10"
+                },
+                new Faction()
+                {
+                    Id = 2,
+                    NameKey = BuildKey("Scellar", SA_DALConstants.FullNameKey),
+                    ShortNameKey = BuildKey("Scellar", SA_DALConstants.ShortNameKey),
+                    ShortDescriptionKey = BuildKey("Scellar", SA_DALConstants.ShortDescKey),
+                    DescriptionKey = BuildKey("Scellar", SA_DALConstants.DescKey),
+                    FactionCode = "F1"
                 }
                 );
         }
@@ -88,25 +205,31 @@ namespace SpaceAvenger.DAL.Data
                     new StarFleetRank()
                     {
                         Id = 1,
-                        FactionId = 1, 
-                        LevelNameKey = "UEF_L1", 
-                        SortOrder = 1, MinExperience = 0,
-                        RankType = "f", DescriptionKey = "UEF_L1_Rank_Desc"
+                        FactionId = 1,
+                        LevelNameKey = "UEF_L1",
+                        SortOrder = 1,
+                        MinExperience = 0,
+                        RankType = "f",
+                        DescriptionKey = "UEF_L1_Rank_Desc"
                     },
                     new StarFleetRank()
                     {
                         Id = 2,
                         FactionId = 1,
                         LevelNameKey = "UEF_L2",
-                        SortOrder = 2, MinExperience = 1000, RankType = "f",
+                        SortOrder = 2,
+                        MinExperience = 1000,
+                        RankType = "f",
                         DescriptionKey = "UEF_L2_Rank_Desc"
                     },
                     new StarFleetRank()
                     {
                         Id = 3,
                         FactionId = 1,
-                        LevelNameKey = "UEF_L3", 
-                        SortOrder = 3, MinExperience = 2500, RankType = "f",
+                        LevelNameKey = "UEF_L3",
+                        SortOrder = 3,
+                        MinExperience = 2500,
+                        RankType = "f",
                         DescriptionKey = "UEF_L3_Rank_Desc"
                     },
                     new StarFleetRank()
@@ -114,7 +237,8 @@ namespace SpaceAvenger.DAL.Data
                         Id = 4,
                         FactionId = 1,
                         LevelNameKey = "UEF_L4",
-                        SortOrder = 4, MinExperience = 5000,
+                        SortOrder = 4,
+                        MinExperience = 5000,
                         RankType = "f",
                         DescriptionKey = "UEF_L4_Rank_Desc"
                     },
@@ -123,7 +247,8 @@ namespace SpaceAvenger.DAL.Data
                         Id = 5,
                         FactionId = 1,
                         LevelNameKey = "UEF_L5",
-                        SortOrder = 5, MinExperience = 9000,
+                        SortOrder = 5,
+                        MinExperience = 9000,
                         RankType = "f",
                         DescriptionKey = "UEF_L5_Rank_Desc"
                     },
@@ -132,7 +257,8 @@ namespace SpaceAvenger.DAL.Data
                         Id = 6,
                         FactionId = 1,
                         LevelNameKey = "UEF_L6",
-                        SortOrder = 6, MinExperience = 15000,
+                        SortOrder = 6,
+                        MinExperience = 15000,
                         RankType = "f",
                         DescriptionKey = "UEF_L6_Rank_Desc"
                     },
@@ -141,7 +267,8 @@ namespace SpaceAvenger.DAL.Data
                         Id = 7,
                         FactionId = 1,
                         LevelNameKey = "UEF_L7",
-                        SortOrder = 7, MinExperience = 25000,
+                        SortOrder = 7,
+                        MinExperience = 25000,
                         RankType = "f",
                         DescriptionKey = "UEF_L7_Rank_Desc"
                     },
@@ -150,7 +277,8 @@ namespace SpaceAvenger.DAL.Data
                         Id = 8,
                         FactionId = 1,
                         LevelNameKey = "UEF_L8",
-                        SortOrder = 8, MinExperience = 45000,
+                        SortOrder = 8,
+                        MinExperience = 45000,
                         RankType = "f",
                         DescriptionKey = "UEF_L8_Rank_Desc"
 
@@ -161,32 +289,38 @@ namespace SpaceAvenger.DAL.Data
                         Id = 9,
                         FactionId = 1,
                         LevelNameKey = "UEF_L9",
-                        SortOrder = 9, MinExperience = 75000,
+                        SortOrder = 9,
+                        MinExperience = 75000,
                         RankType = "f",
                         DescriptionKey = "UEF_L9_Rank_Desc"
                     },
-                    new StarFleetRank() 
+                    new StarFleetRank()
                     {
                         Id = 10,
                         FactionId = 1,
                         LevelNameKey = "UEF_L10",
-                        SortOrder = 10, MinExperience = 120000, RankType = "f",
+                        SortOrder = 10,
+                        MinExperience = 120000,
+                        RankType = "f",
                         DescriptionKey = "UEF_L10_Rank_Desc"
                     },
-                    new StarFleetRank() 
+                    new StarFleetRank()
                     {
                         Id = 11,
                         FactionId = 1,
                         LevelNameKey = "UEF_L11",
-                        SortOrder = 11, MinExperience = 200000,
-                        RankType = "f", DescriptionKey = "UEF_L11_Rank_Desc"
+                        SortOrder = 11,
+                        MinExperience = 200000,
+                        RankType = "f",
+                        DescriptionKey = "UEF_L11_Rank_Desc"
                     },
-                    new StarFleetRank() 
+                    new StarFleetRank()
                     {
                         Id = 12,
                         FactionId = 1,
                         LevelNameKey = "UEF_L12",
-                        SortOrder = 12, MinExperience = 350000,
+                        SortOrder = 12,
+                        MinExperience = 350000,
                         RankType = "f",
                         DescriptionKey = "UEF_L12_Rank_Desc"
                     }
@@ -194,7 +328,7 @@ namespace SpaceAvenger.DAL.Data
         }
 
         private string BuildKey(string arg0, string arg1)
-        { 
+        {
             StringBuilder sb = new StringBuilder();
             sb.Append(arg0);
             sb.Append(arg1);

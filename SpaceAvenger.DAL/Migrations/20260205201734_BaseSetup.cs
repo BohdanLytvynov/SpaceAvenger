@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SpaceAvenger.DAL.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class BaseSetup : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -17,12 +17,12 @@ namespace SpaceAvenger.DAL.Migrations
                 name: "Factions",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    NameKey = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ShortNameKey = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ShortDescriptionKey = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DescriptionKey = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    NameKey = table.Column<string>(type: "TEXT", nullable: false),
+                    ShortNameKey = table.Column<string>(type: "TEXT", nullable: false),
+                    ShortDescriptionKey = table.Column<string>(type: "TEXT", nullable: false),
+                    DescriptionKey = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -33,10 +33,10 @@ namespace SpaceAvenger.DAL.Migrations
                 name: "Users",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ProfileName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LastSaveTime = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    ProfileName = table.Column<string>(type: "TEXT", nullable: false),
+                    LastSaveTime = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -47,14 +47,14 @@ namespace SpaceAvenger.DAL.Migrations
                 name: "Ranks",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    LevelNameKey = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    SortOrder = table.Column<int>(type: "int", nullable: false),
-                    MinExperience = table.Column<int>(type: "int", nullable: false),
-                    RankType = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DescriptionKey = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    FactionId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    LevelNameKey = table.Column<string>(type: "TEXT", nullable: false),
+                    SortOrder = table.Column<int>(type: "INTEGER", nullable: false),
+                    MinExperience = table.Column<int>(type: "INTEGER", nullable: false),
+                    RankType = table.Column<string>(type: "TEXT", nullable: false),
+                    DescriptionKey = table.Column<string>(type: "TEXT", nullable: false),
+                    FactionId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -71,17 +71,17 @@ namespace SpaceAvenger.DAL.Migrations
                 name: "Commanders",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    MaleFemale = table.Column<bool>(type: "bit", nullable: false),
-                    MissionsCount = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Confirmed = table.Column<bool>(type: "bit", nullable: false),
-                    Points = table.Column<float>(type: "real", nullable: false),
-                    RankId = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    FactionId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    MaleFemale = table.Column<bool>(type: "INTEGER", nullable: false),
+                    MissionsCount = table.Column<int>(type: "INTEGER", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Confirmed = table.Column<bool>(type: "INTEGER", nullable: false),
+                    Points = table.Column<float>(type: "REAL", nullable: false),
+                    RankId = table.Column<int>(type: "INTEGER", nullable: false),
+                    UserId = table.Column<int>(type: "INTEGER", nullable: false),
+                    FactionId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -107,7 +107,7 @@ namespace SpaceAvenger.DAL.Migrations
             migrationBuilder.InsertData(
                 table: "Factions",
                 columns: new[] { "Id", "DescriptionKey", "NameKey", "ShortDescriptionKey", "ShortNameKey" },
-                values: new object[] { 1, "UEF_DescKey_DescKey", "UEF_FullNameKey", "UEF_ShortDescKey", "UEF_ShortNameKey" });
+                values: new object[] { 1, "UEF_DescKey", "UEF_FullNameKey", "UEF_ShortDescKey", "UEF_ShortNameKey" });
 
             migrationBuilder.InsertData(
                 table: "Ranks",

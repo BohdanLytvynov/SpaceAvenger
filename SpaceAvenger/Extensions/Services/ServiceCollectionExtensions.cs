@@ -39,21 +39,17 @@ namespace SpaceAvenger.Extensions.Services
 
         public static void InitDatabase(this IServiceCollection services)
         {
-            string pathToDBfolder = Environment.CurrentDirectory +
-                Path.DirectorySeparatorChar +
-                "Database";
-
-            IOUtility.CreateDirectoryIfNotExists(pathToDBfolder);
-
-            string pathToFile = pathToDBfolder + Path.DirectorySeparatorChar + "Local.mdf";
-
-            IOUtility.CreateFileIfNotExists(pathToFile);
+            string pathToExe = RuntimeUtility.GetPathToExe();
+            string pathToFolder = pathToExe + "Database";
+            IOUtility.CreateDirectoryIfNotExists(pathToFolder);
+            string pathToFile = pathToFolder + Path.DirectorySeparatorChar
+                + "Game.db";
 
             services.AddSingleton<SADataContext>( c =>
             {
                 return new SADataContext(
-                    ConfigurationManager.ConnectionStrings["SADBConnection"]
-                    .ConnectionString);
+                    $"Data Source={pathToFile}"
+                    );
             });
         }
 

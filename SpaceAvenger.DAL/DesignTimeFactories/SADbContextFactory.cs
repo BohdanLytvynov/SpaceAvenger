@@ -7,9 +7,19 @@ namespace SpaceAvenger.DAL.DesignTimeFactories
     {
         public SADataContext CreateDbContext(string[] args)
         {
-            string connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\blytv\C#\SpaceAvenger\SpaceAvenger\bin\Debug\net9.0-windows\Database\Local.mdf;Integrated Security=True;Connect Timeout=30";
+            string pathToExe = AppContext.BaseDirectory;
+            string pathToFolder = pathToExe + "Database";
+            
+            if(!Directory.Exists(pathToFolder))
+                Directory.CreateDirectory(pathToFolder);
 
-            return new SADataContext(connectionString);
+            string pathToFile = pathToFolder + Path.DirectorySeparatorChar
+                + "Game.db";
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine($"Data base file will be located at : \n{pathToFile}");
+            Console.ResetColor();
+
+            return new SADataContext($"Data Source={pathToFile}");
         }
     }
 }

@@ -11,6 +11,7 @@ namespace SpaceAvenger.DAL.Models
         public DateTime CreatedDate { get; set; }
         public bool Confirmed { get; set; }
         public float Points { get; set; }
+
         #endregion
 
         #region Navigation Properties
@@ -22,6 +23,12 @@ namespace SpaceAvenger.DAL.Models
 
         public int FactionId { get; set; }
         public Faction Faction { get; set; }
+
+        public CommanderWallet? CommanderWallet { get; set; }
+        public int? CommanderWalletId { get; set; }
+
+        public ICollection<SpaceShip> SpaceShips { get; set; } 
+            = new List<SpaceShip>();
         #endregion
     }
 }

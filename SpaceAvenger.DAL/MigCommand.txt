@@ -27,3 +27,7 @@ dotnet ef database update 0
   the required tables. Also by 'update' command we can jump from 1 migration image to another.
 
 dotnet ef migrations add BaseSetup --project SpaceAvenger.DAL/SpaceAvenger.DAL.csproj --startup-project SpaceAvenger/SpaceAvenger.csproj
+
+dotnet ef database update --project SpaceAvenger.DAL/SpaceAvenger.DAL.csproj --startup-project SpaceAvenger/SpaceAvenger.csproj
+
+dotnet ef database update 0 --project SpaceAvenger.DAL/SpaceAvenger.DAL.csproj --startup-project SpaceAvenger/SpaceAvenger.csproj

@@ -23,7 +23,7 @@ namespace SpaceAvenger.Game.Core.Factions.F1.Corvettes
 
         public F1Corvette() : base(Faction.F1)
         {
-            HorSpeed = 70f;
+            HorSpeed = 70f;//To do get all this from db
             VertSpeed = 30f;
             HP = 600f;
             Shield = 600f;

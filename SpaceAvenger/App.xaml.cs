@@ -88,8 +88,8 @@ namespace SpaceAvenger
             });
 
             services.AddSingleton<IGameObjectImporter>(c =>
-            { 
-                string pathToObjects = Environment.CurrentDirectory
+            {
+                string pathToObjects = RuntimeUtility.GetPathToExe()
                 + Path.DirectorySeparatorChar + "Resources" 
                 + Path.DirectorySeparatorChar + "GameObjects";
 
