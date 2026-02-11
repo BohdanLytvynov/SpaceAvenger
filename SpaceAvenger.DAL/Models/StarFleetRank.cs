@@ -11,9 +11,10 @@ namespace SpaceAvenger.DAL.Models
         public string DescriptionKey { get; set; }
 
         #region Navigation Properties
-        public ICollection<Commander> Commanders { get; set; } = new List<Commander>();
+        public ICollection<CommanderRank> CommanderRanks { get; set; } 
+            = new List<CommanderRank>();
 
-        public int FactionId { get; set; }
+        public int? FactionId { get; set; }
         public Faction Faction { get; set; }
         #endregion
     }

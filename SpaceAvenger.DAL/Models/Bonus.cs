@@ -1,15 +1,24 @@
 ﻿using SpaceAvenger.DAL.Models.Base;
-using SpaceAvenger.DAL.Models.Enums;
 
 namespace SpaceAvenger.DAL.Models
 {
-    public class Bonus : LoreEntity
+    public class Bonus : EntityBase
     {
-        public BonusType Type { get; set; }
         public float ModifierValue { get; set; }
+        public float Duration { get; set; }
         public bool IsPercentage { get; set; }
+        public bool IsPositive { get; set; }
+
+        public ICollection<BonusParameter> BonusParameters { get; set; }
+        = new List<BonusParameter>();
 
         public ICollection<FactionBonus> FactionBonuses { get; set; } 
             = new List<FactionBonus>();
+
+        public ICollection<SubFactionBonus> SubFactionBonuses { get; set; }
+            = new List<SubFactionBonus>();
+
+        public ICollection<CommanderBonus> CommanderBonuses { get; set; }
+            = new List<CommanderBonus>();
     }
 }

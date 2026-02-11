@@ -1,5 +1,4 @@
-﻿using SpaceAvenger.Game.Core.Enums;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using WPFGameEngine.CollisionDetection.RaycastManager;
 using WPFGameEngine.Extensions;
 using WPFGameEngine.GameViewControl;
@@ -12,7 +11,7 @@ namespace SpaceAvenger.Game.Core.Base
         private object m_hitLock;
         private List<RaycastData> m_raycastInfo;
 
-        protected ExplosiveProjectile(Faction faction) : base(faction)
+        protected ExplosiveProjectile()
         {
             m_hitLock = new object();
             m_raycastInfo = new List<RaycastData>();

@@ -4,11 +4,15 @@ namespace SpaceAvenger.DAL.Models
 {
     public class SpaceShipClass : LoreEntity
     {
-        public string Class { get; set; }
+        public string ShipClass { get; set; }
 
-        public SpaceShip SapceShip { get; set; }
+        public ICollection<SpaceShip> SpaceShips { get; set; }
+            = new List<SpaceShip>();
 
         public Faction Faction { get; set; }
         public int FactionId { get; set; }
+
+        public Armor? Armor { get; set; }
+        public int? ArmorId { get; set; }
     }
 }

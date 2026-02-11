@@ -1,0 +1,44 @@
+﻿<Page x:Class="SpaceAvenger.Views.Pages.ChooseSubFaction_Page"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:SpaceAvenger.Views.Pages"
+      xmlns:vm="clr-namespace:SpaceAvenger.ViewModels.PagesVM"
+      xmlns:res="clr-namespace:SpaceAvenger.Resources.Strings"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="ChooseSubFaction_Page"
+      d:DataContext="{d:DesignInstance vm:ChooseSubFaction_ViewModel, IsDesignTimeCreatable=True}">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+        <TextBlock Margin="10,0,0,0" Text="{x:Static res:UIStrings.ChooseProfile_Title}"
+       Style="{StaticResource textBlockHeaders}"/>
+        <Border Style="{StaticResource BorderStype}" Grid.Row="1" CornerRadius="25"
+                Margin="7"
+                BorderThickness="2">
+            <ItemsControl Style="{StaticResource CardsContainer}">
+            </ItemsControl>
+        </Border>
+        <Grid Grid.Row="2" Margin="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="30"/>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="20"/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="1" Style="{StaticResource Button}"
+                    Content="{x:Static res:UIStrings.ChooseSFBack}"
+                    Command="{Binding OnBackButtonPressed}"/>
+            <Button Grid.Column="3" Style="{StaticResource Button}"
+                    Content="{x:Static res:UIStrings.ChooseSFNext}"
+                    Command="{Binding OnNextButtonPressed}"/>
+        </Grid>
+    </Grid>
+</Page>

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SpaceAvenger.DAL.Repositories.Base;
+using SpaceAvenger.DAL.Repositories.CommanderRanks;
 using SpaceAvenger.DAL.Repositories.Commanders;
 using SpaceAvenger.DAL.Repositories.Factions;
 using SpaceAvenger.DAL.Repositories.Ranks;
@@ -14,6 +15,7 @@ namespace SpaceAvenger.DAL.RepositoryWrappers
         private IStartFleetRankRepository? m_startFleetRankRepository;
         private ICommanderRepository? m_commanderRepository;
         private IFactionRepository? m_factionRepository;
+        private ICommanderRankRepository m_commanderRankRepository;
         private DbContext m_dbContext;
         #endregion
 
@@ -36,6 +38,11 @@ namespace SpaceAvenger.DAL.RepositoryWrappers
         public IFactionRepository FactionRepository 
         { 
             get => CreateLazy<IFactionRepository, FactionRepository>(ref m_factionRepository);
+        }
+
+        public ICommanderRankRepository CommanderRankRepository 
+        { 
+            get => CreateLazy<ICommanderRankRepository, CommanderRankRepository>(ref m_commanderRankRepository);
         }
         #endregion
 

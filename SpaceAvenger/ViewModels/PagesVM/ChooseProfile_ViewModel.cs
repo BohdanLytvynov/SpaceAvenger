@@ -33,6 +33,7 @@ namespace SpaceAvenger.ViewModels.PagesVM
         private IStringResourceLoader m_StringResourceLoader;
         private IMapper m_mapper;
         private const int NEW_ID = -1;
+        private Faction m_selectedFaction;
         #endregion
 
         #region Properties
@@ -77,18 +78,19 @@ namespace SpaceAvenger.ViewModels.PagesVM
             m_StringResourceLoader = stringResourceLoader ?? throw new ArgumentNullException(nameof(stringResourceLoader));
 
             var users = m_userRepository.GetAll().Where(t => true)
-                .Include(c => c.Commander)
-                .ThenInclude(c => c.Rank).ToList();
-
+                .Include(c => c.Commander);
+            
             foreach (var user in users)
             {
+                var rank = m_repositoryWrapper.CommanderRankRepository.GetCommanderRank(user.Commander.Id);
+
                 var upvm = new UserProfileVM(
                     m_profileList.Count + 1,
                     user.Id,
                     user.Commander.MaleFemale, 
                     user.ProfileName, 
                     user.Commander.CreatedDate,
-                    m_StringResourceLoader.GetString(user.Commander.Rank.LevelNameKey),
+                    m_StringResourceLoader.GetString(rank.LevelNameKey),
                     user.Commander.Confirmed);
 
                 upvm.OnUserProfileConfirmedEvent += Up_OnUserProfileConfirmedEvent;
@@ -135,7 +137,9 @@ namespace SpaceAvenger.ViewModels.PagesVM
 
         private void OnAddNewProfileButtonPressedExecute(object p)
         {
-            var lowestRank = m_repositoryWrapper.StarFleetRankRepository.GetLowest();
+            m_selectedFaction = m_repositoryWrapper
+                    .FactionRepository.GetUEF();
+            var lowestRank = m_repositoryWrapper.StarFleetRankRepository.GetLowest(m_selectedFaction);
             var up = new UserProfileVM(
                     ProfileList.Count + 1, NEW_ID,
                     true, "Please enter your name Commander", default,
@@ -153,16 +157,15 @@ namespace SpaceAvenger.ViewModels.PagesVM
             if (obj.Id.Equals(NEW_ID))
             {
                 var lowestRank = m_repositoryWrapper
-                    .StarFleetRankRepository.GetLowest();
-                var uefFaction = m_repositoryWrapper
-                    .FactionRepository.GetUEF();
+                    .StarFleetRankRepository.GetLowest(m_selectedFaction);
 
                 var user = m_mapper.Map<User>(obj);
                 if (user == null) return; //To Do Exception Throw
                 var com = m_mapper.Map<Commander>(obj);
                 if (com == null) return; //To Do Exception Throw
-                com.Faction = uefFaction;
-                com.Rank = lowestRank;
+                com.Faction = m_selectedFaction;
+                m_repositoryWrapper.CommanderRankRepository
+                    .SetCommanderRank(com, lowestRank, m_selectedFaction);
                 user.Commander = com;
                 m_userRepository.Add(user);
             }

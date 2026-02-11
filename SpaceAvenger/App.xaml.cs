@@ -37,6 +37,7 @@ using WPFGameEngine.WPF.GE.Settings;
 using WPFGameEngine.CollisionDetection.RaycastManager;
 using Domain.Services.StringResourceLoaders;
 using ViewModelBaseLibDotNetCore.Extensions;
+using SpaceAvenger.Resources.Strings;
 
 namespace SpaceAvenger
 {
@@ -139,6 +140,9 @@ namespace SpaceAvenger
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
+
+            DispatcherUnhandledException += App_DispatcherUnhandledException;
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
             
             var pm = Services.GetRequiredService<IPageManagerService<FrameType>>();
 
@@ -197,6 +201,28 @@ namespace SpaceAvenger
 
             pm.SwitchPage(nameof(ChooseProfile_Page), FrameType.MainFrame);
             pm.SwitchPage(nameof(UserProfileInfo_Page), FrameType.InfoFrame);
+        }
+
+        private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            var ex = e.ExceptionObject as Exception;
+
+            MessageBox.Show(string.Format(SystemMessages.CommonExceptionTemplate, ex.Message),
+                SystemMessages.AppName, MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+
+        private void App_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        {
+            MessageBox.Show(string.Format(SystemMessages.CommonExceptionTemplate, e.Exception.Message),
+                SystemMessages.AppName, MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+
+        protected override void OnExit(ExitEventArgs e)
+        {
+            DispatcherUnhandledException -= App_DispatcherUnhandledException;
+            AppDomain.CurrentDomain.UnhandledException -= CurrentDomain_UnhandledException;
+
+            base.OnExit(e);
         }
     }
 }

@@ -453,6 +453,22 @@
 
     <!--#endregion-->
 
+    <!--#region Item Containers -->
+
+    <Style x:Key="CardsContainer" TargetType="ItemsControl">
+        <Style.Setters>
+            <Setter Property="ItemsPanel">
+                <Setter.Value>
+                    <ItemsPanelTemplate>
+                        <WrapPanel/>
+                    </ItemsPanelTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style.Setters>
+    </Style>
+
+    <!--#endregion-->
+
     <!--#endregion-->
    
 </ResourceDictionary>

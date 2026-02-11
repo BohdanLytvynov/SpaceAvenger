@@ -17,6 +17,96 @@ namespace SpaceAvenger.DAL.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.0");
 
+            modelBuilder.Entity("SpaceAvenger.DAL.Models.Armor", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("DescriptionKey")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<float>("EnergyResist")
+                        .HasColumnType("REAL");
+
+                    b.Property<float>("ExplosiveResist")
+                        .HasColumnType("REAL");
+
+                    b.Property<int?>("FactionId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<float>("KineticResist")
+                        .HasColumnType("REAL");
+
+                    b.Property<string>("NameKey")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("SubFactionId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FactionId");
+
+                    b.HasIndex("SubFactionId");
+
+                    b.ToTable("Armors");
+                });
+
+            modelBuilder.Entity("SpaceAvenger.DAL.Models.Bonus", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<float>("Duration")
+                        .HasColumnType("REAL");
+
+                    b.Property<bool>("IsPercentage")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsPositive")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<float>("ModifierValue")
+                        .HasPrecision(18, 4)
+                        .HasColumnType("REAL");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Bonuses");
+                });
+
+            modelBuilder.Entity("SpaceAvenger.DAL.Models.BonusParameter", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("BonusId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ParameterName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Unit")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BonusId");
+
+                    b.HasIndex("ParameterName")
+                        .IsUnique();
+
+                    b.ToTable("BonusParameters");
+                });
+
             modelBuilder.Entity("SpaceAvenger.DAL.Models.Commander", b =>
                 {
                     b.Property<int>("Id")
@@ -29,7 +119,7 @@ namespace SpaceAvenger.DAL.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("FactionId")
+                    b.Property<int?>("FactionId")
                         .HasColumnType("INTEGER");
 
                     b.Property<bool>("MaleFemale")
@@ -45,7 +135,7 @@ namespace SpaceAvenger.DAL.Migrations
                     b.Property<float>("Points")
                         .HasColumnType("REAL");
 
-                    b.Property<int>("RankId")
+                    b.Property<int?>("SubFactionId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("UserId")
@@ -55,12 +145,112 @@ namespace SpaceAvenger.DAL.Migrations
 
                     b.HasIndex("FactionId");
 
-                    b.HasIndex("RankId");
+                    b.HasIndex("SubFactionId");
 
                     b.HasIndex("UserId")
                         .IsUnique();
 
                     b.ToTable("Commanders");
+                });
+
+            modelBuilder.Entity("SpaceAvenger.DAL.Models.CommanderBonus", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("BonusId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("CommanderId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BonusId");
+
+                    b.HasIndex("CommanderId");
+
+                    b.ToTable("CommanderBonus");
+                });
+
+            modelBuilder.Entity("SpaceAvenger.DAL.Models.CommanderRank", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("CommanderId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("FactionId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("StarFleetRankId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CommanderId");
+
+                    b.HasIndex("FactionId");
+
+                    b.HasIndex("StarFleetRankId");
+
+                    b.ToTable("CommanderRanks");
+                });
+
+            modelBuilder.Entity("SpaceAvenger.DAL.Models.CommanderWallet", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("Amount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("CommanderId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("CurrencyId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CurrencyId");
+
+                    b.HasIndex("CommanderId", "CurrencyId")
+                        .IsUnique();
+
+                    b.ToTable("CommanderWalet");
+                });
+
+            modelBuilder.Entity("SpaceAvenger.DAL.Models.Currency", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("DescriptionKey")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("NameKey")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ResourceKey")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ShortName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Currencies");
                 });
 
             modelBuilder.Entity("SpaceAvenger.DAL.Models.Faction", b =>
@@ -73,8 +263,18 @@ namespace SpaceAvenger.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("FactionCode")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsAlive")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("NameKey")
                         .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ShipPrefix")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ShortDescriptionKey")
@@ -93,11 +293,228 @@ namespace SpaceAvenger.DAL.Migrations
                         new
                         {
                             Id = 1,
-                            DescriptionKey = "UEF_DescKey",
-                            NameKey = "UEF_FullNameKey",
-                            ShortDescriptionKey = "UEF_ShortDescKey",
-                            ShortNameKey = "UEF_ShortNameKey"
+                            DescriptionKey = "F10_DescKey",
+                            FactionCode = "F10",
+                            IsAlive = false,
+                            NameKey = "F10_FullNameKey",
+                            ShipPrefix = "F10_ShipPrefix",
+                            ShortDescriptionKey = "F10_ShortDescKey",
+                            ShortNameKey = "F10_ShortNameKey"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            DescriptionKey = "F1_DescKey",
+                            FactionCode = "F1",
+                            IsAlive = false,
+                            NameKey = "F1_FullNameKey",
+                            ShortDescriptionKey = "F1_ShortDescKey",
+                            ShortNameKey = "F1_ShortNameKey"
                         });
+                });
+
+            modelBuilder.Entity("SpaceAvenger.DAL.Models.FactionBonus", b =>
+                {
+                    b.Property<int>("FactionId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("BonusId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("FactionId", "BonusId");
+
+                    b.HasIndex("BonusId");
+
+                    b.ToTable("FactionBonuses");
+                });
+
+            modelBuilder.Entity("SpaceAvenger.DAL.Models.FactionCurrency", b =>
+                {
+                    b.Property<int>("CurrencyId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("FactionId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<float>("ExchangeRateModifier")
+                        .HasColumnType("REAL");
+
+                    b.Property<bool>("IsPrimary")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("CurrencyId", "FactionId");
+
+                    b.HasIndex("FactionId");
+
+                    b.ToTable("FactionCurrencies");
+                });
+
+            modelBuilder.Entity("SpaceAvenger.DAL.Models.FactionHomeWorld", b =>
+                {
+                    b.Property<int>("FactionId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("HomePlanetId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("FactionId", "HomePlanetId");
+
+                    b.HasIndex("HomePlanetId");
+
+                    b.ToTable("FactionHomeWorlds");
+                });
+
+            modelBuilder.Entity("SpaceAvenger.DAL.Models.Planet", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("DescriptionKey")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("FactionId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("NameKey")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<float>("Population")
+                        .HasColumnType("REAL");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FactionId");
+
+                    b.ToTable("Planets");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            DescriptionKey = "P_F10_0__DescKey",
+                            FactionId = 1,
+                            NameKey = "P_F10_0__FullNameKey",
+                            Population = 0f,
+                            Status = 0
+                        });
+                });
+
+            modelBuilder.Entity("SpaceAvenger.DAL.Models.Projectile", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("DescriptionKey")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<float>("EnergyDamage")
+                        .HasColumnType("REAL");
+
+                    b.Property<float>("ExplosiveDamage")
+                        .HasColumnType("REAL");
+
+                    b.Property<int>("FactionId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<float>("KineticDamage")
+                        .HasColumnType("REAL");
+
+                    b.Property<bool>("Maintainable")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("NameKey")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("SubFactionId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FactionId");
+
+                    b.HasIndex("SubFactionId");
+
+                    b.ToTable("Projectiles");
+                });
+
+            modelBuilder.Entity("SpaceAvenger.DAL.Models.SpaceShip", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("CommanderId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("DescriptionKey")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("FactionId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("MapableObject")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("NameKey")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("SpaceShipClassId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CommanderId");
+
+                    b.HasIndex("FactionId");
+
+                    b.HasIndex("SpaceShipClassId");
+
+                    b.ToTable("SpaceShips");
+                });
+
+            modelBuilder.Entity("SpaceAvenger.DAL.Models.SpaceShipClass", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("ArmorId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("DescriptionKey")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("FactionId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("NameKey")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ShipClass")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ArmorId");
+
+                    b.HasIndex("FactionId");
+
+                    b.ToTable("SpaceShipClasses");
                 });
 
             modelBuilder.Entity("SpaceAvenger.DAL.Models.StarFleetRank", b =>
@@ -110,7 +527,7 @@ namespace SpaceAvenger.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("FactionId")
+                    b.Property<int?>("FactionId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("LevelNameKey")
@@ -137,9 +554,9 @@ namespace SpaceAvenger.DAL.Migrations
                         new
                         {
                             Id = 1,
-                            DescriptionKey = "UEF_L1_Rank_Desc",
+                            DescriptionKey = "F10_L1_Rank_Desc",
                             FactionId = 1,
-                            LevelNameKey = "UEF_L1",
+                            LevelNameKey = "F10_L1",
                             MinExperience = 0,
                             RankType = "f",
                             SortOrder = 1
@@ -147,9 +564,9 @@ namespace SpaceAvenger.DAL.Migrations
                         new
                         {
                             Id = 2,
-                            DescriptionKey = "UEF_L2_Rank_Desc",
+                            DescriptionKey = "F10_L2_Rank_Desc",
                             FactionId = 1,
-                            LevelNameKey = "UEF_L2",
+                            LevelNameKey = "F10_L2",
                             MinExperience = 1000,
                             RankType = "f",
                             SortOrder = 2
@@ -157,9 +574,9 @@ namespace SpaceAvenger.DAL.Migrations
                         new
                         {
                             Id = 3,
-                            DescriptionKey = "UEF_L3_Rank_Desc",
+                            DescriptionKey = "F10_L3_Rank_Desc",
                             FactionId = 1,
-                            LevelNameKey = "UEF_L3",
+                            LevelNameKey = "F10_L3",
                             MinExperience = 2500,
                             RankType = "f",
                             SortOrder = 3
@@ -167,9 +584,9 @@ namespace SpaceAvenger.DAL.Migrations
                         new
                         {
                             Id = 4,
-                            DescriptionKey = "UEF_L4_Rank_Desc",
+                            DescriptionKey = "F10_L4_Rank_Desc",
                             FactionId = 1,
-                            LevelNameKey = "UEF_L4",
+                            LevelNameKey = "F10_L4",
                             MinExperience = 5000,
                             RankType = "f",
                             SortOrder = 4
@@ -177,9 +594,9 @@ namespace SpaceAvenger.DAL.Migrations
                         new
                         {
                             Id = 5,
-                            DescriptionKey = "UEF_L5_Rank_Desc",
+                            DescriptionKey = "F10_L5_Rank_Desc",
                             FactionId = 1,
-                            LevelNameKey = "UEF_L5",
+                            LevelNameKey = "F10_L5",
                             MinExperience = 9000,
                             RankType = "f",
                             SortOrder = 5
@@ -187,9 +604,9 @@ namespace SpaceAvenger.DAL.Migrations
                         new
                         {
                             Id = 6,
-                            DescriptionKey = "UEF_L6_Rank_Desc",
+                            DescriptionKey = "F10_L6_Rank_Desc",
                             FactionId = 1,
-                            LevelNameKey = "UEF_L6",
+                            LevelNameKey = "F10_L6",
                             MinExperience = 15000,
                             RankType = "f",
                             SortOrder = 6
@@ -197,9 +614,9 @@ namespace SpaceAvenger.DAL.Migrations
                         new
                         {
                             Id = 7,
-                            DescriptionKey = "UEF_L7_Rank_Desc",
+                            DescriptionKey = "F10_L7_Rank_Desc",
                             FactionId = 1,
-                            LevelNameKey = "UEF_L7",
+                            LevelNameKey = "F10_L7",
                             MinExperience = 25000,
                             RankType = "f",
                             SortOrder = 7
@@ -207,9 +624,9 @@ namespace SpaceAvenger.DAL.Migrations
                         new
                         {
                             Id = 8,
-                            DescriptionKey = "UEF_L8_Rank_Desc",
+                            DescriptionKey = "F10_L8_Rank_Desc",
                             FactionId = 1,
-                            LevelNameKey = "UEF_L8",
+                            LevelNameKey = "F10_L8",
                             MinExperience = 45000,
                             RankType = "f",
                             SortOrder = 8
@@ -217,9 +634,9 @@ namespace SpaceAvenger.DAL.Migrations
                         new
                         {
                             Id = 9,
-                            DescriptionKey = "UEF_L9_Rank_Desc",
+                            DescriptionKey = "F10_L9_Rank_Desc",
                             FactionId = 1,
-                            LevelNameKey = "UEF_L9",
+                            LevelNameKey = "F10_L9",
                             MinExperience = 75000,
                             RankType = "f",
                             SortOrder = 9
@@ -227,9 +644,9 @@ namespace SpaceAvenger.DAL.Migrations
                         new
                         {
                             Id = 10,
-                            DescriptionKey = "UEF_L10_Rank_Desc",
+                            DescriptionKey = "F10_L10_Rank_Desc",
                             FactionId = 1,
-                            LevelNameKey = "UEF_L10",
+                            LevelNameKey = "F10_L10",
                             MinExperience = 120000,
                             RankType = "f",
                             SortOrder = 10
@@ -237,9 +654,9 @@ namespace SpaceAvenger.DAL.Migrations
                         new
                         {
                             Id = 11,
-                            DescriptionKey = "UEF_L11_Rank_Desc",
+                            DescriptionKey = "F10_L11_Rank_Desc",
                             FactionId = 1,
-                            LevelNameKey = "UEF_L11",
+                            LevelNameKey = "F10_L11",
                             MinExperience = 200000,
                             RankType = "f",
                             SortOrder = 11
@@ -247,13 +664,117 @@ namespace SpaceAvenger.DAL.Migrations
                         new
                         {
                             Id = 12,
-                            DescriptionKey = "UEF_L12_Rank_Desc",
+                            DescriptionKey = "F10_L12_Rank_Desc",
                             FactionId = 1,
-                            LevelNameKey = "UEF_L12",
+                            LevelNameKey = "F10_L12",
                             MinExperience = 350000,
                             RankType = "f",
                             SortOrder = 12
                         });
+                });
+
+            modelBuilder.Entity("SpaceAvenger.DAL.Models.SubFaction", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("DescriptionKey")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("FactionId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("NameKey")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ShortDescriptionKey")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ShortNameKey")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SubFactionCode")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FactionId");
+
+                    b.ToTable("SubFactions");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            DescriptionKey = "F10_NAA_DescKey",
+                            FactionId = 1,
+                            NameKey = "F10_NAA_FullNameKey",
+                            ShortDescriptionKey = "F10_NAA_ShortDescKey",
+                            ShortNameKey = "F10_NAA_ShortNameKey",
+                            SubFactionCode = "F10_NAA"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            DescriptionKey = "F10_ECU_DescKey",
+                            FactionId = 1,
+                            NameKey = "F10_ECU_FullNameKey",
+                            ShortDescriptionKey = "F10_ECU_ShortDescKey",
+                            ShortNameKey = "F10_ECU_ShortNameKey",
+                            SubFactionCode = "F10_ECU"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            DescriptionKey = "F10_ECU_DescKey",
+                            FactionId = 1,
+                            NameKey = "F10_PAS_FullNameKey",
+                            ShortDescriptionKey = "F10_ECU_ShortDescKey",
+                            ShortNameKey = "F10_ECU_ShortNameKey",
+                            SubFactionCode = "F10_PAS"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            DescriptionKey = "F10_STC_DescKey",
+                            FactionId = 1,
+                            NameKey = "F10_STC_FullNameKey",
+                            ShortDescriptionKey = "F10_STC_ShortDescKey",
+                            ShortNameKey = "F10_STC_ShortNameKey",
+                            SubFactionCode = "F10_STC"
+                        });
+                });
+
+            modelBuilder.Entity("SpaceAvenger.DAL.Models.SubFactionBonus", b =>
+                {
+                    b.Property<int>("SubFactionId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("BonusId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("DescriptionKey")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Id")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("NameKey")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("SubFactionId", "BonusId");
+
+                    b.HasIndex("BonusId");
+
+                    b.ToTable("SubFactionBonuses");
                 });
 
             modelBuilder.Entity("SpaceAvenger.DAL.Models.User", b =>
@@ -274,19 +795,76 @@ namespace SpaceAvenger.DAL.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("SpaceAvenger.DAL.Models.Weapon", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("DescriptionKey")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("FactionId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("Maintainable")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("NameKey")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("SubFactionId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FactionId");
+
+                    b.HasIndex("SubFactionId");
+
+                    b.ToTable("Weapons");
+                });
+
+            modelBuilder.Entity("SpaceAvenger.DAL.Models.Armor", b =>
+                {
+                    b.HasOne("SpaceAvenger.DAL.Models.Faction", "Faction")
+                        .WithMany("Armors")
+                        .HasForeignKey("FactionId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("SpaceAvenger.DAL.Models.SubFaction", "SubFaction")
+                        .WithMany("Armors")
+                        .HasForeignKey("SubFactionId");
+
+                    b.Navigation("Faction");
+
+                    b.Navigation("SubFaction");
+                });
+
+            modelBuilder.Entity("SpaceAvenger.DAL.Models.BonusParameter", b =>
+                {
+                    b.HasOne("SpaceAvenger.DAL.Models.Bonus", "Bonus")
+                        .WithMany("BonusParameters")
+                        .HasForeignKey("BonusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Bonus");
+                });
+
             modelBuilder.Entity("SpaceAvenger.DAL.Models.Commander", b =>
                 {
                     b.HasOne("SpaceAvenger.DAL.Models.Faction", "Faction")
                         .WithMany("Commanders")
                         .HasForeignKey("FactionId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
-                    b.HasOne("SpaceAvenger.DAL.Models.StarFleetRank", "Rank")
+                    b.HasOne("SpaceAvenger.DAL.Models.SubFaction", "SubFaction")
                         .WithMany("Commanders")
-                        .HasForeignKey("RankId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .HasForeignKey("SubFactionId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("SpaceAvenger.DAL.Models.User", "User")
                         .WithOne("Commander")
@@ -296,9 +874,199 @@ namespace SpaceAvenger.DAL.Migrations
 
                     b.Navigation("Faction");
 
-                    b.Navigation("Rank");
+                    b.Navigation("SubFaction");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("SpaceAvenger.DAL.Models.CommanderBonus", b =>
+                {
+                    b.HasOne("SpaceAvenger.DAL.Models.Bonus", "Bonus")
+                        .WithMany("CommanderBonuses")
+                        .HasForeignKey("BonusId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("SpaceAvenger.DAL.Models.Commander", "Commander")
+                        .WithMany("CommanderBonuses")
+                        .HasForeignKey("CommanderId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("Bonus");
+
+                    b.Navigation("Commander");
+                });
+
+            modelBuilder.Entity("SpaceAvenger.DAL.Models.CommanderRank", b =>
+                {
+                    b.HasOne("SpaceAvenger.DAL.Models.Commander", "Commander")
+                        .WithMany("CommanderRanks")
+                        .HasForeignKey("CommanderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SpaceAvenger.DAL.Models.Faction", "Faction")
+                        .WithMany("CommanderRanks")
+                        .HasForeignKey("FactionId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("SpaceAvenger.DAL.Models.StarFleetRank", "StarFleetRank")
+                        .WithMany("CommanderRanks")
+                        .HasForeignKey("StarFleetRankId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.Navigation("Commander");
+
+                    b.Navigation("Faction");
+
+                    b.Navigation("StarFleetRank");
+                });
+
+            modelBuilder.Entity("SpaceAvenger.DAL.Models.CommanderWallet", b =>
+                {
+                    b.HasOne("SpaceAvenger.DAL.Models.Commander", "Commander")
+                        .WithMany("CommanderWallets")
+                        .HasForeignKey("CommanderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SpaceAvenger.DAL.Models.Currency", "Currency")
+                        .WithMany("CommanderWallets")
+                        .HasForeignKey("CurrencyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Commander");
+
+                    b.Navigation("Currency");
+                });
+
+            modelBuilder.Entity("SpaceAvenger.DAL.Models.FactionBonus", b =>
+                {
+                    b.HasOne("SpaceAvenger.DAL.Models.Bonus", "Bonus")
+                        .WithMany("FactionBonuses")
+                        .HasForeignKey("BonusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SpaceAvenger.DAL.Models.Faction", "Faction")
+                        .WithMany("FactionBonuses")
+                        .HasForeignKey("FactionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Bonus");
+
+                    b.Navigation("Faction");
+                });
+
+            modelBuilder.Entity("SpaceAvenger.DAL.Models.FactionCurrency", b =>
+                {
+                    b.HasOne("SpaceAvenger.DAL.Models.Currency", "Currency")
+                        .WithMany("FactionCurrency")
+                        .HasForeignKey("CurrencyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SpaceAvenger.DAL.Models.Faction", "Faction")
+                        .WithMany("FactionCurrency")
+                        .HasForeignKey("FactionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Currency");
+
+                    b.Navigation("Faction");
+                });
+
+            modelBuilder.Entity("SpaceAvenger.DAL.Models.FactionHomeWorld", b =>
+                {
+                    b.HasOne("SpaceAvenger.DAL.Models.Faction", "Faction")
+                        .WithMany("FactionHomeWorlds")
+                        .HasForeignKey("FactionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SpaceAvenger.DAL.Models.Planet", "HomePlanet")
+                        .WithMany("FactionHomePlanets")
+                        .HasForeignKey("HomePlanetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Faction");
+
+                    b.Navigation("HomePlanet");
+                });
+
+            modelBuilder.Entity("SpaceAvenger.DAL.Models.Planet", b =>
+                {
+                    b.HasOne("SpaceAvenger.DAL.Models.Faction", "Faction")
+                        .WithMany("Planets")
+                        .HasForeignKey("FactionId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("Faction");
+                });
+
+            modelBuilder.Entity("SpaceAvenger.DAL.Models.Projectile", b =>
+                {
+                    b.HasOne("SpaceAvenger.DAL.Models.Faction", "Faction")
+                        .WithMany("Projectiles")
+                        .HasForeignKey("FactionId")
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .IsRequired();
+
+                    b.HasOne("SpaceAvenger.DAL.Models.SubFaction", "SubFaction")
+                        .WithMany("Projectiles")
+                        .HasForeignKey("SubFactionId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("Faction");
+
+                    b.Navigation("SubFaction");
+                });
+
+            modelBuilder.Entity("SpaceAvenger.DAL.Models.SpaceShip", b =>
+                {
+                    b.HasOne("SpaceAvenger.DAL.Models.Commander", "Commander")
+                        .WithMany("SpaceShips")
+                        .HasForeignKey("CommanderId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("SpaceAvenger.DAL.Models.Faction", "Faction")
+                        .WithMany("SpaceShips")
+                        .HasForeignKey("FactionId")
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .IsRequired();
+
+                    b.HasOne("SpaceAvenger.DAL.Models.SpaceShipClass", "SpaceShipClass")
+                        .WithMany("SpaceShips")
+                        .HasForeignKey("SpaceShipClassId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Commander");
+
+                    b.Navigation("Faction");
+
+                    b.Navigation("SpaceShipClass");
+                });
+
+            modelBuilder.Entity("SpaceAvenger.DAL.Models.SpaceShipClass", b =>
+                {
+                    b.HasOne("SpaceAvenger.DAL.Models.Armor", "Armor")
+                        .WithMany("SpaceShipClasses")
+                        .HasForeignKey("ArmorId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("SpaceAvenger.DAL.Models.Faction", "Faction")
+                        .WithMany("SpaceShipClasses")
+                        .HasForeignKey("FactionId")
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .IsRequired();
+
+                    b.Navigation("Armor");
+
+                    b.Navigation("Faction");
                 });
 
             modelBuilder.Entity("SpaceAvenger.DAL.Models.StarFleetRank", b =>
@@ -306,22 +1074,149 @@ namespace SpaceAvenger.DAL.Migrations
                     b.HasOne("SpaceAvenger.DAL.Models.Faction", "Faction")
                         .WithMany("Ranks")
                         .HasForeignKey("FactionId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("Faction");
+                });
+
+            modelBuilder.Entity("SpaceAvenger.DAL.Models.SubFaction", b =>
+                {
+                    b.HasOne("SpaceAvenger.DAL.Models.Faction", "Faction")
+                        .WithMany("SubFactions")
+                        .HasForeignKey("FactionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Faction");
                 });
 
+            modelBuilder.Entity("SpaceAvenger.DAL.Models.SubFactionBonus", b =>
+                {
+                    b.HasOne("SpaceAvenger.DAL.Models.Bonus", "Bonus")
+                        .WithMany("SubFactionBonuses")
+                        .HasForeignKey("BonusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SpaceAvenger.DAL.Models.SubFaction", "SubFaction")
+                        .WithMany("SubFactionBonuses")
+                        .HasForeignKey("SubFactionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Bonus");
+
+                    b.Navigation("SubFaction");
+                });
+
+            modelBuilder.Entity("SpaceAvenger.DAL.Models.Weapon", b =>
+                {
+                    b.HasOne("SpaceAvenger.DAL.Models.Faction", "Faction")
+                        .WithMany("Weapons")
+                        .HasForeignKey("FactionId")
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .IsRequired();
+
+                    b.HasOne("SpaceAvenger.DAL.Models.SubFaction", "SubFaction")
+                        .WithMany("Weapons")
+                        .HasForeignKey("SubFactionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Faction");
+
+                    b.Navigation("SubFaction");
+                });
+
+            modelBuilder.Entity("SpaceAvenger.DAL.Models.Armor", b =>
+                {
+                    b.Navigation("SpaceShipClasses");
+                });
+
+            modelBuilder.Entity("SpaceAvenger.DAL.Models.Bonus", b =>
+                {
+                    b.Navigation("BonusParameters");
+
+                    b.Navigation("CommanderBonuses");
+
+                    b.Navigation("FactionBonuses");
+
+                    b.Navigation("SubFactionBonuses");
+                });
+
+            modelBuilder.Entity("SpaceAvenger.DAL.Models.Commander", b =>
+                {
+                    b.Navigation("CommanderBonuses");
+
+                    b.Navigation("CommanderRanks");
+
+                    b.Navigation("CommanderWallets");
+
+                    b.Navigation("SpaceShips");
+                });
+
+            modelBuilder.Entity("SpaceAvenger.DAL.Models.Currency", b =>
+                {
+                    b.Navigation("CommanderWallets");
+
+                    b.Navigation("FactionCurrency");
+                });
+
             modelBuilder.Entity("SpaceAvenger.DAL.Models.Faction", b =>
                 {
+                    b.Navigation("Armors");
+
+                    b.Navigation("CommanderRanks");
+
                     b.Navigation("Commanders");
 
+                    b.Navigation("FactionBonuses");
+
+                    b.Navigation("FactionCurrency");
+
+                    b.Navigation("FactionHomeWorlds");
+
+                    b.Navigation("Planets");
+
+                    b.Navigation("Projectiles");
+
                     b.Navigation("Ranks");
+
+                    b.Navigation("SpaceShipClasses");
+
+                    b.Navigation("SpaceShips");
+
+                    b.Navigation("SubFactions");
+
+                    b.Navigation("Weapons");
+                });
+
+            modelBuilder.Entity("SpaceAvenger.DAL.Models.Planet", b =>
+                {
+                    b.Navigation("FactionHomePlanets");
+                });
+
+            modelBuilder.Entity("SpaceAvenger.DAL.Models.SpaceShipClass", b =>
+                {
+                    b.Navigation("SpaceShips");
                 });
 
             modelBuilder.Entity("SpaceAvenger.DAL.Models.StarFleetRank", b =>
                 {
+                    b.Navigation("CommanderRanks");
+                });
+
+            modelBuilder.Entity("SpaceAvenger.DAL.Models.SubFaction", b =>
+                {
+                    b.Navigation("Armors");
+
                     b.Navigation("Commanders");
+
+                    b.Navigation("Projectiles");
+
+                    b.Navigation("SubFactionBonuses");
+
+                    b.Navigation("Weapons");
                 });
 
             modelBuilder.Entity("SpaceAvenger.DAL.Models.User", b =>

@@ -5,6 +5,11 @@ namespace SpaceAvenger.DAL.Repositories.Ranks
 {
     public interface IStartFleetRankRepository : IRepositoryBase<StarFleetRank>
     {
-        StarFleetRank? GetLowest();
+        /// <summary>
+        /// Gets the Lowest Rank of the Faction
+        /// </summary>
+        /// <param name="faction"></param>
+        /// <returns></returns>
+        StarFleetRank? GetLowest(Faction faction);
     }
 }

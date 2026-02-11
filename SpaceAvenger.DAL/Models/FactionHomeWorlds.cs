@@ -2,7 +2,7 @@
 
 namespace SpaceAvenger.DAL.Models
 {
-    public class FactionHomeWorlds : EntityBase
+    public class FactionHomeWorld
     {
         public Faction Faction { get; set; }
         public int FactionId { get; set; }

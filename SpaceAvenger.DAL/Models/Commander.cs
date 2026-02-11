@@ -15,20 +15,27 @@ namespace SpaceAvenger.DAL.Models
         #endregion
 
         #region Navigation Properties
-        public int RankId { get; set; }
-        public StarFleetRank Rank { get; set; }
 
         public int UserId { get; set; }
         public User User { get; set; }
 
-        public int FactionId { get; set; }
+        public int? FactionId { get; set; }
         public Faction Faction { get; set; }
 
-        public CommanderWallet? CommanderWallet { get; set; }
-        public int? CommanderWalletId { get; set; }
+        public SubFaction? SubFaction { get; set; }
+        public int? SubFactionId { get; set; }
+
+        public ICollection<CommanderWallet> CommanderWallets { get; set; }
+            = new List<CommanderWallet>();
 
         public ICollection<SpaceShip> SpaceShips { get; set; } 
             = new List<SpaceShip>();
+
+        public ICollection<CommanderRank> CommanderRanks { get; set; }
+            = new List<CommanderRank>();
+
+        public ICollection<CommanderBonus> CommanderBonuses { get; set; }
+            = new List<CommanderBonus>();
         #endregion
     }
 }

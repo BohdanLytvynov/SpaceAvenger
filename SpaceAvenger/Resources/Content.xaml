@@ -25,6 +25,8 @@
 
     <ImageSource x:Key="ChooseProfileBack">pack://siteoforigin:,,,/Resources/Content/Backgrounds/ChooseProfilePage/SAChooseProfile.jpg
     </ImageSource>
+    <ImageSource x:Key="ChooseSubFactionBack">pack://siteoforigin:,,,/Resources/Content/Backgrounds/ChooseSubFactionPage/ChooseSubFactionBack.jpg
+    </ImageSource>
     <ImageSource x:Key="LevelsPageBack">pack://siteoforigin:,,,/Resources/Content/Backgrounds/LevelsPage/SALevels1.jpg
     </ImageSource>
     <ImageSource x:Key="MainPageBack">pack://siteoforigin:,,,/Resources/Content/Backgrounds/MainPage/SAMainBack.jpg

@@ -2,7 +2,7 @@
 
 namespace SpaceAvenger.DAL.Models
 {
-    public class FactionBonus : EntityBase
+    public class FactionBonus
     {
         public Bonus? Bonus { get; set; }
         public int? BonusId { get; set; }

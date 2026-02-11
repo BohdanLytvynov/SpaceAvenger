@@ -20,6 +20,7 @@
     <None Remove="Resources\Content\Backgrounds\ChooseProfilePage\SAChooseLevels1.jpg" />
     <None Remove="Resources\Content\Backgrounds\ChooseProfilePage\SAChooseProfile.jpg" />
     <None Remove="Resources\Content\Backgrounds\ChooseProfilePage\SAChooseProfile1.jpg" />
+    <None Remove="Resources\Content\Backgrounds\ChooseSubFactionPage\ChooseSubFactionBack.jpg" />
     <None Remove="Resources\Content\Backgrounds\GamePage\BlueNebula1.png" />
     <None Remove="Resources\Content\Backgrounds\LevelsPage\SALevels.jpg" />
     <None Remove="Resources\Content\Backgrounds\LevelsPage\SALevels1.jpg" />
@@ -93,6 +94,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\Content\Backgrounds\ChooseProfilePage\SAChooseProfile1.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Content\Backgrounds\ChooseSubFactionPage\ChooseSubFactionBack.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\Content\Backgrounds\GamePage\BlueNebula1.png">
@@ -265,12 +269,30 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>GameStrings.resx</DependentUpon>
     </Compile>
+    <Compile Update="Resources\Strings\SystemMessages.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>SystemMessages.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Strings\UIStrings.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>UIStrings.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Update="Resources\Strings\GameStrings.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>GameStrings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Strings\SystemMessages.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>SystemMessages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Strings\UIStrings.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>UIStrings.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 

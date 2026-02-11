@@ -117,85 +117,211 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="UEF_FullNameKey" xml:space="preserve">
+  <data name="F10_DescKey" xml:space="preserve">
+    <value>United Earth Federation (UEF)
+Motto: "Through Unity, Survival" Capital: Terra (Earth), High Command Sector
+
+The Foundation History
+At the end of the 21st century, humanity faced the greatest crisis in its history. The first steps beyond the Solar System brought not only discovery, but a primal terror of the boundless, empty, and potentially hostile abyss. The fear of the "Great Unknown" and the realization of human vulnerability forced eternal rivals to lay down their arms.
+
+Four great military-political blocs, which for centuries had fought over Earth's resources, signed the "Terra Pact," marking the birth of the UEF. It is more than just a government—it is the defensive fist of humanity, where the ancient traditions of nations are interwoven with the technologies of the future.
+
+The Structure of the Federation: The Four Pillars
+1. North Atlantic Alliance (NAA) — "The Wings of the Federation"
+Heirs to the great naval powers. The NAA provides the UEF with the finest pilots and carrier-based aviation. Their doctrine is space superiority and lightning-fast carrier strikes.
+
+Specialization: Carriers, starfighters, high-precision missiles.
+
+2. Eurasian Continental Union (ECU) — "The Shield of the Federation"
+The industrial heart of humanity. ECU ships are massive, armored fortresses capable of withstanding fire that would incinerate any other vessel. When a sector must be held at any cost, the ECU is called upon.
+
+Specialization: Heavy armor, Railguns, engineering systems.
+
+3. Pan-Asian Sphere (PAS) — "The Mind of the Federation"
+The technological vanguard of the UEF. The PAS has turned stellar energy into a weapon. Their ships are a fusion of elegance and lethal laser technology. They see the enemy long before the enemy realizes they are there.
+
+Specialization: Laser/plasma weaponry, Electronic Warfare (EW), speed.
+
+4. Southern Trade Coalition (STC) — "The Blood of the Federation"
+Masters of resources and logistics. The STC supplies the fleet with everything from fuel to exotic materials. Their ships are known for incredible modularity and capacity, often serving as mobile bases in deep space.
+
+Specialization: Economy, mining drones, modularity, repair systems.
+
+Military Doctrine
+The UEF Navy is governed by a rigid caste system of Legates. Every officer follows a path from commanding a small frigate to managing an entire sector. Despite internal competition between the blocs for budgets and influence, the Federation acts as a single, crushing mechanism when facing an external threat.
+
+"We no longer divide the sky into zones of influence. Now, the entire sky belongs to us. And we will defend it to the last bullet." — From the inaugural speech of the First Grand Admiral of the UEF.</value>
+  </data>
+  <data name="F10_ECU_DescKey" xml:space="preserve">
+    <value>Eurasian Continental Union (ECU) is the industrial and resource-rich heart of the United Earth Federation. If the NAA represents agility and speed, the ECU stands for immovable might and engineering excellence. As the heirs to the great terrestrial powers of the past, they have translated the doctrine of the "armored fist" into the vacuum of space.
+
+Philosophy and Doctrine: Their strategy is simple: to hold the line where others turn to dust. ECU ships are massive armored fortresses capable of withstanding colossal g-forces and direct hits from battleship-caliber main guns. Union engineers favor multi-layered composite plating and active defense systems over fragile energy shields.
+
+Technological Hallmarks:
+
+Railguns: The ECU has perfected the technology of kinetic projectile acceleration. Their salvos ignore most energy barriers, punching through enemy vessels with devastating force.
+
+Engineering Resilience: Unique automated repair crews and a segmented hull structure allow ECU ships to remain combat-effective even after losing 70% of their systems.
+
+Industrial Prestige: Command of a vessel from the shipyards of Mars or the Urals is considered a mark of supreme reliability within the UEF.
+
+"Let them circle us like bothersome flies. When they run out of fuel, our hull will still be intact, and our guns — ready to answer." — Admiral Boris Volkov, ECU High Command.</value>
+  </data>
+  <data name="F10_ECU_FullNameKey" xml:space="preserve">
+    <value>Eurasian Continental Union</value>
+  </data>
+  <data name="F10_ECU_ShortDescKey" xml:space="preserve">
+    <value>Eurasian Continental Union (ECU) — "The Shield of the Federation" Core: An industrial giant specializing in super-heavy armor and artillery weaponry. Bonus: Significant increase in hull integrity and firepower of kinetic weapons (railguns).</value>
+  </data>
+  <data name="F10_ECU_ShortNameKey" xml:space="preserve">
+    <value>ECU</value>
+  </data>
+  <data name="F10_FullNameKey" xml:space="preserve">
     <value>United Earth Federation</value>
   </data>
-  <data name="UEF_L1" xml:space="preserve">
+  <data name="F10_L1" xml:space="preserve">
     <value>Junior Legate</value>
   </data>
-  <data name="UEF_L1_Rank_Desc" xml:space="preserve">
+  <data name="F10_L1_Rank_Desc" xml:space="preserve">
     <value>Freshman officer with a rusty patrol frigate.</value>
   </data>
-  <data name="UEF_L2" xml:space="preserve">
+  <data name="F10_L2" xml:space="preserve">
     <value>Fleet Legate</value>
   </data>
-  <data name="UEF_L2_Rank_Desc" xml:space="preserve">
+  <data name="F10_L2_Rank_Desc" xml:space="preserve">
     <value>Fully commissioned. Command trust is growing.</value>
   </data>
-  <data name="UEF_L3" xml:space="preserve">
+  <data name="F10_L3" xml:space="preserve">
     <value>Senior Legate</value>
   </data>
-  <data name="UEF_L3_Rank_Desc" xml:space="preserve">
+  <data name="F10_L3_Rank_Desc" xml:space="preserve">
     <value>Battle-hardened veteran of local skirmishes.</value>
   </data>
-  <data name="UEF_L4" xml:space="preserve">
+  <data name="F10_L4" xml:space="preserve">
     <value>Lieutenant Commander</value>
   </data>
-  <data name="UEF_L4_Rank_Desc" xml:space="preserve">
+  <data name="F10_L4_Rank_Desc" xml:space="preserve">
     <value>Transition rank for Destroyer-class ships.</value>
   </data>
-  <data name="UEF_L5" xml:space="preserve">
+  <data name="F10_L5" xml:space="preserve">
     <value>Inspector Commander</value>
   </data>
-  <data name="UEF_L5_Rank_Desc" xml:space="preserve">
+  <data name="F10_L5_Rank_Desc" xml:space="preserve">
     <value>Assigned to oversee remote outposts.</value>
   </data>
-  <data name="UEF_L6" xml:space="preserve">
+  <data name="F10_L6" xml:space="preserve">
     <value>High Commander</value>
   </data>
-  <data name="UEF_L6_Rank_Desc" xml:space="preserve">
+  <data name="F10_L6_Rank_Desc" xml:space="preserve">
     <value>Frigate tactics master. Ready for a Cruiser.</value>
   </data>
-  <data name="UEF_L7" xml:space="preserve">
+  <data name="F10_L7" xml:space="preserve">
     <value>Captain Junior Grade</value>
   </data>
-  <data name="UEF_L7_Rank_Desc" xml:space="preserve">
+  <data name="F10_L7_Rank_Desc" xml:space="preserve">
     <value>UEF Elite. Your ship is a force to be reckoned with.</value>
   </data>
-  <data name="UEF_L8" xml:space="preserve">
+  <data name="F10_L8" xml:space="preserve">
     <value>Captain Senior Grade</value>
   </data>
-  <data name="UEF_L8_Rank_Desc" xml:space="preserve">
+  <data name="F10_L8_Rank_Desc" xml:space="preserve">
     <value>A name feared by enemies. Heavy Cruiser command.</value>
   </data>
-  <data name="UEF_L9" xml:space="preserve">
+  <data name="F10_L9" xml:space="preserve">
     <value>Fleet Captain</value>
   </data>
-  <data name="UEF_L9_Rank_Desc" xml:space="preserve">
+  <data name="F10_L9_Rank_Desc" xml:space="preserve">
     <value>Flagship commander or Strike Group leader.</value>
   </data>
-  <data name="UEF_L10" xml:space="preserve">
+  <data name="F10_L10" xml:space="preserve">
     <value>Rear Admiral</value>
   </data>
-  <data name="UEF_L10_Rank_Desc" xml:space="preserve">
+  <data name="F10_L10_Rank_Desc" xml:space="preserve">
     <value>High Command initiate. Orbital strikes authorized.</value>
   </data>
-  <data name="UEF_L11" xml:space="preserve">
+  <data name="F10_L11" xml:space="preserve">
     <value>Vice Admiral</value>
   </data>
-  <data name="UEF_L11_Rank_Desc" xml:space="preserve">
+  <data name="F10_L11_Rank_Desc" xml:space="preserve">
     <value>Sector-wide authority. Fleet-scale operations.</value>
   </data>
-  <data name="UEF_L12" xml:space="preserve">
+  <data name="F10_L12" xml:space="preserve">
     <value>Grand Admiral of UEF</value>
   </data>
-  <data name="UEF_L12_Rank_Desc" xml:space="preserve">
+  <data name="F10_L12_Rank_Desc" xml:space="preserve">
     <value>Supreme rank. You define the goals of the war.</value>
   </data>
-  <data name="UEF_ShortDescKey" xml:space="preserve">
+  <data name="F10_NAA_DescKey" xml:space="preserve">
+    <value>Doctrine: "First contact is the enemy's last chance."
+
+As humanity ventured into deep space, the NAA translated centuries of naval aviation expertise into the vacuum. NAA vessels are the most sophisticated and sleek ships within the UEFS fleet. They are not built for prolonged "broadside-to-broadside" duels. Instead, NAA admirals prefer to unleash hundreds of smart missiles and squadrons of unmanned interceptors, neutralizing threats long before they enter visual range.
+
+Key Feature: The use of advanced composite materials makes their ships swift, though less armored compared to the "fortresses" of the ECU.</value>
+  </data>
+  <data name="F10_NAA_FullNameKey" xml:space="preserve">
+    <value>North Atlantic Alliance</value>
+  </data>
+  <data name="F10_NAA_ShortDescKey" xml:space="preserve">
+    <value>"The Wings of the Federation." Masters of carrier-based strikes and space superiority.</value>
+  </data>
+  <data name="F10_NAA_ShortNameKey" xml:space="preserve">
+    <value>NAA</value>
+  </data>
+  <data name="F10_PAS_DescKey" xml:space="preserve">
+    <value>The Pan-Asian Sphere (PAS) is the scientific and innovative engine of the United Earth Federation. While other Pillars rely on steel and gunpowder, PAS has transformed the very matter of light into a punishing instrument. As the heirs to the great Eastern tech-corporations, they believe the outcome of a war is decided before the first shot is fired — through superiority in information and speed.
+
+Doctrine and Combat Style: Their philosophy is "The Strike from the Void." PAS vessels are characterized by elegant, aerodynamic forms and the use of cutting-edge composites. Rather than absorbing damage with heavy plating, they rely on multi-layered energy barriers and advanced cloaking systems.
+
+Technological Hallmarks:
+
+Energy Dominance: PAS lasers and plasma emitters possess unrivaled precision at extreme ranges.
+
+EW Supremacy: "Ghost Fleet" systems allow their ships to jam enemy radars, remaining invisible until the moment they open fire.
+
+Photonic Engines: Their vessels are the fastest and most agile in the UEF fleet, allowing them to dictate the terms of any engagement.
+
+"Strength is but an illusion to those who cannot see the whole picture. We do not fight the enemy's armor. We fight their capacity to resist." — Magister-Coordinator Li Wei, High Council of the PAS.</value>
+  </data>
+  <data name="F10_PAS_FullNameKey" xml:space="preserve">
+    <value>Pan-Asian Sphere</value>
+  </data>
+  <data name="F10_PAS_ShortDescKey" xml:space="preserve">
+    <value>Pan-Asian Sphere (PAS) — "The Mind of the Federation" Core: A technological vanguard harnessing stellar energy. They specialize in high-precision energy weapons and electronic warfare (EW) systems. Bonus: Increased damage for laser/plasma weapons, faster shield recharge rates, and extended radar/scanning range.</value>
+  </data>
+  <data name="F10_PAS_ShortNameKey" xml:space="preserve">
+    <value>PAS</value>
+  </data>
+  <data name="F10_ShipPrefix" xml:space="preserve">
+    <value>UEFS</value>
+  </data>
+  <data name="F10_ShortDescKey" xml:space="preserve">
     <value>UEF (United Earth Federation) — a global alliance of four earth powers (NAA, ECU, PAS, STC), established to protect humanity from the threats of deep space. By forging together Western aviation, Eurasian armor, Asian technology, and Southern resources, the Federation has transformed the fear of the unknown into an indomitable military machine.</value>
   </data>
-  <data name="UEF_ShortNameKey" xml:space="preserve">
+  <data name="F10_ShortNameKey" xml:space="preserve">
     <value>UEF</value>
+  </data>
+  <data name="F10_STC_DescKey" xml:space="preserve">
+    <value>The Southern Trade Coalition (STC) is the economic foundation of the United Earth Federation. While the NAA and ECU wage wars, the STC makes those wars possible by providing the fleet with fuel, ammunition, and rare isotopes. By uniting the corporations of the Southern Hemisphere and the mining colonies of the Outer Rim, the Coalition has turned logistics into an art of survival.
+
+Doctrine and Combat Style: Their motto is "Adapt and Extract." STC ships are rarely elegant; they are massive, angular vessels bristling with extra containers, drilling rigs, and repair manipulators. In combat, they rely not on brute force, but on endurance and the support of autonomous drone swarms.
+
+Technological Hallmarks:
+
+Modular Architecture: STC vessels are the most flexible in the UEF. They can be refitted from a peaceful ore hauler into a heavily armed minelayer right in orbit.
+
+Autonomous Systems: As masters of robotics, the STC uses drones for everything from hull repairs under fire to boarding operations.
+
+Resource Independence: Coalition ships are equipped with top-tier refinery plants, allowing them to remain on autonomous long-range missions for years without docking.
+
+"Guns win battles, but logistics win wars. We are the ones who keep the lights on in your carriers and the railguns loaded in your turrets. Never forget that." — Elias Torres, Chairman of the STC Board.</value>
+  </data>
+  <data name="F10_STC_FullNameKey" xml:space="preserve">
+    <value>Southern Trade Coalition</value>
+  </data>
+  <data name="F10_STC_ShortDescKey" xml:space="preserve">
+    <value>Southern Trade Coalition (STC) — "The Blood of the Federation" Core: Masters of resources, logistics, and modular technology. They specialize in raw material extraction, field repairs, and cargo expansion. Bonus: Increased cargo capacity, bonuses to mining yield, and reduced costs for repairs and modular upgrades.</value>
+  </data>
+  <data name="F10_STC_ShortNameKey" xml:space="preserve">
+    <value>STC</value>
   </data>
 </root>

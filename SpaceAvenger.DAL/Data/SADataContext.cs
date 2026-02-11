@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SpaceAvenger.DAL.Constants;
 using SpaceAvenger.DAL.Models;
+using System.Reflection;
 using System.Text;
 
 namespace SpaceAvenger.DAL.Data
@@ -14,8 +15,25 @@ namespace SpaceAvenger.DAL.Data
         #region Properties
         public DbSet<User> Users { get; set; }
         public DbSet<Commander> Commanders { get; set; }
+        public DbSet<CommanderRank> CommanderRanks { get; set; }
+        public DbSet<CommanderBonus> CommanderBonus { get; set; }
         public DbSet<Faction> Factions { get; set; }
         public DbSet<StarFleetRank> Ranks { get; set; }
+        public DbSet<Bonus> Bonuses { get; set; }
+        public DbSet<BonusParameter> BonusParameters { get; set; }
+        public DbSet<CommanderWallet> CommanderWalet { get; set; }
+        public DbSet<Currency> Currencies { get; set; }
+        public DbSet<FactionCurrency> FactionCurrencies { get; set; }
+        public DbSet<FactionBonus> FactionBonuses { get; set; }
+        public DbSet<FactionHomeWorld> FactionHomeWorlds { get; set; }
+        public DbSet<Planet> Planets { get; set; }
+        public DbSet<Projectile> Projectiles { get; set; }
+        public DbSet<SpaceShip> SpaceShips { get; set; }
+        public DbSet<SpaceShipClass> SpaceShipClasses { get; set; }
+        public DbSet<SubFaction> SubFactions { get; set; }
+        public DbSet<SubFactionBonus> SubFactionBonuses { get; set; }
+        public DbSet<Weapon> Weapons { get; set; }
+        public DbSet<Armor> Armors { get; set; }
         #endregion
 
         #region Ctor
@@ -37,130 +55,7 @@ namespace SpaceAvenger.DAL.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<User>()
-                .HasOne(x => x.Commander)
-                .WithOne(x => x.User)
-                .HasForeignKey<Commander>(x => x.UserId)
-                .OnDelete(DeleteBehavior.Cascade);//Delete User - Delete Commander
-
-            modelBuilder.Entity<Commander>()
-                .HasOne(x => x.Faction)
-                .WithMany(x => x.Commanders)
-                .HasForeignKey(x => x.FactionId)
-                .OnDelete(DeleteBehavior.NoAction);//Weak ref for dictionary - tables
-
-            modelBuilder.Entity<Commander>()
-                .HasOne(x => x.Rank)
-                .WithMany(x => x.Commanders)
-                .HasForeignKey(x => x.RankId)
-                .OnDelete(DeleteBehavior.NoAction);//Weak ref for dictionary - tables
-
-            modelBuilder.Entity<Commander>()
-                .HasOne(x => x.CommanderWallet)
-                .WithOne(x => x.Commander)
-                .HasForeignKey<Commander>(x => x.CommanderWalletId)
-                .OnDelete(DeleteBehavior.Cascade);//Delete Commander - Delete Wallet
-
-            modelBuilder.Entity<Commander>()
-                .HasMany(x => x.SpaceShips)
-                .WithOne(x => x.Commander)
-                .HasForeignKey(x => x.CommanderId)
-                .OnDelete(DeleteBehavior.Cascade);//Delete All Commander Ships when we delete commander            
-
-            modelBuilder.Entity<Faction>()
-                .HasMany(x => x.SpaceShips)
-                .WithOne(x => x.Faction)
-                .HasForeignKey(x => x.FactionId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<Faction>()
-                .HasMany(x => x.SpaceShipClasses)
-                .WithOne(x => x.Faction)
-                .HasForeignKey(x => x.FactionId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            #region Faction - Bonus -> n:m
-
-            modelBuilder.Entity<FactionBonus>().HasKey(x => new { x.FactionId, x.BonusId });
-
-            modelBuilder.Entity<FactionBonus>()
-                .HasOne(fb => fb.Faction)
-                .WithMany(f => f.FactionBonuses)
-                .HasForeignKey(fb => fb.FactionId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-
-            modelBuilder.Entity<FactionBonus>()
-                .HasOne(fb => fb.Bonus)
-                .WithMany(b => b.FactionBonuses)
-                .HasForeignKey(fb => fb.BonusId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            #endregion
-
-            #region Currency - Commander Wallet 1:m
-
-            modelBuilder.Entity<CommanderWallet>()
-                .HasOne(x => x.Currency)
-                .WithMany(x => x.CommanderWallets)
-                .HasForeignKey(x => x.CurrencyId)
-                .OnDelete(DeleteBehavior.NoAction);
-
-            #endregion
-
-            #region Faction - Currency n:m
-
-            modelBuilder.Entity<FactionCurrency>()
-                .HasKey(x => new { x.CurrencyId, x.FactionId });
-
-            modelBuilder.Entity<FactionCurrency>()
-                .HasOne(x => x.Currency)
-                .WithMany(x => x.FactionCurrency)
-                .HasForeignKey(x => x.CurrencyId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<FactionCurrency>()
-                .HasOne(x => x.Faction)
-                .WithMany(x => x.FactionCurrency)
-                .HasForeignKey(x => x.FactionId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            #endregion
-
-            #region Faction - Planet m:n 
-
-            modelBuilder.Entity<FactionHomeWorlds>()
-                .HasKey(x => new { x.FactionId, x.HomePlanetId });
-
-            modelBuilder.Entity<FactionHomeWorlds>()
-                .HasOne(x => x.Faction)
-                .WithMany(x => x.FactionHomeWorlds)
-                .HasForeignKey(x => x.FactionId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<FactionHomeWorlds>()
-                .HasOne(x => x.HomePlanet)
-                .WithMany(x => x.FactionHomePlanets)
-                .HasForeignKey(x => x.HomePlanetId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            #endregion
-
-            #region Faction Bounds
-
-            modelBuilder.Entity<Faction>()
-                .HasMany(x => x.Planets)
-                .WithOne(x => x.Faction)
-                .HasForeignKey(x => x.FactionId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            #endregion
-
-            modelBuilder.Entity<SpaceShip>()
-                .HasOne(x => x.ShipClass)
-                .WithOne(x => x.SapceShip)
-                .HasForeignKey<SpaceShip>(x => x.ShipClassId)
-                .OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetAssembly(typeof(User)));
 
             SetUpDatabase(modelBuilder);
 
@@ -170,28 +65,107 @@ namespace SpaceAvenger.DAL.Data
         private void SetUpDatabase(ModelBuilder modelBuilder)
         {
             InitFactions(modelBuilder);
+            InitSubFactions(modelBuilder);
             InitRanks(modelBuilder);
+            InitPlanets(modelBuilder);
+        }
+
+        private void InitPlanets(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Planet>()
+                .HasData(
+                new Planet()//UEF
+                {
+                    Id = 1,
+                    FactionId = 1,
+                    NameKey = BuildKey("P_F10_0_", SA_DALConstants.FullNameKey),
+                    DescriptionKey = BuildKey("P_F10_0_", SA_DALConstants.DescKey)
+                }
+                );
+        }
+
+        private void InitBonusParameter(ModelBuilder modelBuilder)
+        {
+           
+        }
+
+        private void InitBonuses(ModelBuilder modelBuilder)
+        {
+            //BonusParameter: What will be modified(InternalCode: "SPEED").
+            //Bonus: Amount of the modification(ModifierValue: 1.15).
+            //SubFactionBonus: SubFaction name(SubFactionId: 1 [NAA]).
+
+            //UEF_NAA
+        }
+
+        private void InitSubFactions(ModelBuilder modelBuilder)
+        {
+            //ForUEF
+            modelBuilder.Entity<SubFaction>()
+                .HasData(
+                new SubFaction()
+                { 
+                    Id = 1,
+                    FactionId = 1,
+                    SubFactionCode = "F10_NAA",
+                    NameKey = BuildKey("F10_NAA", SA_DALConstants.FullNameKey),
+                    ShortNameKey = BuildKey("F10_NAA", SA_DALConstants.ShortNameKey),
+                    ShortDescriptionKey = BuildKey("F10_NAA", SA_DALConstants.ShortDescKey),
+                    DescriptionKey = BuildKey("F10_NAA", SA_DALConstants.DescKey),
+                },
+                new SubFaction()
+                {
+                    Id = 2,
+                    FactionId = 1,
+                    SubFactionCode = "F10_ECU",
+                    NameKey = BuildKey("F10_ECU", SA_DALConstants.FullNameKey),
+                    ShortNameKey = BuildKey("F10_ECU", SA_DALConstants.ShortNameKey),
+                    ShortDescriptionKey = BuildKey("F10_ECU", SA_DALConstants.ShortDescKey),
+                    DescriptionKey = BuildKey("F10_ECU", SA_DALConstants.DescKey),
+                },
+                new SubFaction()
+                {
+                    Id = 3,
+                    FactionId = 1,
+                    SubFactionCode = "F10_PAS",
+                    NameKey = BuildKey("F10_PAS", SA_DALConstants.FullNameKey),
+                    ShortNameKey = BuildKey("F10_ECU", SA_DALConstants.ShortNameKey),
+                    ShortDescriptionKey = BuildKey("F10_ECU", SA_DALConstants.ShortDescKey),
+                    DescriptionKey = BuildKey("F10_ECU", SA_DALConstants.DescKey),
+                },
+                new SubFaction()
+                {
+                    Id = 4,
+                    FactionId = 1,
+                    SubFactionCode = "F10_STC",
+                    NameKey = BuildKey("F10_STC", SA_DALConstants.FullNameKey),
+                    ShortNameKey = BuildKey("F10_STC", SA_DALConstants.ShortNameKey),
+                    ShortDescriptionKey = BuildKey("F10_STC", SA_DALConstants.ShortDescKey),
+                    DescriptionKey = BuildKey("F10_STC", SA_DALConstants.DescKey),
+                }
+                );
         }
 
         private void InitFactions(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Faction>().HasData(
-                new Faction()
+                new Faction()//UEF
                 {
                     Id = 1,
-                    NameKey = BuildKey("UEF", SA_DALConstants.FullNameKey),
-                    ShortNameKey = BuildKey("UEF", SA_DALConstants.ShortNameKey),
-                    ShortDescriptionKey = BuildKey("UEF", SA_DALConstants.ShortDescKey),
-                    DescriptionKey = BuildKey("UEF", SA_DALConstants.DescKey),
-                    FactionCode = "F10"
+                    FactionCode = "F10",
+                    NameKey = BuildKey("F10", SA_DALConstants.FullNameKey),
+                    ShortNameKey = BuildKey("F10", SA_DALConstants.ShortNameKey),
+                    ShortDescriptionKey = BuildKey("F10", SA_DALConstants.ShortDescKey),
+                    DescriptionKey = BuildKey("F10", SA_DALConstants.DescKey),
+                    ShipPrefix = BuildKey("F10", SA_DALConstants.ShipPrefixKey)
                 },
                 new Faction()
                 {
                     Id = 2,
-                    NameKey = BuildKey("Scellar", SA_DALConstants.FullNameKey),
-                    ShortNameKey = BuildKey("Scellar", SA_DALConstants.ShortNameKey),
-                    ShortDescriptionKey = BuildKey("Scellar", SA_DALConstants.ShortDescKey),
-                    DescriptionKey = BuildKey("Scellar", SA_DALConstants.DescKey),
+                    NameKey = BuildKey("F1", SA_DALConstants.FullNameKey),
+                    ShortNameKey = BuildKey("F1", SA_DALConstants.ShortNameKey),
+                    ShortDescriptionKey = BuildKey("F1", SA_DALConstants.ShortDescKey),
+                    DescriptionKey = BuildKey("F1", SA_DALConstants.DescKey),
                     FactionCode = "F1"
                 }
                 );
@@ -206,81 +180,81 @@ namespace SpaceAvenger.DAL.Data
                     {
                         Id = 1,
                         FactionId = 1,
-                        LevelNameKey = "UEF_L1",
+                        LevelNameKey = "F10_L1",
                         SortOrder = 1,
                         MinExperience = 0,
                         RankType = "f",
-                        DescriptionKey = "UEF_L1_Rank_Desc"
+                        DescriptionKey = "F10_L1_Rank_Desc"
                     },
                     new StarFleetRank()
                     {
                         Id = 2,
                         FactionId = 1,
-                        LevelNameKey = "UEF_L2",
+                        LevelNameKey = "F10_L2",
                         SortOrder = 2,
                         MinExperience = 1000,
                         RankType = "f",
-                        DescriptionKey = "UEF_L2_Rank_Desc"
+                        DescriptionKey = "F10_L2_Rank_Desc"
                     },
                     new StarFleetRank()
                     {
                         Id = 3,
                         FactionId = 1,
-                        LevelNameKey = "UEF_L3",
+                        LevelNameKey = "F10_L3",
                         SortOrder = 3,
                         MinExperience = 2500,
                         RankType = "f",
-                        DescriptionKey = "UEF_L3_Rank_Desc"
+                        DescriptionKey = "F10_L3_Rank_Desc"
                     },
                     new StarFleetRank()
                     {
                         Id = 4,
                         FactionId = 1,
-                        LevelNameKey = "UEF_L4",
+                        LevelNameKey = "F10_L4",
                         SortOrder = 4,
                         MinExperience = 5000,
                         RankType = "f",
-                        DescriptionKey = "UEF_L4_Rank_Desc"
+                        DescriptionKey = "F10_L4_Rank_Desc"
                     },
                     new StarFleetRank()
                     {
                         Id = 5,
                         FactionId = 1,
-                        LevelNameKey = "UEF_L5",
+                        LevelNameKey = "F10_L5",
                         SortOrder = 5,
                         MinExperience = 9000,
                         RankType = "f",
-                        DescriptionKey = "UEF_L5_Rank_Desc"
+                        DescriptionKey = "F10_L5_Rank_Desc"
                     },
                     new StarFleetRank()
                     {
                         Id = 6,
                         FactionId = 1,
-                        LevelNameKey = "UEF_L6",
+                        LevelNameKey = "F10_L6",
                         SortOrder = 6,
                         MinExperience = 15000,
                         RankType = "f",
-                        DescriptionKey = "UEF_L6_Rank_Desc"
+                        DescriptionKey = "F10_L6_Rank_Desc"
                     },
                     new StarFleetRank()
                     {
                         Id = 7,
                         FactionId = 1,
-                        LevelNameKey = "UEF_L7",
+                        LevelNameKey = "F10_L7",
                         SortOrder = 7,
                         MinExperience = 25000,
                         RankType = "f",
-                        DescriptionKey = "UEF_L7_Rank_Desc"
+                        DescriptionKey = "F10_L7_Rank_Desc"
                     },
                     new StarFleetRank()
                     {
                         Id = 8,
                         FactionId = 1,
-                        LevelNameKey = "UEF_L8",
+                        LevelNameKey = "F10_L8",
                         SortOrder = 8,
                         MinExperience = 45000,
                         RankType = "f",
-                        DescriptionKey = "UEF_L8_Rank_Desc"
+                        DescriptionKey = "F10_L8_Rank_Desc"
 
 
                     },
@@ -288,41 +262,41 @@ namespace SpaceAvenger.DAL.Data
                     {
                         Id = 9,
                         FactionId = 1,
-                        LevelNameKey = "UEF_L9",
+                        LevelNameKey = "F10_L9",
                         SortOrder = 9,
                         MinExperience = 75000,
                         RankType = "f",
-                        DescriptionKey = "UEF_L9_Rank_Desc"
+                        DescriptionKey = "F10_L9_Rank_Desc"
                     },
                     new StarFleetRank()
                     {
                         Id = 10,
                         FactionId = 1,
-                        LevelNameKey = "UEF_L10",
+                        LevelNameKey = "F10_L10",
                         SortOrder = 10,
                         MinExperience = 120000,
                         RankType = "f",
-                        DescriptionKey = "UEF_L10_Rank_Desc"
+                        DescriptionKey = "F10_L10_Rank_Desc"
                     },
                     new StarFleetRank()
                     {
                         Id = 11,
                         FactionId = 1,
-                        LevelNameKey = "UEF_L11",
+                        LevelNameKey = "F10_L11",
                         SortOrder = 11,
                         MinExperience = 200000,
                         RankType = "f",
-                        DescriptionKey = "UEF_L11_Rank_Desc"
+                        DescriptionKey = "F10_L11_Rank_Desc"
                     },
                     new StarFleetRank()
                     {
                         Id = 12,
                         FactionId = 1,
-                        LevelNameKey = "UEF_L12",
+                        LevelNameKey = "F10_L12",
                         SortOrder = 12,
                         MinExperience = 350000,
                         RankType = "f",
-                        DescriptionKey = "UEF_L12_Rank_Desc"
+                        DescriptionKey = "F10_L12_Rank_Desc"
                     }
                 );
         }

@@ -2,7 +2,7 @@
 
 namespace SpaceAvenger.DAL.Models
 {
-    public class FactionCurrency : EntityBase
+    public class FactionCurrency
     {
         public int FactionId { get; set; }
         public Faction Faction { get; set; }

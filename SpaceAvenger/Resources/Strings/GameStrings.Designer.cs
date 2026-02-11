@@ -61,245 +61,423 @@ namespace SpaceAvenger.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to United Earth Federation (UEF)
+        ///Motto: &quot;Through Unity, Survival&quot; Capital: Terra (Earth), High Command Sector
+        ///
+        ///The Foundation History
+        ///At the end of the 21st century, humanity faced the greatest crisis in its history. The first steps beyond the Solar System brought not only discovery, but a primal terror of the boundless, empty, and potentially hostile abyss. The fear of the &quot;Great Unknown&quot; and the realization of human vulnerability forced eternal rivals to lay down their arms.
+        ///
+        ///Four great military-political bl [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string F10_DescKey {
+            get {
+                return ResourceManager.GetString("F10_DescKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Eurasian Continental Union (ECU) is the industrial and resource-rich heart of the United Earth Federation. If the NAA represents agility and speed, the ECU stands for immovable might and engineering excellence. As the heirs to the great terrestrial powers of the past, they have translated the doctrine of the &quot;armored fist&quot; into the vacuum of space.
+        ///
+        ///Philosophy and Doctrine: Their strategy is simple: to hold the line where others turn to dust. ECU ships are massive armored fortresses capable of withstanding  [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string F10_ECU_DescKey {
+            get {
+                return ResourceManager.GetString("F10_ECU_DescKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Eurasian Continental Union.
+        /// </summary>
+        public static string F10_ECU_FullNameKey {
+            get {
+                return ResourceManager.GetString("F10_ECU_FullNameKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Eurasian Continental Union (ECU) — &quot;The Shield of the Federation&quot; Core: An industrial giant specializing in super-heavy armor and artillery weaponry. Bonus: Significant increase in hull integrity and firepower of kinetic weapons (railguns)..
+        /// </summary>
+        public static string F10_ECU_ShortDescKey {
+            get {
+                return ResourceManager.GetString("F10_ECU_ShortDescKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ECU.
+        /// </summary>
+        public static string F10_ECU_ShortNameKey {
+            get {
+                return ResourceManager.GetString("F10_ECU_ShortNameKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to United Earth Federation.
         /// </summary>
-        public static string UEF_FullNameKey {
+        public static string F10_FullNameKey {
             get {
-                return ResourceManager.GetString("UEF_FullNameKey", resourceCulture);
+                return ResourceManager.GetString("F10_FullNameKey", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Junior Legate.
         /// </summary>
-        public static string UEF_L1 {
+        public static string F10_L1 {
             get {
-                return ResourceManager.GetString("UEF_L1", resourceCulture);
+                return ResourceManager.GetString("F10_L1", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Freshman officer with a rusty patrol frigate..
         /// </summary>
-        public static string UEF_L1_Rank_Desc {
+        public static string F10_L1_Rank_Desc {
             get {
-                return ResourceManager.GetString("UEF_L1_Rank_Desc", resourceCulture);
+                return ResourceManager.GetString("F10_L1_Rank_Desc", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Rear Admiral.
         /// </summary>
-        public static string UEF_L10 {
+        public static string F10_L10 {
             get {
-                return ResourceManager.GetString("UEF_L10", resourceCulture);
+                return ResourceManager.GetString("F10_L10", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to High Command initiate. Orbital strikes authorized..
         /// </summary>
-        public static string UEF_L10_Rank_Desc {
+        public static string F10_L10_Rank_Desc {
             get {
-                return ResourceManager.GetString("UEF_L10_Rank_Desc", resourceCulture);
+                return ResourceManager.GetString("F10_L10_Rank_Desc", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Vice Admiral.
         /// </summary>
-        public static string UEF_L11 {
+        public static string F10_L11 {
             get {
-                return ResourceManager.GetString("UEF_L11", resourceCulture);
+                return ResourceManager.GetString("F10_L11", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Sector-wide authority. Fleet-scale operations..
         /// </summary>
-        public static string UEF_L11_Rank_Desc {
+        public static string F10_L11_Rank_Desc {
             get {
-                return ResourceManager.GetString("UEF_L11_Rank_Desc", resourceCulture);
+                return ResourceManager.GetString("F10_L11_Rank_Desc", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Grand Admiral of UEF.
         /// </summary>
-        public static string UEF_L12 {
+        public static string F10_L12 {
             get {
-                return ResourceManager.GetString("UEF_L12", resourceCulture);
+                return ResourceManager.GetString("F10_L12", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Supreme rank. You define the goals of the war..
         /// </summary>
-        public static string UEF_L12_Rank_Desc {
+        public static string F10_L12_Rank_Desc {
             get {
-                return ResourceManager.GetString("UEF_L12_Rank_Desc", resourceCulture);
+                return ResourceManager.GetString("F10_L12_Rank_Desc", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Fleet Legate.
         /// </summary>
-        public static string UEF_L2 {
+        public static string F10_L2 {
             get {
-                return ResourceManager.GetString("UEF_L2", resourceCulture);
+                return ResourceManager.GetString("F10_L2", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Fully commissioned. Command trust is growing..
         /// </summary>
-        public static string UEF_L2_Rank_Desc {
+        public static string F10_L2_Rank_Desc {
             get {
-                return ResourceManager.GetString("UEF_L2_Rank_Desc", resourceCulture);
+                return ResourceManager.GetString("F10_L2_Rank_Desc", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Senior Legate.
         /// </summary>
-        public static string UEF_L3 {
+        public static string F10_L3 {
             get {
-                return ResourceManager.GetString("UEF_L3", resourceCulture);
+                return ResourceManager.GetString("F10_L3", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Battle-hardened veteran of local skirmishes..
         /// </summary>
-        public static string UEF_L3_Rank_Desc {
+        public static string F10_L3_Rank_Desc {
             get {
-                return ResourceManager.GetString("UEF_L3_Rank_Desc", resourceCulture);
+                return ResourceManager.GetString("F10_L3_Rank_Desc", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Lieutenant Commander.
         /// </summary>
-        public static string UEF_L4 {
+        public static string F10_L4 {
             get {
-                return ResourceManager.GetString("UEF_L4", resourceCulture);
+                return ResourceManager.GetString("F10_L4", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Transition rank for Destroyer-class ships..
         /// </summary>
-        public static string UEF_L4_Rank_Desc {
+        public static string F10_L4_Rank_Desc {
             get {
-                return ResourceManager.GetString("UEF_L4_Rank_Desc", resourceCulture);
+                return ResourceManager.GetString("F10_L4_Rank_Desc", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Inspector Commander.
         /// </summary>
-        public static string UEF_L5 {
+        public static string F10_L5 {
             get {
-                return ResourceManager.GetString("UEF_L5", resourceCulture);
+                return ResourceManager.GetString("F10_L5", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Assigned to oversee remote outposts..
         /// </summary>
-        public static string UEF_L5_Rank_Desc {
+        public static string F10_L5_Rank_Desc {
             get {
-                return ResourceManager.GetString("UEF_L5_Rank_Desc", resourceCulture);
+                return ResourceManager.GetString("F10_L5_Rank_Desc", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to High Commander.
         /// </summary>
-        public static string UEF_L6 {
+        public static string F10_L6 {
             get {
-                return ResourceManager.GetString("UEF_L6", resourceCulture);
+                return ResourceManager.GetString("F10_L6", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Frigate tactics master. Ready for a Cruiser..
         /// </summary>
-        public static string UEF_L6_Rank_Desc {
+        public static string F10_L6_Rank_Desc {
             get {
-                return ResourceManager.GetString("UEF_L6_Rank_Desc", resourceCulture);
+                return ResourceManager.GetString("F10_L6_Rank_Desc", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Captain Junior Grade.
         /// </summary>
-        public static string UEF_L7 {
+        public static string F10_L7 {
             get {
-                return ResourceManager.GetString("UEF_L7", resourceCulture);
+                return ResourceManager.GetString("F10_L7", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to UEF Elite. Your ship is a force to be reckoned with..
         /// </summary>
-        public static string UEF_L7_Rank_Desc {
+        public static string F10_L7_Rank_Desc {
             get {
-                return ResourceManager.GetString("UEF_L7_Rank_Desc", resourceCulture);
+                return ResourceManager.GetString("F10_L7_Rank_Desc", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Captain Senior Grade.
         /// </summary>
-        public static string UEF_L8 {
+        public static string F10_L8 {
             get {
-                return ResourceManager.GetString("UEF_L8", resourceCulture);
+                return ResourceManager.GetString("F10_L8", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to A name feared by enemies. Heavy Cruiser command..
         /// </summary>
-        public static string UEF_L8_Rank_Desc {
+        public static string F10_L8_Rank_Desc {
             get {
-                return ResourceManager.GetString("UEF_L8_Rank_Desc", resourceCulture);
+                return ResourceManager.GetString("F10_L8_Rank_Desc", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Fleet Captain.
         /// </summary>
-        public static string UEF_L9 {
+        public static string F10_L9 {
             get {
-                return ResourceManager.GetString("UEF_L9", resourceCulture);
+                return ResourceManager.GetString("F10_L9", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Flagship commander or Strike Group leader..
         /// </summary>
-        public static string UEF_L9_Rank_Desc {
+        public static string F10_L9_Rank_Desc {
             get {
-                return ResourceManager.GetString("UEF_L9_Rank_Desc", resourceCulture);
+                return ResourceManager.GetString("F10_L9_Rank_Desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Doctrine: &quot;First contact is the enemy&apos;s last chance.&quot;
+        ///
+        ///As humanity ventured into deep space, the NAA translated centuries of naval aviation expertise into the vacuum. NAA vessels are the most sophisticated and sleek ships within the UEFS fleet. They are not built for prolonged &quot;broadside-to-broadside&quot; duels. Instead, NAA admirals prefer to unleash hundreds of smart missiles and squadrons of unmanned interceptors, neutralizing threats long before they enter visual range.
+        ///
+        ///Key Feature: The use of advanced com [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string F10_NAA_DescKey {
+            get {
+                return ResourceManager.GetString("F10_NAA_DescKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to North Atlantic Alliance.
+        /// </summary>
+        public static string F10_NAA_FullNameKey {
+            get {
+                return ResourceManager.GetString("F10_NAA_FullNameKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &quot;The Wings of the Federation.&quot; Masters of carrier-based strikes and space superiority..
+        /// </summary>
+        public static string F10_NAA_ShortDescKey {
+            get {
+                return ResourceManager.GetString("F10_NAA_ShortDescKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NAA.
+        /// </summary>
+        public static string F10_NAA_ShortNameKey {
+            get {
+                return ResourceManager.GetString("F10_NAA_ShortNameKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Pan-Asian Sphere (PAS) is the scientific and innovative engine of the United Earth Federation. While other Pillars rely on steel and gunpowder, PAS has transformed the very matter of light into a punishing instrument. As the heirs to the great Eastern tech-corporations, they believe the outcome of a war is decided before the first shot is fired — through superiority in information and speed.
+        ///
+        ///Doctrine and Combat Style: Their philosophy is &quot;The Strike from the Void.&quot; PAS vessels are characterized by eleg [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string F10_PAS_DescKey {
+            get {
+                return ResourceManager.GetString("F10_PAS_DescKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pan-Asian Sphere.
+        /// </summary>
+        public static string F10_PAS_FullNameKey {
+            get {
+                return ResourceManager.GetString("F10_PAS_FullNameKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pan-Asian Sphere (PAS) — &quot;The Mind of the Federation&quot; Core: A technological vanguard harnessing stellar energy. They specialize in high-precision energy weapons and electronic warfare (EW) systems. Bonus: Increased damage for laser/plasma weapons, faster shield recharge rates, and extended radar/scanning range..
+        /// </summary>
+        public static string F10_PAS_ShortDescKey {
+            get {
+                return ResourceManager.GetString("F10_PAS_ShortDescKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PAS.
+        /// </summary>
+        public static string F10_PAS_ShortNameKey {
+            get {
+                return ResourceManager.GetString("F10_PAS_ShortNameKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to UEFS.
+        /// </summary>
+        public static string F10_ShipPrefix {
+            get {
+                return ResourceManager.GetString("F10_ShipPrefix", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to UEF (United Earth Federation) — a global alliance of four earth powers (NAA, ECU, PAS, STC), established to protect humanity from the threats of deep space. By forging together Western aviation, Eurasian armor, Asian technology, and Southern resources, the Federation has transformed the fear of the unknown into an indomitable military machine..
         /// </summary>
-        public static string UEF_ShortDescKey {
+        public static string F10_ShortDescKey {
             get {
-                return ResourceManager.GetString("UEF_ShortDescKey", resourceCulture);
+                return ResourceManager.GetString("F10_ShortDescKey", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to UEF.
         /// </summary>
-        public static string UEF_ShortNameKey {
+        public static string F10_ShortNameKey {
             get {
-                return ResourceManager.GetString("UEF_ShortNameKey", resourceCulture);
+                return ResourceManager.GetString("F10_ShortNameKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Southern Trade Coalition (STC) is the economic foundation of the United Earth Federation. While the NAA and ECU wage wars, the STC makes those wars possible by providing the fleet with fuel, ammunition, and rare isotopes. By uniting the corporations of the Southern Hemisphere and the mining colonies of the Outer Rim, the Coalition has turned logistics into an art of survival.
+        ///
+        ///Doctrine and Combat Style: Their motto is &quot;Adapt and Extract.&quot; STC ships are rarely elegant; they are massive, angular vessels b [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string F10_STC_DescKey {
+            get {
+                return ResourceManager.GetString("F10_STC_DescKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Southern Trade Coalition.
+        /// </summary>
+        public static string F10_STC_FullNameKey {
+            get {
+                return ResourceManager.GetString("F10_STC_FullNameKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Southern Trade Coalition (STC) — &quot;The Blood of the Federation&quot; Core: Masters of resources, logistics, and modular technology. They specialize in raw material extraction, field repairs, and cargo expansion. Bonus: Increased cargo capacity, bonuses to mining yield, and reduced costs for repairs and modular upgrades..
+        /// </summary>
+        public static string F10_STC_ShortDescKey {
+            get {
+                return ResourceManager.GetString("F10_STC_ShortDescKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to STC.
+        /// </summary>
+        public static string F10_STC_ShortNameKey {
+            get {
+                return ResourceManager.GetString("F10_STC_ShortNameKey", resourceCulture);
             }
         }
     }

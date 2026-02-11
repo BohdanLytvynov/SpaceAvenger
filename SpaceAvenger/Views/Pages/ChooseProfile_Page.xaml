@@ -4,6 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:SpaceAvenger.Views.Pages"
+      xmlns:res="clr-namespace:SpaceAvenger.Resources.Strings"
       mc:Ignorable="d"
       xmlns:vm="clr-namespace:SpaceAvenger.ViewModels.PagesVM"
       d:DesignHeight="450" d:DesignWidth="800"
@@ -21,7 +22,7 @@
             <RowDefinition/>
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
-        <TextBlock Margin="10,0,0,0" Text="Choose profile Or Create a new one:"
+        <TextBlock Margin="10,0,0,0" Text="{x:Static res:UIStrings.ChooseProfile_Title}"
                Style="{StaticResource textBlockHeaders}"/>
         <Grid x:Name="ListViewGrid" 
           Grid.Row="1">
@@ -58,19 +59,19 @@ Background="{StaticResource LVBack}"
                     <RowDefinition Height="150*"/>
                 </Grid.RowDefinitions>
                 <Button Grid.Row="1"
-            Content="Add" Foreground="White"
-            Style="{StaticResource Button}"            
+            Content="{x:Static res:UIStrings.ChooseProfileAddBtn}" Foreground="White"
+            Style="{StaticResource Button}"
             Command="{Binding OnAddNewProfileButtonPressed}"/>
 
                 <Button Grid.Row="3" Style="{DynamicResource Button}"
-                    Content="Edit" 
+                    Content="{x:Static res:UIStrings.ChooseProfileEditBtn}" 
                     Foreground="White"
                     Command="{Binding OnEditUserProfileButtonPressed}"/>
 
                 <Button Grid.Row="5" 
                     Style="{DynamicResource Button}"
             Command="{Binding OnDeleteUserProfileButtonPressed}"
-            Content="Remove"/>
+            Content="{x:Static res:UIStrings.ChooseProfileRemoveBtn}"/>
             </Grid>
         </Grid>
 
@@ -81,9 +82,9 @@ Background="{StaticResource LVBack}"
                 <ColumnDefinition Width="615"/>
             </Grid.ColumnDefinitions>
 
-            <Button Grid.Column="1" Content="Exit"
+            <Button Grid.Column="1" Content="{x:Static res:UIStrings.ChooseProfileExitBtn}"
                 Style="{DynamicResource Button}"
-                FontSize="16" Foreground="White"
+                Foreground="White"
                 Command="{StaticResource ExitCommand}"/>
         </Grid>
     </Grid>

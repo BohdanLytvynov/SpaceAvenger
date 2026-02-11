@@ -11,7 +11,12 @@ namespace SpaceAvenger.DAL.Repositories.Ranks
         {
         }
 
-        public StarFleetRank? GetLowest() => 
-            GetAll().OrderBy(c => c.SortOrder).FirstOrDefault();
+        public StarFleetRank? GetLowest(Faction faction)
+        {
+            if (faction == null) throw new ArgumentNullException(nameof(faction));
+
+            return GetAll().Include(x => x.Faction).Where(x => x.FactionId == faction.Id)
+            .OrderBy(c => c.SortOrder).FirstOrDefault();
+        }
     }
 }

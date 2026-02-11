@@ -1,9 +1,6 @@
-﻿using SpaceAvenger.Game.Core.Enums;
-using System.Numerics;
-using WPFGameEngine.CollisionDetection.Grid;
+﻿using System.Numerics;
 using WPFGameEngine.GameViewControl;
 using WPFGameEngine.Timers.Base;
-using WPFGameEngine.WPF.GE.Component.Collider;
 using WPFGameEngine.WPF.GE.GameObjects;
 using WPFGameEngine.WPF.GE.Math.Sizes;
 
@@ -15,14 +12,8 @@ namespace SpaceAvenger.Game.Core.Base
         public float ProjectileSpeed { get; protected set; }
         public bool Move { get; protected set; }
         public float Damage { get; protected set; }
-        public Faction Faction { get; private set; }
         public Size ExplosionScale { get; protected set; }
-
-        protected ProjectileBase(Faction faction)
-        {
-            Faction = faction;
-        }
-
+       
         public override void StartUp(IGameObjectViewHost gameObjectViewHost, IGameTimer gameTimer)
         {
             Move = false;
