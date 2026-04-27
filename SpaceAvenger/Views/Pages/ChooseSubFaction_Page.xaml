@@ -12,18 +12,32 @@
       d:DataContext="{d:DesignInstance vm:ChooseSubFaction_ViewModel, IsDesignTimeCreatable=True}">
 
     <Grid>
+        <Grid.Background>
+            <SolidColorBrush Color="#050e17"/>
+        </Grid.Background>
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
             <RowDefinition/>
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
-        <TextBlock Margin="10,0,0,0" Text="{x:Static res:UIStrings.ChooseProfile_Title}"
+        <TextBlock Margin="10,0,0,0" Text="{x:Static res:UIStrings.ChooseSubFaction_Title}"
        Style="{StaticResource textBlockHeaders}"/>
+        <Rectangle Grid.Row="1">
+            <Rectangle.Fill>
+                <ImageBrush ImageSource="{Binding FactionIcon, UpdateSourceTrigger=PropertyChanged}" 
+                            Stretch="Uniform"
+                            Opacity="0.3"/>
+            </Rectangle.Fill>
+        </Rectangle>
         <Border Style="{StaticResource BorderStype}" Grid.Row="1" CornerRadius="25"
                 Margin="7"
                 BorderThickness="2">
-            <ItemsControl Style="{StaticResource CardsContainer}">
-            </ItemsControl>
+            <ScrollViewer HorizontalScrollBarVisibility="Visible">
+                <ItemsControl Style="{StaticResource CardsContainer}"
+                          ItemsSource="{Binding SubFactions, UpdateSourceTrigger=PropertyChanged}"
+                          ItemTemplate="{StaticResource SubFactionCardDatatemplate}">
+                </ItemsControl>
+            </ScrollViewer>
         </Border>
         <Grid Grid.Row="2" Margin="5">
             <Grid.ColumnDefinitions>

@@ -1,5 +1,28 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!--#region Factions -->
+    <ImageSource x:Key="F10_Icon">pack://siteoforigin:,,,/Resources/Content/FactionIcons/F10_Icon.png
+    </ImageSource>
+    <!--#endregion-->
+
+    <!--#region SubFactions -->
+
+    <!--#region F10 -->
+    <ImageSource x:Key="F10_SF1">pack://siteoforigin:,,,/Resources/Content/SubFactionIcons/F10_SF1.png
+    </ImageSource>
+
+    <ImageSource x:Key="F10_SF2">pack://siteoforigin:,,,/Resources/Content/SubFactionIcons/F10_SF2.png
+    </ImageSource>
+
+    <ImageSource x:Key="F10_SF3">pack://siteoforigin:,,,/Resources/Content/SubFactionIcons/F10_SF3.png
+    </ImageSource>
+
+    <ImageSource x:Key="F10_SF4">pack://siteoforigin:,,,/Resources/Content/SubFactionIcons/F10_SF4.png
+    </ImageSource>
+    <!--#endregion-->
+
+    <!--#endregion-->
+
     <!--#region Test Anim -->
     <ImageSource x:Key="AnimTest">pack://siteoforigin:,,,/Resources/Content/Animations/Test/TestAnim.png
     </ImageSource>

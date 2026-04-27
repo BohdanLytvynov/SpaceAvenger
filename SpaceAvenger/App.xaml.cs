@@ -184,12 +184,11 @@ namespace SpaceAvenger
 
                 vm = Services.GetRequiredService(viewModelInfo.AsType()) as ViewModelBase;
                 view = Activator.CreateInstance(page.AsType()) as Page;
-
+                
                 view.DataContext = vm;
                 vm.Dispatcher = view.Dispatcher;
 
-                pm.AddPage(
-                page.Name, view);
+                pm.AddPage(page.Name, view);
             }
             var mainWindow = Services.GetRequiredService<MainWindow>();
             var mainWindowViewModel = Services.GetRequiredService<MainWindowViewModel>();

@@ -120,8 +120,8 @@ namespace SpaceAvenger.ViewModels.PagesVM
 
         private void Up_OnUserProfileSelectedEvent(UserProfileVM obj)
         {
-            m_PageManager.SwitchPage(nameof(Main_Page), FrameType.MainFrame);
-            m_messageBus.Send<ChooseProfileMessage_User, UserProfileVM>(new ChooseProfileMessage_User(obj));
+            m_PageManager.SwitchPage(nameof(ChooseSubFaction_Page), FrameType.MainFrame);
+            //m_messageBus.Send<ChooseProfileMessage_User, UserProfileVM>(new ChooseProfileMessage_User(obj));
         }
 
 

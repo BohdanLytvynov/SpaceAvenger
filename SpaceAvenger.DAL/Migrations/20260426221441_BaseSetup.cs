@@ -38,7 +38,8 @@ namespace SpaceAvenger.DAL.Migrations
                     ShortName = table.Column<string>(type: "TEXT", nullable: false),
                     ResourceKey = table.Column<string>(type: "TEXT", nullable: false),
                     NameKey = table.Column<string>(type: "TEXT", nullable: false),
-                    DescriptionKey = table.Column<string>(type: "TEXT", nullable: false)
+                    DescriptionKey = table.Column<string>(type: "TEXT", nullable: false),
+                    ImageName = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -57,7 +58,8 @@ namespace SpaceAvenger.DAL.Migrations
                     ShipPrefix = table.Column<string>(type: "TEXT", nullable: true),
                     IsAlive = table.Column<bool>(type: "INTEGER", nullable: false),
                     NameKey = table.Column<string>(type: "TEXT", nullable: false),
-                    DescriptionKey = table.Column<string>(type: "TEXT", nullable: false)
+                    DescriptionKey = table.Column<string>(type: "TEXT", nullable: false),
+                    ImageName = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -159,7 +161,8 @@ namespace SpaceAvenger.DAL.Migrations
                     FactionId = table.Column<int>(type: "INTEGER", nullable: true),
                     Population = table.Column<float>(type: "REAL", nullable: false),
                     NameKey = table.Column<string>(type: "TEXT", nullable: false),
-                    DescriptionKey = table.Column<string>(type: "TEXT", nullable: false)
+                    DescriptionKey = table.Column<string>(type: "TEXT", nullable: false),
+                    ImageName = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -207,7 +210,8 @@ namespace SpaceAvenger.DAL.Migrations
                     ShortDescriptionKey = table.Column<string>(type: "TEXT", nullable: false),
                     FactionId = table.Column<int>(type: "INTEGER", nullable: false),
                     NameKey = table.Column<string>(type: "TEXT", nullable: false),
-                    DescriptionKey = table.Column<string>(type: "TEXT", nullable: false)
+                    DescriptionKey = table.Column<string>(type: "TEXT", nullable: false),
+                    ImageName = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -256,7 +260,8 @@ namespace SpaceAvenger.DAL.Migrations
                     EnergyResist = table.Column<float>(type: "REAL", nullable: false),
                     ExplosiveResist = table.Column<float>(type: "REAL", nullable: false),
                     NameKey = table.Column<string>(type: "TEXT", nullable: false),
-                    DescriptionKey = table.Column<string>(type: "TEXT", nullable: false)
+                    DescriptionKey = table.Column<string>(type: "TEXT", nullable: false),
+                    ImageName = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -326,7 +331,8 @@ namespace SpaceAvenger.DAL.Migrations
                     ExplosiveDamage = table.Column<float>(type: "REAL", nullable: false),
                     Maintainable = table.Column<bool>(type: "INTEGER", nullable: false),
                     NameKey = table.Column<string>(type: "TEXT", nullable: false),
-                    DescriptionKey = table.Column<string>(type: "TEXT", nullable: false)
+                    DescriptionKey = table.Column<string>(type: "TEXT", nullable: false),
+                    ImageName = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -353,7 +359,8 @@ namespace SpaceAvenger.DAL.Migrations
                     BonusId = table.Column<int>(type: "INTEGER", nullable: false),
                     Id = table.Column<int>(type: "INTEGER", nullable: false),
                     NameKey = table.Column<string>(type: "TEXT", nullable: false),
-                    DescriptionKey = table.Column<string>(type: "TEXT", nullable: false)
+                    DescriptionKey = table.Column<string>(type: "TEXT", nullable: false),
+                    ImageName = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -382,7 +389,8 @@ namespace SpaceAvenger.DAL.Migrations
                     SubFactionId = table.Column<int>(type: "INTEGER", nullable: false),
                     Maintainable = table.Column<bool>(type: "INTEGER", nullable: false),
                     NameKey = table.Column<string>(type: "TEXT", nullable: false),
-                    DescriptionKey = table.Column<string>(type: "TEXT", nullable: false)
+                    DescriptionKey = table.Column<string>(type: "TEXT", nullable: false),
+                    ImageName = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -411,7 +419,8 @@ namespace SpaceAvenger.DAL.Migrations
                     FactionId = table.Column<int>(type: "INTEGER", nullable: false),
                     ArmorId = table.Column<int>(type: "INTEGER", nullable: true),
                     NameKey = table.Column<string>(type: "TEXT", nullable: false),
-                    DescriptionKey = table.Column<string>(type: "TEXT", nullable: false)
+                    DescriptionKey = table.Column<string>(type: "TEXT", nullable: false),
+                    ImageName = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -525,7 +534,8 @@ namespace SpaceAvenger.DAL.Migrations
                     CommanderId = table.Column<int>(type: "INTEGER", nullable: true),
                     MapableObject = table.Column<string>(type: "TEXT", nullable: false),
                     NameKey = table.Column<string>(type: "TEXT", nullable: false),
-                    DescriptionKey = table.Column<string>(type: "TEXT", nullable: false)
+                    DescriptionKey = table.Column<string>(type: "TEXT", nullable: false),
+                    ImageName = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -552,17 +562,17 @@ namespace SpaceAvenger.DAL.Migrations
 
             migrationBuilder.InsertData(
                 table: "Factions",
-                columns: new[] { "Id", "DescriptionKey", "FactionCode", "IsAlive", "NameKey", "ShipPrefix", "ShortDescriptionKey", "ShortNameKey" },
+                columns: new[] { "Id", "DescriptionKey", "FactionCode", "ImageName", "IsAlive", "NameKey", "ShipPrefix", "ShortDescriptionKey", "ShortNameKey" },
                 values: new object[,]
                 {
-                    { 1, "F10_DescKey", "F10", false, "F10_FullNameKey", "F10_ShipPrefix", "F10_ShortDescKey", "F10_ShortNameKey" },
-                    { 2, "F1_DescKey", "F1", false, "F1_FullNameKey", null, "F1_ShortDescKey", "F1_ShortNameKey" }
+                    { 1, "F10_DescKey", "F10", "F10_Icon", false, "F10_FullNameKey", "F10_ShipPrefix", "F10_ShortDescKey", "F10_ShortNameKey" },
+                    { 2, "F1_DescKey", "F1", "F1_Icon", false, "F1_FullNameKey", null, "F1_ShortDescKey", "F1_ShortNameKey" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Planets",
-                columns: new[] { "Id", "DescriptionKey", "FactionId", "NameKey", "Population", "Status" },
-                values: new object[] { 1, "P_F10_0__DescKey", 1, "P_F10_0__FullNameKey", 0f, 0 });
+                columns: new[] { "Id", "DescriptionKey", "FactionId", "ImageName", "NameKey", "Population", "Status" },
+                values: new object[] { 1, "P_F10_0__DescKey", 1, null, "P_F10_0__FullNameKey", 0f, 0 });
 
             migrationBuilder.InsertData(
                 table: "Ranks",
@@ -585,13 +595,13 @@ namespace SpaceAvenger.DAL.Migrations
 
             migrationBuilder.InsertData(
                 table: "SubFactions",
-                columns: new[] { "Id", "DescriptionKey", "FactionId", "NameKey", "ShortDescriptionKey", "ShortNameKey", "SubFactionCode" },
+                columns: new[] { "Id", "DescriptionKey", "FactionId", "ImageName", "NameKey", "ShortDescriptionKey", "ShortNameKey", "SubFactionCode" },
                 values: new object[,]
                 {
-                    { 1, "F10_NAA_DescKey", 1, "F10_NAA_FullNameKey", "F10_NAA_ShortDescKey", "F10_NAA_ShortNameKey", "F10_NAA" },
-                    { 2, "F10_ECU_DescKey", 1, "F10_ECU_FullNameKey", "F10_ECU_ShortDescKey", "F10_ECU_ShortNameKey", "F10_ECU" },
-                    { 3, "F10_ECU_DescKey", 1, "F10_PAS_FullNameKey", "F10_ECU_ShortDescKey", "F10_ECU_ShortNameKey", "F10_PAS" },
-                    { 4, "F10_STC_DescKey", 1, "F10_STC_FullNameKey", "F10_STC_ShortDescKey", "F10_STC_ShortNameKey", "F10_STC" }
+                    { 1, "F10_NAA_DescKey", 1, "F10_SF1", "F10_NAA_FullNameKey", "F10_NAA_ShortDescKey", "F10_NAA_ShortNameKey", "F10_NAA" },
+                    { 2, "F10_ECU_DescKey", 1, "F10_SF2", "F10_ECU_FullNameKey", "F10_ECU_ShortDescKey", "F10_ECU_ShortNameKey", "F10_ECU" },
+                    { 3, "F10_PAS_DescKey", 1, "F10_SF3", "F10_PAS_FullNameKey", "F10_PAS_ShortDescKey", "F10_PAS_ShortNameKey", "F10_PAS" },
+                    { 4, "F10_STC_DescKey", 1, "F10_SF4", "F10_STC_FullNameKey", "F10_STC_ShortDescKey", "F10_STC_ShortNameKey", "F10_STC" }
                 });
 
             migrationBuilder.CreateIndex(

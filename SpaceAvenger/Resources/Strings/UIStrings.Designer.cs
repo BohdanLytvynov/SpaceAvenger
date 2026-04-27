@@ -122,5 +122,41 @@ namespace SpaceAvenger.Resources.Strings {
                 return ResourceManager.GetString("ChooseSFNext", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please select your SubFaction:.
+        /// </summary>
+        public static string ChooseSubFaction_Title {
+            get {
+                return ResourceManager.GetString("ChooseSubFaction_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Less.
+        /// </summary>
+        public static string LessButton {
+            get {
+                return ResourceManager.GetString("LessButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to More.
+        /// </summary>
+        public static string MoreButton {
+            get {
+                return ResourceManager.GetString("MoreButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select.
+        /// </summary>
+        public static string SelectButton {
+            get {
+                return ResourceManager.GetString("SelectButton", resourceCulture);
+            }
+        }
     }
 }

@@ -11,6 +11,7 @@ namespace SpaceAvenger.DAL.Models
         public string ShortDescriptionKey { get; set; }
         public string? ShipPrefix { get; set; }
         public bool IsAlive { get; set; }
+
         public ICollection<Commander> Commanders { get; set; } = new List<Commander>();
         public ICollection<StarFleetRank> Ranks { get; set; } = new List<StarFleetRank>();
         public ICollection<Planet> Planets { get; set; } = new List<Planet>();

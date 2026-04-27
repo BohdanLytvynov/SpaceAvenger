@@ -22,7 +22,8 @@ namespace SpaceAvenger.Converters
         /// <returns></returns>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            bool hiddenCollapsed = (bool)parameter;
+            bool hiddenCollapsed;
+            bool.TryParse(parameter.ToString(), out hiddenCollapsed);
             bool v = (bool)value;
             if (v) 
                 return Visibility.Visible;

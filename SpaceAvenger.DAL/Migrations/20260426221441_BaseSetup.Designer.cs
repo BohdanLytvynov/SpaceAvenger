@@ -11,7 +11,7 @@ using SpaceAvenger.DAL.Data;
 namespace SpaceAvenger.DAL.Migrations
 {
     [DbContext(typeof(SADataContext))]
-    [Migration("20260211195155_BaseSetup")]
+    [Migration("20260426221441_BaseSetup")]
     partial class BaseSetup
     {
         /// <inheritdoc />
@@ -38,6 +38,9 @@ namespace SpaceAvenger.DAL.Migrations
 
                     b.Property<int?>("FactionId")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("ImageName")
+                        .HasColumnType("TEXT");
 
                     b.Property<float>("KineticResist")
                         .HasColumnType("REAL");
@@ -239,6 +242,9 @@ namespace SpaceAvenger.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("ImageName")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("NameKey")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -270,6 +276,9 @@ namespace SpaceAvenger.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("ImageName")
+                        .HasColumnType("TEXT");
+
                     b.Property<bool>("IsAlive")
                         .HasColumnType("INTEGER");
 
@@ -298,6 +307,7 @@ namespace SpaceAvenger.DAL.Migrations
                             Id = 1,
                             DescriptionKey = "F10_DescKey",
                             FactionCode = "F10",
+                            ImageName = "F10_Icon",
                             IsAlive = false,
                             NameKey = "F10_FullNameKey",
                             ShipPrefix = "F10_ShipPrefix",
@@ -309,6 +319,7 @@ namespace SpaceAvenger.DAL.Migrations
                             Id = 2,
                             DescriptionKey = "F1_DescKey",
                             FactionCode = "F1",
+                            ImageName = "F1_Icon",
                             IsAlive = false,
                             NameKey = "F1_FullNameKey",
                             ShortDescriptionKey = "F1_ShortDescKey",
@@ -380,6 +391,9 @@ namespace SpaceAvenger.DAL.Migrations
                     b.Property<int?>("FactionId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("ImageName")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("NameKey")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -427,6 +441,9 @@ namespace SpaceAvenger.DAL.Migrations
                     b.Property<int>("FactionId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("ImageName")
+                        .HasColumnType("TEXT");
+
                     b.Property<float>("KineticDamage")
                         .HasColumnType("REAL");
 
@@ -465,6 +482,9 @@ namespace SpaceAvenger.DAL.Migrations
                     b.Property<int>("FactionId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("ImageName")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("MapableObject")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -502,6 +522,9 @@ namespace SpaceAvenger.DAL.Migrations
 
                     b.Property<int>("FactionId")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("ImageName")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("NameKey")
                         .IsRequired()
@@ -689,6 +712,9 @@ namespace SpaceAvenger.DAL.Migrations
                     b.Property<int>("FactionId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("ImageName")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("NameKey")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -717,6 +743,7 @@ namespace SpaceAvenger.DAL.Migrations
                             Id = 1,
                             DescriptionKey = "F10_NAA_DescKey",
                             FactionId = 1,
+                            ImageName = "F10_SF1",
                             NameKey = "F10_NAA_FullNameKey",
                             ShortDescriptionKey = "F10_NAA_ShortDescKey",
                             ShortNameKey = "F10_NAA_ShortNameKey",
@@ -727,6 +754,7 @@ namespace SpaceAvenger.DAL.Migrations
                             Id = 2,
                             DescriptionKey = "F10_ECU_DescKey",
                             FactionId = 1,
+                            ImageName = "F10_SF2",
                             NameKey = "F10_ECU_FullNameKey",
                             ShortDescriptionKey = "F10_ECU_ShortDescKey",
                             ShortNameKey = "F10_ECU_ShortNameKey",
@@ -735,11 +763,12 @@ namespace SpaceAvenger.DAL.Migrations
                         new
                         {
                             Id = 3,
-                            DescriptionKey = "F10_ECU_DescKey",
+                            DescriptionKey = "F10_PAS_DescKey",
                             FactionId = 1,
+                            ImageName = "F10_SF3",
                             NameKey = "F10_PAS_FullNameKey",
-                            ShortDescriptionKey = "F10_ECU_ShortDescKey",
-                            ShortNameKey = "F10_ECU_ShortNameKey",
+                            ShortDescriptionKey = "F10_PAS_ShortDescKey",
+                            ShortNameKey = "F10_PAS_ShortNameKey",
                             SubFactionCode = "F10_PAS"
                         },
                         new
@@ -747,6 +776,7 @@ namespace SpaceAvenger.DAL.Migrations
                             Id = 4,
                             DescriptionKey = "F10_STC_DescKey",
                             FactionId = 1,
+                            ImageName = "F10_SF4",
                             NameKey = "F10_STC_FullNameKey",
                             ShortDescriptionKey = "F10_STC_ShortDescKey",
                             ShortNameKey = "F10_STC_ShortNameKey",
@@ -768,6 +798,9 @@ namespace SpaceAvenger.DAL.Migrations
 
                     b.Property<int>("Id")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("ImageName")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("NameKey")
                         .IsRequired()
@@ -810,6 +843,9 @@ namespace SpaceAvenger.DAL.Migrations
 
                     b.Property<int>("FactionId")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("ImageName")
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("Maintainable")
                         .HasColumnType("INTEGER");

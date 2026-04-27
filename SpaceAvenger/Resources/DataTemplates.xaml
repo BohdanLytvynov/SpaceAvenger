@@ -1,7 +1,10 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:userVM="clr-namespace:SpaceAvenger.ViewModels.UserProfile"
-    xmlns:sfVM="clr-namespace:SpaceAvenger.ViewModels.SubFactionCard">
+    xmlns:sfVM="clr-namespace:SpaceAvenger.ViewModels.SubFactionCard"
+    xmlns:res="clr-namespace:SpaceAvenger.Resources.Strings"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                    >
     <Style x:Key="UserProfText">
         <Style.Setters>
             <Setter Property="ItemsControl.FontSize" Value="20"/>
@@ -111,8 +114,40 @@
         </DataTemplate.Triggers>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type sfVM:SubFactionCardVM}">
-        <Border>
+    <DataTemplate DataType="{x:Type sfVM:SubFactionCardVM}" x:Key="SubFactionCardDatatemplate">
+        <Border Margin="20" Style="{StaticResource BorderStype}">
+            <StackPanel Orientation="Vertical">
+                <TextBlock Style="{StaticResource textBlockHeaders}"
+                           Text="{Binding Title}"
+                           HorizontalAlignment="Center"/>
+                <Rectangle Height="200" Width="200" Margin="0,20">
+                    <Rectangle.Fill>
+                        <ImageBrush Stretch="Uniform" ImageSource="{Binding Icon, UpdateSourceTrigger=PropertyChanged}"/>
+                    </Rectangle.Fill>
+                </Rectangle>
+                <TextBlock Margin="10" Style="{StaticResource textBlockHeaders}"
+                           Text="{Binding ShortDesc}"
+                           TextWrapping="WrapWithOverflow"
+                           Width="400"/>
+                <StackPanel Orientation="Vertical" 
+                            Visibility="{Binding MoreLess,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=False}">
+                    <Rectangle Fill="White" Height="3" Margin="5"/>
+                    <TextBlock Text="{Binding Description}" 
+                           Style="{StaticResource textBlockHeaders}"
+                           TextWrapping="WrapWithOverflow"
+                           Width="400"/>
+                </StackPanel>
+                <Rectangle Fill="White" Height="3" Margin="5"/>
+                <StackPanel Orientation="Horizontal" Margin="15">
+                    <Button Content="{Binding MoreButtonName, UpdateSourceTrigger=PropertyChanged}" 
+                            Margin="0,0,20,0" Style="{StaticResource Button}" 
+                            Command="{Binding OnReadMoreButtonPressed}"/>
+                    <Button Content="{x:Static res:UIStrings.SelectButton}" 
+                            Style="{StaticResource Button}"
+                            Command="{Binding OnSelectButtonPressed}"/>
+                </StackPanel>
+            </StackPanel>
         </Border>
     </DataTemplate>
+
 </ResourceDictionary>

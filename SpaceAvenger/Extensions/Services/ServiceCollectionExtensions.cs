@@ -30,7 +30,7 @@ namespace SpaceAvenger.Extensions.Services
                 t is not null && t.Name.Contains("ViewModel")
                 && (t.GetCustomAttribute<ViewModelType>()?.Usage.Equals(ViewModelUsage.Page) ?? false)
                 && t.GetCustomAttribute<ReflexionDetectionIgnore>() is null);
-            //Add the viewModels of the Pages to the Container as Singletone
+            //Add the viewModels of the Pages to the Container as Singleton
             foreach (var viewModel in viewModels)
             {
                 services.AddSingleton(viewModel.AsType());

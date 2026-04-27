@@ -6,5 +6,7 @@ namespace SpaceAvenger.DAL.Models.Base
     {
         public string NameKey { get ; set ; }
         public string DescriptionKey { get; set; }
+
+        public string? ImageName { get; set; }
     }
 }

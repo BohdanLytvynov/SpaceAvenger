@@ -67,7 +67,7 @@ namespace SpaceAvenger.Resources.Strings {
         ///The Foundation History
         ///At the end of the 21st century, humanity faced the greatest crisis in its history. The first steps beyond the Solar System brought not only discovery, but a primal terror of the boundless, empty, and potentially hostile abyss. The fear of the &quot;Great Unknown&quot; and the realization of human vulnerability forced eternal rivals to lay down their arms.
         ///
-        ///Four great military-political bl [rest of string was truncated]&quot;;.
+        ///Four great military-politi [rest of string was truncated]&quot;;.
         /// </summary>
         public static string F10_DescKey {
             get {
@@ -78,7 +78,7 @@ namespace SpaceAvenger.Resources.Strings {
         /// <summary>
         ///   Looks up a localized string similar to Eurasian Continental Union (ECU) is the industrial and resource-rich heart of the United Earth Federation. If the NAA represents agility and speed, the ECU stands for immovable might and engineering excellence. As the heirs to the great terrestrial powers of the past, they have translated the doctrine of the &quot;armored fist&quot; into the vacuum of space.
         ///
-        ///Philosophy and Doctrine: Their strategy is simple: to hold the line where others turn to dust. ECU ships are massive armored fortresses capable of withstanding  [rest of string was truncated]&quot;;.
+        ///Philosophy and Doctrine: Their strategy is simple: to hold the line where others turn to dust. ECU ships are massive armored fortresses capable of withstandin [rest of string was truncated]&quot;;.
         /// </summary>
         public static string F10_ECU_DescKey {
             get {
@@ -343,7 +343,7 @@ namespace SpaceAvenger.Resources.Strings {
         ///
         ///As humanity ventured into deep space, the NAA translated centuries of naval aviation expertise into the vacuum. NAA vessels are the most sophisticated and sleek ships within the UEFS fleet. They are not built for prolonged &quot;broadside-to-broadside&quot; duels. Instead, NAA admirals prefer to unleash hundreds of smart missiles and squadrons of unmanned interceptors, neutralizing threats long before they enter visual range.
         ///
-        ///Key Feature: The use of advanced com [rest of string was truncated]&quot;;.
+        ///Key Feature: The use of advanced [rest of string was truncated]&quot;;.
         /// </summary>
         public static string F10_NAA_DescKey {
             get {
@@ -381,7 +381,7 @@ namespace SpaceAvenger.Resources.Strings {
         /// <summary>
         ///   Looks up a localized string similar to The Pan-Asian Sphere (PAS) is the scientific and innovative engine of the United Earth Federation. While other Pillars rely on steel and gunpowder, PAS has transformed the very matter of light into a punishing instrument. As the heirs to the great Eastern tech-corporations, they believe the outcome of a war is decided before the first shot is fired — through superiority in information and speed.
         ///
-        ///Doctrine and Combat Style: Their philosophy is &quot;The Strike from the Void.&quot; PAS vessels are characterized by eleg [rest of string was truncated]&quot;;.
+        ///Doctrine and Combat Style: Their philosophy is &quot;The Strike from the Void.&quot; PAS vessels are characterized by el [rest of string was truncated]&quot;;.
         /// </summary>
         public static string F10_PAS_DescKey {
             get {
@@ -446,7 +446,7 @@ namespace SpaceAvenger.Resources.Strings {
         /// <summary>
         ///   Looks up a localized string similar to The Southern Trade Coalition (STC) is the economic foundation of the United Earth Federation. While the NAA and ECU wage wars, the STC makes those wars possible by providing the fleet with fuel, ammunition, and rare isotopes. By uniting the corporations of the Southern Hemisphere and the mining colonies of the Outer Rim, the Coalition has turned logistics into an art of survival.
         ///
-        ///Doctrine and Combat Style: Their motto is &quot;Adapt and Extract.&quot; STC ships are rarely elegant; they are massive, angular vessels b [rest of string was truncated]&quot;;.
+        ///Doctrine and Combat Style: Their motto is &quot;Adapt and Extract.&quot; STC ships are rarely elegant; they are massive, angular vessels [rest of string was truncated]&quot;;.
         /// </summary>
         public static string F10_STC_DescKey {
             get {

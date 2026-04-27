@@ -112,6 +112,7 @@ namespace SpaceAvenger.DAL.Data
                     ShortNameKey = BuildKey("F10_NAA", SA_DALConstants.ShortNameKey),
                     ShortDescriptionKey = BuildKey("F10_NAA", SA_DALConstants.ShortDescKey),
                     DescriptionKey = BuildKey("F10_NAA", SA_DALConstants.DescKey),
+                    ImageName = "F10_SF1"
                 },
                 new SubFaction()
                 {
@@ -122,6 +123,7 @@ namespace SpaceAvenger.DAL.Data
                     ShortNameKey = BuildKey("F10_ECU", SA_DALConstants.ShortNameKey),
                     ShortDescriptionKey = BuildKey("F10_ECU", SA_DALConstants.ShortDescKey),
                     DescriptionKey = BuildKey("F10_ECU", SA_DALConstants.DescKey),
+                    ImageName = "F10_SF2"
                 },
                 new SubFaction()
                 {
@@ -129,9 +131,10 @@ namespace SpaceAvenger.DAL.Data
                     FactionId = 1,
                     SubFactionCode = "F10_PAS",
                     NameKey = BuildKey("F10_PAS", SA_DALConstants.FullNameKey),
-                    ShortNameKey = BuildKey("F10_ECU", SA_DALConstants.ShortNameKey),
-                    ShortDescriptionKey = BuildKey("F10_ECU", SA_DALConstants.ShortDescKey),
-                    DescriptionKey = BuildKey("F10_ECU", SA_DALConstants.DescKey),
+                    ShortNameKey = BuildKey("F10_PAS", SA_DALConstants.ShortNameKey),
+                    ShortDescriptionKey = BuildKey("F10_PAS", SA_DALConstants.ShortDescKey),
+                    DescriptionKey = BuildKey("F10_PAS", SA_DALConstants.DescKey),
+                    ImageName = "F10_SF3"
                 },
                 new SubFaction()
                 {
@@ -142,6 +145,7 @@ namespace SpaceAvenger.DAL.Data
                     ShortNameKey = BuildKey("F10_STC", SA_DALConstants.ShortNameKey),
                     ShortDescriptionKey = BuildKey("F10_STC", SA_DALConstants.ShortDescKey),
                     DescriptionKey = BuildKey("F10_STC", SA_DALConstants.DescKey),
+                    ImageName = "F10_SF4"
                 }
                 );
         }
@@ -157,7 +161,8 @@ namespace SpaceAvenger.DAL.Data
                     ShortNameKey = BuildKey("F10", SA_DALConstants.ShortNameKey),
                     ShortDescriptionKey = BuildKey("F10", SA_DALConstants.ShortDescKey),
                     DescriptionKey = BuildKey("F10", SA_DALConstants.DescKey),
-                    ShipPrefix = BuildKey("F10", SA_DALConstants.ShipPrefixKey)
+                    ShipPrefix = BuildKey("F10", SA_DALConstants.ShipPrefixKey),
+                    ImageName = "F10_Icon"
                 },
                 new Faction()
                 {
@@ -166,7 +171,8 @@ namespace SpaceAvenger.DAL.Data
                     ShortNameKey = BuildKey("F1", SA_DALConstants.ShortNameKey),
                     ShortDescriptionKey = BuildKey("F1", SA_DALConstants.ShortDescKey),
                     DescriptionKey = BuildKey("F1", SA_DALConstants.DescKey),
-                    FactionCode = "F1"
+                    FactionCode = "F1",
+                    ImageName = "F1_Icon"
                 }
                 );
         }

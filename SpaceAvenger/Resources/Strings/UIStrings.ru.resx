@@ -138,4 +138,16 @@
   <data name="ChooseSFBack" xml:space="preserve">
     <value>Далее</value>
   </data>
+  <data name="ChooseSubFaction_Title" xml:space="preserve">
+    <value>Выберите подфракцию:</value>
+  </data>
+  <data name="MoreButton" xml:space="preserve">
+    <value>Подробнее</value>
+  </data>
+  <data name="LessButton" xml:space="preserve">
+    <value>Короче</value>
+  </data>
+  <data name="SelectButton" xml:space="preserve">
+    <value>Выбрать</value>
+  </data>
 </root>

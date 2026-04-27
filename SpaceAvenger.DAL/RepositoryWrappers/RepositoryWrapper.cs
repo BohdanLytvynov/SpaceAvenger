@@ -4,6 +4,7 @@ using SpaceAvenger.DAL.Repositories.CommanderRanks;
 using SpaceAvenger.DAL.Repositories.Commanders;
 using SpaceAvenger.DAL.Repositories.Factions;
 using SpaceAvenger.DAL.Repositories.Ranks;
+using SpaceAvenger.DAL.Repositories.SubFactions;
 using SpaceAvenger.DAL.Repositories.Users;
 
 namespace SpaceAvenger.DAL.RepositoryWrappers
@@ -16,6 +17,7 @@ namespace SpaceAvenger.DAL.RepositoryWrappers
         private ICommanderRepository? m_commanderRepository;
         private IFactionRepository? m_factionRepository;
         private ICommanderRankRepository m_commanderRankRepository;
+        private ISubFactionRepository m_subfactionRepository;
         private DbContext m_dbContext;
         #endregion
 
@@ -43,6 +45,11 @@ namespace SpaceAvenger.DAL.RepositoryWrappers
         public ICommanderRankRepository CommanderRankRepository 
         { 
             get => CreateLazy<ICommanderRankRepository, CommanderRankRepository>(ref m_commanderRankRepository);
+        }
+
+        public ISubFactionRepository SubFactionRepository 
+        {
+            get => CreateLazy<ISubFactionRepository, SubFactionRepository>(ref m_subfactionRepository);
         }
         #endregion
 

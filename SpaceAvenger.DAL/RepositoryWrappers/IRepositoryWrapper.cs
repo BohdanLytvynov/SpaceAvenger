@@ -2,6 +2,7 @@
 using SpaceAvenger.DAL.Repositories.Commanders;
 using SpaceAvenger.DAL.Repositories.Factions;
 using SpaceAvenger.DAL.Repositories.Ranks;
+using SpaceAvenger.DAL.Repositories.SubFactions;
 using SpaceAvenger.DAL.Repositories.Users;
 
 namespace SpaceAvenger.DAL.RepositoryWrappers
@@ -13,6 +14,7 @@ namespace SpaceAvenger.DAL.RepositoryWrappers
         IStartFleetRankRepository StarFleetRankRepository { get; }
         IFactionRepository FactionRepository { get; }
         ICommanderRankRepository CommanderRankRepository { get; }
+        ISubFactionRepository SubFactionRepository { get; }
         int Save();
     }
 }
